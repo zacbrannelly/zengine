@@ -21,7 +21,7 @@ public:
 
 	void Init() override;
 	void Update() override;
-	void Render() override;
+	void Render(int viewId) override;
 
 	void SetViewId(int viewId);
 	int GetViewId() const;

@@ -26,7 +26,7 @@ void Camera::Update()
 	// Must be implemented for components
 }
 
-void Camera::Render()
+void Camera::Render(int viewId)
 {
 	_graphics->ViewMode(_viewId, bgfx::ViewMode::Default);
 	_graphics->Viewport(_viewId, _viewport.x, _viewport.y, _viewport.z, _viewport.w);

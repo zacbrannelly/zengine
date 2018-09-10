@@ -3,23 +3,24 @@
 
 using namespace std;
 
-Transform::Transform() : Component("Transform", ObjectType::TRANSFORM), _parent(nullptr)
+Transform::Transform() : Component("Transform", ObjectType::TRANSFORM)
 {
+	_position = glm::vec3(0);
+	_scale = glm::vec3(1.0f);
+	_rotation = glm::vec3(0);
+	_parent = nullptr;
 }
 
 void Transform::Init()
 {
-
 }
 
 void Transform::Update()
 {
-
 }
 
-void Transform::Render()
+void Transform::Render(int viewId)
 {
-
 }
 
 void Transform::SetPosition(const glm::vec3& position)

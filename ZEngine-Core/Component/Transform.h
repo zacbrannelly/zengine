@@ -34,7 +34,7 @@ private:
 public:
 	void Init() override;
 	void Update() override;
-	void Render() override;
+	void Render(int viewId) override;
 
 	static ZObject* CreateInstance(std::string name, ObjectType type);
 };
