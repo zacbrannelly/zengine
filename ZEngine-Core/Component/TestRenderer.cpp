@@ -99,13 +99,13 @@ void TestRenderer::Render(int viewId)
 	auto g = Graphics::GetInstance();
 	auto transform = glm::mat4(1.0f);
 
-	g->Transform(transform);
+	g->SetTransform(transform);
 
 	// TODO: Abstract these into their classes
 	bgfx::setVertexBuffer(viewId, _vertexBuffer);
 	bgfx::setIndexBuffer(_indexBuffer);
 
-	g->State(BGFX_STATE_DEFAULT | BGFX_STATE_PT_TRISTRIP);
+	g->SetState(BGFX_STATE_DEFAULT | BGFX_STATE_PT_TRISTRIP);
 	g->Submit(viewId, _program);
 }
 
