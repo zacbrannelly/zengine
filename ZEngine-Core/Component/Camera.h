@@ -26,7 +26,7 @@ public:
 	void SetViewId(int viewId);
 	int GetViewId() const;
 
-	void SetClearFlags(int flags);
+	void SetClearFlags(uint16_t flags);
 	void SetClearColor(float r, float g, float b, float a);
 	void SetClearColor(const glm::vec4& color);
 	const glm::vec4& GetClearColor() const;
@@ -60,7 +60,7 @@ private:
 
 	// Global settings
 	int _viewId;
-	int _clearFlags;
+	uint16_t _clearFlags;
 	glm::vec4 _clearColor;
 
 	float _zNear, _zFar;

@@ -4,6 +4,7 @@
 #include "../Map/Map.h"
 #include "../Component/Camera.h"
 #include "../Component/Transform.h"
+#include "../Component/TestRenderer.h"
 
 std::map<ObjectType, ZObject*(*)(std::string, ObjectType)> Factory::_typeConstructors;
 
@@ -13,6 +14,7 @@ void Factory::Init()
 	RegisterType(ObjectType::MAP, &Map::CreateInstance);
 	RegisterType(ObjectType::CAMERA, &Camera::CreateInstance);
 	RegisterType(ObjectType::TRANSFORM, &Transform::CreateInstance);
+	RegisterType(ObjectType::TEST_RENDERER, &TestRenderer::CreateInstance);
 }
 
 void Factory::RegisterType(ObjectType type, ConstructorFunc constructor)

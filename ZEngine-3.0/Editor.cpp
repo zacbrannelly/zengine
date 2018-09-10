@@ -6,6 +6,8 @@
 #include <ZEngine-Core\Rendering\Graphics.h>
 #include <ZEngine-Core\Misc\Factory.h>
 #include <ZEngine-Core\Map\Map.h>
+#include <ZEngine-Core\Map\Objects\Entity.h>
+#include <ZEngine-Core\Component\TestRenderer.h>
 
 #include "GUILibrary.h"
 #include "MainMenuBar.h"
@@ -17,6 +19,10 @@ Editor::Editor()
 	auto testMap = Factory::CreateInstance<Map>("test_map", ObjectType::MAP);
 
 	// TODO: Add objects to the test map
+
+	auto testObject = Factory::CreateInstance<Entity>("test_object", ObjectType::ENTITY);
+	testObject->AddComponent(Factory::CreateInstance<TestRenderer>("Test Renderer", ObjectType::TEST_RENDERER));
+	testMap->Add(testObject);
 
 	Add(new MainMenuBar());
 	Add(new MapView(testMap));

@@ -130,6 +130,7 @@
     <ClInclude Include="Map\Objects\ZObject.h" />
     <ClInclude Include="Rendering\Shader.h" />
     <ClInclude Include="Component\Transform.h" />
+    <ClInclude Include="Component\TestRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Assets\Asset.cpp" />
@@ -145,6 +146,7 @@
     <ClCompile Include="Map\Objects\ZObject.cpp" />
     <ClCompile Include="Rendering\Shader.cpp" />
     <ClCompile Include="Component\Transform.cpp" />
+    <ClCompile Include="Component\TestRenderer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

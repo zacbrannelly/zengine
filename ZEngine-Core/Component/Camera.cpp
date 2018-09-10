@@ -32,7 +32,7 @@ void Camera::Update()
 void Camera::Render(int viewId)
 {
 	_graphics->SetFrameBuffer(_viewId, _frameBuffer);
-	_graphics->ViewMode(_viewId, bgfx::ViewMode::Default);
+	_graphics->ViewMode(_viewId, bgfx::ViewMode::Sequential);
 	_graphics->Viewport(_viewId, (int)(_viewport.x + 0.5f), (int)(_viewport.y + 0.5f), (int)(_viewport.z + 0.5f), (int)(_viewport.w + 0.5f));
 	_graphics->Clear(_viewId, _clearFlags, (int)(_clearColor.r * 255.0f + 0.5f), (int)(_clearColor.g * 255.0f + 0.5f), (int)(_clearColor.b * 255.0f + 0.5f), (int)(_clearColor.a * 255.0f + 0.5f));
 
@@ -59,7 +59,7 @@ void Camera::Render(int viewId)
 	_graphics->Touch(_viewId);
 }
 
-void Camera::SetClearFlags(int flags)
+void Camera::SetClearFlags(uint16_t flags)
 {
 	_clearFlags = flags;
 }

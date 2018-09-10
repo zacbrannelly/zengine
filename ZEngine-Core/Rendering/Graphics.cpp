@@ -71,7 +71,7 @@ void Graphics::SetFrameBuffer(int viewId, FrameBufferHandle fbo)
 	setViewFrameBuffer(viewId, fbo);
 }
 
-void Graphics::Reset(int width, int height, int flags)
+void Graphics::Reset(int width, int height, uint32_t flags)
 {
 	reset(width, height, flags);
 }
@@ -83,10 +83,10 @@ void Graphics::Clear(int viewId)
 
 void Graphics::Clear(int viewId, int r, int g, int b, int a)
 {
-	Clear(viewId, BGFX_CLEAR_COLOR | BGFX_CLEAR_COLOR, r, g, b, a);
+	Clear(viewId, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, r, g, b, a);
 }
 
-void Graphics::Clear(int viewId, int flags, int r, int g, int b, int a)
+void Graphics::Clear(int viewId, uint16_t flags, int r, int g, int b, int a)
 {
 	setViewClear(viewId, flags, convertRGBToInt(r, g, b, a));
 }
@@ -109,6 +109,21 @@ void Graphics::ViewTransform(int viewId, const glm::mat4& projMatrix, const glm:
 void Graphics::Touch(int viewId)
 {
 	touch(viewId);
+}
+
+void Graphics::SetTransform(const glm::mat4 & transform)
+{
+	setTransform(&transform[0][0]);
+}
+
+void Graphics::SetState(uint64_t state)
+{
+	setState(state);
+}
+
+void Graphics::Submit(int viewId, bgfx::ProgramHandle program)
+{
+	submit(viewId, program);
 }
 
 void Graphics::Render()
