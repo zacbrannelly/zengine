@@ -4,16 +4,23 @@
 #include "GUIImage.h"
 #include <ZEngine-Core/Rendering/Graphics.h>
 
+class Map;
+class Camera;
+class Entity;
+
 class MapView : public GUIWindow
 {
 public:
-	MapView();
+	MapView(Map* map);
 	~MapView();
 
 	void ProcessInput() override;
 	void RenderElement() override;
 private:
-	bgfx::FrameBufferHandle _fbo;
 	GUIImage* _viewImage;
+	Map* _map;
+
+	Entity* _viewEntity;
+	Camera* _viewCamera;
 };
 

@@ -12,6 +12,20 @@
 #include "MapView.h"
 #include "GUIImage.h"
 
+Editor::Editor()
+{
+	auto testMap = Factory::CreateInstance<Map>("test_map", ObjectType::MAP);
+
+	// TODO: Add objects to the test map
+
+	Add(new MainMenuBar());
+	Add(new MapView(testMap));
+}
+
+Editor::~Editor()
+{
+}
+
 int main(int argc, char* argv[])
 {
 	// Initialize the factory (register the types)
@@ -33,8 +47,6 @@ int main(int argc, char* argv[])
 
 	// This container will hold all of the GUI elements
 	Editor* editorContainer = new Editor();
-
-	auto testMap = Factory::CreateInstance<Map>("test_map", ObjectType::MAP);
 
 	while (!display.CloseRequested())
 	{
@@ -63,14 +75,4 @@ int main(int argc, char* argv[])
 	display.Shutdown();
 
 	return 0;
-}
-
-Editor::Editor()
-{
-	Add(new MainMenuBar());
-	Add(new MapView());
-}
-
-Editor::~Editor()
-{
 }

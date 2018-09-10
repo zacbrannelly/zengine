@@ -1,15 +1,28 @@
 #include "MapView.h"
-#include <ZEngine-Core/Rendering/Graphics.h>
+#include <ZEngine-Core/Component/Camera.h>
+#include <ZEngine-Core/Misc/Factory.h>
+#include <ZEngine-Core/Map/Map.h>
+#include <ZEngine-Core/Map/Objects/Entity.h>
 
 
-MapView::MapView() : GUIWindow("Map View", 1024, 600, false)
+MapView::MapView(Map* map) : GUIWindow("Map View", 1024, 600, false)
 {
-	auto graphics = Graphics::GetInstance();
+	_map = map;
 
-	_fbo = graphics->CreateFrameBuffer(1024, 600);
-	auto texture = graphics->GetFrameBufferTexture(_fbo);
+	// We must create an entity (so we can transform the camera)
+	_viewEntity = Factory::CreateInstance<Entity>("View Object", ObjectType::ENTITY);
 
-	_viewImage = new GUIImage(texture, GetWidth(), GetHeight());
+	// Create camera on view 1, this will be used to view/render the scene
+	_viewCamera = Factory::CreateInstance<Camera>("Camera", ObjectType::CAMERA);	
+	_viewEntity->AddComponent(_viewCamera);
+
+	_viewCamera->SetViewport(0, 0, 1024, 600);
+	_viewCamera->SetClearColor(1.0f, 0, 0, 1.0f);
+	_viewCamera->SetViewId(1);
+	_viewCamera->SetRenderToTexture(true);
+
+	// Make image linked to the view camera then add it as a GUI element
+	_viewImage = new GUIImage(_viewCamera->GetRenderTexture(), GetWidth(), GetHeight());
 	Add(_viewImage);
 }
 
@@ -20,14 +33,16 @@ void MapView::ProcessInput()
 
 void MapView::RenderElement()
 {
-	auto graphics = Graphics::GetInstance();
+	// Set camera settings
+	_viewCamera->Render(-1);
 
-	// Set the framebuffer to the view (we will use view 1 for scene rendering)
-	graphics->SetFrameBuffer(1, _fbo);
-	graphics->Clear(1, 255, 0, 0, 255);
-	graphics->Viewport(1, 0, 0, 1024, 600);
-	graphics->Touch(1);
+	// Render the world without the internal cameras
+	if (_map != nullptr)
+	{
+		_map->RenderWorld(_viewCamera->GetViewId());
+	}
 
+	// Render the actual texture to the screen (more like submit the draw call to bgfx)
 	GUIWindow::RenderElement();
 }
 

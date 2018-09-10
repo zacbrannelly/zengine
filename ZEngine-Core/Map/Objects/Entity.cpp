@@ -1,10 +1,15 @@
 #include "Entity.h"
 #include "../../Component/Component.h"
+#include "../../Misc/Factory.h"
+#include "../../Component/Transform.h"
 
 using namespace std;
 
 Entity::Entity(string name) : ZObject(name, ObjectType::ENTITY)
 {
+	// Add transform component by default
+	_transform = Factory::CreateInstance<Transform>("Transform", ObjectType::TRANSFORM);
+	AddComponent(_transform);
 }
 
 ZObject* Entity::CreateInstance(string name, ObjectType type)
@@ -14,12 +19,25 @@ ZObject* Entity::CreateInstance(string name, ObjectType type)
 
 void Entity::AddComponent(Component* component)
 {
-	if (component != nullptr)
+	// Allow valid components and ONLY one transform component 
+	if (component != nullptr || (component != nullptr && component->GetType() == ObjectType::TRANSFORM && _transform == nullptr))
 	{
 		_components.push_back(component);
 
 		component->SetOwner(this);
 		component->Init();
+	}
+}
+
+void Entity::RemoveComponent(Component* component)
+{
+	auto it = find(_components.begin(), _components.end(), component);
+
+	if (it != _components.end())
+	{
+		_components.erase(it);
+
+		// TODO: Send message to component that it has been removed
 	}
 }
 
@@ -47,6 +65,15 @@ vector<Component*> Entity::GetComponents(ObjectType type) const
 	return results;
 }
 
+const std::vector<Component*>& Entity::GetAllComponents() const
+{
+	return _components;
+}
+
+Transform* Entity::GetTransform() const
+{
+	return _transform;
+}
 
 Entity::~Entity()
 {
