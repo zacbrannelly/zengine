@@ -27,6 +27,9 @@ public:
 	int GetViewId() const;
 
 	void SetClearFlags(int flags);
+	void SetClearColor(float r, float g, float b, float a);
+	void SetClearColor(const glm::vec4& color);
+	const glm::vec4& GetClearColor() const;
 
 	void SetViewport(int x, int y, int width, int height);
 	int GetViewportWidth() const;
@@ -38,6 +41,7 @@ public:
 
 	void SetRenderToTexture(bool renderToTexture);
 	bool IsRenderingToTexture() const;
+	bgfx::TextureHandle GetRenderTexture() const;
 
 	void SetFieldOfView(float fov);
 	float GetFieldOfView() const;

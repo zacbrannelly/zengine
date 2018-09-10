@@ -1,5 +1,7 @@
 #include "Camera.h"
 #include "../Rendering/Graphics.h"
+#include "../Map/Objects/Entity.h"
+#include "Transform.h"
 #include <glm\gtc\matrix_transform.hpp>
 
 using namespace std;
@@ -8,6 +10,7 @@ Camera::Camera() : Component("Camera", ObjectType::CAMERA)
 {
 	_projMode = ORTHOGRAPHIC;
 	_frameBuffer = BGFX_INVALID_HANDLE;
+	_renderTexture = BGFX_INVALID_HANDLE;
 	_clearFlags = BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH;
 	_zNear = 0.1f;
 	_zFar = 100.0f;
@@ -28,10 +31,12 @@ void Camera::Update()
 
 void Camera::Render(int viewId)
 {
+	_graphics->SetFrameBuffer(_viewId, _frameBuffer);
 	_graphics->ViewMode(_viewId, bgfx::ViewMode::Default);
-	_graphics->Viewport(_viewId, _viewport.x, _viewport.y, _viewport.z, _viewport.w);
+	_graphics->Viewport(_viewId, (int)(_viewport.x + 0.5f), (int)(_viewport.y + 0.5f), (int)(_viewport.z + 0.5f), (int)(_viewport.w + 0.5f));
 	_graphics->Clear(_viewId, _clearFlags, (int)(_clearColor.r * 255.0f + 0.5f), (int)(_clearColor.g * 255.0f + 0.5f), (int)(_clearColor.b * 255.0f + 0.5f), (int)(_clearColor.a * 255.0f + 0.5f));
 
+	// Calculate projection matrix based off projection mode
 	glm::mat4 projMatrix(1.0f);
 	auto aspectRatio = GetAspectRatio();
 
@@ -44,15 +49,34 @@ void Camera::Render(int viewId)
 		projMatrix = glm::perspective<float>(_fov, aspectRatio, _zNear, _zFar);
 	}
 
-	// TODO: Get camera position from transform of owner entity
-	glm::mat4 viewMatrix = glm::translate(viewMatrix, glm::vec3(0, 0, 0));
+	// Get camera position from transform of owner entity
+	auto viewMatrix = GetOwner()->GetTransform()->GetWorldTransformMatrix();
 
+	// Upload projection and view matrices to the GPU
 	_graphics->ViewTransform(_viewId, projMatrix, viewMatrix);
+
+	// Ensure the screen is cleared when nothing is being drawn (for testing purposes mostly, can remove later)
+	_graphics->Touch(_viewId);
 }
 
 void Camera::SetClearFlags(int flags)
 {
 	_clearFlags = flags;
+}
+
+void Camera::SetClearColor(float r, float g, float b, float a)
+{
+	_clearColor = glm::vec4(r, g, b, a);
+}
+
+void Camera::SetClearColor(const glm::vec4& color)
+{
+	_clearColor = color;
+}
+
+const glm::vec4 & Camera::GetClearColor() const
+{
+	return _clearColor;
 }
 
 void Camera::SetViewId(int viewId)
@@ -99,7 +123,7 @@ void Camera::SetRenderToTexture(bool renderToTexture)
 {
 	if (renderToTexture && !IsRenderingToTexture())
 	{
-		_frameBuffer = _graphics->CreateFrameBuffer(_viewport.x, _viewport.y);
+		_frameBuffer = _graphics->CreateFrameBuffer(_viewport.z, _viewport.w);
 		_renderTexture = _graphics->GetFrameBufferTexture(_frameBuffer);
 	}
 	else if (!renderToTexture && IsRenderingToTexture())
@@ -112,6 +136,11 @@ void Camera::SetRenderToTexture(bool renderToTexture)
 bool Camera::IsRenderingToTexture() const
 {
 	return _frameBuffer.idx != bgfx::kInvalidHandle;
+}
+
+bgfx::TextureHandle Camera::GetRenderTexture() const
+{
+	return _renderTexture;
 }
 
 void Camera::SetFieldOfView(float fov)
