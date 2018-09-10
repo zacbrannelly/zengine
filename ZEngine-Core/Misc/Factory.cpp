@@ -1,0 +1,21 @@
+#include "Factory.h"
+
+#include "../Map/Objects/Entity.h"
+#include "../Map/Map.h"
+#include "../Component/Camera.h"
+#include "../Component/Transform.h"
+
+std::map<ObjectType, ZObject*(*)(std::string, ObjectType)> Factory::_typeConstructors;
+
+void Factory::Init()
+{
+	RegisterType(ObjectType::ENTITY, &Entity::CreateInstance);
+	RegisterType(ObjectType::MAP, &Map::CreateInstance);
+	RegisterType(ObjectType::CAMERA, &Camera::CreateInstance);
+	RegisterType(ObjectType::TRANSFORM, &Transform::CreateInstance);
+}
+
+void Factory::RegisterType(ObjectType type, ConstructorFunc constructor)
+{
+	_typeConstructors[type] = constructor;
+}
