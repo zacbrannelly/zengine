@@ -17,8 +17,11 @@ public:
 	void Remove(std::string name);
 
 	void RegisterCameras();
+	const std::vector<Camera*>& GetCameras() const;
 
+	void Update();
 	void Render();
+	void RenderWorld(int viewId);
 
 	static ZObject* CreateInstance(std::string name, ObjectType type);
 private:
