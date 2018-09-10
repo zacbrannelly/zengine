@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{C1652A2E-CC29-4A3A-B35D-F081BDBBCBAB}</ProjectGuid>
     <RootNamespace>ZEngineCore</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -39,7 +39,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -75,7 +75,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\ZEngine-3.0\ZEngine-3.0\glm;..\..\bx\include;..\..\bimg\include;..\..\bgfx\include;..\..\ZEngine-3.0\ZEngine-3.0\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>..\..\ZEngine-3.0\ZEngine-3.0\glfw\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -111,6 +116,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Component\Camera.h" />
+    <ClInclude Include="Component\Component.h" />
+    <ClInclude Include="Display\Display.h" />
+    <ClInclude Include="Engine.h" />
+    <ClInclude Include="Map\Map.h" />
+    <ClInclude Include="Misc\Factory.h" />
+    <ClInclude Include="Map\Objects\Entity.h" />
+    <ClInclude Include="Rendering\Graphics.h" />
+    <ClInclude Include="Misc\Singleton.h" />
+    <ClInclude Include="Map\Objects\ZObject.h" />
+    <ClInclude Include="Rendering\Shader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Component\Camera.cpp" />
+    <ClCompile Include="Component\Component.cpp" />
+    <ClCompile Include="Display\Display.cpp" />
+    <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="Map\Map.cpp" />
+    <ClCompile Include="Misc\Factory.cpp" />
+    <ClCompile Include="Map\Objects\Entity.cpp" />
+    <ClCompile Include="Rendering\Graphics.cpp" />
+    <ClCompile Include="Map\Objects\ZObject.cpp" />
+    <ClCompile Include="Rendering\Shader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -23,7 +23,7 @@
     <ProjectGuid>{EE3656B7-28BD-45EC-91D5-4D959AC69211}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>ZEngine30</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
     <ProjectName>ZEngine-Editor</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -90,12 +90,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\ZEngine\ZEngine-3.0\ZEngine-3.0\glew-2.1.0\include\GL;D:\ZEngine\ZEngine-3.0\ZEngine-3.0\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\ZEngine-3.0\ZEngine-3.0\glew-2.1.0\include\GL;..\..\ZEngine-3.0\ZEngine-3.0\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\ZEngine\ZEngine-3.0\ZEngine-3.0\glew-2.1.0\lib\Release\x64;D:\ZEngine\ZEngine-3.0\ZEngine-3.0\glfw\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\ZEngine-3.0\ZEngine-3.0\glew-2.1.0\lib\Release\x64;..\..\ZEngine-3.0\ZEngine-3.0\glfw\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -106,14 +106,14 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\ZEngine\ZEngine-3.0\ZEngine-3.0\glm;D:\ZEngine\bx\include;D:\ZEngine\bgfx\3rdparty;D:\ZEngine\bgfx\include;D:\ZEngine\ZEngine-3.0\ZEngine-3.0\glew-2.1.0\include\GL;D:\ZEngine\ZEngine-3.0\ZEngine-3.0\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\ZEngine-3.0;..\..\ZEngine-3.0\ZEngine-3.0\glm;..\..\bx\include;..\..\bgfx\3rdparty;..\..\bgfx\include;..\..\ZEngine-3.0\ZEngine-3.0\glew-2.1.0\include\GL;..\..\ZEngine-3.0\ZEngine-3.0\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\ZEngine\ZEngine-3.0\ZEngine-3.0\glew-2.1.0\lib\Release\x64;D:\ZEngine\ZEngine-3.0\ZEngine-3.0\glfw\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\ZEngine-3.0\ZEngine-3.0\glew-2.1.0\lib\Release\x64;..\..\ZEngine-3.0\ZEngine-3.0\glfw\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -152,7 +152,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\bgfx\3rdparty\dear-imgui\imgui_impl_glfw.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Container.cpp" />
+    <ClCompile Include="Editor.cpp" />
+    <ClCompile Include="EditorWindow.cpp" />
+    <ClCompile Include="experimental.cpp" />
+    <ClCompile Include="GUIImage.cpp" />
+    <ClCompile Include="GUILibrary.cpp" />
+    <ClCompile Include="GUIWindow.cpp" />
+    <ClCompile Include="MainMenuBar.cpp" />
+    <ClCompile Include="MapView.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\bgfx\.build\projects\vs2017\bgfx.vcxproj">
@@ -176,6 +184,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\bgfx\3rdparty\dear-imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="Container.h" />
+    <ClInclude Include="Editor.h" />
+    <ClInclude Include="EditorWindow.h" />
+    <ClInclude Include="GUIElement.h" />
+    <ClInclude Include="GUIImage.h" />
+    <ClInclude Include="GUILibrary.h" />
+    <ClInclude Include="GUIWindow.h" />
+    <ClInclude Include="imgui-includes.h" />
+    <ClInclude Include="MainMenuBar.h" />
+    <ClInclude Include="MapView.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
