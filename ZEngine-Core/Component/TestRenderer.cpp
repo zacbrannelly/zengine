@@ -3,11 +3,15 @@
 #include <glm/glm.hpp>
 #include <fstream>
 #include <iostream>
+
 #include "../Rendering/Graphics.h"
 #include "../Rendering/Shader.h"
 #include "../Rendering/VertexBuffer.h"
 #include "../Rendering/IndexBuffer.h"
 #include "../Rendering/Material.h"
+#include "../Rendering/Mesh.h"
+
+using namespace std;
 
 TestRenderer::TestRenderer() : Component("Test Renderer", ObjectType::TEST_RENDERER)
 {
@@ -15,38 +19,35 @@ TestRenderer::TestRenderer() : Component("Test Renderer", ObjectType::TEST_RENDE
 
 void TestRenderer::Init()
 {
-	bgfx::VertexDecl decl;
-	decl.begin()
-			.add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float)
-			.add(bgfx::Attrib::Color0, 4, bgfx::AttribType::Float)
-	.end();
-
-	struct vert
+	vector<glm::vec3> verts
 	{
-		glm::vec3 pos;
-		float r, g, b, a;
+		{ -1.0f,  1.0f, 0 }, // top left
+		{  1.0f,  1.0f, 0 }, // top right
+		{ -1.0f, -1.0f, 0 }, // bottom left
+		{  1.0f, -1.0f, 0 } // bottom right
 	};
 
-	vert vertices[] =
+	vector<glm::vec4> colors
 	{
-		{ { -1.0f,  1.0f, 0 }, 0, 1, 0, 1 }, // top left
-		{ {  1.0f,  1.0f, 0 }, 0, 1, 0, 1 }, // top right
-		{ { -1.0f, -1.0f, 0 }, 0, 1, 0, 1 }, // bottom left
-		{ {  1.0f, -1.0f, 0 }, 0, 1, 0, 1 } // bottom right
+		{ 0, 1, 0, 1 },
+		{ 0, 1, 0, 1 },
+		{ 0, 1, 0, 1 },
+		{ 0, 1, 0, 1 }
 	};
 
-	// CCW triangles!! (since we cull CW)
-	uint16_t indices[] =
+	// CCW triangles
+	std::vector<uint16_t> indices
 	{
 		0, 2, 1,
 		2, 3, 1
 	};
 
-	_vertexBuffer = new VertexBuffer(decl);
-	_indexBuffer = new IndexBuffer();
+	_mesh = new Mesh("test mesh");
+	_mesh->SetDynamic(false);
 
-	_vertexBuffer->Upload(vertices, sizeof(vertices), true);
-	_indexBuffer->Upload(indices, sizeof(indices), true);
+	_mesh->SetVertices(verts);
+	_mesh->SetColors(colors);
+	_mesh->SetIndices(indices);
 
 	_program = new Shader("cubes");
 	_program->Load("vs_cubes.bin", "fs_cubes.bin");
@@ -62,16 +63,7 @@ void TestRenderer::Update()
 
 void TestRenderer::Render(int viewId)
 {
-	auto g = Graphics::GetInstance();
-	auto transform = glm::mat4(1.0f);
-
-	g->SetTransform(transform);
-
-	g->SetVertexBuffer(0, _vertexBuffer);
-	g->SetIndexBuffer(_indexBuffer);
-
-	g->SetState(BGFX_STATE_DEFAULT | BGFX_STATE_PT_TRISTRIP);
-	g->Submit(viewId, _material);
+	_mesh->Draw(viewId, { _material }, glm::mat4(1.0f));
 }
 
 ZObject* TestRenderer::CreateInstance(std::string name, ObjectType type)

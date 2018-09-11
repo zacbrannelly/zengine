@@ -8,6 +8,7 @@ class VertexBuffer;
 class IndexBuffer;
 class Shader;
 class Material;
+class Mesh;
 
 class TestRenderer : public Component 
 {
@@ -26,5 +27,6 @@ private:
 	IndexBuffer* _indexBuffer;
 	Shader* _program;
 	Material* _material;
+	Mesh* _mesh;
 };
 
