@@ -1,7 +1,13 @@
 #pragma once
 
 #include "Component.h"
+
 #include <bgfx/bgfx.h>
+
+class VertexBuffer;
+class IndexBuffer;
+class Shader;
+class Material;
 
 class TestRenderer : public Component 
 {
@@ -16,8 +22,9 @@ public:
 	static ZObject* CreateInstance(std::string name, ObjectType type);
 
 private:
-	bgfx::VertexBufferHandle _vertexBuffer;
-	bgfx::IndexBufferHandle _indexBuffer;
-	bgfx::ProgramHandle _program;
+	VertexBuffer* _vertexBuffer;
+	IndexBuffer* _indexBuffer;
+	Shader* _program;
+	Material* _material;
 };
 

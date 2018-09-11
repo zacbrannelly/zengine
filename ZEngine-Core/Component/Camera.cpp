@@ -31,8 +31,9 @@ void Camera::Update()
 
 void Camera::Render(int viewId)
 {
+	// Setup the view
 	_graphics->SetFrameBuffer(_viewId, _frameBuffer);
-	_graphics->ViewMode(_viewId, bgfx::ViewMode::Sequential);
+	_graphics->ViewMode(_viewId, bgfx::ViewMode::Default);
 	_graphics->Viewport(_viewId, (int)(_viewport.x + 0.5f), (int)(_viewport.y + 0.5f), (int)(_viewport.z + 0.5f), (int)(_viewport.w + 0.5f));
 	_graphics->Clear(_viewId, _clearFlags, (int)(_clearColor.r * 255.0f + 0.5f), (int)(_clearColor.g * 255.0f + 0.5f), (int)(_clearColor.b * 255.0f + 0.5f), (int)(_clearColor.a * 255.0f + 0.5f));
 
@@ -42,10 +43,12 @@ void Camera::Render(int viewId)
 
 	if (_projMode == Camera::ProjectionMode::ORTHOGRAPHIC)
 	{
+		// Create orthogonal projection with _orthoSize being the half vertical height
 		projMatrix = glm::ortho<float>(-aspectRatio * _orthoSize, aspectRatio * _orthoSize, -_orthoSize, _orthoSize, _zNear, _zFar);
 	}
 	else
 	{
+		// Create perspective projection (3D) with the field of view (zoom)
 		projMatrix = glm::perspective<float>(_fov, aspectRatio, _zNear, _zFar);
 	}
 

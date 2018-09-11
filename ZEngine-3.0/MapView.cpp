@@ -10,9 +10,8 @@ MapView::MapView(Map* map) : GUIWindow("Map View", 1024, 640, false)
 {
 	_map = map;
 
-	// We must create an entity (so we can transform the camera)
+	// We must create an entity (so we can transform the camera) and translate it back 10 units
 	_viewEntity = Factory::CreateInstance<Entity>("View Object", ObjectType::ENTITY);
-
 	_viewEntity->GetTransform()->SetPosition(glm::vec3(0, 0, 10));
 
 	// Create camera on view 1, this will be used to view/render the scene
