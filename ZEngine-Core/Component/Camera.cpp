@@ -16,7 +16,7 @@ Camera::Camera() : Component("Camera", ObjectType::CAMERA)
 	_zFar = 100.0f;
 
 	_orthoSize = 5.0f;
-	_fov = 60.0f;
+	_fov = glm::radians(60.0f);
 }
 
 void Camera::Init()
@@ -52,8 +52,8 @@ void Camera::Render(int viewId)
 		projMatrix = glm::perspective<float>(_fov, aspectRatio, _zNear, _zFar);
 	}
 
-	// Get camera position from transform of owner entity
-	auto viewMatrix = GetOwner()->GetTransform()->GetWorldTransformMatrix();
+	// View matrix is the inverse of the camera's world transformation matrix
+	auto viewMatrix = glm::inverse(GetOwner()->GetTransform()->GetWorldTransformMatrix());
 
 	// Upload projection and view matrices to the GPU
 	_graphics->ViewTransform(_viewId, projMatrix, viewMatrix);
@@ -148,7 +148,7 @@ bgfx::TextureHandle Camera::GetRenderTexture() const
 
 void Camera::SetFieldOfView(float fov)
 {
-	_fov = fov;
+	_fov = glm::radians(fov);
 }
 
 float Camera::GetFieldOfView() const

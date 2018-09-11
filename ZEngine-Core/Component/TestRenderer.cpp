@@ -4,6 +4,9 @@
 #include <fstream>
 #include <iostream>
 
+#include "../Map/Objects/Entity.h"
+#include "../Component/Transform.h"
+
 #include "../Rendering/Graphics.h"
 #include "../Rendering/Shader.h"
 #include "../Rendering/VertexBuffer.h"
@@ -21,10 +24,15 @@ void TestRenderer::Init()
 {
 	vector<glm::vec3> verts
 	{
-		{ -1.0f,  1.0f, 0 }, // top left
-		{  1.0f,  1.0f, 0 }, // top right
-		{ -1.0f, -1.0f, 0 }, // bottom left
-		{  1.0f, -1.0f, 0 } // bottom right
+		{-1.0f,  1.0f,  1.0f },
+		{ 1.0f,  1.0f,  1.0f },
+		{-1.0f, -1.0f,  1.0f },
+		{ 1.0f, -1.0f,  1.0f },
+
+		{-1.0f,  1.0f, -1.0f },
+		{ 1.0f,  1.0f, -1.0f },
+		{-1.0f, -1.0f, -1.0f },
+		{ 1.0f, -1.0f, -1.0f },
 	};
 
 	vector<glm::vec4> colors
@@ -32,14 +40,29 @@ void TestRenderer::Init()
 		{ 0, 1, 0, 1 },
 		{ 0, 1, 0, 1 },
 		{ 0, 1, 0, 1 },
-		{ 0, 1, 0, 1 }
+		{ 0, 1, 0, 1 }, 
+
+		{ 1, 0, 0, 1 },
+		{ 1, 0, 0, 1 },
+		{ 1, 0, 0, 1 },
+		{ 1, 0, 0, 1 },
 	};
 
 	// CCW triangles
 	std::vector<uint16_t> indices
 	{
-		0, 2, 1,
-		2, 3, 1
+			0, 1, 2,
+			3,
+			7,
+			1,
+			5,
+			0,
+			4,
+			2,
+			6,
+			7,
+			4,
+			5,
 	};
 
 	_mesh = new Mesh("test mesh");
@@ -56,14 +79,22 @@ void TestRenderer::Init()
 	_material->SetShader(_program);
 }
 
+float g_counter = 0.0f;
+
 void TestRenderer::Update()
 {
-
+	
 }
 
 void TestRenderer::Render(int viewId)
 {
-	_mesh->Draw(viewId, { _material }, glm::mat4(1.0f));
+	auto transform = GetOwner()->GetTransform();
+
+	transform->SetRotation({ 0, g_counter, 0 });
+
+	g_counter += 0.01f;
+
+	_mesh->Draw(viewId, { _material }, GetOwner()->GetTransform()->GetWorldTransformMatrix());
 }
 
 ZObject* TestRenderer::CreateInstance(std::string name, ObjectType type)
