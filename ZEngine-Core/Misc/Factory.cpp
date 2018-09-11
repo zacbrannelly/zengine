@@ -2,6 +2,8 @@
 
 #include "../Map/Objects/Entity.h"
 #include "../Map/Map.h"
+#include "../Rendering/Shader.h"
+#include "../Rendering/Material.h"
 #include "../Component/Camera.h"
 #include "../Component/Transform.h"
 #include "../Component/TestRenderer.h"
@@ -12,6 +14,8 @@ void Factory::Init()
 {
 	RegisterType(ObjectType::ENTITY, &Entity::CreateInstance);
 	RegisterType(ObjectType::MAP, &Map::CreateInstance);
+	RegisterType(ObjectType::MATERIAL, &Material::CreateInstance);
+	RegisterType(ObjectType::SHADER, &Shader::CreateInstance);
 	RegisterType(ObjectType::CAMERA, &Camera::CreateInstance);
 	RegisterType(ObjectType::TRANSFORM, &Transform::CreateInstance);
 	RegisterType(ObjectType::TEST_RENDERER, &TestRenderer::CreateInstance);

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -118,6 +118,7 @@
   <ItemGroup>
     <ClInclude Include="Assets\Asset.h" />
     <ClInclude Include="Assets\AssetManager.h" />
+    <ClInclude Include="Rendering\Material.h" />
     <ClInclude Include="Rendering\DynamicIndexBuffer.h" />
     <ClInclude Include="Rendering\DynamicVertexBuffer.h" />
     <ClInclude Include="Rendering\IndexBuffer.h" />
@@ -143,6 +144,7 @@
     <ClCompile Include="Component\Camera.cpp" />
     <ClCompile Include="Component\Component.cpp" />
     <ClCompile Include="Display\Display.cpp" />
+    <ClCompile Include="Rendering\Material.cpp" />
     <ClCompile Include="Rendering\DynamicIndexBuffer.cpp" />
     <ClCompile Include="Rendering\DynamicVertexBuffer.cpp" />
     <ClCompile Include="Engine.cpp" />

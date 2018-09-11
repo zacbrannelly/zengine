@@ -4,6 +4,8 @@
 #include "DynamicVertexBuffer.h"
 #include "IndexBuffer.h"
 #include "DynamicIndexBuffer.h"
+#include "Material.h"
+#include "Shader.h"
 
 #include <GLFW\glfw3.h>
 #include <bgfx\platform.h>
@@ -135,6 +137,14 @@ void Graphics::SetTransform(const glm::mat4 & transform)
 void Graphics::SetState(uint64_t state)
 {
 	setState(state);
+}
+
+void Graphics::Submit(int viewId, Material* material)
+{
+	if (material == nullptr || material->GetShader() == nullptr) return;
+
+	material->Apply();
+	Submit(viewId, material->GetShader()->GetHandle());
 }
 
 void Graphics::Submit(int viewId, bgfx::ProgramHandle program)

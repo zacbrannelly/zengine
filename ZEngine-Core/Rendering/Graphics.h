@@ -8,6 +8,7 @@ class VertexBuffer;
 class IndexBuffer;
 class DynamicVertexBuffer;
 class DynamicIndexBuffer;
+class Material;
 
 class Graphics : public Singleton<Graphics>
 {
@@ -31,6 +32,7 @@ public:
 	void SetIndexBuffer(IndexBuffer* buffer);
 	void SetTransform(const glm::mat4& transform);
 	void SetState(uint64_t state);
+	void Submit(int viewId, Material* material);
 	void Submit(int viewId, bgfx::ProgramHandle program);
 
 	bgfx::FrameBufferHandle CreateFrameBuffer(int width, int height);
