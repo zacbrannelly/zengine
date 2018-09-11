@@ -4,6 +4,10 @@
 #include <glm/glm.hpp>
 
 class Display;
+class VertexBuffer;
+class IndexBuffer;
+class DynamicVertexBuffer;
+class DynamicIndexBuffer;
 
 class Graphics : public Singleton<Graphics>
 {
@@ -23,6 +27,8 @@ public:
 	void ViewTransform(int viewId, const glm::mat4& projMatrix, const glm::mat4& viewMatrix);
 	void Touch(int viewId);
 
+	void SetVertexBuffer(uint8_t stream, VertexBuffer* buffer);
+	void SetIndexBuffer(IndexBuffer* buffer);
 	void SetTransform(const glm::mat4& transform);
 	void SetState(uint64_t state);
 	void Submit(int viewId, bgfx::ProgramHandle program);

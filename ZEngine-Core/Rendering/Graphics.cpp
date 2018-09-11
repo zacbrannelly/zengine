@@ -1,5 +1,9 @@
 #include "Graphics.h"
 #include "../Display/Display.h"
+#include "VertexBuffer.h"
+#include "DynamicVertexBuffer.h"
+#include "IndexBuffer.h"
+#include "DynamicIndexBuffer.h"
 
 #include <GLFW\glfw3.h>
 #include <bgfx\platform.h>
@@ -109,6 +113,18 @@ void Graphics::ViewTransform(int viewId, const glm::mat4& projMatrix, const glm:
 void Graphics::Touch(int viewId)
 {
 	touch(viewId);
+}
+
+void Graphics::SetVertexBuffer(uint8_t stream, VertexBuffer* buffer)
+{
+	if (buffer != nullptr)
+		setVertexBuffer(stream, buffer->GetHandle());
+}
+
+void Graphics::SetIndexBuffer(IndexBuffer* buffer)
+{
+	if (buffer != nullptr)
+		setIndexBuffer(buffer->GetHandle());
 }
 
 void Graphics::SetTransform(const glm::mat4 & transform)
