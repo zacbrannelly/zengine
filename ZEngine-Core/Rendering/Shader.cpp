@@ -38,17 +38,6 @@ bool Shader::Load(std::string vertPath, std::string fragPath)
 	return _program.idx != bgfx::kInvalidHandle;
 }
 
-void Shader::SetUniform(const std::string & name, bgfx::UniformType::Enum type, const void * data, uint16_t numElements)
-{
-	auto& uniform = bgfx::createUniform(name.c_str(), type, numElements);
-	bgfx::setUniform(uniform, data, numElements);
-}
-
-void Shader::SetUniform(bgfx::UniformHandle& uniform, const void* data, uint16_t numElements)
-{
-	bgfx::setUniform(uniform, data, numElements);
-}
-
 const bgfx::ProgramHandle& Shader::GetHandle() const
 {
 	return _program;

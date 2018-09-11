@@ -117,6 +117,11 @@ void Graphics::Touch(int viewId)
 	touch(viewId);
 }
 
+bgfx::UniformHandle Graphics::CreateUniform(const std::string & name, bgfx::UniformType::Enum type, uint16_t numElements)
+{
+	return createUniform(name.c_str(), type, numElements);
+}
+
 void Graphics::SetVertexBuffer(uint8_t stream, VertexBuffer* buffer)
 {
 	if (buffer != nullptr)
@@ -137,6 +142,27 @@ void Graphics::SetTransform(const glm::mat4 & transform)
 void Graphics::SetState(uint64_t state)
 {
 	setState(state);
+}
+
+void Graphics::SetUniform(const std::string& name, bgfx::UniformType::Enum type, const void * data, uint16_t numElements)
+{
+	auto& uniform = createUniform(name.c_str(), type, numElements);
+	setUniform(uniform, data, numElements);
+}
+
+void Graphics::SetUniform(bgfx::UniformHandle& uniform, const void* data, uint16_t numElements)
+{
+	setUniform(uniform, data, numElements);
+}
+
+void Graphics::SetTexture(uint8_t stage, bgfx::UniformHandle & sampler, bgfx::TextureHandle & handle)
+{
+	setTexture(stage, sampler, handle);
+}
+
+void Graphics::SetTexture(int stage, bgfx::UniformHandle& sampler, bgfx::TextureHandle & handle, uint32_t flags)
+{
+	setTexture(stage, sampler, handle, flags);
 }
 
 void Graphics::Submit(int viewId, Material* material)

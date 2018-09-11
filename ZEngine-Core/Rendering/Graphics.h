@@ -2,6 +2,7 @@
 #include "../Misc/Singleton.h"
 #include <bgfx/bgfx.h>
 #include <glm/glm.hpp>
+#include <string>
 
 class Display;
 class VertexBuffer;
@@ -28,10 +29,16 @@ public:
 	void ViewTransform(int viewId, const glm::mat4& projMatrix, const glm::mat4& viewMatrix);
 	void Touch(int viewId);
 
+	bgfx::UniformHandle CreateUniform(const std::string& name, bgfx::UniformType::Enum type, uint16_t numElements);
+
 	void SetVertexBuffer(uint8_t stream, VertexBuffer* buffer);
 	void SetIndexBuffer(IndexBuffer* buffer);
 	void SetTransform(const glm::mat4& transform);
 	void SetState(uint64_t state);
+	void SetUniform(const std::string& name, bgfx::UniformType::Enum type, const void* data, uint16_t numElements);
+	void SetUniform(bgfx::UniformHandle& uniform, const void* data, uint16_t numElements);
+	void SetTexture(uint8_t stage, bgfx::UniformHandle& sampler, bgfx::TextureHandle& handle);
+	void SetTexture(int stage, bgfx::UniformHandle& sampler, bgfx::TextureHandle& handle, uint32_t flags);
 	void Submit(int viewId, Material* material);
 	void Submit(int viewId, bgfx::ProgramHandle program);
 

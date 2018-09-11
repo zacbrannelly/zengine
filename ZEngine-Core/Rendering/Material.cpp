@@ -1,23 +1,33 @@
 #include "Material.h"
 #include "Shader.h"
-
+#include "Graphics.h"
 
 Material::Material(std::string name) : ZObject(name, ObjectType::MATERIAL)
 {
 	_shader = nullptr;
+	_graphics = Graphics::GetInstance();
 }
 
 void Material::RegisterUniform(const std::string& name, bgfx::UniformType::Enum type, uint16_t numElements)
 {
 	Uniform uniform = 
 	{
-		bgfx::createUniform(name.c_str(), type, numElements),
+		_graphics->CreateUniform(name, type, numElements),
 		type,
 		numElements,
 		nullptr
 	};
 
 	_uniforms[name] = uniform;
+}
+
+void Material::RegisterSampler(const std::string& name)
+{
+	_textureSamplers[name] = 
+	{
+		_graphics->CreateUniform(name, bgfx::UniformType::Int1, 1),
+		{ bgfx::kInvalidHandle }
+	};
 }
 
 void Material::SetUniform(const std::string& name, void* data, uint16_t numElements)
@@ -30,7 +40,19 @@ void Material::SetUniform(const std::string& name, void* data, uint16_t numEleme
 		uniform.data = data;
 		uniform.numElements = numElements;
 
-		_uniforms[name] = uniform;
+		_uniforms.insert_or_assign(iterator, name, uniform);
+	}
+}
+
+void Material::SetTexture(const std::string& name, bgfx::TextureHandle texture)
+{
+	auto iterator = _textureSamplers.find(name);
+	if (iterator != _textureSamplers.end())
+	{
+		auto sampler = iterator->second;
+		sampler.texture = texture;
+
+		_textureSamplers.insert_or_assign(iterator, name, sampler);
 	}
 }
 
@@ -49,14 +71,25 @@ const std::map<std::string, Uniform>& Material::GetUniforms() const
 	return _uniforms;
 }
 
+const std::map<std::string, Sampler> Material::GetSamplers() const
+{
+	return _textureSamplers;
+}
+
 void Material::Apply()
 {
-	if (_shader == nullptr) return;
-
 	for (auto pair : _uniforms)
 	{
 		auto uniform = pair.second;
-		_shader->SetUniform(uniform.handle, uniform.data, uniform.numElements);
+		_graphics->SetUniform(uniform.handle, uniform.data, uniform.numElements);
+	}
+
+	// TODO: Check the bounds of the count int
+	uint8_t count = 0;
+	for (auto it = _textureSamplers.begin(); it != _textureSamplers.end(); it++, count++)
+	{
+		auto sampler = it->second;
+		_graphics->SetTexture(count, sampler.handle, sampler.texture);
 	}
 }
 
@@ -67,4 +100,9 @@ ZObject* Material::CreateInstance(std::string name, ObjectType type)
 
 Material::~Material()
 {
+	for (auto pair : _uniforms)
+	{
+		if (pair.second.data != nullptr)
+			delete pair.second.data;
+	}
 }
