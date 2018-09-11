@@ -24,6 +24,16 @@ float GUIImage::GetHeight() const
 	return _height;
 }
 
+void GUIImage::SetTexture(bgfx::TextureHandle texture)
+{
+	_texture = texture;
+}
+
+TextureHandle GUIImage::GetTexture() const
+{
+	return _texture;
+}
+
 void GUIImage::RenderElement()
 {
 	ImGui::Image(_texture, ImVec2(_width, _height));

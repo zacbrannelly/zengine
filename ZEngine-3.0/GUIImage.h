@@ -13,6 +13,9 @@ public:
 	float GetWidth() const;
 	float GetHeight() const;
 
+	void SetTexture(bgfx::TextureHandle texture);
+	bgfx::TextureHandle GetTexture() const;
+
 	void RenderElement() override;
 
 private:
