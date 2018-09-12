@@ -7,25 +7,75 @@
 #include <ZEngine-Core\Misc\Factory.h>
 #include <ZEngine-Core\Map\Map.h>
 #include <ZEngine-Core\Map\Objects\Entity.h>
-#include <ZEngine-Core\Component\TestRenderer.h>
+#include <ZEngine-Core\Component\MeshRenderer.h>
+#include <ZEngine-Core\Rendering\Material.h>
+#include <ZEngine-Core\Rendering\Shader.h>
+#include <ZEngine-Core\Rendering\Mesh.h>
+#include <ZEngine-Core\Component\Transform.h>
+#include <ZEngine-Core\Rendering\MeshFactory.h>
+#include <glm/glm.hpp>
 
 #include "GUILibrary.h"
 #include "MainMenuBar.h"
 #include "MapView.h"
+#include "InspectorWindow.h"
 #include "GUIImage.h"
 
 Editor::Editor()
 {
 	auto testMap = Factory::CreateInstance<Map>("test_map", ObjectType::MAP);
+	SetSelectedMap(testMap);
 
-	// TODO: Add objects to the test map
+	// Add object to the test map
+	{
+		auto testObject = Factory::CreateInstance<Entity>("test_object", ObjectType::ENTITY);
 
-	auto testObject = Factory::CreateInstance<Entity>("test_object", ObjectType::ENTITY);
-	testObject->AddComponent(Factory::CreateInstance<TestRenderer>("Test Renderer", ObjectType::TEST_RENDERER));
-	testMap->Add(testObject);
+		// Create material for mesh to be created
+		auto shader = Factory::CreateInstance<Shader>("cubes", ObjectType::SHADER);
+		shader->Load("vs_cubes.bin", "fs_cubes.bin");
+		auto material = Factory::CreateInstance<Material>("test material", ObjectType::MATERIAL);
+		material->SetShader(shader);
+
+		// Create mesh renderer with sphere mesh attached
+		auto mesh = MeshFactory::CreateSphere("Sphere");
+		auto meshRenderer = Factory::CreateInstance<MeshRenderer>("Mesh Renderer", ObjectType::MESH_RENDERER);
+		meshRenderer->SetMesh(mesh);
+		meshRenderer->SetMaterial(material);
+		testObject->AddComponent(meshRenderer);
+
+		testMap->Add(testObject);
+
+		SetSelectedEntity(testObject);
+	}
 
 	Add(new MainMenuBar());
 	Add(new MapView(testMap));
+	Add(new InspectorWindow(this));
+
+}
+
+void Editor::Update()
+{
+}
+
+void Editor::SetSelectedMap(Map* map)
+{
+	_selectedMap = map;
+}
+
+Map* Editor::GetSelectedMap() const
+{
+	return _selectedMap;
+}
+
+void Editor::SetSelectedEntity(Entity* entity)
+{
+	_selectedObject = entity;
+}
+
+Entity* Editor::GetSelectedEntity() const
+{
+	return _selectedObject;
 }
 
 Editor::~Editor()
@@ -57,6 +107,8 @@ int main(int argc, char* argv[])
 	while (!display.CloseRequested())
 	{
 		display.Update();
+
+		editorContainer->Update();
 
 		// Render the GUI
 		gui->NewFrame();

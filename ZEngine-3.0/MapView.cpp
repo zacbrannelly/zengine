@@ -21,7 +21,7 @@ MapView::MapView(Map* map) : GUIWindow("Map View", 1024, 640, false)
 	_viewEntity->AddComponent(_viewCamera);
 
 	_viewCamera->SetProjectionMode(Camera::ProjectionMode::ORTHOGRAPHIC);
-	_viewCamera->SetFieldOfView(90.0f);
+	_viewCamera->SetFieldOfView(60.0f);
 	_viewCamera->SetViewport(0, 0, 1024, 600);
 	_viewCamera->SetClearColor(0, 0, 1, 1.0f);
 	_viewCamera->SetViewId(1);
@@ -37,10 +37,16 @@ void MapView::ProcessInput()
 	_viewImage->SetSize(GetWidth(), GetHeight() - 40);
 }
 
+void MapView::RenderInWindow()
+{
+}
+
 void MapView::RenderElement()
 {
 	// Set camera settings
 	_viewCamera->Render(-1);
+
+	ImGui::Begin("Map View Camera Settings");
 
 	auto transform = _viewEntity->GetTransform();
 	float newPos[3] = { transform->GetPosition().x, transform->GetPosition().y, transform->GetPosition().z };
@@ -50,7 +56,7 @@ void MapView::RenderElement()
 	}
 
 	float deg2rad = 3.1415f / 180.0f;
-	float newRot[3] = { transform->GetRotaion().x / deg2rad, transform->GetRotaion().y / deg2rad, transform->GetRotaion().z / deg2rad };
+	float newRot[3] = { transform->GetRotation().x / deg2rad, transform->GetRotation().y / deg2rad, transform->GetRotation().z / deg2rad };
 	if (ImGui::SliderFloat3("Rotation", newRot, 0, 360))
 	{
 		transform->SetRotation({ newRot[0] * deg2rad, newRot[1] * deg2rad, newRot[2] * deg2rad });
@@ -76,6 +82,14 @@ void MapView::RenderElement()
 	{
 		_viewCamera->SetFieldOfView(glm::degrees(fov));
 	}
+
+	float size = _viewCamera->GetOrthoSize();
+	if (ImGui::SliderFloat("Size", &size, 0.0f, 50.0f))
+	{
+		_viewCamera->SetOrthoSize(size);
+	}
+
+	ImGui::End();
 
 	// Render the world without the internal cameras
 	if (_map != nullptr)

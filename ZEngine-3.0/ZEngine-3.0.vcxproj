@@ -159,6 +159,7 @@
     <ClCompile Include="GUIImage.cpp" />
     <ClCompile Include="GUILibrary.cpp" />
     <ClCompile Include="GUIWindow.cpp" />
+    <ClCompile Include="InspectorWindow.cpp" />
     <ClCompile Include="MainMenuBar.cpp" />
     <ClCompile Include="MapView.cpp" />
   </ItemGroup>
@@ -192,6 +193,7 @@
     <ClInclude Include="GUILibrary.h" />
     <ClInclude Include="GUIWindow.h" />
     <ClInclude Include="imgui-includes.h" />
+    <ClInclude Include="InspectorWindow.h" />
     <ClInclude Include="MainMenuBar.h" />
     <ClInclude Include="MapView.h" />
   </ItemGroup>

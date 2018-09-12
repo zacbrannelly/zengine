@@ -70,7 +70,7 @@ public:
 	void SetNormals(const std::vector<glm::vec3>& vertices);
 	const std::vector<glm::vec3>& GetNormals() const;
 
-	void Draw(int viewId, std::vector<Material*> materials, glm::mat4& transform);
+	void Draw(int viewId, const std::vector<Material*>& materials, glm::mat4& transform);
 private:
 	template<typename T>
 	void SetBuffer(VertexBuffer*& buffer, bgfx::VertexDecl& decl, std::vector<T>& originalData, const float* data, unsigned int numElements);

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -118,6 +118,8 @@
   <ItemGroup>
     <ClInclude Include="Assets\Asset.h" />
     <ClInclude Include="Assets\AssetManager.h" />
+    <ClInclude Include="Component\MeshRenderer.h" />
+    <ClInclude Include="Rendering\MeshFactory.h" />
     <ClInclude Include="Rendering\Mesh.h" />
     <ClInclude Include="Rendering\Material.h" />
     <ClInclude Include="Rendering\DynamicIndexBuffer.h" />
@@ -138,6 +140,7 @@
     <ClInclude Include="Component\Transform.h" />
     <ClInclude Include="Component\TestRenderer.h" />
     <ClInclude Include="Rendering\VertexBuffer.h" />
+    <ClInclude Include="Rendering\Texture2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Assets\Asset.cpp" />
@@ -145,6 +148,8 @@
     <ClCompile Include="Component\Camera.cpp" />
     <ClCompile Include="Component\Component.cpp" />
     <ClCompile Include="Display\Display.cpp" />
+    <ClCompile Include="Component\MeshRenderer.cpp" />
+    <ClCompile Include="Rendering\MeshFactory.cpp" />
     <ClCompile Include="Rendering\Mesh.cpp" />
     <ClCompile Include="Rendering\Material.cpp" />
     <ClCompile Include="Rendering\DynamicIndexBuffer.cpp" />
@@ -160,6 +165,7 @@
     <ClCompile Include="Component\Transform.cpp" />
     <ClCompile Include="Component\TestRenderer.cpp" />
     <ClCompile Include="Rendering\VertexBuffer.cpp" />
+    <ClCompile Include="Rendering\Texture2D.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

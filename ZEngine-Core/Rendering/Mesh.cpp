@@ -47,18 +47,19 @@ bool Mesh::IsDynamic() const
 
 void Mesh::SetIndices(const std::vector<uint16_t>& indices)
 {
-	if (_subMeshes.size() == 0)
-	{
-		_subMeshes.push_back(new SubMesh(_isDynamic));
-	}
-
-	auto subMesh = _subMeshes.front();
-	subMesh->SetIndices(indices);
+	SetIndices(0, indices);
 }
 
 void Mesh::SetIndices(int subMesh, const std::vector<uint16_t>& indices)
 {
-	assert(subMesh >= 0 && subMesh < _subMeshes.size());
+	assert(subMesh >= 0);
+
+	if (subMesh >= _subMeshes.size())
+	{
+		_subMeshes.push_back(new SubMesh(_isDynamic));
+		subMesh = _subMeshes.size() - 1;
+	}
+
 	_subMeshes[subMesh]->SetIndices(indices);
 }
 
@@ -158,13 +159,13 @@ const std::vector<glm::vec2>& Mesh::GetTextureCoords() const
 	return _textureCoords;
 }
 
-void Mesh::Draw(int viewId, std::vector<Material*> materials, glm::mat4& transform)
+void Mesh::Draw(int viewId, const std::vector<Material*>& materials, glm::mat4& transform)
 {
 	auto graphics = Graphics::GetInstance();
 
 	for (int i = 0; i < _subMeshes.size(); ++i)
 	{
-		auto material = i < materials.size() ? materials[i] : nullptr;
+		auto material = i < materials.size() ? materials[i] : materials.size() > 0 ? materials.back() : nullptr;
 
 		if (material != nullptr)
 		{

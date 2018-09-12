@@ -16,6 +16,10 @@ public:
 	void Remove(Entity* entity);
 	void Remove(std::string name);
 
+	Entity* Find(std::string name);
+	std::vector<Entity*> FindAll(std::string name);
+	const std::vector<Entity*>& GetEntities();
+
 	void RegisterCameras();
 	const std::vector<Camera*>& GetCameras() const;
 

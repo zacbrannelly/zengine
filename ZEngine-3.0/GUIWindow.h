@@ -10,6 +10,7 @@ public:
 	virtual ~GUIWindow();
 
 	virtual void ProcessInput() = 0;
+	virtual void RenderInWindow() = 0;
 	virtual void RenderElement() override;
 
 	virtual void SetSize(int width, int height);

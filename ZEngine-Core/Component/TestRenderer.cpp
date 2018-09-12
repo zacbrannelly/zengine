@@ -52,17 +52,10 @@ void TestRenderer::Init()
 	std::vector<uint16_t> indices
 	{
 			0, 1, 2,
-			3,
-			7,
-			1,
-			5,
-			0,
-			4,
-			2,
-			6,
-			7,
-			4,
-			5,
+			3, 7, 1,
+			5, 0, 4,
+			2, 6, 7,
+			4, 5,
 	};
 
 	_mesh = new Mesh("test mesh");

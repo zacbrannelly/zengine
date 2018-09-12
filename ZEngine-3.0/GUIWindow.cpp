@@ -40,6 +40,7 @@ void GUIWindow::RenderElement()
 	_height = windowSize.y;
 
 	Container::RenderElement();
+	RenderInWindow();
 	ProcessInput();
 
 	if (_isChild)

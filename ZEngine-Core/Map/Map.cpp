@@ -58,6 +58,35 @@ void Map::Remove(string name)
 	}
 }
 
+Entity * Map::Find(string name)
+{
+	for (auto entity : _entities)
+	{
+		if (entity->GetName() == name)
+		{
+			return entity;
+		}
+	}
+}
+
+vector<Entity*> Map::FindAll(string name)
+{
+	vector<Entity*> result;
+
+	for (auto entity : _entities)
+	{
+		if (entity->GetName() == name)
+			result.push_back(entity);
+	}
+
+	return result;
+}
+
+const std::vector<Entity*>& Map::GetEntities()
+{
+	return _entities;
+}
+
 void Map::RegisterCameras()
 {
 	_cameras.clear();

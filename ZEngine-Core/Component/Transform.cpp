@@ -48,7 +48,7 @@ void Transform::SetRotation(const glm::vec3& rotation)
 	_rotation = rotation;
 }
 
-const glm::vec3 & Transform::GetRotaion() const
+const glm::vec3 & Transform::GetRotation() const
 {
 	return _rotation;
 }

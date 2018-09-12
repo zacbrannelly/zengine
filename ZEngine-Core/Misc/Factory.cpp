@@ -5,6 +5,7 @@
 #include "../Rendering/Shader.h"
 #include "../Rendering/Material.h"
 #include "../Rendering/Mesh.h"
+#include "../Component/MeshRenderer.h"
 #include "../Component/Camera.h"
 #include "../Component/Transform.h"
 #include "../Component/TestRenderer.h"
@@ -20,6 +21,7 @@ void Factory::Init()
 	RegisterType(ObjectType::SHADER, &Shader::CreateInstance);
 	RegisterType(ObjectType::CAMERA, &Camera::CreateInstance);
 	RegisterType(ObjectType::TRANSFORM, &Transform::CreateInstance);
+	RegisterType(ObjectType::MESH_RENDERER, &MeshRenderer::CreateInstance);
 	RegisterType(ObjectType::TEST_RENDERER, &TestRenderer::CreateInstance);
 }
 
