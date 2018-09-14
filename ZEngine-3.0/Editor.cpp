@@ -19,6 +19,7 @@
 #include "MainMenuBar.h"
 #include "MapView.h"
 #include "InspectorWindow.h"
+#include "SceneGraphWindow.h"
 #include "GUIImage.h"
 
 Editor::Editor()
@@ -45,13 +46,24 @@ Editor::Editor()
 
 		testMap->Add(testObject);
 
+		auto testObject2 = Factory::CreateInstance<Entity>("test_object2", ObjectType::ENTITY);
+
+		// Create mesh renderer with sphere mesh attached
+		meshRenderer = Factory::CreateInstance<MeshRenderer>("Mesh Renderer", ObjectType::MESH_RENDERER);
+		meshRenderer->SetMesh(mesh);
+		meshRenderer->SetMaterial(material);
+		testObject2->AddComponent(meshRenderer);
+
+		testObject2->GetTransform()->SetParent(testObject->GetTransform());
+		testMap->Add(testObject2);
+
 		SetSelectedEntity(testObject);
 	}
 
 	Add(new MainMenuBar());
 	Add(new MapView(testMap));
 	Add(new InspectorWindow(this));
-
+	Add(new SceneGraphWindow(this));
 }
 
 void Editor::Update()
@@ -82,8 +94,13 @@ Editor::~Editor()
 {
 }
 
+// Definied in ScriptDemo.cpp in ZEngine-Core (only for testing if scripting is working)
+int RunScriptTest(int argc, char* argv[]);
+
 int main(int argc, char* argv[])
 {
+	RunScriptTest(argc, argv);
+
 	// Initialize the factory (register the types)
 	Factory::Init();
 

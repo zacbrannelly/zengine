@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include "Component.h"
 #include <glm/glm.hpp>
 
@@ -24,12 +25,15 @@ public:
 	void SetParent(Transform* parent);
 	Transform* GetParent() const;
 
+	const std::vector<Transform*>& GetChildren() const;
+
 private:
 	glm::vec3 _position;
 	glm::vec3 _scale;
 	glm::vec3 _rotation;
 
 	Transform* _parent;
+	std::vector<Transform*> _children;
 
 public:
 	void Init() override;

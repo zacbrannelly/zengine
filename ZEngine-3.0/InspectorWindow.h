@@ -1,6 +1,9 @@
 #pragma once
 
 #include "GUIWindow.h"
+#include "Inspector.h"
+#include <ZEngine-Core/Map/Objects/ZObject.h>
+#include <map>
 
 class Editor;
 
@@ -14,6 +17,9 @@ public:
 	void RenderInWindow() override;
 
 private:
+	Inspector* GetInspector(ObjectType type);
+
 	Editor* _context;
+	std::map<ObjectType, Inspector*> _inspectors;
 };
 

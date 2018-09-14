@@ -8,7 +8,7 @@
 #include "imgui-includes.h"
 
 
-MapView::MapView(Map* map) : GUIWindow("Map View", 1024, 640, false)
+MapView::MapView(Map* map) : GUIWindow("Map View", 1024, 850, false)
 {
 	_map = map;
 
@@ -30,66 +30,69 @@ MapView::MapView(Map* map) : GUIWindow("Map View", 1024, 640, false)
 	// Make image linked to the view camera then add it as a GUI element
 	_viewImage = new GUIImage(_viewCamera->GetRenderTexture(), 1024, 600);
 	Add(_viewImage);
+
+	SetFlags(ImGuiWindowFlags_AlwaysAutoResize);
 }
 
 void MapView::ProcessInput()
 {
-	_viewImage->SetSize(GetWidth(), GetHeight() - 40);
+	//_viewImage->SetSize(GetWidth(), GetHeight() - 40);
 }
 
 void MapView::RenderInWindow()
 {
+	if (ImGui::CollapsingHeader("Camera Settings", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		ImGui::BeginChild("Map View Camera Settings", ImVec2(0, 100), false, ImGuiWindowFlags_AlwaysAutoResize);
+
+		auto transform = _viewEntity->GetTransform();
+		float newPos[3] = { transform->GetPosition().x, transform->GetPosition().y, transform->GetPosition().z };
+		if (ImGui::DragFloat3("Position", newPos))
+		{
+			transform->SetPosition({ newPos[0], newPos[1], newPos[2] });
+		}
+
+		float newRot[3] = { transform->GetRotation().x, transform->GetRotation().y, transform->GetRotation().z };
+		if (ImGui::DragFloat3("Rotation", newRot))
+		{
+			transform->SetRotation({ newRot[0], newRot[1], newRot[2] });
+		}
+
+		if (ImGui::BeginCombo("Projection", _viewCamera->GetProjectionMode() == Camera::PERSPECTIVE ? "Perspective" : "Orthograpic"))
+		{
+			if (ImGui::Selectable("Orthographic"))
+			{
+				_viewCamera->SetProjectionMode(Camera::ORTHOGRAPHIC);
+			}
+
+			if (ImGui::Selectable("Perspective"))
+			{
+				_viewCamera->SetProjectionMode(Camera::PERSPECTIVE);
+			}
+
+			ImGui::EndCombo();
+		}
+
+		float fov = _viewCamera->GetFieldOfView();
+		if (ImGui::SliderAngle("Field of View", &fov))
+		{
+			_viewCamera->SetFieldOfView(glm::degrees(fov));
+		}
+
+		float size = _viewCamera->GetOrthoSize();
+		if (ImGui::SliderFloat("Size", &size, 0.0f, 50.0f))
+		{
+			_viewCamera->SetOrthoSize(size);
+		}
+
+		ImGui::EndChild();
+	}
 }
 
 void MapView::RenderElement()
 {
 	// Set camera settings
 	_viewCamera->Render(-1);
-
-	ImGui::Begin("Map View Camera Settings");
-
-	auto transform = _viewEntity->GetTransform();
-	float newPos[3] = { transform->GetPosition().x, transform->GetPosition().y, transform->GetPosition().z };
-	if (ImGui::SliderFloat3("Position", newPos, -10, 10))
-	{
-		transform->SetPosition({ newPos[0], newPos[1], newPos[2] });
-	}
-
-	float deg2rad = 3.1415f / 180.0f;
-	float newRot[3] = { transform->GetRotation().x / deg2rad, transform->GetRotation().y / deg2rad, transform->GetRotation().z / deg2rad };
-	if (ImGui::SliderFloat3("Rotation", newRot, 0, 360))
-	{
-		transform->SetRotation({ newRot[0] * deg2rad, newRot[1] * deg2rad, newRot[2] * deg2rad });
-	}
-
-	if (ImGui::BeginCombo("Projection", _viewCamera->GetProjectionMode() == Camera::PERSPECTIVE ? "Perspective" : "Orthograpic"))
-	{
-		if (ImGui::Selectable("Orthographic"))
-		{
-			_viewCamera->SetProjectionMode(Camera::ORTHOGRAPHIC);
-		}
-
-		if (ImGui::Selectable("Perspective"))
-		{
-			_viewCamera->SetProjectionMode(Camera::PERSPECTIVE);
-		}
-
-		ImGui::EndCombo();
-	}
-
-	float fov = _viewCamera->GetFieldOfView();
-	if (ImGui::SliderAngle("Field of View", &fov))
-	{
-		_viewCamera->SetFieldOfView(glm::degrees(fov));
-	}
-
-	float size = _viewCamera->GetOrthoSize();
-	if (ImGui::SliderFloat("Size", &size, 0.0f, 50.0f))
-	{
-		_viewCamera->SetOrthoSize(size);
-	}
-
-	ImGui::End();
 
 	// Render the world without the internal cameras
 	if (_map != nullptr)

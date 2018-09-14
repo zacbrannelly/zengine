@@ -75,12 +75,18 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\ZEngine-3.0\ZEngine-3.0\glm;..\..\bx\include;..\..\bimg\include;..\..\bgfx\include;..\..\ZEngine-3.0\ZEngine-3.0\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\v8\v8\include;..\..\v8\v8;..\..\ZEngine-3.0\ZEngine-3.0\glm;..\..\bx\include;..\..\bimg\include;..\..\bgfx\include;..\..\ZEngine-3.0\ZEngine-3.0\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\..\ZEngine-3.0\ZEngine-3.0\glfw\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Lib>
+      <AdditionalDependencies>v8.dll.lib;v8_libbase.dll.lib;v8_libplatform.dll.lib;icui18n.dll.lib;icuuc.dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>..\..\v8\v8\out.gn\x64.debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -141,6 +147,7 @@
     <ClInclude Include="Component\TestRenderer.h" />
     <ClInclude Include="Rendering\VertexBuffer.h" />
     <ClInclude Include="Rendering\Texture2D.h" />
+    <ClInclude Include="Scripting\ScriptSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Assets\Asset.cpp" />
@@ -166,6 +173,8 @@
     <ClCompile Include="Component\TestRenderer.cpp" />
     <ClCompile Include="Rendering\VertexBuffer.cpp" />
     <ClCompile Include="Rendering\Texture2D.cpp" />
+    <ClCompile Include="Scripting\ScriptDemo.cpp" />
+    <ClCompile Include="Scripting\ScriptSystem.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

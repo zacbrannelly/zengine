@@ -152,16 +152,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\bgfx\3rdparty\dear-imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="CodeEditor.cpp" />
     <ClCompile Include="Container.cpp" />
     <ClCompile Include="Editor.cpp" />
-    <ClCompile Include="EditorWindow.cpp" />
     <ClCompile Include="experimental.cpp" />
     <ClCompile Include="GUIImage.cpp" />
     <ClCompile Include="GUILibrary.cpp" />
     <ClCompile Include="GUIWindow.cpp" />
+    <ClCompile Include="Inspector.cpp" />
     <ClCompile Include="InspectorWindow.cpp" />
     <ClCompile Include="MainMenuBar.cpp" />
     <ClCompile Include="MapView.cpp" />
+    <ClCompile Include="SceneGraphWindow.cpp" />
+    <ClCompile Include="TransformInspector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\bgfx\.build\projects\vs2017\bgfx.vcxproj">
@@ -185,17 +188,20 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\bgfx\3rdparty\dear-imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="CodeEditor.h" />
     <ClInclude Include="Container.h" />
     <ClInclude Include="Editor.h" />
-    <ClInclude Include="EditorWindow.h" />
     <ClInclude Include="GUIElement.h" />
     <ClInclude Include="GUIImage.h" />
     <ClInclude Include="GUILibrary.h" />
     <ClInclude Include="GUIWindow.h" />
     <ClInclude Include="imgui-includes.h" />
+    <ClInclude Include="Inspector.h" />
     <ClInclude Include="InspectorWindow.h" />
     <ClInclude Include="MainMenuBar.h" />
     <ClInclude Include="MapView.h" />
+    <ClInclude Include="SceneGraphWindow.h" />
+    <ClInclude Include="TransformInspector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

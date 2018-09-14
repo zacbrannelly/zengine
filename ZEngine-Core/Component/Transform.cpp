@@ -58,9 +58,9 @@ glm::mat4 Transform::GetLocalTransformMatrix() const
 	auto transform = glm::mat4(1.0f);
 
 	transform = glm::translate(transform, _position);
-	transform = glm::rotate(transform, _rotation.x, glm::vec3(1, 0, 0));
-	transform = glm::rotate(transform, _rotation.y, glm::vec3(0, 1, 0));
-	transform = glm::rotate(transform, _rotation.z, glm::vec3(0, 0, 1));
+	transform = glm::rotate(transform, glm::radians(_rotation.x), glm::vec3(1, 0, 0));
+	transform = glm::rotate(transform, glm::radians(_rotation.y), glm::vec3(0, 1, 0));
+	transform = glm::rotate(transform, glm::radians(_rotation.z), glm::vec3(0, 0, 1));
 	transform = glm::scale(transform, _scale);
 
 	return transform;
@@ -78,12 +78,32 @@ glm::mat4 Transform::GetWorldTransformMatrix() const
 
 void Transform::SetParent(Transform* parent)
 {
+	if (_parent != nullptr)
+	{
+		auto it = std::find(_parent->GetChildren().begin(), _parent->GetChildren().end(), this);
+
+		if (it != _parent->GetChildren().end())
+		{
+			_parent->_children.erase(it);
+		}
+	}
+
 	_parent = parent;
+
+	if (_parent != nullptr)
+	{
+		_parent->_children.push_back(this);
+	}
 }
 
 Transform* Transform::GetParent() const
 {
 	return _parent;
+}
+
+const std::vector<Transform*>& Transform::GetChildren() const
+{
+	return _children;
 }
 
 ZObject* Transform::CreateInstance(string name, ObjectType type)
