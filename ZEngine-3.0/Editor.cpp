@@ -13,6 +13,9 @@
 #include <ZEngine-Core\Rendering\Mesh.h>
 #include <ZEngine-Core\Component\Transform.h>
 #include <ZEngine-Core\Rendering\MeshFactory.h>
+#include <ZEngine-Core\Scripting\ScriptSystem.h>
+#include <ZEngine-Core\Scripting\Script.h>
+#include <ZEngine-Core\Component\ScriptComponent.h>
 #include <glm/glm.hpp>
 
 #include "GUILibrary.h"
@@ -49,10 +52,26 @@ Editor::Editor()
 		auto testObject2 = Factory::CreateInstance<Entity>("test_object2", ObjectType::ENTITY);
 
 		// Create mesh renderer with sphere mesh attached
+		mesh = MeshFactory::CreateCube("Cube");
 		meshRenderer = Factory::CreateInstance<MeshRenderer>("Mesh Renderer", ObjectType::MESH_RENDERER);
 		meshRenderer->SetMesh(mesh);
 		meshRenderer->SetMaterial(material);
 		testObject2->AddComponent(meshRenderer);
+
+		// Create a test scripting component and add to test_object2
+		{
+			auto script = Factory::CreateInstance<Script>("TestComponent", ObjectType::SCRIPT);
+
+			if (script->CompileFromFile("scripts/test.js"))
+			{
+				script->Execute();
+
+				auto scriptComp = Factory::CreateInstance<ScriptComponent>("TestComponent", ObjectType::SCRIPT_COMPONENT);
+				scriptComp->SetScript(script);
+
+				testObject2->AddComponent(scriptComp);
+			}
+		}
 
 		testObject2->GetTransform()->SetParent(testObject->GetTransform());
 		testMap->Add(testObject2);
@@ -94,17 +113,16 @@ Editor::~Editor()
 {
 }
 
-// Definied in ScriptDemo.cpp in ZEngine-Core (only for testing if scripting is working)
-int RunScriptTest(int argc, char* argv[]);
-
 int main(int argc, char* argv[])
 {
-	RunScriptTest(argc, argv);
-
 	// Initialize the factory (register the types)
 	Factory::Init();
 
 	// TODO: Register any editor specific ZObject's here
+
+	// Init scripting system
+	auto scriptSystem = ScriptSystem::GetInstance();
+	scriptSystem->Init(argv[0]);
 
 	// Init window
 	Display display("ZEngine 3.0 | By Zac Brannelly", 1920, 1060);
@@ -148,6 +166,7 @@ int main(int argc, char* argv[])
 	gui->Shutdown();
 	graphics->Shutdown();
 	display.Shutdown();
+	scriptSystem->Shutdown();
 
 	return 0;
 }

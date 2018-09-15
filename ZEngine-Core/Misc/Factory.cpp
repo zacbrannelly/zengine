@@ -9,6 +9,8 @@
 #include "../Component/Camera.h"
 #include "../Component/Transform.h"
 #include "../Component/TestRenderer.h"
+#include "../Component/ScriptComponent.h"
+#include "../Scripting/Script.h"
 
 std::map<ObjectType, ZObject*(*)(std::string, ObjectType)> Factory::_typeConstructors;
 
@@ -22,6 +24,8 @@ void Factory::Init()
 	RegisterType(ObjectType::CAMERA, &Camera::CreateInstance);
 	RegisterType(ObjectType::TRANSFORM, &Transform::CreateInstance);
 	RegisterType(ObjectType::MESH_RENDERER, &MeshRenderer::CreateInstance);
+	RegisterType(ObjectType::SCRIPT, &Script::CreateInstance);
+	RegisterType(ObjectType::SCRIPT_COMPONENT, &ScriptComponent::CreateInstance);
 	RegisterType(ObjectType::TEST_RENDERER, &TestRenderer::CreateInstance);
 }
 

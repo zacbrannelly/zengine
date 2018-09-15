@@ -1,5 +1,6 @@
 #include "Transform.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include "../Scripting/ScriptSystem.h"
 
 using namespace std;
 
@@ -109,6 +110,79 @@ const std::vector<Transform*>& Transform::GetChildren() const
 ZObject* Transform::CreateInstance(string name, ObjectType type)
 {
 	return new Transform();
+}
+
+void Transform_SetPositionCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+	if (info.Length() == 3)
+	{
+		auto self = info.Holder();
+		auto wrapper = v8::Local<v8::External>::Cast(self->GetInternalField(0));
+		auto scriptableObj = static_cast<IScriptable*>(wrapper->Value());
+		auto transform = static_cast<Transform*>(scriptableObj);
+		auto context = ScriptSystem::GetInstance()->GetContext()->GetLocal();
+
+		double x = info[0]->NumberValue(context).ToChecked();
+		double y = info[1]->NumberValue(context).ToChecked();
+		double z = info[2]->NumberValue(context).ToChecked();
+
+		transform->SetPosition({ x, y, z });
+	}
+}
+
+void Transform_SetRotationCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+	if (info.Length() == 3)
+	{
+		auto self = info.Holder();
+		auto wrapper = v8::Local<v8::External>::Cast(self->GetInternalField(0));
+		auto scriptableObj = static_cast<IScriptable*>(wrapper->Value());
+		auto transform = static_cast<Transform*>(scriptableObj);
+		auto context = ScriptSystem::GetInstance()->GetContext()->GetLocal();
+
+		double x = info[0]->NumberValue(context).ToChecked();
+		double y = info[1]->NumberValue(context).ToChecked();
+		double z = info[2]->NumberValue(context).ToChecked();
+
+		transform->SetRotation({ x, y, z });
+	}
+}
+
+void Transform_SetScaleCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+	if (info.Length() == 3)
+	{
+		auto self = info.Holder();
+		auto wrapper = v8::Local<v8::External>::Cast(self->GetInternalField(0));
+		auto scriptableObj = static_cast<IScriptable*>(wrapper->Value());
+		auto transform = static_cast<Transform*>(scriptableObj);
+		auto context = ScriptSystem::GetInstance()->GetContext()->GetLocal();
+
+		double x = info[0]->NumberValue(context).ToChecked();
+		double y = info[1]->NumberValue(context).ToChecked();
+		double z = info[2]->NumberValue(context).ToChecked();
+
+		transform->SetScale({ x, y, z });
+	}
+}
+
+v8::Global<v8::FunctionTemplate> Transform::GetTemplate(v8::Isolate* isolate)
+{
+	using namespace v8;
+
+	auto sys = ScriptSystem::GetInstance();
+
+	auto constructor = FunctionTemplate::New(isolate);
+	constructor->SetClassName(sys->GetString("Transform"));
+
+	constructor->InstanceTemplate()->SetInternalFieldCount(1);
+
+	// TODO: Add properties (getters/setters only)
+	constructor->InstanceTemplate()->Set(isolate, "SetPosition", FunctionTemplate::New(isolate, Transform_SetPositionCallback));
+	constructor->InstanceTemplate()->Set(isolate, "SetRotation", FunctionTemplate::New(isolate, Transform_SetRotationCallback));
+	constructor->InstanceTemplate()->Set(isolate, "SetScale", FunctionTemplate::New(isolate, Transform_SetScaleCallback));
+
+	return Global<FunctionTemplate>(isolate, constructor);
 }
 
 Transform::~Transform()

@@ -41,5 +41,6 @@ public:
 	void Render(int viewId) override;
 
 	static ZObject* CreateInstance(std::string name, ObjectType type);
+	static v8::Global<v8::FunctionTemplate> GetTemplate(v8::Isolate* isolate);
 };
 

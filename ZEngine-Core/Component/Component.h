@@ -1,10 +1,12 @@
 #pragma once
 
 #include "../Map/Objects/ZObject.h"
+#include "../Scripting/IScriptable.h"
+#include <include/v8.h>
 
 class Entity;
 
-class Component : public ZObject
+class Component : public ZObject, public IScriptable
 {
 public:
 	Component(std::string name, ObjectType type);
@@ -17,6 +19,7 @@ public:
 	virtual void SetOwner(Entity* owner);
 	virtual Entity* GetOwner() const;
 
+	static v8::Global<v8::FunctionTemplate> GetTemplate(v8::Isolate* isolate);
 private:
 	Entity* _owner;
 };

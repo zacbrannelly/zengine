@@ -1,12 +1,13 @@
 #pragma once
 
 #include "ZObject.h"
+#include "../../Scripting/IScriptable.h"
 #include <vector>
 
 class Component;
 class Transform;
 
-class Entity : public ZObject
+class Entity : public ZObject, public IScriptable
 {
 public:
 	Entity(std::string name); 
@@ -21,6 +22,7 @@ public:
 	Transform* GetTransform() const;
 
 	static ZObject* CreateInstance(std::string name, ObjectType type);
+	static v8::Global<v8::FunctionTemplate> GetTemplate(v8::Isolate* isolate);
 
 private:
 	std::vector<Component*> _components;

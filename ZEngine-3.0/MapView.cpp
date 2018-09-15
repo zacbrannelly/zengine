@@ -43,7 +43,7 @@ void MapView::RenderInWindow()
 {
 	if (ImGui::CollapsingHeader("Camera Settings", ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		ImGui::BeginChild("Map View Camera Settings", ImVec2(0, 100), false, ImGuiWindowFlags_AlwaysAutoResize);
+		ImGui::BeginChild("Map View Camera Settings", ImVec2(0, 150), false, ImGuiWindowFlags_AlwaysAutoResize);
 
 		auto transform = _viewEntity->GetTransform();
 		float newPos[3] = { transform->GetPosition().x, transform->GetPosition().y, transform->GetPosition().z };

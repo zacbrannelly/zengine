@@ -125,6 +125,7 @@
     <ClInclude Include="Assets\Asset.h" />
     <ClInclude Include="Assets\AssetManager.h" />
     <ClInclude Include="Component\MeshRenderer.h" />
+    <ClInclude Include="Scripting\IScriptable.h" />
     <ClInclude Include="Rendering\MeshFactory.h" />
     <ClInclude Include="Rendering\Mesh.h" />
     <ClInclude Include="Rendering\Material.h" />
@@ -147,6 +148,8 @@
     <ClInclude Include="Component\TestRenderer.h" />
     <ClInclude Include="Rendering\VertexBuffer.h" />
     <ClInclude Include="Rendering\Texture2D.h" />
+    <ClInclude Include="Component\ScriptComponent.h" />
+    <ClInclude Include="Scripting\Script.h" />
     <ClInclude Include="Scripting\ScriptSystem.h" />
   </ItemGroup>
   <ItemGroup>
@@ -173,6 +176,9 @@
     <ClCompile Include="Component\TestRenderer.cpp" />
     <ClCompile Include="Rendering\VertexBuffer.cpp" />
     <ClCompile Include="Rendering\Texture2D.cpp" />
+    <ClCompile Include="Component\ScriptComponent.cpp" />
+    <ClCompile Include="Scripting\IScriptable.cpp" />
+    <ClCompile Include="Scripting\Script.cpp" />
     <ClCompile Include="Scripting\ScriptDemo.cpp" />
     <ClCompile Include="Scripting\ScriptSystem.cpp" />
   </ItemGroup>
