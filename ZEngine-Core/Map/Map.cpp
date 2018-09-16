@@ -1,6 +1,7 @@
 #include "Map.h"
 #include "Objects/Entity.h"
 #include "../Component/Camera.h"
+#include "../Component/Transform.h"
 
 using namespace std;
 
@@ -33,16 +34,28 @@ void Map::Remove(Entity* entity)
 	if (it != _entities.end())
 	{
 		// Erase the camera from the cameras vector (if it has one)
-		auto camera = (*it)->GetComponent(ObjectType::CAMERA);
-		if (camera != nullptr)
+		auto cameras = entity->GetComponents(ObjectType::CAMERA);
+		if (cameras.size() > 0)
 		{
-			auto cameraIt = find(_cameras.begin(), _cameras.end(), camera);
-			
-			if (cameraIt != _cameras.end())
-				_cameras.erase(cameraIt);
+			for (auto camera : cameras)
+			{
+				auto cameraIt = find(_cameras.begin(), _cameras.end(), camera);
+
+				if (cameraIt != _cameras.end())
+					_cameras.erase(cameraIt);
+			}
 		}
 
 		_entities.erase(it);
+
+		// Recursively delete all the children objects too
+		if (entity->GetTransform()->GetChildren().size())
+		{
+			for (auto child : entity->GetTransform()->GetChildren())
+			{
+				Remove(child->GetOwner());
+			}
+		}
 	}
 }
 
@@ -58,7 +71,7 @@ void Map::Remove(string name)
 	}
 }
 
-Entity * Map::Find(string name)
+Entity* Map::Find(string name)
 {
 	for (auto entity : _entities)
 	{
@@ -67,6 +80,8 @@ Entity * Map::Find(string name)
 			return entity;
 		}
 	}
+
+	return nullptr;
 }
 
 vector<Entity*> Map::FindAll(string name)
@@ -95,11 +110,14 @@ void Map::RegisterCameras()
 	{
 		if (entity != nullptr)
 		{
-			auto camera = entity->GetComponent(ObjectType::CAMERA);
+			auto cameras = entity->GetComponents(ObjectType::CAMERA);
 
-			if (camera != nullptr)
+			if (cameras.size() > 0)
 			{
-				_cameras.push_back(static_cast<Camera*>(camera));
+				for (auto camera : cameras)
+				{
+					_cameras.push_back(static_cast<Camera*>(camera));
+				}
 			}
 		}
 	}
