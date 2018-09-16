@@ -67,6 +67,11 @@ void Camera::SetClearFlags(uint16_t flags)
 	_clearFlags = flags;
 }
 
+uint16_t Camera::GetClearFlags() const
+{
+	return _clearFlags;
+}
+
 void Camera::SetClearColor(float r, float g, float b, float a)
 {
 	_clearColor = glm::vec4(r, g, b, a);
@@ -77,7 +82,7 @@ void Camera::SetClearColor(const glm::vec4& color)
 	_clearColor = color;
 }
 
-const glm::vec4 & Camera::GetClearColor() const
+const glm::vec4& Camera::GetClearColor() const
 {
 	return _clearColor;
 }
@@ -95,6 +100,24 @@ int Camera::GetViewId() const
 void Camera::SetViewport(int x, int y, int width, int height)
 {
 	_viewport = { x, y, width, height };
+
+	if (IsRenderingToTexture())
+	{
+		bgfx::destroy(_frameBuffer);
+
+		_frameBuffer = _graphics->CreateFrameBuffer(_viewport.z, _viewport.w);
+		_renderTexture = _graphics->GetFrameBufferTexture(_frameBuffer);
+	}
+}
+
+int Camera::GetViewportX() const
+{
+	return (int)(_viewport.x + 0.5f);
+}
+
+int Camera::GetViewportY() const
+{
+	return (int)(_viewport.y + 0.5f);
 }
 
 int Camera::GetViewportWidth() const
@@ -193,4 +216,6 @@ ZObject* Camera::CreateInstance(string name, ObjectType type)
 
 Camera::~Camera()
 {
+	if (IsRenderingToTexture())
+		bgfx::destroy(_frameBuffer);
 }

@@ -16,6 +16,7 @@
 #include <ZEngine-Core\Scripting\ScriptSystem.h>
 #include <ZEngine-Core\Scripting\Script.h>
 #include <ZEngine-Core\Component\ScriptComponent.h>
+#include <ZEngine-Core\Component\Camera.h>
 #include <glm/glm.hpp>
 
 #include "GUILibrary.h"
@@ -29,6 +30,13 @@ Editor::Editor()
 {
 	auto testMap = Factory::CreateInstance<Map>("test_map", ObjectType::MAP);
 	SetSelectedMap(testMap);
+
+	// Add camera object to map
+	{
+		auto cameraObject = Factory::CreateInstance<Entity>("Main Camera", ObjectType::ENTITY);
+		cameraObject->AddComponent(Factory::CreateInstance<Camera>("Camera", ObjectType::CAMERA));
+		testMap->Add(cameraObject);
+	}
 
 	// Add object to the test map
 	{
@@ -80,7 +88,7 @@ Editor::Editor()
 	}
 
 	Add(new MainMenuBar());
-	Add(new MapView(testMap));
+	Add(new MapView(this));
 	Add(new InspectorWindow(this));
 	Add(new SceneGraphWindow(this));
 }

@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\bgfx\3rdparty\dear-imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="CameraInspector.cpp" />
     <ClCompile Include="CodeEditor.cpp" />
     <ClCompile Include="Container.cpp" />
     <ClCompile Include="Editor.cpp" />
@@ -188,6 +189,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\bgfx\3rdparty\dear-imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="CameraInspector.h" />
     <ClInclude Include="CodeEditor.h" />
     <ClInclude Include="Container.h" />
     <ClInclude Include="Editor.h" />

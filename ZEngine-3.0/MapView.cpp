@@ -5,12 +5,16 @@
 #include <ZEngine-Core/Map/Objects/Entity.h>
 #include <ZEngine-Core/Component/Transform.h>
 
+#include "Editor.h"
+#include "TransformInspector.h"
+#include "CameraInspector.h"
 #include "imgui-includes.h"
 
 
-MapView::MapView(Map* map) : GUIWindow("Map View", 1024, 850, false)
+MapView::MapView(Editor* editor) : GUIWindow("Map View", 1024, 850, false)
 {
-	_map = map;
+	_editor = editor;
+	_isPlaying = false;
 
 	// We must create an entity (so we can transform the camera) and translate it back 10 units
 	_viewEntity = Factory::CreateInstance<Entity>("View Object", ObjectType::ENTITY);
@@ -28,76 +32,86 @@ MapView::MapView(Map* map) : GUIWindow("Map View", 1024, 850, false)
 	_viewCamera->SetRenderToTexture(true);
 
 	// Make image linked to the view camera then add it as a GUI element
-	_viewImage = new GUIImage(_viewCamera->GetRenderTexture(), 1024, 600);
+	_viewImage = new GUIImage(_viewCamera->GetRenderTexture(), _viewCamera->GetViewportWidth(), _viewCamera->GetViewportHeight());
 	Add(_viewImage);
 
 	SetFlags(ImGuiWindowFlags_AlwaysAutoResize);
+
+	_transformInspector = new TransformInspector();
+	_cameraInspector = new CameraInspector();
+
+	_transformInspector->Inspect(_viewEntity->GetTransform());
+	_cameraInspector->Inspect(_viewCamera);
 }
 
 void MapView::ProcessInput()
 {
-	//_viewImage->SetSize(GetWidth(), GetHeight() - 40);
 }
 
 void MapView::RenderInWindow()
 {
-	if (ImGui::CollapsingHeader("Camera Settings", ImGuiTreeNodeFlags_DefaultOpen))
+	// Playback buttons
 	{
-		ImGui::BeginChild("Map View Camera Settings", ImVec2(0, 150), false, ImGuiWindowFlags_AlwaysAutoResize);
-
-		auto transform = _viewEntity->GetTransform();
-		float newPos[3] = { transform->GetPosition().x, transform->GetPosition().y, transform->GetPosition().z };
-		if (ImGui::DragFloat3("Position", newPos))
+		bool startPlaying = false;
+		if (_isPlaying)
 		{
-			transform->SetPosition({ newPos[0], newPos[1], newPos[2] });
+			ImGui::PushStyleColor(0, ImVec4(1, 0, 0, 1));
+			startPlaying = ImGui::Button("Play", ImVec2(80, 0));
+			ImGui::PopStyleColor();
+		}
+		else
+		{
+			startPlaying = ImGui::Button("Play", ImVec2(80, 0));
 		}
 
-		float newRot[3] = { transform->GetRotation().x, transform->GetRotation().y, transform->GetRotation().z };
-		if (ImGui::DragFloat3("Rotation", newRot))
+		if (startPlaying)
 		{
-			transform->SetRotation({ newRot[0], newRot[1], newRot[2] });
+			_isPlaying = !_isPlaying;
+
+			// TODO: Start playing the map when this is true
 		}
 
-		if (ImGui::BeginCombo("Projection", _viewCamera->GetProjectionMode() == Camera::PERSPECTIVE ? "Perspective" : "Orthograpic"))
+		ImGui::SameLine();
+		if (ImGui::Button("Pause", ImVec2(80, 0)))
 		{
-			if (ImGui::Selectable("Orthographic"))
-			{
-				_viewCamera->SetProjectionMode(Camera::ORTHOGRAPHIC);
-			}
 
-			if (ImGui::Selectable("Perspective"))
-			{
-				_viewCamera->SetProjectionMode(Camera::PERSPECTIVE);
-			}
-
-			ImGui::EndCombo();
 		}
 
-		float fov = _viewCamera->GetFieldOfView();
-		if (ImGui::SliderAngle("Field of View", &fov))
+		ImGui::SameLine();
+		if (ImGui::Button("Stop", ImVec2(80, 0)))
 		{
-			_viewCamera->SetFieldOfView(glm::degrees(fov));
+			_isPlaying = false;
 		}
+	}
 
-		float size = _viewCamera->GetOrthoSize();
-		if (ImGui::SliderFloat("Size", &size, 0.0f, 50.0f))
+	if (ImGui::CollapsingHeader("View Settings"))
+	{
+		float screenSize[] = { _viewImage->GetWidth(), _viewImage->GetHeight() };
+		if (ImGui::InputFloat2("Screen Size", screenSize, "%.1f"))
 		{
-			_viewCamera->SetOrthoSize(size);
+			_viewImage->SetSize(screenSize[0], screenSize[1]);
 		}
+	}
 
-		ImGui::EndChild();
+	if (ImGui::CollapsingHeader("Camera Settings"))
+	{
+		_transformInspector->RenderElement();
+		_cameraInspector->RenderElement();
 	}
 }
 
 void MapView::RenderElement()
 {
+	// Ensure the render texture is current, as it changes when viewport is changed
+	_viewImage->SetTexture(_viewCamera->GetRenderTexture());
+
 	// Set camera settings
 	_viewCamera->Render(-1);
 
 	// Render the world without the internal cameras
-	if (_map != nullptr)
+	if (_editor->GetSelectedMap() != nullptr)
 	{
-		_map->RenderWorld(_viewCamera->GetViewId());
+		_editor->GetSelectedMap()->RenderWorld(_viewCamera->GetViewId());
 	}
 
 	// Render the actual texture to the screen (more like submit the draw call to bgfx)

@@ -27,11 +27,14 @@ public:
 	int GetViewId() const;
 
 	void SetClearFlags(uint16_t flags);
+	uint16_t GetClearFlags() const;
 	void SetClearColor(float r, float g, float b, float a);
 	void SetClearColor(const glm::vec4& color);
 	const glm::vec4& GetClearColor() const;
 
 	void SetViewport(int x, int y, int width, int height);
+	int GetViewportX() const;
+	int GetViewportY() const;
 	int GetViewportWidth() const;
 	int GetViewportHeight() const;
 	float GetAspectRatio() const;
