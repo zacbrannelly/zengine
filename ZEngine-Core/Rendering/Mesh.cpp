@@ -254,7 +254,7 @@ void SubMesh::Draw(int viewId, Material* material, Graphics* graphics)
 	case POINTS:
 		renderFlags |= BGFX_STATE_PT_POINTS;
 		break;
-	default:
+	case TRIANGLE_STRIP:
 		renderFlags |= BGFX_STATE_PT_TRISTRIP;
 	}
 

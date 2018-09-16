@@ -6,25 +6,46 @@ Mesh* MeshFactory::CreateCube(std::string name)
 {
 	std::vector<glm::vec3> verts
 	{
-		{-1.0f,  1.0f,  1.0f },
-		{ 1.0f,  1.0f,  1.0f },
-		{-1.0f, -1.0f,  1.0f },
-		{ 1.0f, -1.0f,  1.0f },
+		// Back
+		{-1.0f,  1.0f,  1.0f }, // bottom left 0
+		{ 1.0f,  1.0f,  1.0f }, // bototm right 1
+		{-1.0f, -1.0f,  1.0f }, // top left 2
+		{ 1.0f, -1.0f,  1.0f }, // top right 3
 
-		{-1.0f,  1.0f, -1.0f },
-		{ 1.0f,  1.0f, -1.0f },
-		{-1.0f, -1.0f, -1.0f },
-		{ 1.0f, -1.0f, -1.0f },
+		// Front
+		{-1.0f,  1.0f, -1.0f }, // bottom left 4
+		{ 1.0f,  1.0f, -1.0f }, // bottom right 5 
+		{-1.0f, -1.0f, -1.0f }, // top left 6
+		{ 1.0f, -1.0f, -1.0f }, // top right 7
 	};
 
 	std::vector<glm::vec4> colors(8, { 1, 1, 1, 1 });
 
 	std::vector<uint16_t> indices
 	{
-		0, 1, 2, 3, 
-		7, 1, 5, 0, 
-		4, 2, 6, 7,
-		4, 5,
+		// front face
+		4, 7, 6, 
+		4, 5, 7,
+
+		// back face
+		1, 2, 3,
+		1, 0, 2,
+
+		// left face
+		0, 6, 2,
+		0, 4, 6,
+
+		// right face
+		5, 3, 7,
+		5, 1, 3,
+
+		// top face
+		6, 3, 2,
+		6, 7, 3,
+
+		// bottom face
+		0, 5, 4,
+		0, 1, 5
 	};
 
 	auto newMesh = Factory::CreateInstance<Mesh>(name, ObjectType::MESH);
@@ -43,31 +64,12 @@ Mesh* MeshFactory::CreateSphere(std::string name, int resolution)
 	std::vector<uint16_t> indices;
 
 	GeneratePlaneVertices(glm::vec3( 0.0f, -0.5f,  0.0f), resolution, resolution, vertices, indices, PlaneOrientation::BOTTOM);
-	newMesh->SetIndices(0, indices);
-
-	int prevSize = indices.size();
 	GeneratePlaneVertices(glm::vec3( 0.0f, 0.5f,  0.0f), resolution, resolution, vertices, indices, PlaneOrientation::TOP);
-	newMesh->SetIndices(1, std::vector<glm::uint16_t>(indices.begin() + prevSize, indices.end()));
-
-	prevSize = indices.size();
 	GeneratePlaneVertices(glm::vec3( 0.0f, 0.0f, -0.5f), resolution, resolution, vertices, indices, PlaneOrientation::FRONT);
-	newMesh->SetIndices(2, std::vector<glm::uint16_t>(indices.begin() + prevSize, indices.end()));
-
-	prevSize = indices.size();
 	GeneratePlaneVertices(glm::vec3( 0.0f, 0.0f,  0.5f), resolution, resolution, vertices, indices, PlaneOrientation::BACK);
-	newMesh->SetIndices(3, std::vector<glm::uint16_t>(indices.begin() + prevSize, indices.end()));
-
-	prevSize = indices.size();
 	GeneratePlaneVertices(glm::vec3(-0.5f, 0.0f,  0.0f), resolution, resolution, vertices, indices, PlaneOrientation::LEFT);
-	newMesh->SetIndices(4, std::vector<glm::uint16_t>(indices.begin() + prevSize, indices.end()));
-
-	prevSize = indices.size();
 	GeneratePlaneVertices(glm::vec3( 0.5f, 0.0f,  0.0f), resolution, resolution, vertices, indices, PlaneOrientation::RIGHT);
-	newMesh->SetIndices(5, std::vector<glm::uint16_t>(indices.begin() + prevSize, indices.end()));
-
-	prevSize = indices.size();
 	GeneratePlaneVertices(glm::vec3( 0.0f, 0.5f,  0.0f), resolution, resolution, vertices, indices, PlaneOrientation::TOP);
-	newMesh->SetIndices(6, std::vector<glm::uint16_t>(indices.begin() + prevSize, indices.end()));
 
 	for (auto& vertex : vertices)
 	{
@@ -78,6 +80,7 @@ Mesh* MeshFactory::CreateSphere(std::string name, int resolution)
 
 	newMesh->SetVertices(vertices);
 	newMesh->SetColors(colors);
+	newMesh->SetIndices(indices);
 
 	return newMesh;
 }
@@ -97,7 +100,8 @@ Mesh * MeshFactory::CreateRectangle(std::string name)
 
 	std::vector<uint16_t> indices
 	{
-		2, 0, 3, 1
+		0, 3, 2,
+		0, 1, 3
 	};
 
 	auto newMesh = Factory::CreateInstance<Mesh>(name, ObjectType::MESH);
@@ -128,10 +132,12 @@ Mesh* MeshFactory::CreatePlane(std::string name, int width, int height, PlaneOri
 void MeshFactory::GeneratePlaneVertices(const glm::vec3& pos, int width, int height, std::vector<glm::vec3>& vertices, std::vector<uint16_t>& indices, PlaneOrientation facing)
 {
 	float xx = -0.5f;
-	float yy = 0.5f;
+	float yy = -0.5f;
 
 	float stepSizeX = 1.0f / (width - 1);
-	float stepSizeY = -1.0f / (height - 1);
+	float stepSizeY = 1.0f / (height - 1);
+
+	int prevSize = vertices.size();
 
 	for (int y = 0; y < height; ++y)
 	{
@@ -174,27 +180,27 @@ void MeshFactory::GeneratePlaneVertices(const glm::vec3& pos, int width, int hei
 		yy += stepSizeY;
 	}
 
-	int startIndex = indices.size() > 0 ? indices.back() + 1 : 0;
 
-	for (int y = 0; y < height - 1; ++y)
+	int startIndex = prevSize;
+	int index = 0;
+	for (int index = 0; index < vertices.size(); index++)
 	{
-		for (int x = 0; x < width; ++x)
+		if ((index + 1) % width == 0)
 		{
-			indices.push_back(startIndex + y * width + x);
-
-			// Repeat first vertex of second row
-			if (x == 0 && y != 0)
-			{
-				indices.push_back(indices.back());
-			}
-
-			indices.push_back(startIndex + y * width + x + width);
-
-			// Repeat last vertex of first row (skip last row
-			if (x == width - 1 && y != height - 2)
-			{
-				indices.push_back(indices.back());
-			}
+			continue;
 		}
+
+		if (index / width == height - 1)
+		{
+			break;
+		}
+
+		indices.push_back(startIndex + index + 1);
+		indices.push_back(startIndex + index + width);
+		indices.push_back(startIndex + index);
+
+		indices.push_back(startIndex + index + 1);
+		indices.push_back(startIndex + index + width + 1);
+		indices.push_back(startIndex + index + width);
 	}
 }

@@ -61,6 +61,7 @@ Editor::Editor()
 
 		// Create mesh renderer with sphere mesh attached
 		mesh = MeshFactory::CreateCube("Cube");
+		mesh->SetColors(std::vector<glm::vec4>(mesh->GetVertices().size(), { 0, 1, 0, 1 }));
 		meshRenderer = Factory::CreateInstance<MeshRenderer>("Mesh Renderer", ObjectType::MESH_RENDERER);
 		meshRenderer->SetMesh(mesh);
 		meshRenderer->SetMaterial(material);

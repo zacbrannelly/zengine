@@ -12,7 +12,7 @@ class Graphics;
 
 enum DrawMode
 {
-	TRIANGLES, LINES, LINE_STRIP, POINTS
+	TRIANGLES, TRIANGLE_STRIP, LINES, LINE_STRIP, POINTS
 };
 
 class SubMesh
