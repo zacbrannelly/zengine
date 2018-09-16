@@ -65,4 +65,5 @@ ZObject* Script::CreateInstance(std::string name, ObjectType type)
 
 Script::~Script()
 {
+	_scriptObj.Reset();
 }

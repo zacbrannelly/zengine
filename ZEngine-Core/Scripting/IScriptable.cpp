@@ -24,6 +24,11 @@ IScriptable::IScriptable(ObjectType type)
 		std::cout << "ISCRIPTABLE: No template found for object with type: " << type << std::endl;
 }
 
+void IScriptable::SetScriptObject(v8::Local<v8::Object> scriptObj)
+{
+	_scriptInstance.Reset(ScriptSystem::GetInstance()->GetIsolate(), scriptObj);
+}
+
 v8::Local<v8::Object> IScriptable::GetScriptObject() const
 {
 	return !_scriptInstance.IsEmpty() ? _scriptInstance.Get(ScriptSystem::GetInstance()->GetIsolate()) : v8::Local<v8::Object>();

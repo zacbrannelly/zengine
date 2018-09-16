@@ -11,6 +11,9 @@ public:
 
 	v8::Local<v8::Object> GetScriptObject() const;
 
+protected:
+	void SetScriptObject(v8::Local<v8::Object> scriptObj);
+
 private:
 	v8::Persistent<v8::Object> _scriptInstance;
 };

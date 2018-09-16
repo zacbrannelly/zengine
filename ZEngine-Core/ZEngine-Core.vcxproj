@@ -151,6 +151,7 @@
     <ClInclude Include="Component\ScriptComponent.h" />
     <ClInclude Include="Scripting\Script.h" />
     <ClInclude Include="Scripting\ScriptSystem.h" />
+    <ClInclude Include="Scripting\Wrappers\Wrapper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Assets\Asset.cpp" />
@@ -181,6 +182,7 @@
     <ClCompile Include="Scripting\Script.cpp" />
     <ClCompile Include="Scripting\ScriptDemo.cpp" />
     <ClCompile Include="Scripting\ScriptSystem.cpp" />
+    <ClCompile Include="Scripting\Wrappers\Wrapper.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

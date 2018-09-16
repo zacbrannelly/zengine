@@ -19,7 +19,7 @@ public:
 	virtual void SetOwner(Entity* owner);
 	virtual Entity* GetOwner() const;
 
-	static v8::Global<v8::FunctionTemplate> GetTemplate(v8::Isolate* isolate);
+	static v8::Global<v8::FunctionTemplate> GetTemplate(v8::Isolate* isolate, v8::Local<v8::Object>& global);
 private:
 	Entity* _owner;
 };

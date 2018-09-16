@@ -59,6 +59,5 @@ private:
 	ScriptSystemContext* _context;
 
 	std::map<ObjectType, v8::Global<v8::FunctionTemplate>> _templates;
-
 };
 

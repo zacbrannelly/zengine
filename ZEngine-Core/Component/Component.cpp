@@ -28,7 +28,7 @@ void Callback_Component_GetOwner(v8::Local<v8::Name> name, const v8::PropertyCal
 	info.GetReturnValue().Set(component->GetOwner()->GetScriptObject());
 }
 
-v8::Global<v8::FunctionTemplate> Component::GetTemplate(v8::Isolate* isolate)
+v8::Global<v8::FunctionTemplate> Component::GetTemplate(v8::Isolate* isolate, v8::Local<v8::Object>& global)
 {
 	using namespace v8;
 	auto sys = ScriptSystem::GetInstance();
@@ -37,6 +37,9 @@ v8::Global<v8::FunctionTemplate> Component::GetTemplate(v8::Isolate* isolate)
 
 	constructor->InstanceTemplate()->SetAccessor(String::NewFromUtf8(isolate, "owner"), Callback_Component_GetOwner, nullptr);
 	constructor->InstanceTemplate()->SetInternalFieldCount(1);
+
+	// Register the constructor into the global namespace
+	global->Set(sys->GetString("Component"), constructor->GetFunction());
 
 	return v8::Global<FunctionTemplate>(isolate, constructor);
 }

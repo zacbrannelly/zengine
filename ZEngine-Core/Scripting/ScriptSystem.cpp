@@ -57,18 +57,11 @@ void ScriptSystem::SetupCallbacks(Local<ObjectTemplate>& globalTemplate)
 void ScriptSystem::SetupTemplates()
 {
 	Context::Scope scope(_context->GetLocal());
+	auto global = _context->GetLocal()->Global();
 
-	_templates[ObjectType::SCRIPT_COMPONENT] = Component::GetTemplate(_isolate);
+	_templates[ObjectType::SCRIPT_COMPONENT] = Component::GetTemplate(_isolate, global);
 	_templates[ObjectType::ENTITY] = Entity::GetTemplate(_isolate);
 	_templates[ObjectType::TRANSFORM] = Transform::GetTemplate(_isolate);
-
-	/*Local<FunctionTemplate> cons = FunctionTemplate::New(_isolate, TestConstructor);
-	cons->InstanceTemplate()->SetInternalFieldCount(1);
-
-	global->Set(GetString("TestObject"), cons->GetFunction());
-
-	Local<Object> obj = cons->GetFunction()->NewInstance(_context->GetLocal()).ToLocalChecked();
-	obj->SetInternalField(0, External::New(_isolate, this));*/
 }
 
 void ScriptSystem::Run(std::string code)

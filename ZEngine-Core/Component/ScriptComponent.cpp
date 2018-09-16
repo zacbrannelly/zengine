@@ -19,6 +19,42 @@ Script* ScriptComponent::GetScript() const
 	return _script;
 }
 
+v8::Local<v8::Object> ScriptComponent::CreateObjectFromScript(v8::Isolate*& isolate, v8::Local<v8::Context>& context)
+{
+	auto scriptSys = ScriptSystem::GetInstance();
+
+	// Get the global namespace
+	auto global = context->Global();
+
+	// Try to get the class constructor from the global namespace
+	auto value = global->Get(scriptSys->GetString(_script->GetName()));
+
+	if (!value.IsEmpty() && value->IsFunction())
+	{
+		_scriptConstructor.Reset(isolate, v8::Local<v8::Function>::Cast(value));
+	}
+	else
+	{
+		std::cout << "SCRIPT_COMPONENT: Failed to find the constructor for script '" << _script->GetName() << "'" << std::endl;
+		return v8::Local<v8::Object>();
+	}
+
+	auto constructor = _scriptConstructor.Get(isolate);
+
+	if (constructor->IsConstructor())
+	{
+		// Construct the object defined in the script
+		_scriptObj.Reset(isolate, constructor->NewInstance(context).ToLocalChecked());
+	}
+	else
+	{
+		std::cout << "SCRIPT_COMPONENT: Script class name is not a constructor '" << _script->GetName() << "'" << std::endl;
+		return v8::Local<v8::Object>();
+	}
+
+	return _scriptObj.Get(isolate);
+}
+
 void ScriptComponent::Init()
 {
 	if (_script == nullptr)
@@ -34,39 +70,17 @@ void ScriptComponent::Init()
 	// Create a scope
 	v8::Context::Scope scope(context);
 
-	// Get the global namespace
-	auto global = context->Global();
+	// Create the Object that was defined in the script
+	auto obj = CreateObjectFromScript(isolate, context);
 
-	// Try to get the class constructor from the global namespace
-	auto value = global->Get(scriptSys->GetString(_script->GetName()));
+	// Set the internal field for the parent (which should be defined as the Component function template)
+	auto componentObj = obj->FindInstanceInPrototypeChain(scriptSys->GetTemplate(ObjectType::SCRIPT_COMPONENT));
+	componentObj->SetInternalField(0, v8::External::New(isolate, this));
 
-	if (!value.IsEmpty() && value->IsFunction())
-	{
-		_scriptConstructor.Reset(isolate, v8::Local<v8::Function>::Cast(value));
-	}
-	else
-	{
-		std::cout << "SCRIPT_COMPONENT: Failed to find the constructor for script '" << _script->GetName() << "'" << std::endl;
-		return;
-	}
+	// Remove our previously created script object and set to the new one
+	SetScriptObject(obj);
 
-	auto constructor = _scriptConstructor.Get(isolate);
-
-	if (constructor->IsConstructor())
-	{
-		_scriptObj.Reset(isolate, constructor->NewInstance(context).ToLocalChecked());
-	}
-	else
-	{
-		std::cout << "SCRIPT_COMPONENT: Script class name is not a constructor '" << _script->GetName() << "'" << std::endl;
-		return;
-	}
-
-	auto obj = _scriptObj.Get(isolate);
-
-	// TODO: Add extra functions and fields to the object 
-	obj->Set(scriptSys->GetString("entity"), GetOwner()->GetScriptObject());
-
+	// Retrieve the functions from the object (TODO: make this more automated)
 	auto initString = scriptSys->GetString("Init");
 	auto updateString = scriptSys->GetString("Update");
 	auto renderString = scriptSys->GetString("Render");
@@ -128,4 +142,8 @@ ZObject * ScriptComponent::CreateInstance(std::string name, ObjectType type)
 
 ScriptComponent::~ScriptComponent()
 {
+	_scriptObj.Reset();
+	_scriptInit.Reset();
+	_scriptUpdate.Reset();
+	_scriptRender.Reset();
 }

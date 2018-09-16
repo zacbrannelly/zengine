@@ -19,6 +19,8 @@ public:
 	Script* GetScript() const;
 
 private:
+	v8::Local<v8::Object> CreateObjectFromScript(v8::Isolate*& isolate, v8::Local<v8::Context>& context);
+
 	v8::Persistent<v8::Function> _scriptConstructor, _scriptInit, _scriptUpdate, _scriptRender;
 	v8::Persistent<v8::Object> _scriptObj;
 	Script* _script;
