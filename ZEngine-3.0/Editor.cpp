@@ -17,6 +17,7 @@
 #include <ZEngine-Core\Scripting\Script.h>
 #include <ZEngine-Core\Component\ScriptComponent.h>
 #include <ZEngine-Core\Component\Camera.h>
+#include <ZEngine-Core/Rendering/Texture2D.h>
 #include <glm/glm.hpp>
 
 #include "GUILibrary.h"
@@ -60,11 +61,27 @@ Editor::Editor()
 		auto testObject2 = Factory::CreateInstance<Entity>("test_object2", ObjectType::ENTITY);
 
 		// Create mesh renderer with sphere mesh attached
-		mesh = MeshFactory::CreateCube("Cube");
-		mesh->SetColors(std::vector<glm::vec4>(mesh->GetVertices().size(), { 0, 1, 0, 1 }));
+		mesh = MeshFactory::CreateCube("Rect");
 		meshRenderer = Factory::CreateInstance<MeshRenderer>("Mesh Renderer", ObjectType::MESH_RENDERER);
+
+		// Example of loading a texture into a material (TODO: Fix memory leak and finish texture class properly)
+		{
+			auto texturedMaterial = Factory::CreateInstance<Material>("textured mat", ObjectType::MATERIAL);
+			auto texturedShader = Factory::CreateInstance<Shader>("textured shader", ObjectType::SHADER);
+
+			texturedShader->Load("vs_texture.bin", "fs_texture.bin");
+			texturedMaterial->SetShader(texturedShader);
+
+			texturedMaterial->RegisterSampler("texColor");
+
+			Texture2D texture;
+			texture.Load("test.png");
+			texturedMaterial->SetTexture("texColor", texture.GetHandle());
+
+			meshRenderer->SetMaterial(texturedMaterial);
+		}
+		
 		meshRenderer->SetMesh(mesh);
-		meshRenderer->SetMaterial(material);
 		testObject2->AddComponent(meshRenderer);
 
 		// Create a test scripting component and add to test_object2

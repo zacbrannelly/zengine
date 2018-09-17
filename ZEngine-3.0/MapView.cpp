@@ -24,6 +24,7 @@ MapView::MapView(Editor* editor) : GUIWindow("Map View", 1024, 850, false)
 	_viewCamera = Factory::CreateInstance<Camera>("Camera", ObjectType::CAMERA);	
 	_viewEntity->AddComponent(_viewCamera);
 
+	// Set default values for the camera
 	_viewCamera->SetProjectionMode(Camera::ProjectionMode::ORTHOGRAPHIC);
 	_viewCamera->SetFieldOfView(60.0f);
 	_viewCamera->SetViewport(0, 0, 1024, 600);
@@ -35,13 +36,14 @@ MapView::MapView(Editor* editor) : GUIWindow("Map View", 1024, 850, false)
 	_viewImage = new GUIImage(_viewCamera->GetRenderTexture(), _viewCamera->GetViewportWidth(), _viewCamera->GetViewportHeight());
 	Add(_viewImage);
 
-	SetFlags(ImGuiWindowFlags_AlwaysAutoResize);
-
 	_transformInspector = new TransformInspector();
 	_cameraInspector = new CameraInspector();
 
 	_transformInspector->Inspect(_viewEntity->GetTransform());
 	_cameraInspector->Inspect(_viewCamera);
+
+	// The window won't be resizable, it will fit to content
+	SetFlags(ImGuiWindowFlags_AlwaysAutoResize);
 }
 
 void MapView::ProcessInput()
@@ -84,6 +86,7 @@ void MapView::RenderInWindow()
 		}
 	}
 
+	// Allow the user to change the size of the texture being rendered in the window
 	if (ImGui::CollapsingHeader("View Settings"))
 	{
 		float screenSize[] = { _viewImage->GetWidth(), _viewImage->GetHeight() };
@@ -93,6 +96,7 @@ void MapView::RenderInWindow()
 		}
 	}
 
+	// Draw the inspectors for the camera transform and camera settings
 	if (ImGui::CollapsingHeader("Camera Settings"))
 	{
 		_transformInspector->RenderElement();

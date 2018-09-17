@@ -13,6 +13,8 @@ TestComponent.prototype.Init = function()
 {
 	// Called on start
 	log("This is a test log from a script!");	
+	
+	this.owner.transform.SetScale(1.5, 1.5, 1.5);
 };
 	
 TestComponent.prototype.Update = function()
@@ -25,7 +27,7 @@ TestComponent.prototype.Render = function()
 	// Called once per frame after update
 	this.owner.transform.SetPosition(5.0 * Math.sin(this.delta),  5.0 * Math.cos(this.delta), -5);
 	this.owner.transform.SetRotation(0, this.delta * 100, 0);
-	this.owner.transform.SetScale(Math.cos(this.delta / 2), Math.sin(this.delta / 2), Math.sin(this.delta / 2));
+	//this.owner.transform.SetScale(1.5 * Math.cos(this.delta / 2), 1.5 * Math.sin(this.delta / 2), 1.5 * Math.sin(this.delta / 2));
 	
 	this.delta += 0.01;
 };

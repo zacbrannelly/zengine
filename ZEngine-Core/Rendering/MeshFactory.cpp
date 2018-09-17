@@ -19,39 +19,53 @@ Mesh* MeshFactory::CreateCube(std::string name)
 		{ 1.0f, -1.0f, -1.0f }, // top right 7
 	};
 
+	std::vector<glm::vec2> texCoords
+	{
+		{ 1, 1 },
+		{ 0, 1 },
+		{ 1, 0 },
+		{ 0, 0 },
+
+		{ 0, 1 },
+		{ 1, 1 },
+		{ 0, 0 },
+		{ 1, 0 },
+	};
+
 	std::vector<glm::vec4> colors(8, { 1, 1, 1, 1 });
 
 	std::vector<uint16_t> indices
 	{
 		// front face
-		4, 7, 6, 
-		4, 5, 7,
+		6, 7, 4, 
+		7, 5, 4,
 
 		// back face
-		1, 2, 3,
-		1, 0, 2,
+		3, 2, 1,
+		2, 0, 1,
 
 		// left face
-		0, 6, 2,
-		0, 4, 6,
+		2, 6, 0,
+		6, 4, 0,
 
 		// right face
-		5, 3, 7,
-		5, 1, 3,
+		7, 3, 5,
+		3, 1, 5,
 
 		// top face
-		6, 3, 2,
-		6, 7, 3,
+		2, 3, 6,
+		3, 7, 6,
 
 		// bottom face
-		0, 5, 4,
-		0, 1, 5
+		4, 5, 0,
+		5, 1, 0
 	};
 
 	auto newMesh = Factory::CreateInstance<Mesh>(name, ObjectType::MESH);
 	newMesh->SetVertices(verts);
 	newMesh->SetColors(colors);
 	newMesh->SetIndices(indices);
+	newMesh->SetTextureCoords(texCoords);
 
 	return newMesh;
 }
@@ -89,11 +103,19 @@ Mesh * MeshFactory::CreateRectangle(std::string name)
 {
 	std::vector<glm::vec3> verts
 	{
-		{ -0.5f, -0.5f, 0 }, // bottom left - 0
-		{  0.5f, -0.5f, 0 }, // bottom right - 1
-		{ -0.5f,  0.5f, 0 }, // top left - 2
-		{  0.5f,  0.5f, 0 }, // top right - 3
+		{ -0.5f, -0.5f, 0 }, // top left - 0
+		{  0.5f, -0.5f, 0 }, // top right - 1
+		{ -0.5f,  0.5f, 0 }, // bottom left - 2
+		{  0.5f,  0.5f, 0 }, // bottom right - 3
 
+	};
+
+	std::vector<glm::vec2> texCoords
+	{
+		{ 0, 0 }, 
+		{ 1, 0 }, 
+		{ 0, 1 }, 
+		{ 1, 1 }
 	};
 
 	std::vector<glm::vec4> colors(6, { 1, 1, 1, 1 });
@@ -108,6 +130,7 @@ Mesh * MeshFactory::CreateRectangle(std::string name)
 	newMesh->SetVertices(verts);
 	newMesh->SetColors(colors);
 	newMesh->SetIndices(indices);
+	newMesh->SetTextureCoords(texCoords);
 
 	return newMesh;
 }
