@@ -177,7 +177,7 @@ v8::Global<v8::FunctionTemplate> Transform::GetTemplate(v8::Isolate* isolate)
 
 	constructor->InstanceTemplate()->SetInternalFieldCount(1);
 
-	// TODO: Add properties (getters/setters only)
+	//TODO: Add properties (getters/setters only)
 	constructor->InstanceTemplate()->Set(isolate, "SetPosition", FunctionTemplate::New(isolate, Transform_SetPositionCallback));
 	constructor->InstanceTemplate()->Set(isolate, "SetRotation", FunctionTemplate::New(isolate, Transform_SetRotationCallback));
 	constructor->InstanceTemplate()->Set(isolate, "SetScale", FunctionTemplate::New(isolate, Transform_SetScaleCallback));

@@ -38,7 +38,7 @@ public:
 	void SetUniform(const std::string& name, bgfx::UniformType::Enum type, const void* data, uint16_t numElements);
 	void SetUniform(bgfx::UniformHandle& uniform, const void* data, uint16_t numElements);
 	void SetTexture(uint8_t stage, bgfx::UniformHandle& sampler, bgfx::TextureHandle& handle);
-	void SetTexture(int stage, bgfx::UniformHandle& sampler, bgfx::TextureHandle& handle, uint32_t flags);
+	void SetTexture(uint8_t stage, bgfx::UniformHandle& sampler, bgfx::TextureHandle& handle, uint32_t flags);
 	void Submit(int viewId, Material* material);
 	void Submit(int viewId, bgfx::ProgramHandle program);
 

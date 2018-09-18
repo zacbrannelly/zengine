@@ -17,7 +17,7 @@ Entity::Entity(string name) : ZObject(name, ObjectType::ENTITY), IScriptable(Obj
 	auto scriptObject = GetScriptObject();
 	v8::Context::Scope scope(scriptSystem->GetContext()->GetLocal());
 
-	// TODO: Add extra script functionality here (alive data)
+	//TODO: Add extra script functionality here (alive data)
 	scriptObject->Set(scriptSystem->GetString("transform"), _transform->GetScriptObject());
 }
 
@@ -37,7 +37,7 @@ v8::Global<v8::FunctionTemplate> Entity::GetTemplate(v8::Isolate* isolate)
 
 	constructor->InstanceTemplate()->SetInternalFieldCount(1);
 
-	// TODO: Add properties (getters/setters only)
+	//TODO: Add properties (getters/setters only)
 
 	return v8::Global<FunctionTemplate>(isolate, constructor);
 }
@@ -62,7 +62,7 @@ void Entity::RemoveComponent(Component* component)
 	{
 		_components.erase(it);
 
-		// TODO: Send message to component that it has been removed
+		//TODO: Send message to component that it has been removed
 	}
 }
 

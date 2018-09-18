@@ -160,7 +160,7 @@ void Graphics::SetTexture(uint8_t stage, bgfx::UniformHandle & sampler, bgfx::Te
 	setTexture(stage, sampler, handle);
 }
 
-void Graphics::SetTexture(int stage, bgfx::UniformHandle& sampler, bgfx::TextureHandle & handle, uint32_t flags)
+void Graphics::SetTexture(uint8_t stage, bgfx::UniformHandle& sampler, bgfx::TextureHandle & handle, uint32_t flags)
 {
 	setTexture(stage, sampler, handle, flags);
 }

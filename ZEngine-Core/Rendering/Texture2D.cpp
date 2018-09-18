@@ -2,26 +2,13 @@
 
 #include "../../stb/stb_image.h"
 
-Texture2D::Texture2D()
+Texture2D::Texture2D(uint16_t width, uint16_t height, bool hasMips, uint16_t numLayers, bgfx::TextureFormat::Enum format, uint64_t flags, void* data, uint32_t size)
 {
+	_handle = bgfx::createTexture2D(width, height, false, 1, format, flags, bgfx::makeRef(data, size));
 }
 
-bool Texture2D::Load(std::string path)
+bool Texture2D::IsValid() const
 {
-	int width, height, channel;
-	auto data = stbi_load(path.c_str(), &width, &height, &channel, 4);
-
-	if (data == nullptr)
-		return false;
-	
-	bgfx::TextureInfo info;
-	bgfx::calcTextureSize(info, width, height, 0, false, false, 1, bgfx::TextureFormat::RGBA8);
-
-	uint64_t flags = BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP | BGFX_SAMPLER_MIN_ANISOTROPIC | BGFX_SAMPLER_MAG_ANISOTROPIC;
-	_handle = bgfx::createTexture2D(width, height, false, 1, bgfx::TextureFormat::RGBA8, flags, bgfx::makeRef(data, info.storageSize));
-
-	//delete data;
-
 	return _handle.idx != bgfx::kInvalidHandle;
 }
 

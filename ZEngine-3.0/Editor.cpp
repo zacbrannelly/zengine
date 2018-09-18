@@ -17,7 +17,9 @@
 #include <ZEngine-Core\Scripting\Script.h>
 #include <ZEngine-Core\Component\ScriptComponent.h>
 #include <ZEngine-Core\Component\Camera.h>
-#include <ZEngine-Core/Rendering/Texture2D.h>
+#include <ZEngine-Core\Assets\Objects\TextureAsset.h>
+#include <ZEngine-Core\Rendering\Texture2D.h>
+#include <ZEngine-Core\Assets\AssetManager.h>
 #include <glm/glm.hpp>
 
 #include "GUILibrary.h"
@@ -74,9 +76,12 @@ Editor::Editor()
 
 			texturedMaterial->RegisterSampler("texColor");
 
-			Texture2D texture;
-			texture.Load("test.png");
-			texturedMaterial->SetTexture("texColor", texture.GetHandle());
+			auto assetManager = AssetManager::GetInstance();
+			auto textureAsset = assetManager->LoadAsset("test texture", "test.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
+			textureAsset->Load("test.png");
+			textureAsset->LoadTexture();
+
+			texturedMaterial->SetTexture("texColor", textureAsset->GetTexture()->GetHandle());
 
 			meshRenderer->SetMaterial(texturedMaterial);
 		}
@@ -144,7 +149,7 @@ int main(int argc, char* argv[])
 	// Initialize the factory (register the types)
 	Factory::Init();
 
-	// TODO: Register any editor specific ZObject's here
+	//TODO: Register any editor specific ZObject's here
 
 	// Init scripting system
 	auto scriptSystem = ScriptSystem::GetInstance();
@@ -157,6 +162,10 @@ int main(int argc, char* argv[])
 	// Init graphics sub-system
 	auto graphics = Graphics::GetInstance();
 	graphics->Init(&display);
+
+	// Init asset management system
+	auto assetManager = AssetManager::GetInstance();
+	assetManager->Init();
 
 	// Init GUI sub-system
 	auto gui = GUILibrary::GetInstance();
@@ -190,6 +199,7 @@ int main(int argc, char* argv[])
 
 	// Clean up
 	gui->Shutdown();
+	assetManager->Shutdown();
 	graphics->Shutdown();
 	display.Shutdown();
 	scriptSystem->Shutdown();

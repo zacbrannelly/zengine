@@ -70,7 +70,7 @@ void MapView::RenderInWindow()
 		{
 			_isPlaying = !_isPlaying;
 
-			// TODO: Start playing the map when this is true
+			//TODO: Start playing the map when this is true
 		}
 
 		ImGui::SameLine();

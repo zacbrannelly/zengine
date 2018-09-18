@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -152,6 +152,8 @@
     <ClInclude Include="Scripting\Script.h" />
     <ClInclude Include="Scripting\ScriptSystem.h" />
     <ClInclude Include="Scripting\Wrappers\Wrapper.h" />
+    <ClInclude Include="Assets\Objects\TextureAsset.h" />
+    <ClInclude Include="Assets\Objects\ShaderAsset.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Assets\Asset.cpp" />
@@ -183,6 +185,8 @@
     <ClCompile Include="Scripting\ScriptDemo.cpp" />
     <ClCompile Include="Scripting\ScriptSystem.cpp" />
     <ClCompile Include="Scripting\Wrappers\Wrapper.cpp" />
+    <ClCompile Include="Assets\Objects\TextureAsset.cpp" />
+    <ClCompile Include="Assets\Objects\ShaderAsset.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
