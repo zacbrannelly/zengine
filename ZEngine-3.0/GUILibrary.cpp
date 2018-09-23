@@ -8,6 +8,7 @@ void GUILibrary::Init(Display* display)
 	imguiCreate();
 	ImGui_ImplGlfw_InitForOpenGL(display->GetHandle(), true);
 	ImGui::StyleColorsDark();
+	ImGui::LoadIniSettingsFromDisk("layout.ini");
 }
 
 void GUILibrary::NewFrame()
@@ -24,5 +25,6 @@ void GUILibrary::EndFrame()
 
 void GUILibrary::Shutdown()
 {
+	ImGui::SaveIniSettingsToDisk("layout.ini");
 	imguiDestroy();
 }

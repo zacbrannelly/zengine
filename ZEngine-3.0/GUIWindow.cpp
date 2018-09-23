@@ -41,7 +41,7 @@ void GUIWindow::RenderElement()
 	else
 		ImGui::Begin(_title.c_str(), (bool*)0, _flags);
 
-	ImGui::SetWindowSize(_title.c_str(), ImVec2(_width, _height), _shouldSetSize ? ImGuiCond_Always : ImGuiCond_Once);
+	ImGui::SetWindowSize(_title.c_str(), ImVec2(_width, _height), _shouldSetSize ? ImGuiCond_Always : ImGuiCond_FirstUseEver);
 	if (_shouldSetSize)
 		_shouldSetSize = false;
 
