@@ -37,6 +37,9 @@ void Material::SetUniform(const std::string& name, void* data, uint16_t numEleme
 	{
 		auto uniform = iterator->second;
 
+		if (uniform.data != nullptr)
+			delete uniform.data;
+
 		uniform.data = data;
 		uniform.numElements = numElements;
 
