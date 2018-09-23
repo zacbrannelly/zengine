@@ -94,7 +94,7 @@ void Graphics::Clear(int viewId, int r, int g, int b, int a)
 
 void Graphics::Clear(int viewId, uint16_t flags, int r, int g, int b, int a)
 {
-	setViewClear(viewId, flags, convertRGBToInt(r, g, b, a));
+	setViewClear(viewId, flags, convertRGBToInt(r, g, b, a), 1.0f, 0);
 }
 
 void Graphics::Viewport(int viewId, int x, int y, int width, int height)
@@ -191,7 +191,12 @@ void Graphics::Render()
 
 FrameBufferHandle Graphics::CreateFrameBuffer(int width, int height)
 {
-	return createFrameBuffer(width, height, TextureFormat::BGRA8);
+	// NOTE: The second texture is a depth buffer, this is needed!!!!
+	bgfx::TextureHandle buffers[2];
+	buffers[0] = createTexture2D(width, height, false, 1, bgfx::TextureFormat::BGRA8);
+	buffers[1] = createTexture2D(width, height, false, 1, bgfx::TextureFormat::D24);
+
+	return createFrameBuffer(2, buffers, true);
 }
 
 TextureHandle Graphics::GetFrameBufferTexture(FrameBufferHandle fbo)
