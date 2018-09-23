@@ -6,65 +6,166 @@ Mesh* MeshFactory::CreateCube(std::string name)
 {
 	std::vector<glm::vec3> verts
 	{
-		// Back
-		{-1.0f,  1.0f,  1.0f }, // bottom left 0
-		{ 1.0f,  1.0f,  1.0f }, // bototm right 1
-		{-1.0f, -1.0f,  1.0f }, // top left 2
-		{ 1.0f, -1.0f,  1.0f }, // top right 3
-
-		// Front
-		{-1.0f,  1.0f, -1.0f }, // bottom left 4
-		{ 1.0f,  1.0f, -1.0f }, // bottom right 5 
+		// Front face
 		{-1.0f, -1.0f, -1.0f }, // top left 6
 		{ 1.0f, -1.0f, -1.0f }, // top right 7
+		{-1.0f,  1.0f, -1.0f }, // bottom left 4
+		{ 1.0f, -1.0f, -1.0f }, // top right 7
+		{ 1.0f,  1.0f, -1.0f }, // bottom right 5 
+		{-1.0f,  1.0f, -1.0f }, // bottom left 4
+
+		// Back face
+		{ 1.0f, -1.0f,  1.0f }, // top right 3
+		{-1.0f, -1.0f,  1.0f }, // top left 2
+		{ 1.0f,  1.0f,  1.0f }, // bototm right 1
+		{-1.0f, -1.0f,  1.0f }, // top left 2
+		{-1.0f,  1.0f,  1.0f }, // bottom left 0
+		{ 1.0f,  1.0f,  1.0f }, // bototm right 1
+
+		// Left face
+		{-1.0f, -1.0f,  1.0f }, // top left 2
+		{-1.0f, -1.0f, -1.0f }, // top left 6
+		{-1.0f,  1.0f,  1.0f }, // bottom left 0
+		{-1.0f, -1.0f, -1.0f }, // top left 6
+		{-1.0f,  1.0f, -1.0f }, // bottom left 4
+		{-1.0f,  1.0f,  1.0f }, // bottom left 0
+
+		// Right face
+		{ 1.0f, -1.0f, -1.0f }, // top right 7
+		{ 1.0f, -1.0f,  1.0f }, // top right 3
+		{ 1.0f,  1.0f, -1.0f }, // bottom right 5 
+		{ 1.0f, -1.0f,  1.0f }, // top right 3
+		{ 1.0f,  1.0f,  1.0f }, // bototm right 1
+		{ 1.0f,  1.0f, -1.0f }, // bottom right 5 
+
+		// Top face
+		{-1.0f, -1.0f,  1.0f }, // top left 2
+		{ 1.0f, -1.0f,  1.0f }, // top right 3
+		{-1.0f, -1.0f, -1.0f }, // top left 6
+		{ 1.0f, -1.0f,  1.0f }, // top right 3
+		{ 1.0f, -1.0f, -1.0f }, // top right 7
+		{-1.0f, -1.0f, -1.0f }, // top left 6
+
+		// Bottom face
+		{-1.0f,  1.0f, -1.0f }, // bottom left 4
+		{ 1.0f,  1.0f, -1.0f }, // bottom right 5 
+		{-1.0f,  1.0f,  1.0f }, // bottom left 0
+		{ 1.0f,  1.0f, -1.0f }, // bottom right 5 
+		{ 1.0f,  1.0f,  1.0f }, // bototm right 1
+		{-1.0f,  1.0f,  1.0f }, // bottom left 0
 	};
 
 	std::vector<glm::vec2> texCoords
 	{
-		{ 1, 1 },
-		{ 0, 1 },
-		{ 1, 0 },
-		{ 0, 0 },
+		// Front
+		{ 0, 0 }, // top left
+		{ 1, 0 }, // top right
+		{ 0, 1 }, // bottom left
+		{ 1, 0 }, // top right
+		{ 1, 1 }, // bottom right
+		{ 0, 1 }, // bottom left
 
-		{ 0, 1 },
-		{ 1, 1 },
-		{ 0, 0 },
-		{ 1, 0 },
+		// Back
+		{ 0, 0 }, // top left
+		{ 1, 0 }, // top right
+		{ 0, 1 }, // bottom left
+		{ 1, 0 }, // top right
+		{ 1, 1 }, // bottom right
+		{ 0, 1 }, // bottom left
+
+		// Left
+		{ 0, 0 }, // top left
+		{ 1, 0 }, // top right
+		{ 0, 1 }, // bottom left
+		{ 1, 0 }, // top right
+		{ 1, 1 }, // bottom right
+		{ 0, 1 }, // bottom left
+
+		// Right
+		{ 0, 0 }, // top left
+		{ 1, 0 }, // top right
+		{ 0, 1 }, // bottom left
+		{ 1, 0 }, // top right
+		{ 1, 1 }, // bottom right
+		{ 0, 1 }, // bottom left
+
+		// Top
+		{ 0, 0 }, // top left
+		{ 1, 0 }, // top right
+		{ 0, 1 }, // bottom left
+		{ 1, 0 }, // top right
+		{ 1, 1 }, // bottom right
+		{ 0, 1 }, // bottom left
+
+		// Bottom
+		{ 0, 0 }, // top left
+		{ 1, 0 }, // top right
+		{ 0, 1 }, // bottom left
+		{ 1, 0 }, // top right
+		{ 1, 1 }, // bottom right
+		{ 0, 1 }, // bottom left
 	};
 
-	std::vector<glm::vec4> colors(8, { 1, 1, 1, 1 });
+	std::vector<glm::vec4> colors(3 * 2 * 6, { 1, 1, 1, 1 });
+
+	std::vector<glm::vec3> normals
+	{
+		{0, 0, -1},
+		{0, 0, -1},
+		{0, 0, -1},
+		{0, 0, -1},
+		{0, 0, -1},
+		{0, 0, -1},
+
+		{0, 0, 1},
+		{0, 0, 1},
+		{0, 0, 1},
+		{0, 0, 1},
+		{0, 0, 1},
+		{0, 0, 1},
+
+		{-1, 0, 0},
+		{-1, 0, 1},
+		{-1, 0, 1},
+		{-1, 0, 1},
+		{-1, 0, 1},
+		{-1, 0, 1},
+
+		{1, 0, 0},
+		{1, 0, 0},
+		{1, 0, 0},
+		{1, 0, 0},
+		{1, 0, 0},
+		{1, 0, 0},
+
+		{0, -1, 0},
+		{0, -1, 0},
+		{0, -1, 0},
+		{0, -1, 0},
+		{0, -1, 0},
+		{0, -1, 0},
+
+		{0, 1, 0},
+		{0, 1, 0},
+		{0, 1, 0},
+		{0, 1, 0},
+		{0, 1, 0},
+		{0, 1, 0},
+	};
 
 	std::vector<uint16_t> indices
 	{
-		// front face
-		6, 7, 4, 
-		7, 5, 4,
-
-		// back face
-		3, 2, 1,
-		2, 0, 1,
-
-		// left face
-		2, 6, 0,
-		6, 4, 0,
-
-		// right face
-		7, 3, 5,
-		3, 1, 5,
-
-		// top face
-		2, 3, 6,
-		3, 7, 6,
-
-		// bottom face
-		4, 5, 0,
-		5, 1, 0
+		0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+		11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+		21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+		31, 32, 33, 34, 35
 	};
 
 	auto newMesh = Factory::CreateInstance<Mesh>(name, ObjectType::MESH);
 	newMesh->SetVertices(verts);
 	newMesh->SetColors(colors);
 	newMesh->SetIndices(indices);
+	newMesh->SetNormals(normals);
 	newMesh->SetTextureCoords(texCoords);
 
 	return newMesh;
@@ -85,9 +186,12 @@ Mesh* MeshFactory::CreateSphere(std::string name, int resolution)
 	GeneratePlaneVertices(glm::vec3( 0.5f, 0.0f,  0.0f), resolution, resolution, vertices, indices, PlaneOrientation::RIGHT);
 	GeneratePlaneVertices(glm::vec3( 0.0f, 0.5f,  0.0f), resolution, resolution, vertices, indices, PlaneOrientation::TOP);
 
+	std::vector<glm::vec3> normals;
+
 	for (auto& vertex : vertices)
 	{
 		vertex = glm::normalize(vertex);
+		normals.push_back(vertex);
 	}
 
 	std::vector<glm::vec4> colors(vertices.size(), { 1, 1, 1, 1 });
@@ -95,11 +199,12 @@ Mesh* MeshFactory::CreateSphere(std::string name, int resolution)
 	newMesh->SetVertices(vertices);
 	newMesh->SetColors(colors);
 	newMesh->SetIndices(indices);
+	newMesh->SetNormals(normals);
 
 	return newMesh;
 }
 
-Mesh * MeshFactory::CreateRectangle(std::string name)
+Mesh* MeshFactory::CreateRectangle(std::string name)
 {
 	std::vector<glm::vec3> verts
 	{
@@ -107,7 +212,6 @@ Mesh * MeshFactory::CreateRectangle(std::string name)
 		{  0.5f, -0.5f, 0 }, // top right - 1
 		{ -0.5f,  0.5f, 0 }, // bottom left - 2
 		{  0.5f,  0.5f, 0 }, // bottom right - 3
-
 	};
 
 	std::vector<glm::vec2> texCoords
