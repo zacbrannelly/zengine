@@ -125,6 +125,7 @@
     <ClInclude Include="Assets\Asset.h" />
     <ClInclude Include="Assets\AssetManager.h" />
     <ClInclude Include="Component\MeshRenderer.h" />
+    <ClInclude Include="Map\Objects\Primitives\Cube.h" />
     <ClInclude Include="Scripting\IScriptable.h" />
     <ClInclude Include="Rendering\MeshFactory.h" />
     <ClInclude Include="Rendering\Mesh.h" />
@@ -160,6 +161,7 @@
     <ClCompile Include="Assets\AssetManager.cpp" />
     <ClCompile Include="Component\Camera.cpp" />
     <ClCompile Include="Component\Component.cpp" />
+    <ClCompile Include="Map\Objects\Primitives\Cube.cpp" />
     <ClCompile Include="Display\Display.cpp" />
     <ClCompile Include="Component\MeshRenderer.cpp" />
     <ClCompile Include="Rendering\MeshFactory.cpp" />
