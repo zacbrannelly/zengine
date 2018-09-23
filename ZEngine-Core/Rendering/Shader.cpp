@@ -13,7 +13,7 @@ ZObject* Shader::CreateInstance(string name, ObjectType type)
 	return new Shader(name);
 }
 
-bool Shader::Load(std::string vertPath, std::string fragPath)
+bool Shader::Load(std::string vertPath, std::string fragPath, uint64_t state, int pass)
 {
 	auto vertexShaderData = LoadFile(vertPath);
 	
@@ -31,26 +31,44 @@ bool Shader::Load(std::string vertPath, std::string fragPath)
 		return false;
 	}
 
-	_vertexShader = bgfx::createShader(vertexShaderData);
-	_fragmentShader = bgfx::createShader(fragShaderData);
-	_program = bgfx::createProgram(_vertexShader, _fragmentShader, true);
+	auto vertexShader = bgfx::createShader(vertexShaderData);
+	auto fragmentShader = bgfx::createShader(fragShaderData);
+	auto program = bgfx::createProgram(vertexShader, fragmentShader, true);
 
-	return _program.idx != bgfx::kInvalidHandle;
+	if (program.idx != bgfx::kInvalidHandle)
+	{
+		// Either set the pass to an existing, or create a new one
+		if (_pass.size() == 0 || pass >= _pass.size())
+		{
+			_pass.push_back({ vertexShader, fragmentShader, program, state });
+		}
+		else
+			_pass[pass] = { vertexShader, fragmentShader, program, state };
+	}
+	else
+		return false;
+	
+	return true;
 }
 
-const bgfx::ProgramHandle& Shader::GetHandle() const
+const bgfx::ProgramHandle& Shader::GetHandle(int pass) const
 {
-	return _program;
+	return _pass[pass].program;
 }
 
-const bgfx::ShaderHandle & Shader::GetVertexShader() const
+const bgfx::ShaderHandle & Shader::GetVertexShader(int pass) const
 {
-	return _vertexShader;
+	return _pass[pass].vertexShader;
 }
 
-const bgfx::ShaderHandle & Shader::GetFragmentShader() const
+const bgfx::ShaderHandle & Shader::GetFragmentShader(int pass) const
 {
-	return _fragmentShader;
+	return _pass[pass].fragmentShader;
+}
+
+const std::vector<Pass>& Shader::GetPasses() const
+{
+	return _pass;
 }
 
 const bgfx::Memory* Shader::LoadFile(const std::string & path) const
@@ -82,5 +100,8 @@ const bgfx::Memory* Shader::LoadFile(const std::string & path) const
 
 Shader::~Shader()
 {
-	bgfx::destroy(_program);
+	for (auto& pass : _pass)
+	{
+		bgfx::destroy(pass.program);
+	}
 }

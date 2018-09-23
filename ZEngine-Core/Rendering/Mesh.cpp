@@ -241,7 +241,7 @@ const std::vector<uint16_t>& SubMesh::GetIndices() const
 
 void SubMesh::Draw(int viewId, Material* material, Graphics* graphics)
 {
-	uint64_t renderFlags = BGFX_STATE_DEFAULT;
+	uint64_t renderFlags = 0 | BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BGFX_STATE_WRITE_Z | BGFX_STATE_DEPTH_TEST_LESS | BGFX_STATE_CULL_CW | BGFX_STATE_MSAA;
 
 	switch (_drawMode)
 	{
@@ -251,16 +251,15 @@ void SubMesh::Draw(int viewId, Material* material, Graphics* graphics)
 	case LINE_STRIP:
 		renderFlags |= BGFX_STATE_PT_LINESTRIP;
 		break;
-	case POINTS:
+	case DRAW_MODE_POINTS:
 		renderFlags |= BGFX_STATE_PT_POINTS;
 		break;
 	case TRIANGLE_STRIP:
 		renderFlags |= BGFX_STATE_PT_TRISTRIP;
 	}
 
-	graphics->SetState(renderFlags);
 	graphics->SetIndexBuffer(_indexBuffer);
-	graphics->Submit(viewId, material);
+	graphics->Submit(viewId, material, renderFlags);
 }
 
 SubMesh::~SubMesh()

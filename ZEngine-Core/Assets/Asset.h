@@ -8,27 +8,18 @@ enum AssetType
 	ASSET_TEXTURE, ASSET_MESH, ASSET_FONT, ASSET_ENTITY, ASSET_MATERIAL, ASSET_SHADER, ASSET_MAP, ASSET_SCRIPT
 };
 
-enum AssetFileFormat
-{
-	TEXT, BINARY, CUSTOM
-};
-
 class Asset : public ZObject
 {
 public:
-	Asset(std::string name, ObjectType type, AssetFileFormat format);
+	Asset(std::string name, ObjectType type);
 	virtual ~Asset();
 
-	virtual bool Load(std::string path);
+	virtual bool Load(std::string path) = 0;
+	virtual void Release();
 
-	void* GetData() const;
-	unsigned int GetDataSize() const;
-	std::string GetDataString() const;
 	std::string GetPath() const;
 
-	virtual void Release();
-	
-	virtual bool IsLoaded() const;
+	bool IsLoaded() const;
 
 	template<typename T>
 	T* Cast()
@@ -37,15 +28,13 @@ public:
 	}
 
 protected:
-	void SetData(void* data);
-	void SetDataSize(unsigned int size);
 	void SetPath(std::string path);
+	void SetLoaded(bool loaded);
+
+	bool LoadText(const std::string& path, std::string& result);
+	bool LoadBinary(const std::string& path, char* result, unsigned int& size);
+
 private:
-	bool LoadText(std::string& path);
-	bool LoadBinary(std::string& path);
-	
 	std::string _path;
-	void* _data;
-	unsigned int _size;
-	AssetFileFormat _format;
+	bool _isLoaded;
 };

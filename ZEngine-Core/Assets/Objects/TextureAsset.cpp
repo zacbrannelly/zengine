@@ -3,8 +3,9 @@
 
 using namespace std;
 
-TextureAsset::TextureAsset(std::string name) : Asset(name, ObjectType::TEXTURE_ASSET, BINARY)
+TextureAsset::TextureAsset(std::string name) : Asset(name, ObjectType::TEXTURE_ASSET)
 {
+	_imageData = nullptr;
 }
 
 bool TextureAsset::Load(string path)
@@ -20,11 +21,13 @@ bool TextureAsset::Load(string path)
 		bgfx::calcTextureSize(info, _width, _height, 0, false, false, 1, bgfx::TextureFormat::RGBA8);
 
 		// Set the data
-		SetData(imageData);
-		SetDataSize(info.storageSize);
+		_imageData = imageData;
+		_imageSize = info.storageSize;
+
+		// Save the path
 		SetPath(path);
 
-		return IsLoaded();
+		return true;
 	}
 
 	return false;
@@ -32,7 +35,10 @@ bool TextureAsset::Load(string path)
 
 bool TextureAsset::LoadTexture(uint64_t flags)
 {
-	_texture = new Texture2D(_width, _height, false, 1, bgfx::TextureFormat::RGBA8, flags, GetData(), GetDataSize());
+	_texture = new Texture2D(_width, _height, false, 1, bgfx::TextureFormat::RGBA8, flags, _imageData, _imageSize);
+
+	// Set the texture as loaded
+	SetLoaded(_texture->IsValid());
 
 	return _texture->IsValid();
 }
@@ -49,10 +55,11 @@ Asset* TextureAsset::CreateInstance(std::string name)
 
 void TextureAsset::Release()
 {
-	Asset::Release();
-
 	if (_texture != nullptr)
 		delete _texture;
+
+	if (_imageData != nullptr)
+		delete[] _imageData;
 }
 
 TextureAsset::~TextureAsset()

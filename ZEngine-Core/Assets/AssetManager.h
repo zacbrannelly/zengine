@@ -26,7 +26,7 @@ public:
 		for (auto asset : _assets)
 		{
 			if (asset->GetName() == name)
-				return asset;
+				return static_cast<T*>(asset);
 		}
 		
 		return nullptr;

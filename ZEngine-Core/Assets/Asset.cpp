@@ -4,27 +4,12 @@
 
 using namespace std;
 
-Asset::Asset(string name, ObjectType type, AssetFileFormat format) : ZObject(name, type)
+Asset::Asset(string name, ObjectType type) : ZObject(name, type)
 {
-	_data = nullptr;
-	_size = 0;
-	_format = format;
+	_isLoaded = false;
 }
 
-bool Asset::Load(string path)
-{
-	switch (_format)
-	{
-	case TEXT:
-		return LoadText(path);
-	case BINARY:
-		return LoadBinary(path);
-	}
-
-	return false;
-}
-
-bool Asset::LoadBinary(string& path)
+bool Asset::LoadBinary(const string& path, char* result, unsigned int& resultSize)
 {
 	ifstream in(path, ios::in | ios::binary | ios::ate);
 
@@ -35,14 +20,13 @@ bool Asset::LoadBinary(string& path)
 
 		unsigned int allocSize = (unsigned int)size + 1;
 
-		_data = new char[allocSize];
-		_size = allocSize;
-		_path = path;
+		result = new char[allocSize];
+		resultSize = allocSize;
 
-		in.read((char*)_data, size);
+		in.read(result, resultSize);
 
-		// Null terminate & set size 
-		((char*)_data)[allocSize - 1] = '\0';
+		// Null terminate (just in case)
+		result[allocSize - 1] = '\0';
 	}
 	else
 	{
@@ -52,21 +36,16 @@ bool Asset::LoadBinary(string& path)
 
 	in.close();
 
-	return IsLoaded();
+	return true;
 }
 
-bool Asset::LoadText(string& path)
+bool Asset::LoadText(const string& path, string& result)
 {
 	ifstream in(path, ios::in);
 
 	if (in.is_open())
 	{
-		string* code = new string((std::istreambuf_iterator<char>(in)), (std::istreambuf_iterator<char>()));
-
-		// Set the string to the pointer data
-		_data = code;
-		_size = code->size();
-		_path = path;
+		result = string((std::istreambuf_iterator<char>(in)), (std::istreambuf_iterator<char>()));
 	}
 	else
 	{
@@ -76,22 +55,7 @@ bool Asset::LoadText(string& path)
 
 	in.close();
 	
-	return IsLoaded();
-}
-
-void Asset::SetData(void* data)
-{
-	_data = data;
-}
-
-void* Asset::GetData() const
-{
-	return _data;
-}
-
-string Asset::GetDataString() const
-{
-	return std::string((const char*)_data, _size);
+	return true;
 }
 
 void Asset::SetPath(std::string path)
@@ -104,29 +68,18 @@ std::string Asset::GetPath() const
 	return _path;
 }
 
-void Asset::SetDataSize(unsigned int size)
+void Asset::SetLoaded(bool loaded)
 {
-	_size = size;
-}
-
-unsigned int Asset::GetDataSize() const
-{
-	return _size;
-}
-
-void Asset::Release()
-{
-	if (_data == nullptr) return;
-
-	delete[] _data;
-
-	_data = nullptr;
-	_size = 0;
+	_isLoaded = loaded;
 }
 
 bool Asset::IsLoaded() const
 {
-	return _data != nullptr && _size > 0;
+	return _isLoaded;
+}
+
+void Asset::Release()
+{
 }
 
 Asset::~Asset()

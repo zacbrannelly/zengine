@@ -20,6 +20,8 @@ public:
 	static Asset* CreateInstance(std::string name);
 private:
 	Texture2D* _texture;
+	unsigned char* _imageData;
+	unsigned int _imageSize;
 	int _width, _height;
 };
 
