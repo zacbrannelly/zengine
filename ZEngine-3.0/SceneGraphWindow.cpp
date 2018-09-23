@@ -1,6 +1,10 @@
 #include "SceneGraphWindow.h"
 #include "Editor.h"
+#include <ZEngine-Core/Misc/Factory.h>
+#include <ZEngine-Core/Rendering/MeshFactory.h>
+#include <ZEngine-Core/Component/MeshRenderer.h>
 #include <ZEngine-Core/Component/Transform.h>
+#include <ZEngine-Core/Map/Objects/Entity.h>
 #include "imgui-includes.h"
 #include <iostream>
 
@@ -8,6 +12,8 @@
 SceneGraphWindow::SceneGraphWindow(Editor* editor) : GUIWindow("Hierarchy Window", 800, 400, false)
 {
 	_context = editor;
+
+	SetFlags(ImGuiWindowFlags_MenuBar);
 }
 
 void SceneGraphWindow::ProcessInput()
@@ -57,6 +63,73 @@ void SceneGraphWindow::RenderInWindow()
 	if (_context->GetSelectedMap() != nullptr)
 	{
 		auto map = _context->GetSelectedMap();
+
+		ImGui::BeginMenuBar();
+
+		if (ImGui::BeginMenu("Create"))
+		{
+			if (ImGui::BeginMenu("3D Objects"))
+			{
+				if (ImGui::MenuItem("Cube"))
+				{
+
+				}
+
+				if (ImGui::MenuItem("Sphere"))
+				{
+					// TODO: Create sphere object
+				}
+
+				if (ImGui::MenuItem("Plane"))
+				{
+					// TODO: Create pop-up dialog for setting width and height
+					// TODO: Gnerate plane and create object for plane
+				}
+
+				ImGui::EndMenu();
+			}
+			
+			if (ImGui::BeginMenu("2D Objects"))
+			{
+				if (ImGui::MenuItem("Rectangle / Quad"))
+				{
+					// TODO: Create rectangle entity
+				}
+
+				if (ImGui::MenuItem("Sprite"))
+				{
+					// TODO: Create general sprite
+				}
+
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Lighting"))
+			{
+				// TODO: Come up with lighting options
+
+				if (ImGui::MenuItem("Directional Light"))
+				{
+
+				}
+
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::MenuItem("Empty Entity"))
+			{
+				// TODO: Create empty entity 
+			}
+
+			if (ImGui::MenuItem("Camera"))
+			{
+				// TODO: Create camera object
+			}
+
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMenuBar();
 
 		if (ImGui::CollapsingHeader(map->GetName().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 		{
