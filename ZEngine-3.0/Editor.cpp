@@ -20,6 +20,7 @@
 #include <ZEngine-Core\Assets\Objects\TextureAsset.h>
 #include <ZEngine-Core\Rendering\Texture2D.h>
 #include <ZEngine-Core\Assets\AssetManager.h>
+#include <ZEngine-Core\Assets\Objects\ShaderAsset.h>
 #include <glm/glm.hpp>
 
 #include "GUILibrary.h"
@@ -29,10 +30,15 @@
 #include "SceneGraphWindow.h"
 #include "GUIImage.h"
 
+#include "imgui-includes.h"
+
 Editor::Editor()
 {
 	auto testMap = Factory::CreateInstance<Map>("test_map", ObjectType::MAP);
 	SetSelectedMap(testMap);
+
+	AssetManager::GetInstance()->LoadAsset("standard_unlit", "shaders/standard_unlit.shader", ObjectType::SHADER_ASSET);
+	AssetManager::GetInstance()->LoadAsset("pbr_direct", "shaders/pbr_direct.shader", ObjectType::SHADER_ASSET);
 
 	// Add camera object to map
 	{
@@ -64,24 +70,55 @@ Editor::Editor()
 
 		// Create mesh renderer with sphere mesh attached
 		mesh = MeshFactory::CreateCube("Rect");
+		//mesh->SetColors(std::vector<glm::vec4>(mesh->GetVertices().size(), { 1, 0, 0, 1 }));
 		meshRenderer = Factory::CreateInstance<MeshRenderer>("Mesh Renderer", ObjectType::MESH_RENDERER);
 
 		// Example of loading a texture into a material (TODO: Fix memory leak and finish texture class properly)
 		{
 			auto texturedMaterial = Factory::CreateInstance<Material>("textured mat", ObjectType::MATERIAL);
-			auto texturedShader = Factory::CreateInstance<Shader>("textured shader", ObjectType::SHADER);
+			texturedMaterial->SetShader(AssetManager::GetInstance()->GetAsset<ShaderAsset>("pbr_direct")->GetShader());
 
-			texturedShader->Load("vs_texture.bin", "fs_texture.bin");
-			texturedMaterial->SetShader(texturedShader);
+			// Material light properties
+			texturedMaterial->RegisterSampler("albedoTexture");
+			texturedMaterial->RegisterUniform("roughness", bgfx::UniformType::Vec4, 1);
+			texturedMaterial->RegisterUniform("metallic", bgfx::UniformType::Vec4, 1);
+			texturedMaterial->RegisterUniform("ao", bgfx::UniformType::Vec4, 1);
 
-			texturedMaterial->RegisterSampler("texColor");
+			// Light positions and colours
+			texturedMaterial->RegisterUniform("lightPositions", bgfx::UniformType::Vec4, 4);
+			texturedMaterial->RegisterUniform("lightColors", bgfx::UniformType::Vec4, 4);
+
+			// World position of the camera
+			texturedMaterial->RegisterUniform("camPos", bgfx::UniformType::Vec4, 1);
 
 			auto assetManager = AssetManager::GetInstance();
 			auto textureAsset = assetManager->LoadAsset("test texture", "test.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
-			textureAsset->Load("test.png");
 			textureAsset->LoadTexture();
 
-			texturedMaterial->SetTexture("texColor", textureAsset->GetTexture()->GetHandle());
+			texturedMaterial->SetTexture("albedoTexture", textureAsset->GetTexture()->GetHandle());
+			texturedMaterial->SetUniform("roughness", new glm::vec4(0.5f), 1);
+			texturedMaterial->SetUniform("metallic", new glm::vec4(0.5f), 1);
+			texturedMaterial->SetUniform("ao", new glm::vec4(1.0f), 1);
+
+			auto lightPos = new std::vector<glm::vec4>
+			{
+				{ -10, -10, -10, 1 },
+				{  10,  10, -10, 1 },
+				{ -10,  10, -10, 1 },
+				{  10, -10, -10, 1 }
+			};
+
+			auto lightColors = new std::vector<glm::vec4>
+			{
+				{ 600, 600, 600, 0 },
+				{ 600, 600, 600, 0 },
+				{ 600, 600, 600, 0 },
+				{ 600, 600, 600, 0 },
+			};
+
+			texturedMaterial->SetUniform("lightPositions", &(*lightPos)[0], lightPos->size());
+			texturedMaterial->SetUniform("lightColors", &(*lightColors)[0], lightColors->size());
+			texturedMaterial->SetUniform("camPos", new glm::vec4(0, 0, -10, 1), 1);
 
 			meshRenderer->SetMaterial(texturedMaterial);
 		}
