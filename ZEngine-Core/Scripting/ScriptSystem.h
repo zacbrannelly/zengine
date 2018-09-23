@@ -34,9 +34,6 @@ struct ScriptSystemContext
 class ScriptSystem : public Singleton<ScriptSystem>
 {
 public:
-	ScriptSystem();
-	~ScriptSystem();
-
 	bool Init(const char* arg0);
 	void Shutdown();
 
@@ -52,6 +49,7 @@ public:
 private:
 	void SetupCallbacks(v8::Local<v8::ObjectTemplate>& globalTemplate);
 	void SetupTemplates();
+	void SetupGlobalBindings();
 
 	v8::Isolate* _isolate;
 	std::unique_ptr<v8::Platform> _platform;

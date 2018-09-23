@@ -12,6 +12,8 @@ public:
 	void Update();
 	void Shutdown();
 
+	void GrabMouse() const;
+
 	GLFWwindow* GetHandle() const;
 	void* GetWin32Handle() const;
 

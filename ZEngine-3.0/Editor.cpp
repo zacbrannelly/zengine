@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include <ZEngine-Core\Display\Display.h>
+#include <ZEngine-Core\Input\InputManager.h>
 #include <ZEngine-Core\Rendering\Graphics.h>
 #include <ZEngine-Core\Misc\Factory.h>
 #include <ZEngine-Core\Map\Map.h>
@@ -70,12 +71,26 @@ Editor::Editor()
 
 		// Create mesh renderer with sphere mesh attached
 		mesh = MeshFactory::CreateCube("Rect");
-		//mesh->SetColors(std::vector<glm::vec4>(mesh->GetVertices().size(), { 1, 0, 0, 1 }));
 		meshRenderer = Factory::CreateInstance<MeshRenderer>("Mesh Renderer", ObjectType::MESH_RENDERER);
 
-		// Example of loading a texture into a material (TODO: Fix memory leak and finish texture class properly)
+		// Example of loading a texture into a material 
 		{
 			auto texturedMaterial = Factory::CreateInstance<Material>("textured mat", ObjectType::MATERIAL);
+			texturedMaterial->SetShader(AssetManager::GetInstance()->GetAsset<ShaderAsset>("standard_unlit")->GetShader());
+
+			auto texture = AssetManager::GetInstance()->LoadAsset("test image", "test.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
+			texture->LoadTexture();
+
+			texturedMaterial->RegisterSampler("texColor");
+			texturedMaterial->SetTexture("texColor", texture->GetTexture()->GetHandle());
+
+			meshRenderer->SetMaterial(texturedMaterial);
+		}
+
+		// Example of PBR rendering 
+		/*
+		{
+			auto texturedMaterial = Factory::CreateInstance<Material>("pbr mat", ObjectType::MATERIAL);
 			texturedMaterial->SetShader(AssetManager::GetInstance()->GetAsset<ShaderAsset>("pbr_direct")->GetShader());
 
 			// Material light properties
@@ -102,18 +117,18 @@ Editor::Editor()
 
 			auto lightPos = new std::vector<glm::vec4>
 			{
-				{ -10, -10, -10, 1 },
-				{  10,  10, -10, 1 },
-				{ -10,  10, -10, 1 },
-				{  10, -10, -10, 1 }
+			{ -10, -10, -10, 1 },
+			{  10,  10, -10, 1 },
+			{ -10,  10, -10, 1 },
+			{  10, -10, -10, 1 }
 			};
 
 			auto lightColors = new std::vector<glm::vec4>
 			{
-				{ 600, 600, 600, 0 },
-				{ 600, 600, 600, 0 },
-				{ 600, 600, 600, 0 },
-				{ 600, 600, 600, 0 },
+			{ 600, 600, 600, 0 },
+			{ 600, 600, 600, 0 },
+			{ 600, 600, 600, 0 },
+			{ 600, 600, 600, 0 },
 			};
 
 			texturedMaterial->SetUniform("lightPositions", &(*lightPos)[0], lightPos->size());
@@ -122,7 +137,8 @@ Editor::Editor()
 
 			meshRenderer->SetMaterial(texturedMaterial);
 		}
-		
+		*/
+
 		meshRenderer->SetMesh(mesh);
 		testObject2->AddComponent(meshRenderer);
 
@@ -196,6 +212,9 @@ int main(int argc, char* argv[])
 	Display display("ZEngine 3.0 | By Zac Brannelly", 1920, 1060);
 	display.Init();
 
+	auto inputManager = InputManager::GetInstance();
+	inputManager->Init(&display);
+
 	// Init graphics sub-system
 	auto graphics = Graphics::GetInstance();
 	graphics->Init(&display);
@@ -213,6 +232,10 @@ int main(int argc, char* argv[])
 
 	while (!display.CloseRequested())
 	{
+		// Reset the input manager (so the release function works)
+		inputManager->Reset();
+
+		// Poll for input 
 		display.Update();
 
 		editorContainer->Update();
@@ -238,6 +261,7 @@ int main(int argc, char* argv[])
 	gui->Shutdown();
 	assetManager->Shutdown();
 	graphics->Shutdown();
+	inputManager->Shutdown();
 	display.Shutdown();
 	scriptSystem->Shutdown();
 

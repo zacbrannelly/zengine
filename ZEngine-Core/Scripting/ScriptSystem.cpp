@@ -2,13 +2,10 @@
 #include "../Component/Component.h"
 #include "../Component/Transform.h"
 #include "../Map/Objects/Entity.h"
+#include "../Input/InputManager.h"
 #include <iostream>
 
 using namespace v8;
-
-ScriptSystem::ScriptSystem()
-{
-}
 
 // Global callback declarations
 void LogCallback(const FunctionCallbackInfo<Value>& info);
@@ -43,6 +40,7 @@ bool ScriptSystem::Init(const char* arg0)
 	_context->CreateContext(globalTemplate);
 
 	SetupTemplates();
+	SetupGlobalBindings();
 
 	return _isolate != nullptr;
 }
@@ -59,9 +57,22 @@ void ScriptSystem::SetupTemplates()
 	Context::Scope scope(_context->GetLocal());
 	auto global = _context->GetLocal()->Global();
 
+	// Setup template bindings for objects that are used/created inside JS that are not global
 	_templates[ObjectType::SCRIPT_COMPONENT] = Component::GetTemplate(_isolate, global);
 	_templates[ObjectType::ENTITY] = Entity::GetTemplate(_isolate);
 	_templates[ObjectType::TRANSFORM] = Transform::GetTemplate(_isolate);
+}
+
+void ScriptSystem::SetupGlobalBindings()
+{
+	Context::Scope scope(_context->GetLocal());
+	auto global = _context->GetLocal()->Global();
+
+	// TODO: Setup global bindings (objects that are attached to the global namespace)
+
+	// Bind the input manager and the button codes
+	InputManager::GetInstance()->SetupScriptBindings(_isolate, global);
+	InstallButtonCodesIntoScripting(this); // From InputTypes.cpp
 }
 
 void ScriptSystem::Run(std::string code)
@@ -124,11 +135,6 @@ void ScriptSystem::Shutdown()
 	v8::V8::ShutdownPlatform();
 
 	delete _allocator;
-}
-
-ScriptSystem::~ScriptSystem()
-{
-
 }
 
 void LogCallback(const FunctionCallbackInfo<Value>& info)
