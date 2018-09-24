@@ -38,9 +38,25 @@ TestComponent.prototype.Render = function()
 	//this.owner.transform.SetRotation(0, this.delta * 100, 0);
 	//this.owner.transform.SetScale(1.5 * Math.cos(this.delta / 2), 1.5 * Math.sin(this.delta / 2), 1.5 * Math.sin(this.delta / 2));
 	
-	//log("Enter down: " + Input.GetButtonUp(BUTTON_MOUSE_LEFT));
+	var position = this.owner.transform.GetPosition();
 	
-	log("Transform Pos X: " + this.owner.transform.GetPosition().x);
+	if (Input.GetButtonDown(BUTTON_KEY_RIGHT))
+	{		
+		this.owner.transform.SetPosition(position.x + 0.01, position.y, position.z);
+	}
+	else if (Input.GetButtonDown(BUTTON_KEY_LEFT))
+	{		
+		this.owner.transform.SetPosition(position.x - 0.01, position.y, position.z);
+	}
+	
+	if (Input.GetButtonDown(BUTTON_KEY_UP))
+	{		
+		this.owner.transform.SetPosition(position.x, position.y - 0.01, position.z);
+	}
+	else if (Input.GetButtonDown(BUTTON_KEY_DOWN))
+	{		
+		this.owner.transform.SetPosition(position.x, position.y + 0.01, position.z);
+	}
 	
 	this.delta += 0.01;
 };
