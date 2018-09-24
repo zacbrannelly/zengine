@@ -75,7 +75,7 @@ void Wrapper<T>::Install(std::string name, v8::Local<v8::Object>& global)
 	global->Set(sys->GetString(name), temp->GetFunction());
 
 	// Save the function template
-	instance->_template.Reset(sys->GetIsolate(), temp);
+	_template.Reset(sys->GetIsolate(), temp);
 }
 
 template<typename T>
@@ -116,8 +116,7 @@ void Wrapper<T>::Destructor(const v8::WeakCallbackInfo<T>& info)
 template<typename T>
 void Wrapper<T>::DestroyTemplate()
 {
-	auto instance = GetInstance();
-	instance->_template.Reset();
+	_template.Reset();
 }
 
 template<typename T>
