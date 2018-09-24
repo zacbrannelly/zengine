@@ -128,6 +128,7 @@
     <ClInclude Include="Input\InputManager.h" />
     <ClInclude Include="Input\InputTypes.h" />
     <ClInclude Include="Map\Objects\Primitives\Cube.h" />
+    <ClInclude Include="Misc\OneShotSingleton.h" />
     <ClInclude Include="Scripting\IScriptable.h" />
     <ClInclude Include="Rendering\MeshFactory.h" />
     <ClInclude Include="Rendering\Mesh.h" />
@@ -157,6 +158,8 @@
     <ClInclude Include="Scripting\Wrappers\Wrapper.h" />
     <ClInclude Include="Assets\Objects\TextureAsset.h" />
     <ClInclude Include="Assets\Objects\ShaderAsset.h" />
+    <ClInclude Include="Scripting\Wrappers\Vec2Wrapper.h" />
+    <ClInclude Include="Scripting\Wrappers\Vec3Wrapper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Assets\Asset.cpp" />
@@ -190,9 +193,10 @@
     <ClCompile Include="Scripting\Script.cpp" />
     <ClCompile Include="Scripting\ScriptDemo.cpp" />
     <ClCompile Include="Scripting\ScriptSystem.cpp" />
-    <ClCompile Include="Scripting\Wrappers\Wrapper.cpp" />
     <ClCompile Include="Assets\Objects\TextureAsset.cpp" />
     <ClCompile Include="Assets\Objects\ShaderAsset.cpp" />
+    <ClCompile Include="Scripting\Wrappers\Vec2Wrapper.cpp" />
+    <ClCompile Include="Scripting\Wrappers\Vec3Wrapper.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

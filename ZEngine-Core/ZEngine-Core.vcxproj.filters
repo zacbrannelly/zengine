@@ -120,6 +120,15 @@
     <ClInclude Include="Input\InputTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Scripting\Wrappers\Vec2Wrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripting\Wrappers\Vec3Wrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Misc\OneShotSingleton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Rendering\Graphics.cpp">
@@ -200,9 +209,6 @@
     <ClCompile Include="Scripting\IScriptable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Scripting\Wrappers\Wrapper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Assets\Asset.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -222,6 +228,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Input\InputTypes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripting\Wrappers\Vec2Wrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripting\Wrappers\Vec3Wrapper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

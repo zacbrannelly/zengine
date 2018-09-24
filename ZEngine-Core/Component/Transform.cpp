@@ -1,6 +1,7 @@
 #include "Transform.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include "../Scripting/ScriptSystem.h"
+#include "../Scripting/Wrappers/Vec3Wrapper.h"
 
 using namespace std;
 
@@ -166,6 +167,20 @@ void Transform_SetScaleCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
 	}
 }
 
+void Transform_GetPositionCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+	auto self = info.Holder();
+	auto wrapper = v8::Local<v8::External>::Cast(self->GetInternalField(0));
+	auto scriptableObj = static_cast<IScriptable*>(wrapper->Value());
+	auto transform = static_cast<Transform*>(scriptableObj);
+
+	// TODO: Try not to create a new instance every time, perhaps make one instance and save as private field..
+	auto wrapVec3 = Vec3Wrapper::NewInstance();
+	wrapVec3->SetData(transform->GetPosition());
+
+	info.GetReturnValue().Set(wrapVec3->GetObject());
+}
+
 v8::Global<v8::FunctionTemplate> Transform::GetTemplate(v8::Isolate* isolate)
 {
 	using namespace v8;
@@ -179,6 +194,7 @@ v8::Global<v8::FunctionTemplate> Transform::GetTemplate(v8::Isolate* isolate)
 
 	//TODO: Add properties (getters/setters only)
 	constructor->InstanceTemplate()->Set(isolate, "SetPosition", FunctionTemplate::New(isolate, Transform_SetPositionCallback));
+	constructor->InstanceTemplate()->Set(isolate, "GetPosition", FunctionTemplate::New(isolate, Transform_GetPositionCallback));
 	constructor->InstanceTemplate()->Set(isolate, "SetRotation", FunctionTemplate::New(isolate, Transform_SetRotationCallback));
 	constructor->InstanceTemplate()->Set(isolate, "SetScale", FunctionTemplate::New(isolate, Transform_SetScaleCallback));
 

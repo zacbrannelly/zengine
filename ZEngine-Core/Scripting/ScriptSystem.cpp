@@ -3,6 +3,10 @@
 #include "../Component/Transform.h"
 #include "../Map/Objects/Entity.h"
 #include "../Input/InputManager.h"
+
+#include "../Scripting/Wrappers/Vec2Wrapper.h"
+#include "../Scripting/Wrappers/Vec3Wrapper.h"
+
 #include <iostream>
 
 using namespace v8;
@@ -57,10 +61,15 @@ void ScriptSystem::SetupTemplates()
 	Context::Scope scope(_context->GetLocal());
 	auto global = _context->GetLocal()->Global();
 
-	// Setup template bindings for objects that are used/created inside JS that are not global
+	// Setup template bindings for objects that are used inside JS that are not global
+	// These objects have no C++ constructors
 	_templates[ObjectType::SCRIPT_COMPONENT] = Component::GetTemplate(_isolate, global);
 	_templates[ObjectType::ENTITY] = Entity::GetTemplate(_isolate);
 	_templates[ObjectType::TRANSFORM] = Transform::GetTemplate(_isolate);
+
+	// Setup basic classes that can be created in JS code (have C++ constructors)
+	Vec2Wrapper::Install("vec2", global);
+	Vec3Wrapper::Install("vec3", global);
 }
 
 void ScriptSystem::SetupGlobalBindings()
@@ -101,6 +110,12 @@ v8::Local<v8::String> ScriptSystem::GetString(std::string value) const
 	return String::NewFromUtf8(_isolate, value.c_str());
 }
 
+std::string ScriptSystem::CastString(Local<String>& stringObj) const
+{
+	String::Utf8Value utfString(_isolate, stringObj);
+	return std::string(*utfString);
+}
+
 v8::Local<v8::FunctionTemplate> ScriptSystem::GetTemplate(ObjectType type)
 {
 	if (_templates.find(type) != _templates.end())
@@ -129,6 +144,10 @@ ScriptSystemContext* ScriptSystem::GetContext() const
 void ScriptSystem::Shutdown()
 {
 	if (_isolate == nullptr) return;
+
+	// Clean up wrappers
+	Vec2Wrapper::DestroyTemplate();
+	Vec3Wrapper::DestroyTemplate();
 
 	delete _context;
 
