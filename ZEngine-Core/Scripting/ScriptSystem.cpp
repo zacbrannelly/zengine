@@ -70,8 +70,10 @@ void ScriptSystem::SetupGlobalBindings()
 
 	// TODO: Setup global bindings (objects that are attached to the global namespace)
 
-	// Bind the input manager and the button codes
+	// Bind the Input Manager functions
 	InputManager::GetInstance()->SetupScriptBindings(_isolate, global);
+
+	// Bind the Input Button Codes
 	InstallButtonCodesIntoScripting(this); // From InputTypes.cpp
 }
 

@@ -222,6 +222,73 @@ void InputManager_GetButtonDown(const v8::FunctionCallbackInfo<v8::Value>& info)
 	info.GetReturnValue().Set(input->GetButtonDown(code));
 }
 
+void InputManager_GetButtonUp(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+
+	if (info.Length() != 1 || !info[0]->IsInt32())
+	{
+		info.GetReturnValue().Set(false);
+		return;
+	}
+
+	auto input = InputManager::GetInstance();
+	auto sys = ScriptSystem::GetInstance();
+
+	// Extract the code form the args
+	auto code = (ButtonCode)info[0]->ToInt32(info.GetIsolate())->Int32Value(sys->GetContext()->GetLocal()).ToChecked();
+
+	info.GetReturnValue().Set(input->GetButtonUp(code));
+}
+
+void InputManager_GetAxis(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+	if (info.Length() != 1 || !info[0]->IsString())
+	{
+		info.GetReturnValue().Set(0.0f);
+		return;
+	}
+
+	auto input = InputManager::GetInstance();
+
+	// Get the provided axis name
+	v8::String::Utf8Value axisNameObj(info.GetIsolate(), info[0]->ToString(info.GetIsolate()));
+
+	info.GetReturnValue().Set(input->GetAxis(*axisNameObj));
+}
+
+void InputManager_GetAxisRaw(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+	if (info.Length() != 1 || !info[0]->IsString())
+	{
+		info.GetReturnValue().Set(0.0f);
+		return;
+	}
+
+	auto input = InputManager::GetInstance();
+
+	// Get the provided axis name
+	v8::String::Utf8Value axisNameObj(info.GetIsolate(), info[0]->ToString(info.GetIsolate()));
+
+	info.GetReturnValue().Set(input->GetAxisRaw(*axisNameObj));
+}
+
+void InputManager_RegisterAxis(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+	if (info.Length() != 2 || !info[0]->IsString() || !info[1]->IsInt32())
+	{
+		return;
+	}
+
+	auto input = InputManager::GetInstance();
+	auto sys = ScriptSystem::GetInstance();
+
+	// Get the provided axis name and button code
+	v8::String::Utf8Value axisNameObj(info.GetIsolate(), info[0]->ToString(info.GetIsolate()));
+	ButtonCode code = (ButtonCode)info[1]->Int32Value(sys->GetContext()->GetLocal()).ToChecked();
+
+	input->RegisterAxis(*axisNameObj, code);
+}
+
 void InputManager::SetupScriptBindings(v8::Isolate* isolate, v8::Local<v8::Object>& global)
 {
 	using namespace v8;
@@ -234,7 +301,12 @@ void InputManager::SetupScriptBindings(v8::Isolate* isolate, v8::Local<v8::Objec
 	auto inputObj = temp->NewInstance();
 
 	inputObj->Set(sys->GetString("GetButtonDown"), Function::New(isolate, InputManager_GetButtonDown));
+	inputObj->Set(sys->GetString("GetButtonUp"), Function::New(isolate, InputManager_GetButtonUp));
 
+	inputObj->Set(sys->GetString("RegisterAxis"), Function::New(isolate, InputManager_RegisterAxis));
+	inputObj->Set(sys->GetString("GetAxis"), Function::New(isolate, InputManager_GetAxis));
+	inputObj->Set(sys->GetString("GetAxisRaw"), Function::New(isolate, InputManager_GetAxisRaw));
+		
 	global->Set(sys->GetString("Input"), inputObj);
 }
 
