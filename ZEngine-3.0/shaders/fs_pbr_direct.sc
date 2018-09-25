@@ -1,7 +1,13 @@
 $input v_color0, v_texcoord0, v_normal, v_fragPos
 
 // material parameters
+uniform vec4 albedoTint;
 uniform sampler2D albedoTexture;
+uniform sampler2D normalTexture;
+uniform sampler2D metallicTexture;
+uniform sampler2D roughnessTexture;
+uniform sampler2D aoTexture;
+
 uniform vec4 metallic;
 uniform vec4 roughness;
 uniform vec4 ao;
@@ -13,6 +19,24 @@ uniform vec4 lightColors[4];
 uniform vec4 camPos;
 
 const float PI = 3.14159265359;
+
+vec3 getNormalFromMap()
+{
+    vec3 tangentNormal = texture2D(normalTexture, v_texcoord0).xyz * 2.0 - 1.0;
+
+    vec3 Q1  = dFdx(v_fragPos);
+    vec3 Q2  = dFdy(v_fragPos);
+    vec2 st1 = dFdx(v_texcoord0);
+    vec2 st2 = dFdy(v_texcoord0);
+
+    vec3 N   = normalize(v_normal);
+    vec3 T  = normalize(Q1*st2.t - Q2*st1.t);
+    vec3 B  = -normalize(cross(N, T));
+    mat3 TBN = mat3(T, B, N);
+
+    return normalize(TBN * tangentNormal);
+}
+
 // ----------------------------------------------------------------------------
 float DistributionGGX(vec3 N, vec3 H, float roughness)
 {
@@ -25,7 +49,7 @@ float DistributionGGX(vec3 N, vec3 H, float roughness)
     float denom = (NdotH2 * (a2 - 1.0) + 1.0);
     denom = PI * denom * denom;
 
-    return nom / max(denom, 0.001); // prevent divide by zero for roughness=0.0 and NdotH=1.0
+    return nom / denom;
 }
 // ----------------------------------------------------------------------------
 float GeometrySchlickGGX(float NdotV, float roughness)
@@ -56,19 +80,19 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0)
 // ----------------------------------------------------------------------------
 void main()
 {		
-	vec3 albedo = v_color0.rgb * texture2D(albedoTexture, v_texcoord0).rgb;
+	vec3 albedo = v_color0.rgb * albedoTint.rgb * texture2D(albedoTexture, v_texcoord0).rgb;
 	
-    vec3 N = normalize(v_normal);
+    vec3 N = getNormalFromMap();
     vec3 V = normalize(camPos.xyz - v_fragPos.xyz);
 
     // calculate reflectance at normal incidence; if dia-electric (like plastic) use F0 
     // of 0.04 and if it's a metal, use the albedo color as F0 (metallic workflow)    
     vec3 F0 = vec3(0.04); 
-    F0 = mix(F0, albedo, metallic.x);
+    F0 = mix(F0, albedo, metallic.x * texture2D(metallicTexture, v_texcoord0).r);
 
     // reflectance equation
     vec3 Lo = vec3(0.0);
-    for(int i = 0; i < 4; ++i) 
+    for (int i = 0; i < 4; ++i) 
     {
         // calculate per-light radiance
         vec3 L = normalize(lightPositions[i].xyz - v_fragPos);
@@ -78,8 +102,8 @@ void main()
         vec3 radiance = lightColors[i].rgb * attenuation;
 
         // Cook-Torrance BRDF
-        float NDF = DistributionGGX(N, H, roughness.x);   
-        float G   = GeometrySmith(N, V, L, roughness.x);      
+        float NDF = DistributionGGX(N, H, roughness.x * texture2D(roughnessTexture, v_texcoord0).r);   
+        float G   = GeometrySmith(N, V, L, roughness.x * texture2D(roughnessTexture, v_texcoord0).r);      
         vec3 F    = fresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0);
            
         vec3 nominator    = NDF * G * F; 
@@ -95,7 +119,7 @@ void main()
         // multiply kD by the inverse metalness such that only non-metals 
         // have diffuse lighting, or a linear blend if partly metal (pure metals
         // have no diffuse light).
-        kD *= 1.0 - metallic.x;	  
+        kD *= 1.0 - metallic.x * texture2D(metallicTexture, v_texcoord0).r;	  
 
         // scale light by NdotL
         float NdotL = max(dot(N, L), 0.0);        
@@ -106,7 +130,7 @@ void main()
     
     // ambient lighting (note that the next IBL tutorial will replace 
     // this ambient lighting with environment lighting).
-    vec3 ambient = vec3(0.03) * albedo * ao.x;
+    vec3 ambient = vec3(0.03) * albedo * ao.x * texture2D(aoTexture, v_texcoord0).r;
 
     vec3 color = ambient + Lo;
 

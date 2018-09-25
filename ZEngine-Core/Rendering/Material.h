@@ -31,7 +31,10 @@ public:
 	void RegisterSampler(const std::string& name);
 
 	void SetUniform(const std::string& name, void* data, uint16_t numElements);
+	const Uniform& GetUniform(const std::string& name);
+
 	void SetTexture(const std::string& name, bgfx::TextureHandle texture);
+
 	void Apply();
 
 	void SetShader(Shader* shader);

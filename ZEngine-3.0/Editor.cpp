@@ -74,7 +74,7 @@ Editor::Editor()
 		meshRenderer = Factory::CreateInstance<MeshRenderer>("Mesh Renderer", ObjectType::MESH_RENDERER);
 
 		// Example of loading a texture into a material 
-		{
+		/*{
 			auto texturedMaterial = Factory::CreateInstance<Material>("textured mat", ObjectType::MATERIAL);
 			texturedMaterial->SetShader(AssetManager::GetInstance()->GetAsset<ShaderAsset>("standard_unlit")->GetShader());
 
@@ -85,16 +85,23 @@ Editor::Editor()
 			texturedMaterial->SetTexture("texColor", texture->GetTexture()->GetHandle());
 
 			meshRenderer->SetMaterial(texturedMaterial);
-		}
+		}*/
 
 		// Example of PBR rendering 
-		/*
 		{
 			auto texturedMaterial = Factory::CreateInstance<Material>("pbr mat", ObjectType::MATERIAL);
 			texturedMaterial->SetShader(AssetManager::GetInstance()->GetAsset<ShaderAsset>("pbr_direct")->GetShader());
 
-			// Material light properties
+			// Material light textures
 			texturedMaterial->RegisterSampler("albedoTexture");
+			texturedMaterial->RegisterSampler("normalTexture");
+			texturedMaterial->RegisterSampler("roughnessTexture");
+			texturedMaterial->RegisterSampler("metallicTexture");
+			texturedMaterial->RegisterSampler("aoTexture");
+
+
+			// Material light uniforms
+			texturedMaterial->RegisterUniform("albedoTint", bgfx::UniformType::Vec4, 1);
 			texturedMaterial->RegisterUniform("roughness", bgfx::UniformType::Vec4, 1);
 			texturedMaterial->RegisterUniform("metallic", bgfx::UniformType::Vec4, 1);
 			texturedMaterial->RegisterUniform("ao", bgfx::UniformType::Vec4, 1);
@@ -107,38 +114,58 @@ Editor::Editor()
 			texturedMaterial->RegisterUniform("camPos", bgfx::UniformType::Vec4, 1);
 
 			auto assetManager = AssetManager::GetInstance();
-			auto textureAsset = assetManager->LoadAsset("test texture", "test.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
-			textureAsset->LoadTexture();
 
+			// Load the texture assets for the material
+			auto textureAsset = assetManager->LoadAsset("test texture", "darktiles1_albedo.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
+			auto roughnessAsset = assetManager->LoadAsset("test texture 2", "darktiles1_roughness.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
+			auto metallicAsset = assetManager->LoadAsset("test texture 3", "darktiles1_metallic.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
+			auto normalAsset = assetManager->LoadAsset("test texture 4", "darktiles1_normal.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
+			auto aoAsset = assetManager->LoadAsset("test texture 5", "darktiles1_ao.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
+
+			// Load the textures into the GPU
+			textureAsset->LoadTexture();
+			roughnessAsset->LoadTexture();
+			metallicAsset->LoadTexture();
+			normalAsset->LoadTexture();
+			aoAsset->LoadTexture();
+
+			// Set the textures to the shader
 			texturedMaterial->SetTexture("albedoTexture", textureAsset->GetTexture()->GetHandle());
-			texturedMaterial->SetUniform("roughness", new glm::vec4(0.5f), 1);
+			texturedMaterial->SetTexture("normalTexture", normalAsset->GetTexture()->GetHandle());
+			texturedMaterial->SetTexture("roughnessTexture", roughnessAsset->GetTexture()->GetHandle());
+			texturedMaterial->SetTexture("metallicTexture", metallicAsset->GetTexture()->GetHandle());
+			texturedMaterial->SetTexture("aoTexture", aoAsset->GetTexture()->GetHandle());
+
+			// Set the other material properties
+			texturedMaterial->SetUniform("albedoTint", new glm::vec4(1.0f), 1);
+			texturedMaterial->SetUniform("roughness", new glm::vec4(0.11f), 1);
 			texturedMaterial->SetUniform("metallic", new glm::vec4(0.5f), 1);
 			texturedMaterial->SetUniform("ao", new glm::vec4(1.0f), 1);
 
 			auto lightPos = new std::vector<glm::vec4>
 			{
-			{ -10, -10, -10, 1 },
-			{  10,  10, -10, 1 },
-			{ -10,  10, -10, 1 },
-			{  10, -10, -10, 1 }
+				{ -10, -10, -10, 1 },
+				{  10,  10, -10, 1 },
+				{ -10,  10, -10, 1 },
+				{  10, -10, -10, 1 }
 			};
 
 			auto lightColors = new std::vector<glm::vec4>
 			{
-			{ 600, 600, 600, 0 },
-			{ 600, 600, 600, 0 },
-			{ 600, 600, 600, 0 },
-			{ 600, 600, 600, 0 },
+				{ 300, 300, 300, 0 },
+				{ 300, 300, 300, 0 },
+				{ 300, 300, 300, 0 },
+				{ 300, 300, 300, 0 },
 			};
 
+			// Light properties & camera position
 			texturedMaterial->SetUniform("lightPositions", &(*lightPos)[0], lightPos->size());
 			texturedMaterial->SetUniform("lightColors", &(*lightColors)[0], lightColors->size());
 			texturedMaterial->SetUniform("camPos", new glm::vec4(0, 0, -10, 1), 1);
 
 			meshRenderer->SetMaterial(texturedMaterial);
 		}
-		*/
-
+		
 		meshRenderer->SetMesh(mesh);
 		testObject2->AddComponent(meshRenderer);
 
@@ -160,7 +187,7 @@ Editor::Editor()
 		testObject2->GetTransform()->SetParent(testObject->GetTransform());
 		testMap->Add(testObject2);
 
-		SetSelectedEntity(testObject);
+		SetSelectedEntity(testObject2);
 	}
 
 	Add(new MainMenuBar());
@@ -171,6 +198,23 @@ Editor::Editor()
 
 void Editor::Update()
 {
+	if (_selectedObject != nullptr)
+	{
+		if (_selectedObject->GetComponent(ObjectType::MESH_RENDERER) != nullptr)
+		{
+			auto meshRenderer = static_cast<MeshRenderer*>(_selectedObject->GetComponent(ObjectType::MESH_RENDERER));
+			auto material = meshRenderer->GetMaterial();
+
+			float* roughness = (float*)material->GetUniform("roughness").data;
+			ImGui::DragFloat3("Roughness", roughness, 0.01f, 0.0f, 1.0f);
+
+			float* metallic = (float*)material->GetUniform("metallic").data;
+			ImGui::DragFloat3("Metallic", metallic, 0.01f, 0.0f, 1.0f);
+
+			float* ao = (float*)material->GetUniform("ao").data;
+			ImGui::DragFloat("AO", ao, 0.01f, 0, 1);
+;		}
+	}
 }
 
 void Editor::SetSelectedMap(Map* map)
@@ -238,11 +282,12 @@ int main(int argc, char* argv[])
 		// Poll for input 
 		display.Update();
 
-		editorContainer->Update();
-
 		// Render the GUI
 		gui->NewFrame();
+
+		editorContainer->Update();
 		editorContainer->RenderElement();
+
 		gui->EndFrame();
 
 		// Render the grey background

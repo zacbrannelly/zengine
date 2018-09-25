@@ -47,6 +47,11 @@ void Material::SetUniform(const std::string& name, void* data, uint16_t numEleme
 	}
 }
 
+const Uniform& Material::GetUniform(const std::string& name)
+{
+	return _uniforms.find(name) != _uniforms.end() ? _uniforms[name] : Uniform();
+}
+
 void Material::SetTexture(const std::string& name, bgfx::TextureHandle texture)
 {
 	auto iterator = _textureSamplers.find(name);
