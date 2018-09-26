@@ -70,7 +70,7 @@ Editor::Editor()
 		auto testObject2 = Factory::CreateInstance<Entity>("test_object2", ObjectType::ENTITY);
 
 		// Create mesh renderer with sphere mesh attached
-		mesh = MeshFactory::CreateCube("Rect");
+		mesh = MeshFactory::CreateSphereStrip("Rect");
 		meshRenderer = Factory::CreateInstance<MeshRenderer>("Mesh Renderer", ObjectType::MESH_RENDERER);
 
 		// Example of loading a texture into a material 
@@ -99,7 +99,6 @@ Editor::Editor()
 			texturedMaterial->RegisterSampler("metallicTexture");
 			texturedMaterial->RegisterSampler("aoTexture");
 
-
 			// Material light uniforms
 			texturedMaterial->RegisterUniform("albedoTint", bgfx::UniformType::Vec4, 1);
 			texturedMaterial->RegisterUniform("roughness", bgfx::UniformType::Vec4, 1);
@@ -116,11 +115,11 @@ Editor::Editor()
 			auto assetManager = AssetManager::GetInstance();
 
 			// Load the texture assets for the material
-			auto textureAsset = assetManager->LoadAsset("test texture", "darktiles1_albedo.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
-			auto roughnessAsset = assetManager->LoadAsset("test texture 2", "darktiles1_roughness.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
-			auto metallicAsset = assetManager->LoadAsset("test texture 3", "darktiles1_metallic.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
-			auto normalAsset = assetManager->LoadAsset("test texture 4", "darktiles1_normal.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
-			auto aoAsset = assetManager->LoadAsset("test texture 5", "darktiles1_ao.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
+			auto textureAsset = assetManager->LoadAsset("test texture", "blank_ao.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
+			auto roughnessAsset = assetManager->LoadAsset("test texture 2", "blank_ao.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
+			auto metallicAsset = assetManager->LoadAsset("test texture 3", "blank_ao.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
+			auto normalAsset = assetManager->LoadAsset("test texture 4", "blank_normal.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
+			auto aoAsset = assetManager->LoadAsset("test texture 5", "blank_ao.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
 
 			// Load the textures into the GPU
 			textureAsset->LoadTexture();
