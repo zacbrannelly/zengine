@@ -22,30 +22,21 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{d2cd1d64-4d51-42de-a5bc-6686772c0cb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{6378864c-522b-4c49-8c49-035d55ee1896}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IO">
+      <UniqueIdentifier>{e1e20fca-cbdb-4422-98c0-7c0f636af133}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\bgfx\3rdparty\dear-imgui\imgui_impl_glfw.cpp">
       <Filter>Lib</Filter>
     </ClCompile>
     <ClCompile Include="experimental.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Editor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Container.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GUIWindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GUILibrary.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MainMenuBar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GUIImage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TransformInspector.cpp">
@@ -63,39 +54,39 @@
     <ClCompile Include="CodeEditor.cpp">
       <Filter>Windows</Filter>
     </ClCompile>
-    <ClCompile Include="Inspector.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CameraInspector.cpp">
       <Filter>Inspectors</Filter>
+    </ClCompile>
+    <ClCompile Include="Container.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIImage.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUILibrary.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIWindow.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenuBar.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Inspector.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialWriter.cpp">
+      <Filter>IO</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\bgfx\3rdparty\dear-imgui\imgui_impl_glfw.h">
       <Filter>Lib</Filter>
     </ClInclude>
-    <ClInclude Include="Container.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GUIWindow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="imgui-includes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GUILibrary.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GUIElement.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MainMenuBar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GUIImage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Editor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TransformInspector.h">
@@ -113,11 +104,35 @@
     <ClInclude Include="CodeEditor.h">
       <Filter>Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Inspector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CameraInspector.h">
       <Filter>Inspectors</Filter>
+    </ClInclude>
+    <ClInclude Include="Container.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIElement.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIImage.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUILibrary.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIWindow.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenuBar.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Inspector.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialWriter.h">
+      <Filter>IO</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

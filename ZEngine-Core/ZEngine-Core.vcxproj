@@ -75,17 +75,17 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\v8\v8\include;..\..\v8\v8;..\..\ZEngine-3.0\ZEngine-3.0\glm;..\..\bx\include;..\..\bimg\include;..\..\bgfx\include;..\..\ZEngine-3.0\ZEngine-3.0\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\v8\v8\include;..\..\v8\v8;..\..\ZEngine-3.0\ZEngine-3.0\glm;..\..\bx\include;..\..\bimg\include;..\..\assimp\include;..\..\bgfx\include;..\..\ZEngine-3.0\ZEngine-3.0\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\..\ZEngine-3.0\ZEngine-3.0\glfw\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib>
-      <AdditionalDependencies>v8.dll.lib;v8_libbase.dll.lib;v8_libplatform.dll.lib;icui18n.dll.lib;icuuc.dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>v8.dll.lib;v8_libbase.dll.lib;v8_libplatform.dll.lib;icui18n.dll.lib;icuuc.dll.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>..\..\v8\v8\out.gn\x64.debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\assimp\lib\x64;..\..\v8\v8\out.gn\x64.debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -122,13 +122,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Assets\AssetCatalog.h" />
     <ClInclude Include="Assets\Asset.h" />
     <ClInclude Include="Assets\AssetManager.h" />
     <ClInclude Include="Component\MeshRenderer.h" />
+    <ClInclude Include="Assets\Objects\FontAsset.h" />
     <ClInclude Include="Input\InputManager.h" />
     <ClInclude Include="Input\InputTypes.h" />
+    <ClInclude Include="Assets\Objects\MapAsset.h" />
     <ClInclude Include="Map\Objects\Primitives\Cube.h" />
+    <ClInclude Include="Assets\Objects\MaterialAsset.h" />
+    <ClInclude Include="Assets\Objects\MeshAsset.h" />
     <ClInclude Include="Misc\OneShotSingleton.h" />
+    <ClInclude Include="Assets\Objects\ModelAsset.h" />
+    <ClInclude Include="Assets\Objects\ScriptAsset.h" />
     <ClInclude Include="Scripting\IScriptable.h" />
     <ClInclude Include="Rendering\MeshFactory.h" />
     <ClInclude Include="Rendering\Mesh.h" />
@@ -162,15 +169,21 @@
     <ClInclude Include="Scripting\Wrappers\Vec3Wrapper.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Assets\AssetCatalog.cpp" />
     <ClCompile Include="Assets\Asset.cpp" />
     <ClCompile Include="Assets\AssetManager.cpp" />
     <ClCompile Include="Component\Camera.cpp" />
     <ClCompile Include="Component\Component.cpp" />
+    <ClCompile Include="Assets\Objects\FontAsset.cpp" />
     <ClCompile Include="Input\InputManager.cpp" />
     <ClCompile Include="Input\InputTypes.cpp" />
+    <ClCompile Include="Assets\Objects\MapAsset.cpp" />
     <ClCompile Include="Map\Objects\Primitives\Cube.cpp" />
     <ClCompile Include="Display\Display.cpp" />
     <ClCompile Include="Component\MeshRenderer.cpp" />
+    <ClCompile Include="Assets\Objects\MaterialAsset.cpp" />
+    <ClCompile Include="Assets\Objects\ModelAsset.cpp" />
+    <ClCompile Include="Assets\Objects\MeshAsset.cpp" />
     <ClCompile Include="Rendering\MeshFactory.cpp" />
     <ClCompile Include="Rendering\Mesh.cpp" />
     <ClCompile Include="Rendering\Material.cpp" />
@@ -189,6 +202,7 @@
     <ClCompile Include="Rendering\VertexBuffer.cpp" />
     <ClCompile Include="Rendering\Texture2D.cpp" />
     <ClCompile Include="Component\ScriptComponent.cpp" />
+    <ClCompile Include="Assets\Objects\ScriptAsset.cpp" />
     <ClCompile Include="Scripting\IScriptable.cpp" />
     <ClCompile Include="Scripting\Script.cpp" />
     <ClCompile Include="Scripting\ScriptDemo.cpp" />

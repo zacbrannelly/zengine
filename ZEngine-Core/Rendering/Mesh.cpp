@@ -45,12 +45,12 @@ bool Mesh::IsDynamic() const
 	return _isDynamic;
 }
 
-void Mesh::SetIndices(const std::vector<uint16_t>& indices)
+void Mesh::SetIndices(const std::vector<uint32_t>& indices)
 {
 	SetIndices(0, indices);
 }
 
-void Mesh::SetIndices(int subMesh, const std::vector<uint16_t>& indices)
+void Mesh::SetIndices(int subMesh, const std::vector<uint32_t>& indices)
 {
 	assert(subMesh >= 0);
 
@@ -63,7 +63,7 @@ void Mesh::SetIndices(int subMesh, const std::vector<uint16_t>& indices)
 	_subMeshes[subMesh]->SetIndices(indices);
 }
 
-const std::vector<uint16_t>& Mesh::GetIndices()
+const std::vector<uint32_t>& Mesh::GetIndices()
 {
 	assert(_subMeshes.size() > 0);
 
@@ -71,7 +71,7 @@ const std::vector<uint16_t>& Mesh::GetIndices()
 	return firstSubMesh->GetIndices();
 }
 
-const std::vector<uint16_t>& Mesh::GetIndices(int subMesh)
+const std::vector<uint32_t>& Mesh::GetIndices(int subMesh)
 {
 	assert(subMesh >= 0 && subMesh < _subMeshes.size());
 
@@ -219,22 +219,22 @@ DrawMode SubMesh::GetMode() const
 	return _drawMode;
 }
 
-void SubMesh::SetIndices(const std::vector<uint16_t>& indices)
+void SubMesh::SetIndices(const std::vector<uint32_t>& indices)
 {
 	_indices = indices;
 
 	if (_isDynamic && _indexBuffer->GetHandle().idx != bgfx::kInvalidHandle)
 	{
 		auto dynamicBuffer = static_cast<DynamicIndexBuffer*>(_indexBuffer);
-		dynamicBuffer->Update(0, &indices[0], _indices.size() * sizeof(uint16_t), false);
+		dynamicBuffer->Update(0, &indices[0], _indices.size() * sizeof(uint32_t), false);
 	}
 	else
 	{
-		_indexBuffer->Upload(&_indices[0], _indices.size() * sizeof(uint16_t), false);
+		_indexBuffer->Upload(&_indices[0], _indices.size() * sizeof(uint32_t), false);
 	}
 }
 
-const std::vector<uint16_t>& SubMesh::GetIndices() const
+const std::vector<uint32_t>& SubMesh::GetIndices() const
 {
 	return _indices;
 }

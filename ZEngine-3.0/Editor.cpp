@@ -22,6 +22,7 @@
 #include <ZEngine-Core\Rendering\Texture2D.h>
 #include <ZEngine-Core\Assets\AssetManager.h>
 #include <ZEngine-Core\Assets\Objects\ShaderAsset.h>
+#include <ZEngine-Core\Assets\Objects\ModelAsset.h>
 #include <glm/glm.hpp>
 
 #include "GUILibrary.h"
@@ -70,7 +71,11 @@ Editor::Editor()
 		auto testObject2 = Factory::CreateInstance<Entity>("test_object2", ObjectType::ENTITY);
 
 		// Create mesh renderer with sphere mesh attached
-		mesh = MeshFactory::CreateSphereStrip("Rect");
+
+		auto modelAsset = new ModelAsset("suit");
+		modelAsset->Load("models/suit/nanosuit.obj");
+
+		mesh = modelAsset->GetMesh();
 		meshRenderer = Factory::CreateInstance<MeshRenderer>("Mesh Renderer", ObjectType::MESH_RENDERER);
 
 		// Example of loading a texture into a material 

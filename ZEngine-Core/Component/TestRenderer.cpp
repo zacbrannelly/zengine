@@ -49,7 +49,7 @@ void TestRenderer::Init()
 	};
 
 	// CCW triangles
-	std::vector<uint16_t> indices
+	std::vector<uint32_t> indices
 	{
 			0, 1, 2,
 			3, 7, 1,

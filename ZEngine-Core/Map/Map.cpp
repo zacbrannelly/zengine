@@ -3,6 +3,8 @@
 #include "../Component/Camera.h"
 #include "../Component/Transform.h"
 
+#include <algorithm>
+
 using namespace std;
 
 Map::Map(std::string name) : ZObject(name, ObjectType::MAP)
@@ -21,9 +23,13 @@ void Map::Add(Entity* entity)
 		_entities.push_back(entity);
 		
 		// If the entity has a camera component, register it
-		auto camera = entity->GetComponent(ObjectType::CAMERA);
-		if (camera != nullptr)
-			_cameras.push_back(static_cast<Camera*>(camera));
+		auto cameras = entity->GetComponents(ObjectType::CAMERA);
+		
+		for (auto camera : cameras)
+		{
+			if (camera != nullptr)
+				_cameras.push_back(static_cast<Camera*>(camera));
+		}
 	}
 }
 
@@ -61,13 +67,12 @@ void Map::Remove(Entity* entity)
 
 void Map::Remove(string name)
 {
-	for (auto it = _entities.begin(); it != _entities.end(); it++)
+	auto it = find_if(_entities.begin(), _entities.end(), [&name](auto entity) { return entity->GetName() == name; });
+	
+	while (it != _entities.end())
 	{
-		if ((*it)->GetName() == name)
-		{
-			_entities.erase(it);
-			it = _entities.begin();
-		}
+		_entities.erase(it);
+		it = find_if(_entities.begin(), _entities.end(), [&name](auto entity) { return entity->GetName() == name; });
 	}
 }
 

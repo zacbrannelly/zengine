@@ -6,7 +6,7 @@ DynamicIndexBuffer::DynamicIndexBuffer()
 {
 }
 
-void DynamicIndexBuffer::Upload(const unsigned short * indices, unsigned int size, bool copy)
+void DynamicIndexBuffer::Upload(const unsigned int* indices, unsigned int size, bool copy)
 {
 	Memory* memory = nullptr;
 
@@ -17,14 +17,14 @@ void DynamicIndexBuffer::Upload(const unsigned short * indices, unsigned int siz
 
 	if (GetHandle().idx == kInvalidHandle)
 	{
-		auto handle = createDynamicIndexBuffer(memory);
+		auto handle = createDynamicIndexBuffer(memory, BGFX_BUFFER_INDEX32);
 		SetHandleID(handle.idx);
 	}
 	else
 		Update(0, indices, size, copy);
 }
 
-void DynamicIndexBuffer::Update(unsigned int startIndex, const unsigned short* data, unsigned int size, bool copy)
+void DynamicIndexBuffer::Update(unsigned int startIndex, const unsigned int* data, unsigned int size, bool copy)
 {
 	Memory* memory = nullptr;
 

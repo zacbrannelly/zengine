@@ -27,12 +27,14 @@ Asset* AssetManager::LoadAsset(std::string name, std::string path, ObjectType ty
 	{
 		// Load the new asset
 		auto newAsset = constructor(name);
-		newAsset->Load(path);
+		
+		if (newAsset->Load(path))
+		{
+			// Add to the list of assets (so it can be released later)
+			_assets.push_back(newAsset);
 
-		// Add to the list of assets (so it can be released later)
-		_assets.push_back(newAsset);
-
-		return newAsset;
+			return newAsset;
+		}
 	}
 
 	return nullptr;

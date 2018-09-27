@@ -9,6 +9,6 @@ public:
 	IndexBuffer();
 	~IndexBuffer();
 
-	virtual void Upload(const unsigned short* indices, unsigned int size, bool copy);
+	virtual void Upload(const unsigned int* indices, unsigned int size, bool copy);
 };
 

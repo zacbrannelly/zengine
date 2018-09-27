@@ -23,6 +23,6 @@ public:
 	static Mesh* CreateSphereStrip(std::string name);
 
 private:
-	static void GeneratePlaneVertices(const glm::vec3& pos, int width, int height, std::vector<glm::vec3>& vertices, std::vector<uint16_t>& indices, PlaneOrientation facing);
+	static void GeneratePlaneVertices(const glm::vec3& pos, int width, int height, std::vector<glm::vec3>& vertices, std::vector<uint32_t>& indices, PlaneOrientation facing);
 };
 

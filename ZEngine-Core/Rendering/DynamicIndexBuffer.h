@@ -8,7 +8,7 @@ public:
 	DynamicIndexBuffer();
 	~DynamicIndexBuffer();
 
-	void Upload(const unsigned short* indices, unsigned int size, bool copy) override;
-	void Update(unsigned int startIndex, const unsigned short* data, unsigned int size, bool copy);
+	void Upload(const unsigned int* indices, unsigned int size, bool copy) override;
+	void Update(unsigned int startIndex, const unsigned int* data, unsigned int size, bool copy);
 };
 

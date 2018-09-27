@@ -1,5 +1,6 @@
 #include "TextureAsset.h"
 #include "../../../stb/stb_image.h"
+#include <iostream>
 
 using namespace std;
 
@@ -29,12 +30,16 @@ bool TextureAsset::Load(string path)
 
 		return true;
 	}
+	else
+		std::cout << "TEXTURE_ASSET: Failed to load the image: " << path << endl;
 
 	return false;
 }
 
 bool TextureAsset::LoadTexture(uint64_t flags)
 {
+	if (_imageData == nullptr) return false;
+
 	_texture = new Texture2D(_width, _height, false, 1, bgfx::TextureFormat::RGBA8, flags, _imageData, _imageSize);
 
 	// Set the texture as loaded

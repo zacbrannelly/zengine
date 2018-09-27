@@ -6,7 +6,7 @@ IndexBuffer::IndexBuffer()
 {
 }
 
-void IndexBuffer::Upload(const unsigned short* indices, unsigned int size, bool copy)
+void IndexBuffer::Upload(const unsigned int* indices, unsigned int size, bool copy)
 {
 	Memory* memory = nullptr;
 
@@ -15,7 +15,8 @@ void IndexBuffer::Upload(const unsigned short* indices, unsigned int size, bool 
 	else
 		memory = (Memory*)bgfx::makeRef(indices, size);
 
-	auto handle = bgfx::createIndexBuffer(memory);
+	auto handle = bgfx::createIndexBuffer(memory, BGFX_BUFFER_INDEX32);
+
 	SetHandleID(handle.idx);
 }
 

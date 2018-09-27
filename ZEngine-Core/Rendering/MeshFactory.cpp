@@ -153,7 +153,7 @@ Mesh* MeshFactory::CreateCube(std::string name)
 		{0, 1, 0},
 	};
 
-	std::vector<uint16_t> indices
+	std::vector<uint32_t> indices
 	{
 		0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
 		11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
@@ -176,7 +176,7 @@ Mesh* MeshFactory::CreateSphere(std::string name, int resolution)
 	auto newMesh = Factory::CreateInstance<Mesh>(name, ObjectType::MESH);
 
 	std::vector<glm::vec3> vertices;
-	std::vector<uint16_t> indices;
+	std::vector<uint32_t> indices;
 
 	GeneratePlaneVertices(glm::vec3( 0.0f, -0.5f,  0.0f), resolution, resolution, vertices, indices, PlaneOrientation::BOTTOM);
 	GeneratePlaneVertices(glm::vec3( 0.0f, 0.5f,  0.0f), resolution, resolution, vertices, indices, PlaneOrientation::TOP);
@@ -224,7 +224,7 @@ Mesh* MeshFactory::CreateRectangle(std::string name)
 
 	std::vector<glm::vec4> colors(6, { 1, 1, 1, 1 });
 
-	std::vector<uint16_t> indices
+	std::vector<uint32_t> indices
 	{
 		0, 3, 2,
 		0, 1, 3
@@ -242,7 +242,7 @@ Mesh* MeshFactory::CreateRectangle(std::string name)
 Mesh* MeshFactory::CreatePlane(std::string name, int width, int height, PlaneOrientation facing)
 {
 	std::vector<glm::vec3> verts;
-	std::vector<uint16_t> indices;
+	std::vector<uint32_t> indices;
 
 	GeneratePlaneVertices(glm::vec3(0, 0, 0), width, height, verts, indices, facing);
 
@@ -256,7 +256,7 @@ Mesh* MeshFactory::CreatePlane(std::string name, int width, int height, PlaneOri
 	return newMesh;
 }
 
-void MeshFactory::GeneratePlaneVertices(const glm::vec3& pos, int width, int height, std::vector<glm::vec3>& vertices, std::vector<uint16_t>& indices, PlaneOrientation facing)
+void MeshFactory::GeneratePlaneVertices(const glm::vec3& pos, int width, int height, std::vector<glm::vec3>& vertices, std::vector<uint32_t>& indices, PlaneOrientation facing)
 {
 	float xx = -0.5f;
 	float yy = -0.5f;
@@ -339,7 +339,7 @@ Mesh* MeshFactory::CreateSphereStrip(std::string name)
 	std::vector<glm::vec3> positions;
 	std::vector<glm::vec2> uv;
 	std::vector<glm::vec3> normals;
-	std::vector<unsigned short> indices;
+	std::vector<uint32_t> indices;
 
 	const unsigned int X_SEGMENTS = 64;
 	const unsigned int Y_SEGMENTS = 64;

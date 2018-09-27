@@ -24,13 +24,13 @@ public:
 	void SetMode(DrawMode mode);
 	DrawMode GetMode() const;
 
-	void SetIndices(const std::vector<uint16_t>& indices);
-	const std::vector<uint16_t>& GetIndices() const;
+	void SetIndices(const std::vector<uint32_t>& indices);
+	const std::vector<uint32_t>& GetIndices() const;
 
 	void Draw(int viewId, Material* material, Graphics* graphics);
 
 private:
-	std::vector<uint16_t> _indices;
+	std::vector<uint32_t> _indices;
 	IndexBuffer* _indexBuffer;
 	DrawMode _drawMode;
 	bool _isDynamic;
@@ -45,10 +45,10 @@ public:
 	void SetDynamic(bool isDynamic);
 	bool IsDynamic() const;
 
-	void SetIndices(const std::vector<uint16_t>& indices);
-	void SetIndices(int subMesh, const std::vector<uint16_t>& indices);
-	const std::vector<uint16_t>& GetIndices();
-	const std::vector<uint16_t>& GetIndices(int subMesh);
+	void SetIndices(const std::vector<uint32_t>& indices);
+	void SetIndices(int subMesh, const std::vector<uint32_t>& indices);
+	const std::vector<uint32_t>& GetIndices();
+	const std::vector<uint32_t>& GetIndices(int subMesh);
 	int GetSubMeshCount() const;
 
 	void SetMode(DrawMode mode);
@@ -113,6 +113,8 @@ inline void Mesh::SetBuffer(VertexBuffer*& buffer, bgfx::VertexDecl& decl, std::
 template<typename T>
 inline void Mesh::SetBuffer(VertexBuffer*& buffer, bgfx::VertexDecl& decl, const std::vector<T>& data)
 {
+	if (data.size() == 0) return;
+
 	if (buffer == nullptr)
 	{
 		if (_isDynamic)
