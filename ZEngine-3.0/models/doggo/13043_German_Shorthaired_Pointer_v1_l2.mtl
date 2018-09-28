@@ -12,6 +12,6 @@ newmtl German_Shorthaired_Pointer
 	Kd 1.0000 1.0000 1.0000
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka /models/doggo/German_Shorthaired_Pointer_diffuse.jpg
-	map_Kd /models/doggo/German_Shorthaired_Pointer_diffuse.jpg
-	map_bump /models/doggo/Map__12_Normal Bump.jpg
+	map_Ka German_Shorthaired_Pointer_diffuse.jpg
+	map_Kd German_Shorthaired_Pointer_diffuse.jpg
+	map_bump Map__12_Normal Bump.jpg

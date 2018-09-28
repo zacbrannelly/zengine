@@ -1,13 +1,14 @@
 #include "ModelAsset.h"
 #include "../../Rendering/Mesh.h"
 #include "../../Rendering/Texture2D.h"
+#include "../../Rendering/Material.h"
+#include "ShaderAsset.h"
 #include "../AssetManager.h"
 #include "TextureAsset.h"
 #include <iostream>
 
 #include <glm\glm.hpp>
 #include <assimp\scene.h>
-#include <assimp\material.h>
 #include <assimp\postprocess.h>
 
 using namespace Assimp;
@@ -26,6 +27,8 @@ bool ModelAsset::Load(std::string path)
  		return false;
 	}
 
+	_directory = path.substr(0, path.find_last_of('/'));
+
 	Mesh* mesh = nullptr;
 
 	if (!scene->HasMeshes())
@@ -38,14 +41,9 @@ bool ModelAsset::Load(std::string path)
 		_mesh = LoadMesh(scene);
 	}
 
-	if (scene->HasTextures())
-	{
-		// TODO: Load textyres
-	}
-
 	if (scene->HasMaterials())
 	{
-		// TODO: Load materials
+		_materials = LoadMaterials(scene);
 	}
 
 	return true;
@@ -54,6 +52,11 @@ bool ModelAsset::Load(std::string path)
 Mesh* ModelAsset::GetMesh() const
 {
 	return _mesh;
+}
+
+const std::vector<Material*> ModelAsset::GetMaterials()
+{
+	return _materials;
 }
 
 Mesh* ModelAsset::LoadMesh(const aiScene* scene)
@@ -130,39 +133,136 @@ Mesh* ModelAsset::LoadMesh(const aiScene* scene)
 
 std::vector<Material*> ModelAsset::LoadMaterials(const aiScene* scene)
 {
+	std::vector<Material*> materials;
 
-	for (int i = 0; i < scene->mNumMaterials; i++)
+	for (int i = 1; i < scene->mNumMaterials; i++)
 	{
-		aiMaterial* material = scene->mMaterials[i];
+		aiMaterial* sceneMaterial = scene->mMaterials[i];
 
-		aiColor4D diffuse;
-		aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &diffuse);
+		aiString name;
+		aiGetMaterialString(sceneMaterial, AI_MATKEY_NAME, &name);
 
-		// TODO: Not done here
+		Material* material = new Material(name.C_Str());
+		
+		// Set the shader to the pbr shader
+		material->SetShader(AssetManager::GetInstance()->GetAsset("pbr_direct")->Cast<ShaderAsset>()->GetShader());
+
+		auto diffuseTextures = LoadTextures(sceneMaterial, aiTextureType_DIFFUSE);
+		auto specTextures = LoadTextures(sceneMaterial, aiTextureType_SPECULAR);
+		auto normalTextures = LoadTextures(sceneMaterial, aiTextureType_NORMALS);
+
+		if (diffuseTextures.size() > 0)
+		{
+			material->RegisterSampler("albedoTexture");
+			material->SetTexture("albedoTexture", diffuseTextures.front()->GetHandle());
+		}
+
+		if (specTextures.size() > 0)
+		{
+
+		}
+
+		if (normalTextures.size() > 0)
+		{
+			material->RegisterSampler("normalTexture");
+			material->SetTexture("normalTexture", normalTextures.front()->GetHandle());
+		}
+
+		// Material light textures
+		material->RegisterSampler("roughnessTexture");
+		material->RegisterSampler("metallicTexture");
+		material->RegisterSampler("aoTexture");
+
+		// Material light uniforms
+		material->RegisterUniform("albedoTint", bgfx::UniformType::Vec4, 1);
+		material->RegisterUniform("roughness", bgfx::UniformType::Vec4, 1);
+		material->RegisterUniform("metallic", bgfx::UniformType::Vec4, 1);
+		material->RegisterUniform("ao", bgfx::UniformType::Vec4, 1);
+
+		// Light positions and colours
+		material->RegisterUniform("lightPositions", bgfx::UniformType::Vec4, 4);
+		material->RegisterUniform("lightColors", bgfx::UniformType::Vec4, 4);
+
+		// World position of the camera
+		material->RegisterUniform("camPos", bgfx::UniformType::Vec4, 1);
+
+		auto assetManager = AssetManager::GetInstance();
+
+		auto roughnessAsset = assetManager->LoadAsset("test texture 2", "blank_ao.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
+		auto metallicAsset = assetManager->LoadAsset("test texture 3", "blank_ao.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
+		auto aoAsset = assetManager->LoadAsset("test texture 5", "blank_ao.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
+
+		// Load the textures into the GPU
+		roughnessAsset->LoadTexture();
+		metallicAsset->LoadTexture();
+		aoAsset->LoadTexture();
+
+		// Set the textures to the shader
+		material->SetTexture("roughnessTexture", roughnessAsset->GetTexture()->GetHandle());
+		material->SetTexture("metallicTexture", metallicAsset->GetTexture()->GetHandle());
+		material->SetTexture("aoTexture", aoAsset->GetTexture()->GetHandle());
+
+		// Set the other material properties
+		material->SetUniform("albedoTint", new glm::vec4(1.0f), 1);
+		material->SetUniform("roughness", new glm::vec4(0.11f), 1);
+		material->SetUniform("metallic", new glm::vec4(0.5f), 1);
+		material->SetUniform("ao", new glm::vec4(1.0f), 1);
+
+		auto lightPos = new std::vector<glm::vec4>
+		{
+			{ -10, -10, -10, 1 },
+			{ 10,  10, -10, 1 },
+			{ -10,  10, -10, 1 },
+			{ 10, -10, -10, 1 }
+		};
+
+		auto lightColors = new std::vector<glm::vec4>
+		{
+			{ 300, 300, 300, 0 },
+			{ 300, 300, 300, 0 },
+			{ 300, 300, 300, 0 },
+			{ 300, 300, 300, 0 },
+		};
+
+		// Light properties & camera position
+		material->SetUniform("lightPositions", &(*lightPos)[0], lightPos->size());
+		material->SetUniform("lightColors", &(*lightColors)[0], lightColors->size());
+		material->SetUniform("camPos", new glm::vec4(0, 0, -10, 1), 1);
+
+		materials.push_back(material);
 	}
 
-	return std::vector<Material*>();
+	return materials;
 }
 
-std::vector<Texture2D*> ModelAsset::LoadTextures(const aiScene* scene)
+std::vector<Texture2D*> ModelAsset::LoadTextures(const aiMaterial* mat, aiTextureType type)
 {
 	auto assetManager = AssetManager::GetInstance();
 	std::vector<Texture2D*> textures;
 
-	for (int i = 0; i < scene->mNumTextures; i++)
+	for (int i = 0; i < mat->GetTextureCount(type); i++)
 	{
-		aiTexture* texture = scene->mTextures[i];
+		aiString path;
+		mat->GetTexture(type, i, &path);
 
 		// Attemp to load the texture
-		auto newTexture = assetManager->LoadAsset(GetName() + "_" + texture->mFilename.C_Str(), texture->mFilename.C_Str(), ObjectType::TEXTURE_ASSET);
+		auto newTexture = assetManager->LoadAsset(GetName() + "_" + path.C_Str(), _directory + '/' + path.C_Str(), ObjectType::TEXTURE_ASSET);
 
 		if (newTexture != nullptr)
 		{
 			auto textureAsset = newTexture->Cast<TextureAsset>();
-			if (textureAsset->LoadTexture())
+
+			if (!textureAsset->IsLoaded())
 			{
-				textures.push_back(textureAsset->GetTexture());
+				if (textureAsset->LoadTexture())
+				{
+					textures.push_back(textureAsset->GetTexture());
+				}
+
+				// TODO: Release asset on failure to load POSSBILE MEMORY LEAK
 			}
+			else
+				textures.push_back(textureAsset->GetTexture());
 		}
 	}
 

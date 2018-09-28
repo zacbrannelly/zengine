@@ -39,6 +39,7 @@ Editor::Editor()
 	auto testMap = Factory::CreateInstance<Map>("test_map", ObjectType::MAP);
 	SetSelectedMap(testMap);
 
+	// Load some default shaders
 	AssetManager::GetInstance()->LoadAsset("standard_unlit", "shaders/standard_unlit.shader", ObjectType::SHADER_ASSET);
 	AssetManager::GetInstance()->LoadAsset("pbr_direct", "shaders/pbr_direct.shader", ObjectType::SHADER_ASSET);
 
@@ -70,27 +71,17 @@ Editor::Editor()
 
 		auto testObject2 = Factory::CreateInstance<Entity>("test_object2", ObjectType::ENTITY);
 
-		// Create mesh renderer with sphere mesh attached
-
+		// Create mesh renderer with a model attached
 		auto modelAsset = new ModelAsset("suit");
 		modelAsset->Load("models/suit/nanosuit.obj");
 
-		mesh = modelAsset->GetMesh();
 		meshRenderer = Factory::CreateInstance<MeshRenderer>("Mesh Renderer", ObjectType::MESH_RENDERER);
+		meshRenderer->SetMesh(modelAsset->GetMesh());
 
-		// Example of loading a texture into a material 
-		/*{
-			auto texturedMaterial = Factory::CreateInstance<Material>("textured mat", ObjectType::MATERIAL);
-			texturedMaterial->SetShader(AssetManager::GetInstance()->GetAsset<ShaderAsset>("standard_unlit")->GetShader());
+		// TODO: Figure out materials property, something is wrong and idk what
+		//meshRenderer->SetMaterials(modelAsset->GetMaterials());
 
-			auto texture = AssetManager::GetInstance()->LoadAsset("test image", "test.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
-			texture->LoadTexture();
-
-			texturedMaterial->RegisterSampler("texColor");
-			texturedMaterial->SetTexture("texColor", texture->GetTexture()->GetHandle());
-
-			meshRenderer->SetMaterial(texturedMaterial);
-		}*/
+		testObject2->AddComponent(meshRenderer);
 
 		// Example of PBR rendering 
 		{
@@ -170,9 +161,6 @@ Editor::Editor()
 			meshRenderer->SetMaterial(texturedMaterial);
 		}
 		
-		meshRenderer->SetMesh(mesh);
-		testObject2->AddComponent(meshRenderer);
-
 		// Create a test scripting component and add to test_object2
 		{
 			auto script = Factory::CreateInstance<Script>("TestComponent", ObjectType::SCRIPT);
@@ -209,14 +197,17 @@ void Editor::Update()
 			auto meshRenderer = static_cast<MeshRenderer*>(_selectedObject->GetComponent(ObjectType::MESH_RENDERER));
 			auto material = meshRenderer->GetMaterial();
 
-			float* roughness = (float*)material->GetUniform("roughness").data;
-			ImGui::DragFloat3("Roughness", roughness, 0.01f, 0.0f, 1.0f);
+			if (material->GetShader()->GetName() == "pbr_direct")
+			{
+				float* roughness = (float*)material->GetUniform("roughness").data;
+				ImGui::DragFloat3("Roughness", roughness, 0.01f, 0.0f, 1.0f);
 
-			float* metallic = (float*)material->GetUniform("metallic").data;
-			ImGui::DragFloat3("Metallic", metallic, 0.01f, 0.0f, 1.0f);
+				float* metallic = (float*)material->GetUniform("metallic").data;
+				ImGui::DragFloat3("Metallic", metallic, 0.01f, 0.0f, 1.0f);
 
-			float* ao = (float*)material->GetUniform("ao").data;
-			ImGui::DragFloat("AO", ao, 0.01f, 0, 1);
+				float* ao = (float*)material->GetUniform("ao").data;
+				ImGui::DragFloat("AO", ao, 0.01f, 0, 1);
+			}
 ;		}
 	}
 }
