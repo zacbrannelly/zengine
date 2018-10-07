@@ -12,6 +12,9 @@ public:
 
 	Asset* LoadAsset(std::string name, std::string path, ObjectType type);
 
+	Asset* FindAsset(std::string name);
+	Asset* FindAssetFromPath(std::string path);
+
 	bool ReloadAsset(std::string name);
 	void ReleaseAsset(std::string name);
 	void ReleaseAll();

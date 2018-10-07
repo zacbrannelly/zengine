@@ -23,6 +23,7 @@
 #include <ZEngine-Core\Assets\AssetManager.h>
 #include <ZEngine-Core\Assets\Objects\ShaderAsset.h>
 #include <ZEngine-Core\Assets\Objects\ModelAsset.h>
+#include <ZEngine-Core\Assets\Objects\MaterialAsset.h>
 #include <glm/glm.hpp>
 
 #include "GUILibrary.h"
@@ -81,85 +82,13 @@ Editor::Editor()
 		// TODO: Figure out materials property, something is wrong and idk what
 		//meshRenderer->SetMaterials(modelAsset->GetMaterials());
 
-		testObject2->AddComponent(meshRenderer);
-
-		// Example of PBR rendering 
+		// Example of PBR rendering & material asset loading
 		{
-			auto texturedMaterial = Factory::CreateInstance<Material>("pbr mat", ObjectType::MATERIAL);
-			texturedMaterial->SetShader(AssetManager::GetInstance()->GetAsset<ShaderAsset>("pbr_direct")->GetShader());
-
-			// Material light textures
-			texturedMaterial->RegisterSampler("albedoTexture");
-			texturedMaterial->RegisterSampler("normalTexture");
-			texturedMaterial->RegisterSampler("roughnessTexture");
-			texturedMaterial->RegisterSampler("metallicTexture");
-			texturedMaterial->RegisterSampler("aoTexture");
-
-			// Material light uniforms
-			texturedMaterial->RegisterUniform("albedoTint", bgfx::UniformType::Vec4, 1);
-			texturedMaterial->RegisterUniform("roughness", bgfx::UniformType::Vec4, 1);
-			texturedMaterial->RegisterUniform("metallic", bgfx::UniformType::Vec4, 1);
-			texturedMaterial->RegisterUniform("ao", bgfx::UniformType::Vec4, 1);
-
-			// Light positions and colours
-			texturedMaterial->RegisterUniform("lightPositions", bgfx::UniformType::Vec4, 4);
-			texturedMaterial->RegisterUniform("lightColors", bgfx::UniformType::Vec4, 4);
-
-			// World position of the camera
-			texturedMaterial->RegisterUniform("camPos", bgfx::UniformType::Vec4, 1);
-
-			auto assetManager = AssetManager::GetInstance();
-
-			// Load the texture assets for the material
-			auto textureAsset = assetManager->LoadAsset("test texture", "blank_ao.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
-			auto roughnessAsset = assetManager->LoadAsset("test texture 2", "blank_ao.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
-			auto metallicAsset = assetManager->LoadAsset("test texture 3", "blank_ao.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
-			auto normalAsset = assetManager->LoadAsset("test texture 4", "blank_normal.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
-			auto aoAsset = assetManager->LoadAsset("test texture 5", "blank_ao.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
-
-			// Load the textures into the GPU
-			textureAsset->LoadTexture();
-			roughnessAsset->LoadTexture();
-			metallicAsset->LoadTexture();
-			normalAsset->LoadTexture();
-			aoAsset->LoadTexture();
-
-			// Set the textures to the shader
-			texturedMaterial->SetTexture("albedoTexture", textureAsset->GetTexture()->GetHandle());
-			texturedMaterial->SetTexture("normalTexture", normalAsset->GetTexture()->GetHandle());
-			texturedMaterial->SetTexture("roughnessTexture", roughnessAsset->GetTexture()->GetHandle());
-			texturedMaterial->SetTexture("metallicTexture", metallicAsset->GetTexture()->GetHandle());
-			texturedMaterial->SetTexture("aoTexture", aoAsset->GetTexture()->GetHandle());
-
-			// Set the other material properties
-			texturedMaterial->SetUniform("albedoTint", new glm::vec4(1.0f), 1);
-			texturedMaterial->SetUniform("roughness", new glm::vec4(0.11f), 1);
-			texturedMaterial->SetUniform("metallic", new glm::vec4(0.5f), 1);
-			texturedMaterial->SetUniform("ao", new glm::vec4(1.0f), 1);
-
-			auto lightPos = new std::vector<glm::vec4>
-			{
-				{ -10, -10, -10, 1 },
-				{  10,  10, -10, 1 },
-				{ -10,  10, -10, 1 },
-				{  10, -10, -10, 1 }
-			};
-
-			auto lightColors = new std::vector<glm::vec4>
-			{
-				{ 300, 300, 300, 0 },
-				{ 300, 300, 300, 0 },
-				{ 300, 300, 300, 0 },
-				{ 300, 300, 300, 0 },
-			};
-
-			// Light properties & camera position
-			texturedMaterial->SetUniform("lightPositions", &(*lightPos)[0], lightPos->size());
-			texturedMaterial->SetUniform("lightColors", &(*lightColors)[0], lightColors->size());
-			texturedMaterial->SetUniform("camPos", new glm::vec4(0, 0, -10, 1), 1);
-
-			meshRenderer->SetMaterial(texturedMaterial);
+			auto materialAsset = AssetManager::GetInstance()->LoadAsset("pbr_material", "test_material.asset", MATERIAL_ASSET)->Cast<MaterialAsset>();
+			meshRenderer->SetMaterial(materialAsset->GetMaterial());
 		}
+
+		testObject2->AddComponent(meshRenderer);
 		
 		// Create a test scripting component and add to test_object2
 		{

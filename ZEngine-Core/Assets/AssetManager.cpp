@@ -1,14 +1,17 @@
 #include "AssetManager.h"
 #include <iostream>
+#include <algorithm>
 
 #include "Objects/TextureAsset.h"
 #include "Objects/ShaderAsset.h"
+#include "Objects/MaterialAsset.h"
 
 void AssetManager::Init()
 {
 	//TODO: Register asset constructors here
 	_assetConstructors[ObjectType::TEXTURE_ASSET] = TextureAsset::CreateInstance;
 	_assetConstructors[ObjectType::SHADER_ASSET] = ShaderAsset::CreateInstance;
+	_assetConstructors[ObjectType::MATERIAL_ASSET] = MaterialAsset::CreateInstance;
 }
 
 Asset* AssetManager::LoadAsset(std::string name, std::string path, ObjectType type)
@@ -38,6 +41,18 @@ Asset* AssetManager::LoadAsset(std::string name, std::string path, ObjectType ty
 	}
 
 	return nullptr;
+}
+
+Asset* AssetManager::FindAsset(std::string name)
+{
+	auto it = find_if(_assets.begin(), _assets.end(), [&name](auto asset) { return asset->GetName() == name; });
+	return it != _assets.end() ? *it : nullptr;
+}
+
+Asset* AssetManager::FindAssetFromPath(std::string path)
+{
+	auto it = find_if(_assets.begin(), _assets.end(), [&path](auto asset) { return asset->GetPath() == path; });
+	return it != _assets.end() ? *it : nullptr;
 }
 
 bool AssetManager::ReloadAsset(std::string name)
