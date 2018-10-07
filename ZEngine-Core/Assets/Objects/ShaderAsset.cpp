@@ -73,6 +73,7 @@ bool ShaderAsset::Load(std::string path)
 		}
 	}
 
+	SetPath(path);
 	SetLoaded(true);
 
 	return true;
