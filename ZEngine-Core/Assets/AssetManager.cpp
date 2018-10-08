@@ -14,6 +14,16 @@ void AssetManager::Init()
 	_assetConstructors[ObjectType::MATERIAL_ASSET] = MaterialAsset::CreateInstance;
 }
 
+void AssetManager::SetCatalog(AssetCatalog* catalog)
+{
+	_catalog = catalog;
+}
+
+AssetCatalog* AssetManager::GetCatalog() const
+{
+	return _catalog;
+}
+
 Asset* AssetManager::LoadAsset(std::string name, std::string path, ObjectType type)
 {
 	// Check if the asset has a constructor registered

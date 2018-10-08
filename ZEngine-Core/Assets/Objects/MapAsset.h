@@ -4,6 +4,8 @@
 #include "../../../json/json.hpp"
 
 class Map;
+class Entity;
+class Component;
 
 class MapAsset : public Asset
 {
@@ -16,6 +18,8 @@ public:
 	Map* GetMap() const;
 
 private:
+	Entity* LoadEntity(nlohmann::json::object_t& entity);
+
 	Map* _map;
 };
 

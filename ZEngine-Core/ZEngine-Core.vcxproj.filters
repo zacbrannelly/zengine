@@ -150,6 +150,9 @@
     <ClInclude Include="Assets\Objects\FontAsset.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Component\Importers\CameraImporter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Rendering\Graphics.cpp">
@@ -276,6 +279,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Assets\Objects\FontAsset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\Importers\CameraImporter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -4,11 +4,16 @@
 #include "../Misc/Singleton.h"
 #include "Asset.h"
 
+class AssetCatalog;
+
 class AssetManager : public Singleton<AssetManager>
 {
 public:
 	void Init();
 	void Shutdown();
+
+	void SetCatalog(AssetCatalog* catalog);
+	AssetCatalog* GetCatalog() const;
 
 	Asset* LoadAsset(std::string name, std::string path, ObjectType type);
 
@@ -38,4 +43,5 @@ public:
 private:
 	std::map<ObjectType, Asset*(*)(std::string)> _assetConstructors;
 	std::vector<Asset*> _assets;
+	AssetCatalog* _catalog;
 };
