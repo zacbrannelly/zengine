@@ -20,6 +20,8 @@ public:
 
 	Mesh* GetMesh() const;
 	const std::vector<Material*> GetMaterials();
+
+	static Asset* CreateInstance(std::string name);
 private:
 
 	Mesh* LoadMesh(const aiScene* scene);

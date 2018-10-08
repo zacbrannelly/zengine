@@ -153,6 +153,18 @@
     <ClInclude Include="Component\Importers\CameraImporter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Component\Importers\TransformImporter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\Importers\ComponentImporter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\Importers\MeshRendererImporter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\Importers\ScriptComponentImporter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Rendering\Graphics.cpp">
@@ -282,6 +294,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Component\Importers\CameraImporter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\Importers\TransformImporter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\Importers\MeshRendererImporter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\Importers\ScriptComponentImporter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

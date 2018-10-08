@@ -17,6 +17,8 @@ public:
 
 	Map* GetMap() const;
 
+	static Asset* CreateInstance(std::string name);
+
 private:
 	Entity* LoadEntity(nlohmann::json::object_t& entity);
 

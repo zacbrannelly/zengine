@@ -8,11 +8,11 @@
 using namespace std;
 
 Entity::Entity(string name) : ZObject(name, ObjectType::ENTITY), IScriptable(ObjectType::ENTITY)
-{
+{	
 	// Add transform component by default
-	_transform = Factory::CreateInstance<Transform>("Transform", ObjectType::TRANSFORM);
-	AddComponent(_transform);
-	
+	auto transform = Factory::CreateInstance<Transform>("Transform", ObjectType::TRANSFORM);
+	AddComponent(transform);
+
 	auto scriptSystem = ScriptSystem::GetInstance();
 	auto scriptObject = GetScriptObject();
 	v8::Context::Scope scope(scriptSystem->GetContext()->GetLocal());
@@ -45,8 +45,26 @@ v8::Global<v8::FunctionTemplate> Entity::GetTemplate(v8::Isolate* isolate)
 void Entity::AddComponent(Component* component)
 {
 	// Allow valid components and ONLY one transform component 
-	if (component != nullptr || (component != nullptr && component->GetType() == ObjectType::TRANSFORM && _transform == nullptr))
+	if (component != nullptr)
 	{
+		if (component->GetType() == TRANSFORM)
+		{
+			// Remove the previous transform (there can only be one)
+			if (_transform != nullptr)
+			{
+				RemoveComponent(_transform);
+			}
+
+			// Keep direct ref to transform (most common access)
+			_transform = static_cast<Transform*>(component);
+
+			// Update script transform field with new transform (TODO: find a better solution to this, e.g. keep the same script object and just change internal field)
+			auto scriptSystem = ScriptSystem::GetInstance();
+			auto scriptObject = GetScriptObject();
+			v8::Context::Scope scope(scriptSystem->GetContext()->GetLocal());
+			scriptObject->Set(scriptSystem->GetString("transform"), _transform->GetScriptObject());
+		}
+
 		_components.push_back(component);
 
 		component->SetOwner(this);

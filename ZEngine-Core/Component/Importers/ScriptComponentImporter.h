@@ -2,7 +2,7 @@
 
 #include "ComponentImporter.h"
 
-class CameraImporter : public ComponentImporter<CameraImporter>
+class ScriptComponentImporter : public ComponentImporter<ScriptComponentImporter>
 {
 public:
 	ZObject* ImportImpl(std::string name, nlohmann::json::object_t& values) override;

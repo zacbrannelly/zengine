@@ -24,6 +24,8 @@
 #include <ZEngine-Core\Assets\Objects\ShaderAsset.h>
 #include <ZEngine-Core\Assets\Objects\ModelAsset.h>
 #include <ZEngine-Core\Assets\Objects\MaterialAsset.h>
+#include <ZEngine-Core\Assets\Objects\MapAsset.h>
+#include <ZEngine-Core\Assets\AssetCatalog.h>
 #include <glm/glm.hpp>
 
 #include "GUILibrary.h"
@@ -37,79 +39,19 @@
 
 Editor::Editor()
 {
-	auto testMap = Factory::CreateInstance<Map>("test_map", ObjectType::MAP);
-	SetSelectedMap(testMap);
+	// Create a test asset catalog
+	auto testCatalog = new AssetCatalog();
+	testCatalog->LoadCatalog();
+	AssetManager::GetInstance()->SetCatalog(testCatalog);
 
 	// Load some default shaders
 	AssetManager::GetInstance()->LoadAsset("standard_unlit", "shaders/standard_unlit.shader", ObjectType::SHADER_ASSET);
 	AssetManager::GetInstance()->LoadAsset("pbr_direct", "shaders/pbr_direct.shader", ObjectType::SHADER_ASSET);
 
-	// Add camera object to map
-	{
-		auto cameraObject = Factory::CreateInstance<Entity>("Main Camera", ObjectType::ENTITY);
-		cameraObject->AddComponent(Factory::CreateInstance<Camera>("Camera", ObjectType::CAMERA));
-		testMap->Add(cameraObject);
-	}
+	auto mapAsset = AssetManager::GetInstance()->LoadAsset("test_map", "test_map.map", MAP_ASSET)->Cast<MapAsset>();
+	auto testMap = mapAsset->GetMap();
 
-	// Add object to the test map
-	{
-		auto testObject = Factory::CreateInstance<Entity>("test_object", ObjectType::ENTITY);
-
-		// Create material for mesh to be created
-		auto shader = Factory::CreateInstance<Shader>("cubes", ObjectType::SHADER);
-		shader->Load("vs_cubes.bin", "fs_cubes.bin");
-		auto material = Factory::CreateInstance<Material>("test material", ObjectType::MATERIAL);
-		material->SetShader(shader);
-
-		// Create mesh renderer with sphere mesh attached
-		auto mesh = MeshFactory::CreateSphere("Sphere");
-		auto meshRenderer = Factory::CreateInstance<MeshRenderer>("Mesh Renderer", ObjectType::MESH_RENDERER);
-		meshRenderer->SetMesh(mesh);
-		meshRenderer->SetMaterial(material);
-		testObject->AddComponent(meshRenderer);
-
-		testMap->Add(testObject);
-
-		auto testObject2 = Factory::CreateInstance<Entity>("test_object2", ObjectType::ENTITY);
-
-		// Create mesh renderer with a model attached
-		auto modelAsset = new ModelAsset("suit");
-		modelAsset->Load("models/suit/nanosuit.obj");
-
-		meshRenderer = Factory::CreateInstance<MeshRenderer>("Mesh Renderer", ObjectType::MESH_RENDERER);
-		meshRenderer->SetMesh(modelAsset->GetMesh());
-
-		// TODO: Figure out materials property, something is wrong and idk what
-		//meshRenderer->SetMaterials(modelAsset->GetMaterials());
-
-		// Example of PBR rendering & material asset loading
-		{
-			auto materialAsset = AssetManager::GetInstance()->LoadAsset("pbr_material", "test_material.asset", MATERIAL_ASSET)->Cast<MaterialAsset>();
-			meshRenderer->SetMaterial(materialAsset->GetMaterial());
-		}
-
-		testObject2->AddComponent(meshRenderer);
-		
-		// Create a test scripting component and add to test_object2
-		{
-			auto script = Factory::CreateInstance<Script>("TestComponent", ObjectType::SCRIPT);
-
-			if (script->CompileFromFile("scripts/test.js"))
-			{
-				script->Execute();
-
-				auto scriptComp = Factory::CreateInstance<ScriptComponent>("TestComponent", ObjectType::SCRIPT_COMPONENT);
-				scriptComp->SetScript(script);
-
-				testObject2->AddComponent(scriptComp);
-			}
-		}
-
-		testObject2->GetTransform()->SetParent(testObject->GetTransform());
-		testMap->Add(testObject2);
-
-		SetSelectedEntity(testObject2);
-	}
+	SetSelectedMap(testMap);
 
 	Add(new MainMenuBar());
 	Add(new MapView(this));

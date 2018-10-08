@@ -125,6 +125,7 @@
     <ClInclude Include="Assets\AssetCatalog.h" />
     <ClInclude Include="Assets\Asset.h" />
     <ClInclude Include="Assets\AssetManager.h" />
+    <ClInclude Include="Component\Importers\ComponentImporter.h" />
     <ClInclude Include="Component\Importers\CameraImporter.h" />
     <ClInclude Include="Component\MeshRenderer.h" />
     <ClInclude Include="Assets\Objects\FontAsset.h" />
@@ -134,9 +135,11 @@
     <ClInclude Include="Map\Objects\Primitives\Cube.h" />
     <ClInclude Include="Assets\Objects\MaterialAsset.h" />
     <ClInclude Include="Assets\Objects\MeshAsset.h" />
+    <ClInclude Include="Component\Importers\MeshRendererImporter.h" />
     <ClInclude Include="Misc\OneShotSingleton.h" />
     <ClInclude Include="Assets\Objects\ModelAsset.h" />
     <ClInclude Include="Assets\Objects\ScriptAsset.h" />
+    <ClInclude Include="Component\Importers\ScriptComponentImporter.h" />
     <ClInclude Include="Scripting\IScriptable.h" />
     <ClInclude Include="Rendering\MeshFactory.h" />
     <ClInclude Include="Rendering\Mesh.h" />
@@ -168,6 +171,7 @@
     <ClInclude Include="Assets\Objects\ShaderAsset.h" />
     <ClInclude Include="Scripting\Wrappers\Vec2Wrapper.h" />
     <ClInclude Include="Scripting\Wrappers\Vec3Wrapper.h" />
+    <ClInclude Include="Component\Importers\TransformImporter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Assets\AssetCatalog.cpp" />
@@ -186,6 +190,7 @@
     <ClCompile Include="Assets\Objects\MaterialAsset.cpp" />
     <ClCompile Include="Assets\Objects\ModelAsset.cpp" />
     <ClCompile Include="Assets\Objects\MeshAsset.cpp" />
+    <ClCompile Include="Component\Importers\MeshRendererImporter.cpp" />
     <ClCompile Include="Rendering\MeshFactory.cpp" />
     <ClCompile Include="Rendering\Mesh.cpp" />
     <ClCompile Include="Rendering\Material.cpp" />
@@ -205,6 +210,7 @@
     <ClCompile Include="Rendering\Texture2D.cpp" />
     <ClCompile Include="Component\ScriptComponent.cpp" />
     <ClCompile Include="Assets\Objects\ScriptAsset.cpp" />
+    <ClCompile Include="Component\Importers\ScriptComponentImporter.cpp" />
     <ClCompile Include="Scripting\IScriptable.cpp" />
     <ClCompile Include="Scripting\Script.cpp" />
     <ClCompile Include="Scripting\ScriptDemo.cpp" />
@@ -213,6 +219,7 @@
     <ClCompile Include="Assets\Objects\ShaderAsset.cpp" />
     <ClCompile Include="Scripting\Wrappers\Vec2Wrapper.cpp" />
     <ClCompile Include="Scripting\Wrappers\Vec3Wrapper.cpp" />
+    <ClCompile Include="Component\Importers\TransformImporter.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -5,6 +5,9 @@
 #include "Objects/TextureAsset.h"
 #include "Objects/ShaderAsset.h"
 #include "Objects/MaterialAsset.h"
+#include "Objects/MapAsset.h"
+#include "Objects/ModelAsset.h"
+#include "Objects/ScriptAsset.h"
 
 void AssetManager::Init()
 {
@@ -12,6 +15,9 @@ void AssetManager::Init()
 	_assetConstructors[ObjectType::TEXTURE_ASSET] = TextureAsset::CreateInstance;
 	_assetConstructors[ObjectType::SHADER_ASSET] = ShaderAsset::CreateInstance;
 	_assetConstructors[ObjectType::MATERIAL_ASSET] = MaterialAsset::CreateInstance;
+	_assetConstructors[ObjectType::MAP_ASSET] = MapAsset::CreateInstance;
+	_assetConstructors[ObjectType::MODEL_ASSET] = ModelAsset::CreateInstance;
+	_assetConstructors[ObjectType::SCRIPT_ASSET] = ScriptAsset::CreateInstance;
 }
 
 void AssetManager::SetCatalog(AssetCatalog* catalog)

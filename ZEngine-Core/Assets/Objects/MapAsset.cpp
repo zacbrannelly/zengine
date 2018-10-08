@@ -17,6 +17,11 @@ MapAsset::MapAsset(string name) : Asset(name, ObjectType::MAP_ASSET)
 {
 }
 
+Asset* MapAsset::CreateInstance(string name)
+{
+	return new MapAsset(name);
+}
+
 bool MapAsset::Load(string path)
 {
 	ifstream in(path, ios::in);
@@ -92,8 +97,6 @@ Entity* MapAsset::LoadEntity(json::object_t& object)
 		}
 	}
 
-	_map->Add(entity);
-
 	auto it = object.find("children");
 	if (it != object.end() && (*it).second.is_array())
 	{
@@ -106,7 +109,9 @@ Entity* MapAsset::LoadEntity(json::object_t& object)
 				if (childEntity != nullptr)
 				{
 					auto transform = static_cast<Transform*>(childEntity->GetComponent(TRANSFORM));
-					transform->SetParent(transform);
+					transform->SetParent(entity->GetTransform());
+
+					_map->Add(childEntity);
 				}
 			}
 		}

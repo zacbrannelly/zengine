@@ -17,6 +17,11 @@ ModelAsset::ModelAsset(std::string name) : Asset(name, ObjectType::MODEL_ASSET)
 {
 }
 
+Asset* ModelAsset::CreateInstance(std::string name)
+{
+	return new ModelAsset(name);
+}
+
 bool ModelAsset::Load(std::string path)
 {
 	const aiScene* scene = _importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipWindingOrder);
@@ -28,8 +33,6 @@ bool ModelAsset::Load(std::string path)
 	}
 
 	_directory = path.substr(0, path.find_last_of('/'));
-
-	Mesh* mesh = nullptr;
 
 	if (!scene->HasMeshes())
 	{

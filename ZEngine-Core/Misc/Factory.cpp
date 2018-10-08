@@ -12,10 +12,17 @@
 #include "../Component/ScriptComponent.h"
 #include "../Scripting/Script.h"
 
-std::map<ObjectType, ZObject*(*)(std::string, ObjectType)> Factory::_typeConstructors;
+#include "../Component/Importers/TransformImporter.h"
+#include "../Component/Importers/CameraImporter.h"
+#include "../Component/Importers/MeshRendererImporter.h"
+#include "../Component/Importers/ScriptComponentImporter.h"
+
+std::map<ObjectType, ConstructorFunc> Factory::_typeConstructors;
+std::map<ObjectType, ImporterFunc> Factory::_importers;
 
 void Factory::Init()
 {
+	// Register instantiators (real-time creation)
 	RegisterType(ObjectType::ENTITY, &Entity::CreateInstance);
 	RegisterType(ObjectType::MAP, &Map::CreateInstance);
 	RegisterType(ObjectType::MATERIAL, &Material::CreateInstance);
@@ -27,9 +34,27 @@ void Factory::Init()
 	RegisterType(ObjectType::SCRIPT, &Script::CreateInstance);
 	RegisterType(ObjectType::SCRIPT_COMPONENT, &ScriptComponent::CreateInstance);
 	RegisterType(ObjectType::TEST_RENDERER, &TestRenderer::CreateInstance);
+
+	// Register importers (from JSON objects)
+	TransformImporter::Init();
+	RegisterTypeImporter(ObjectType::TRANSFORM, TransformImporter::Import);
+
+	CameraImporter::Init();
+	RegisterTypeImporter(ObjectType::CAMERA, CameraImporter::Import);
+
+	MeshRendererImporter::Init();
+	RegisterTypeImporter(ObjectType::MESH_RENDERER, MeshRendererImporter::Import);
+
+	ScriptComponentImporter::Init();
+	RegisterTypeImporter(ObjectType::SCRIPT_COMPONENT, ScriptComponentImporter::Import);
 }
 
 void Factory::RegisterType(ObjectType type, ConstructorFunc constructor)
 {
 	_typeConstructors[type] = constructor;
+}
+
+void Factory::RegisterTypeImporter(ObjectType type, ImporterFunc importer)
+{
+	_importers[type] = importer;
 }

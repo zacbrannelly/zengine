@@ -1,0 +1,73 @@
+{
+	"name": "test_map",
+	"entities": 
+	[
+		{
+			"name": "Main Camera",
+			"components": 
+			[
+				{
+					"name": "Transform",
+					"type": 5,
+					
+					"position": [0, 1, 0],
+					"rotation": [0, 90, 0],
+					"scale": [1, 1, 1]
+				},
+				{
+					"name": "Camera",
+					"type": 4,
+					
+					"clearColor": [1, 0, 0, 1],
+					"viewport": [0, 0, 800, 600]
+				}
+			],
+			
+			"children":
+			[
+				{
+					"name": "Test Empty Object (Child)",
+					"components": 
+					[
+						{
+							"name": "Transform",
+							"type": 5, 
+					
+							"position": [0, 20, 0],
+							"rotation": [0, 0, 0],
+							"scale": [1, 1, 1]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Test Empty Object",
+			"components": 
+			[
+				{
+					"name": "Transform",
+					"type": 5, 
+					
+					"position": [0, 0, 0],
+					"rotation": [0, 0, 0],
+					"scale": [1, 1, 1]
+				},
+				{
+					"name": "Test Renderer (from file)",
+					"type": 7,
+					
+					"model": 1,
+					"materials": [ 0 ]
+				},
+				{
+					"name": "TestComponent",
+					"type": 9,
+					
+					"script": 2
+				}
+			]
+		}
+		
+	]
+}
