@@ -4,7 +4,7 @@
 
 using namespace std;
 
-Component::Component(string name, ObjectType type) : ZObject(name, type), IScriptable(type), _owner(nullptr)
+Component::Component(string name, ObjectType type) : ZObject(name, type), _owner(nullptr)
 {
 }
 

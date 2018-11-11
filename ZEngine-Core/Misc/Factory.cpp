@@ -18,6 +18,7 @@
 #include "../Component/Importers/ScriptComponentImporter.h"
 
 std::map<ObjectType, ConstructorFunc> Factory::_typeConstructors;
+std::map<ObjectType, CopyFunc> Factory::_copyFunctions;
 std::map<ObjectType, ImporterFunc> Factory::_importers;
 
 void Factory::Init()
@@ -34,6 +35,13 @@ void Factory::Init()
 	RegisterType(ObjectType::SCRIPT, &Script::CreateInstance);
 	RegisterType(ObjectType::SCRIPT_COMPONENT, &ScriptComponent::CreateInstance);
 	RegisterType(ObjectType::TEST_RENDERER, &TestRenderer::CreateInstance);
+
+	// Register copy instatiators (real-time copying)
+	RegisterCopyType(ObjectType::ENTITY, &Entity::Copy);
+	RegisterCopyType(ObjectType::TRANSFORM, &Transform::Copy);
+	RegisterCopyType(ObjectType::MESH_RENDERER, &MeshRenderer::Copy);
+	RegisterCopyType(ObjectType::CAMERA, &Camera::Copy);
+	RegisterCopyType(ObjectType::SCRIPT_COMPONENT, &ScriptComponent::Copy);
 
 	// Register importers (from JSON objects)
 	TransformImporter::Init();
@@ -52,6 +60,11 @@ void Factory::Init()
 void Factory::RegisterType(ObjectType type, ConstructorFunc constructor)
 {
 	_typeConstructors[type] = constructor;
+}
+
+void Factory::RegisterCopyType(ObjectType type, CopyFunc copyFunc)
+{
+	_copyFunctions[type] = copyFunc;
 }
 
 void Factory::RegisterTypeImporter(ObjectType type, ImporterFunc importer)

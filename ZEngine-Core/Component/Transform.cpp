@@ -113,6 +113,21 @@ ZObject* Transform::CreateInstance(string name, ObjectType type)
 	return new Transform();
 }
 
+ZObject* Transform::Copy(string name, ZObject* object)
+{
+	if (object == nullptr || object->GetType() != TRANSFORM)
+		return nullptr;
+
+	auto source = static_cast<Transform*>(object);
+	auto copy = new Transform();
+
+	copy->SetPosition(source->GetPosition());
+	copy->SetRotation(source->GetRotation());
+	copy->SetScale(source->GetScale());
+
+	return copy;
+}
+
 void Transform_SetPositionCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
 {
 	if (info.Length() == 3)
@@ -181,6 +196,111 @@ void Transform_GetPositionCallback(const v8::FunctionCallbackInfo<v8::Value>& in
 	info.GetReturnValue().Set(wrapVec3->GetObject());
 }
 
+void Transform_GetRotationCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+	auto self = info.Holder();
+	auto wrapper = v8::Local<v8::External>::Cast(self->GetInternalField(0));
+	auto scriptableObj = static_cast<IScriptable*>(wrapper->Value());
+	auto transform = static_cast<Transform*>(scriptableObj);
+
+	// TODO: Try not to create a new instance every time, perhaps make one instance and save as private field..
+	auto wrapVec3 = Vec3Wrapper::NewInstance();
+	wrapVec3->SetData(transform->GetRotation());
+
+	info.GetReturnValue().Set(wrapVec3->GetObject());
+}
+
+void Transform_GetScaleCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+	auto self = info.Holder();
+	auto wrapper = v8::Local<v8::External>::Cast(self->GetInternalField(0));
+	auto scriptableObj = static_cast<IScriptable*>(wrapper->Value());
+	auto transform = static_cast<Transform*>(scriptableObj);
+
+	// TODO: Try not to create a new instance every time, perhaps make one instance and save as private field..
+	auto wrapVec3 = Vec3Wrapper::NewInstance();
+	wrapVec3->SetData(transform->GetScale());
+
+	info.GetReturnValue().Set(wrapVec3->GetObject());
+}
+
+void Transform_Getter(v8::Local<v8::String> nameObj, const v8::PropertyCallbackInfo<v8::Value>& info)
+{
+	auto sys = ScriptSystem::GetInstance();
+	auto name = sys->CastString(nameObj);
+	
+	auto wrap = v8::Local<v8::External>::Cast(info.Holder()->GetInternalField(0));
+	auto scriptable = static_cast<IScriptable*>(wrap->Value());
+	auto transform = static_cast<Transform*>(scriptable);
+
+	if (transform == nullptr)
+		return;
+
+	if (name == "position")
+	{
+		auto vecWrapper = Vec3Wrapper::NewInstance();
+		vecWrapper->SetData(transform->GetPosition());
+
+		info.GetReturnValue().Set(vecWrapper->GetObject());
+	}
+	else if (name == "rotation")
+	{
+		auto vecWrapper = Vec3Wrapper::NewInstance();
+		vecWrapper->SetData(transform->GetRotation());
+
+		info.GetReturnValue().Set(vecWrapper->GetObject());
+	}
+	else if (name == "scale")
+	{
+		auto vecWrapper = Vec3Wrapper::NewInstance();
+		vecWrapper->SetData(transform->GetScale());
+
+		info.GetReturnValue().Set(vecWrapper->GetObject());
+	}
+	else if (name == "worldPosition")
+	{
+		auto vecWrapper = Vec3Wrapper::NewInstance();
+		vecWrapper->SetData(transform->GetWorldTransformMatrix() * glm::vec4(transform->GetPosition(), 1));
+
+		info.GetReturnValue().Set(vecWrapper->GetObject());
+	}
+}
+
+void Transform_Setter(v8::Local<v8::String> nameObj, v8::Local<v8::Value> value, const v8::PropertyCallbackInfo<void>& info)
+{
+	auto sys = ScriptSystem::GetInstance();
+	auto name = sys->CastString(nameObj);
+
+	auto wrap = v8::Local<v8::External>::Cast(info.Holder()->GetInternalField(0));
+	auto scriptable = static_cast<IScriptable*>(wrap->Value());
+	auto transform = static_cast<Transform*>(scriptable);
+
+	if (transform == nullptr)
+		return;
+
+	if (name == "position")
+	{
+		wrap = v8::Local<v8::External>::Cast(value->ToObject(sys->GetIsolate())->GetInternalField(0));
+		auto vecWrapper = static_cast<Vec3Wrapper*>(wrap->Value());
+		
+		transform->SetPosition(vecWrapper->GetData());
+	}
+	else if (name == "rotation")
+	{
+		wrap = v8::Local<v8::External>::Cast(value->ToObject(sys->GetIsolate())->GetInternalField(0));
+		auto vecWrapper = static_cast<Vec3Wrapper*>(wrap->Value());
+
+		transform->SetRotation(vecWrapper->GetData());
+	}
+	else if (name == "scale")
+	{
+		wrap = v8::Local<v8::External>::Cast(value->ToObject(sys->GetIsolate())->GetInternalField(0));
+		auto vecWrapper = static_cast<Vec3Wrapper*>(wrap->Value());
+
+		transform->SetScale(vecWrapper->GetData());
+	}
+}
+
 v8::Global<v8::FunctionTemplate> Transform::GetTemplate(v8::Isolate* isolate)
 {
 	using namespace v8;
@@ -192,11 +312,19 @@ v8::Global<v8::FunctionTemplate> Transform::GetTemplate(v8::Isolate* isolate)
 
 	constructor->InstanceTemplate()->SetInternalFieldCount(1);
 
-	//TODO: Add properties (getters/setters only)
+	//Add functions 
 	constructor->InstanceTemplate()->Set(isolate, "SetPosition", FunctionTemplate::New(isolate, Transform_SetPositionCallback));
 	constructor->InstanceTemplate()->Set(isolate, "GetPosition", FunctionTemplate::New(isolate, Transform_GetPositionCallback));
 	constructor->InstanceTemplate()->Set(isolate, "SetRotation", FunctionTemplate::New(isolate, Transform_SetRotationCallback));
+	constructor->InstanceTemplate()->Set(isolate, "GetRotation", FunctionTemplate::New(isolate, Transform_GetRotationCallback));
 	constructor->InstanceTemplate()->Set(isolate, "SetScale", FunctionTemplate::New(isolate, Transform_SetScaleCallback));
+	constructor->InstanceTemplate()->Set(isolate, "GetScale", FunctionTemplate::New(isolate, Transform_GetScaleCallback));
+
+	// Add properties
+	constructor->InstanceTemplate()->SetAccessor(sys->GetString("position"), Transform_Getter, Transform_Setter);
+	constructor->InstanceTemplate()->SetAccessor(sys->GetString("rotation"), Transform_Getter, Transform_Setter);
+	constructor->InstanceTemplate()->SetAccessor(sys->GetString("scale"), Transform_Getter, Transform_Setter);
+	constructor->InstanceTemplate()->SetAccessor(sys->GetString("worldPosition"), Transform_Getter, Transform_Setter);
 
 	return Global<FunctionTemplate>(isolate, constructor);
 }

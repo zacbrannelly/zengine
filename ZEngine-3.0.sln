@@ -41,6 +41,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "texturec", "..\bgfx\.build\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "texturev", "..\bgfx\.build\projects\vs2017\texturev.vcxproj", "{CCF8A108-B8C5-FC13-E1DE-EABBCD0A32A2}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZEngine-Player", "ZEngine-Player\ZEngine-Player.vcxproj", "{D82C704D-8BEF-4EAC-A15E-2661A8A28848}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -169,6 +171,14 @@ Global
 		{CCF8A108-B8C5-FC13-E1DE-EABBCD0A32A2}.Release|x64.Build.0 = Release|x64
 		{CCF8A108-B8C5-FC13-E1DE-EABBCD0A32A2}.Release|x86.ActiveCfg = Release|Win32
 		{CCF8A108-B8C5-FC13-E1DE-EABBCD0A32A2}.Release|x86.Build.0 = Release|Win32
+		{D82C704D-8BEF-4EAC-A15E-2661A8A28848}.Debug|x64.ActiveCfg = Debug|x64
+		{D82C704D-8BEF-4EAC-A15E-2661A8A28848}.Debug|x64.Build.0 = Debug|x64
+		{D82C704D-8BEF-4EAC-A15E-2661A8A28848}.Debug|x86.ActiveCfg = Debug|Win32
+		{D82C704D-8BEF-4EAC-A15E-2661A8A28848}.Debug|x86.Build.0 = Debug|Win32
+		{D82C704D-8BEF-4EAC-A15E-2661A8A28848}.Release|x64.ActiveCfg = Release|x64
+		{D82C704D-8BEF-4EAC-A15E-2661A8A28848}.Release|x64.Build.0 = Release|x64
+		{D82C704D-8BEF-4EAC-A15E-2661A8A28848}.Release|x86.ActiveCfg = Release|Win32
+		{D82C704D-8BEF-4EAC-A15E-2661A8A28848}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

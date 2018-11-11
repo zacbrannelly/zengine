@@ -6,6 +6,7 @@
 #include "../../json/json.hpp"
 
 typedef ZObject*(*ConstructorFunc)(std::string, ObjectType);
+typedef ZObject*(*CopyFunc)(std::string, ZObject*);
 typedef ZObject*(*ImporterFunc)(std::string, nlohmann::json::object_t&);
 
 class Factory
@@ -21,6 +22,19 @@ public:
 		if (constructor != _typeConstructors.end())
 		{
 			return static_cast<T*>(constructor->second(name, type));
+		}
+
+		return nullptr;
+	}
+
+	template<class T>
+	static T* Copy(std::string name, ZObject* object)
+	{
+		auto copyFunc = _copyFunctions.find(object->GetType());
+
+		if (copyFunc != _copyFunctions.end())
+		{
+			return static_cast<T*>(copyFunc->second(name, object));
 		}
 
 		return nullptr;
@@ -48,10 +62,11 @@ public:
 	}
 
 	static void RegisterType(ObjectType type, ConstructorFunc constructor);
+	static void RegisterCopyType(ObjectType type, CopyFunc copyFunc);
 	static void RegisterTypeImporter(ObjectType type, ImporterFunc importerFunc);
-
 private:
 	static std::map<ObjectType, ConstructorFunc> _typeConstructors;
+	static std::map<ObjectType, CopyFunc> _copyFunctions;
 	static std::map<ObjectType, ImporterFunc> _importers;
 };
 

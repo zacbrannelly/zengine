@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "../../Scripting/IScriptable.h"
 
 enum ObjectType
 {
@@ -9,7 +10,7 @@ enum ObjectType
 	TEXTURE_ASSET, SHADER_ASSET, MATERIAL_ASSET, MODEL_ASSET, MAP_ASSET, SCRIPT_ASSET
 };
 
-class ZObject
+class ZObject : public IScriptable
 {
 public:
 	ZObject(std::string name, ObjectType type);

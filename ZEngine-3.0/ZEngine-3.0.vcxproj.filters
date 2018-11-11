@@ -81,6 +81,9 @@
     <ClCompile Include="MaterialWriter.cpp">
       <Filter>IO</Filter>
     </ClCompile>
+    <ClCompile Include="GameView.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\bgfx\3rdparty\dear-imgui\imgui_impl_glfw.h">
@@ -133,6 +136,9 @@
     </ClInclude>
     <ClInclude Include="MaterialWriter.h">
       <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="GameView.h">
+      <Filter>Windows</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

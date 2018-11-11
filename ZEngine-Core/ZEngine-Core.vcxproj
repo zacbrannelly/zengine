@@ -129,9 +129,12 @@
     <ClInclude Include="Component\Importers\CameraImporter.h" />
     <ClInclude Include="Component\MeshRenderer.h" />
     <ClInclude Include="Assets\Objects\FontAsset.h" />
+    <ClInclude Include="Scripting\Wrappers\FactoryWrapper.h" />
     <ClInclude Include="Input\InputManager.h" />
     <ClInclude Include="Input\InputTypes.h" />
     <ClInclude Include="Assets\Objects\MapAsset.h" />
+    <ClInclude Include="Scripting\Wrappers\MapManagerWrapper.h" />
+    <ClInclude Include="Map\MapManager.h" />
     <ClInclude Include="Map\Objects\Primitives\Cube.h" />
     <ClInclude Include="Assets\Objects\MaterialAsset.h" />
     <ClInclude Include="Assets\Objects\MeshAsset.h" />
@@ -172,6 +175,8 @@
     <ClInclude Include="Scripting\Wrappers\Vec2Wrapper.h" />
     <ClInclude Include="Scripting\Wrappers\Vec3Wrapper.h" />
     <ClInclude Include="Component\Importers\TransformImporter.h" />
+    <ClInclude Include="Physics\Time.h" />
+    <ClInclude Include="Scripting\Wrappers\TimeWrapper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Assets\AssetCatalog.cpp" />
@@ -181,9 +186,12 @@
     <ClCompile Include="Component\Camera.cpp" />
     <ClCompile Include="Component\Component.cpp" />
     <ClCompile Include="Assets\Objects\FontAsset.cpp" />
+    <ClCompile Include="Scripting\Wrappers\FactoryWrapper.cpp" />
     <ClCompile Include="Input\InputManager.cpp" />
     <ClCompile Include="Input\InputTypes.cpp" />
     <ClCompile Include="Assets\Objects\MapAsset.cpp" />
+    <ClCompile Include="Scripting\Wrappers\MapManagerWrapper.cpp" />
+    <ClCompile Include="Map\MapManager.cpp" />
     <ClCompile Include="Map\Objects\Primitives\Cube.cpp" />
     <ClCompile Include="Display\Display.cpp" />
     <ClCompile Include="Component\MeshRenderer.cpp" />
@@ -220,6 +228,8 @@
     <ClCompile Include="Scripting\Wrappers\Vec2Wrapper.cpp" />
     <ClCompile Include="Scripting\Wrappers\Vec3Wrapper.cpp" />
     <ClCompile Include="Component\Importers\TransformImporter.cpp" />
+    <ClCompile Include="Physics\Time.cpp" />
+    <ClCompile Include="Scripting\Wrappers\TimeWrapper.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

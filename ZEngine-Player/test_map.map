@@ -1,0 +1,146 @@
+{
+	"name": "test_map",
+	"entities": 
+	[
+		{
+			"name": "Main Camera",
+			"components": 
+			[
+				{
+					"name": "Transform",
+					"type": 5,
+					
+					"position": [0, 0, -10],
+					"rotation": [0, 0, 0],
+					"scale": [1, 1, 1]
+				},
+				{
+					"name": "Camera",
+					"type": 4,
+					
+					"clearColor": [1, 0, 0, 1],
+					"viewport": [0, 0, 1024, 600],
+					"projection": 0
+				}
+			],
+			
+			"children":
+			[
+				{
+					"name": "Test Empty Object (Child)",
+					"components": 
+					[
+						{
+							"name": "Transform",
+							"type": 5, 
+					
+							"position": [0, 20, 0],
+							"rotation": [0, 0, 0],
+							"scale": [1, 1, 1]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Test Empty Object",
+			"components": 
+			[
+				{
+					"name": "Transform",
+					"type": 5, 
+					
+					"position": [0, 0, 0],
+					"rotation": [0, 0, 0],
+					"scale": [1, 1, 1]
+				},
+				{
+					"name": "Test Renderer (from file)",
+					"type": 7,
+					
+					"model": 1,
+					"materials": [ 0 ]
+				},
+				{
+					"name": "TestComponent",
+					"type": 9,
+					
+					"script": 2
+				}
+			]
+		},
+		{
+			"name": "Head",
+			"components":
+			[
+				{
+					"name": "Transform",
+					"type": 5, 
+					
+					"position": [0, 0, 0],
+					"rotation": [0, 0, 0],
+					"scale": [0.2, 0.2, 0.2]
+				},
+				{
+					"name": "MeshRender 2",
+					"type": 7,
+					
+					"primitive": "cube",
+					"materials": [ 0 ]
+				},
+				{
+					"name": "RotateComponent",
+					"type": 9,
+					
+					"script": 3
+				},
+				{
+					"name": "HeadComponent",
+					"type": 9,
+					
+					"script": 4
+				},
+				{
+					"name": "BoxCollider2D",
+					"type": 9,
+					
+					"script": 5
+				}
+			]
+		},
+		{
+			"name": "Food",
+			"components":
+			[
+				{
+					"name": "Transform",
+					"type": 5, 
+					
+					"position": [0, 0, 0],
+					"rotation": [0, 0, 0],
+					"scale": [0.2, 0.2, 0.2]
+				},
+				{
+					"name": "MeshRender 2",
+					"type": 7,
+					
+					"primitive": "cube",
+					"materials": [ 0 ]
+				},
+				{
+					"name": "FoodComponent",
+					"type": 9,
+					
+					"script": 6
+				},
+				{
+					"name": "BoxCollider2D",
+					"type": 9,
+					
+					"script": 5
+				}
+			]
+		}
+		
+	]
+}

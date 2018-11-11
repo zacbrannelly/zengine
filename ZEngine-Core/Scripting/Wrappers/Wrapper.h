@@ -95,7 +95,7 @@ void Wrapper<T>::Constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
 	newInstance->_instanceObj.SetWeak<T>(newInstance, Destructor, v8::WeakCallbackType::kParameter);
 	
 	// Set the new C++ instance to the internal field of the js object
-	jsObject->SetInternalField(0, External::New(info.GetIsolate(), newInstance));
+	jsObject->SetInternalField(0, v8::External::New(info.GetIsolate(), newInstance));
 }
 
 template<typename T>

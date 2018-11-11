@@ -26,6 +26,8 @@
 #include <ZEngine-Core\Assets\Objects\MaterialAsset.h>
 #include <ZEngine-Core\Assets\Objects\MapAsset.h>
 #include <ZEngine-Core\Assets\AssetCatalog.h>
+#include <ZEngine-Core\Physics\Time.h>
+#include <ZEngine-Core\Map\MapManager.h>
 #include <glm/glm.hpp>
 
 #include "GUILibrary.h"
@@ -34,6 +36,7 @@
 #include "InspectorWindow.h"
 #include "SceneGraphWindow.h"
 #include "GUIImage.h"
+#include "GameView.h"
 
 #include "imgui-includes.h"
 
@@ -46,7 +49,6 @@ Editor::Editor()
 
 	// Load some default shaders
 	AssetManager::GetInstance()->LoadAsset("standard_unlit", "shaders/standard_unlit.shader", ObjectType::SHADER_ASSET);
-	AssetManager::GetInstance()->LoadAsset("pbr_direct", "shaders/pbr_direct.shader", ObjectType::SHADER_ASSET);
 
 	auto mapAsset = AssetManager::GetInstance()->LoadAsset("test_map", "test_map.map", MAP_ASSET)->Cast<MapAsset>();
 	auto testMap = mapAsset->GetMap();
@@ -57,30 +59,12 @@ Editor::Editor()
 	Add(new MapView(this));
 	Add(new InspectorWindow(this));
 	Add(new SceneGraphWindow(this));
+	Add(new GameView(this));
 }
 
 void Editor::Update()
 {
-	if (_selectedObject != nullptr)
-	{
-		if (_selectedObject->GetComponent(ObjectType::MESH_RENDERER) != nullptr)
-		{
-			auto meshRenderer = static_cast<MeshRenderer*>(_selectedObject->GetComponent(ObjectType::MESH_RENDERER));
-			auto material = meshRenderer->GetMaterial();
 
-			if (material->GetShader()->GetName() == "pbr_direct")
-			{
-				float* roughness = (float*)material->GetUniform("roughness").data;
-				ImGui::DragFloat3("Roughness", roughness, 0.01f, 0.0f, 1.0f);
-
-				float* metallic = (float*)material->GetUniform("metallic").data;
-				ImGui::DragFloat3("Metallic", metallic, 0.01f, 0.0f, 1.0f);
-
-				float* ao = (float*)material->GetUniform("ao").data;
-				ImGui::DragFloat("AO", ao, 0.01f, 0, 1);
-			}
-;		}
-	}
 }
 
 void Editor::SetSelectedMap(Map* map)
@@ -137,6 +121,9 @@ int main(int argc, char* argv[])
 	auto gui = GUILibrary::GetInstance();
 	gui->Init(&display);
 
+	auto time = Time::GetInstance();
+	time->Init();
+
 	// This container will hold all of the GUI elements
 	Editor* editorContainer = new Editor();
 
@@ -163,6 +150,8 @@ int main(int argc, char* argv[])
 
 		// Head to the next frame (no draw calls beyond this point)
 		graphics->Render();
+
+		time->Tick();
 	}
 
 	// Clean up the GUI
@@ -175,6 +164,7 @@ int main(int argc, char* argv[])
 	inputManager->Shutdown();
 	display.Shutdown();
 	scriptSystem->Shutdown();
+	time->Shutdown();
 
 	return 0;
 }

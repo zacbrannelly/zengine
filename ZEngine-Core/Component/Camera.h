@@ -80,5 +80,6 @@ private:
 
 public:
 	static ZObject* CreateInstance(std::string name, ObjectType type);
+	static ZObject* Copy(std::string name, ZObject* object);
 };
 

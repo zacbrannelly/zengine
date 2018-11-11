@@ -44,23 +44,23 @@ TestComponent.prototype.Render = function()
 	{		
 		log("doing this");
 
-		this.owner.transform.SetPosition(position.x + 0.01, position.y, position.z);
+		this.owner.transform.SetPosition(position.x + 2 * Time.delta, position.y, position.z);
 	}
 	else if (Input.GetButtonDown(BUTTON_KEY_LEFT))
 	{		
-		this.owner.transform.SetPosition(position.x - 0.01, position.y, position.z);
+		this.owner.transform.SetPosition(position.x - 2 * Time.delta, position.y, position.z);
 	}
 	
 	if (Input.GetButtonDown(BUTTON_KEY_UP))
 	{		
-		this.owner.transform.SetPosition(position.x, position.y - 0.01, position.z);
+		this.owner.transform.SetPosition(position.x, position.y - 2 * Time.delta, position.z);
 	}
 	else if (Input.GetButtonDown(BUTTON_KEY_DOWN))
 	{		
-		this.owner.transform.SetPosition(position.x, position.y + 0.01, position.z);
+		this.owner.transform.SetPosition(position.x, position.y + 2 * Time.delta, position.z);
 	}
 	
-	this.delta += 0.01;
+	this.delta += 0.01;	
 };
 	
 TestComponent.prototype.AdditionalFunction = function()

@@ -43,8 +43,24 @@ v8::Local<v8::Object> ScriptComponent::CreateObjectFromScript(v8::Isolate*& isol
 
 	if (constructor->IsConstructor())
 	{
-		// Construct the object defined in the script
-		_scriptObj.Reset(isolate, constructor->NewInstance(context).ToLocalChecked());
+		// Create the object defined in the script 
+		auto baseInstance = constructor->CallAsConstructor(context, 0, nullptr).ToLocalChecked();
+
+		// Create a template that inherits the script component 
+		auto derivedTemplate = v8::FunctionTemplate::New(isolate);
+		derivedTemplate->Inherit(scriptSys->GetTemplate(SCRIPT_COMPONENT));
+		derivedTemplate->InstanceTemplate()->SetInternalFieldCount(1);
+		derivedTemplate->SetClassName(scriptSys->GetString(_script->GetName()));
+		
+		// Create an instance of the derived template and set the internal field
+		auto instance = derivedTemplate->GetFunction()->NewInstance(context).ToLocalChecked();
+		instance->SetInternalField(0, v8::External::New(isolate, this));
+
+		// Set the prototype of the derived instance to the base instance
+		instance->SetPrototype(context, baseInstance->ToObject(isolate));
+
+		// Keep the derived instance
+		_scriptObj.Reset(isolate, instance);
 	}
 	else
 	{
@@ -68,14 +84,11 @@ void ScriptComponent::Init()
 	auto context = scriptSys->GetContext()->GetLocal();
 
 	// Create a scope
+	v8::HandleScope handleScope(isolate);
 	v8::Context::Scope scope(context);
 
 	// Create the Object that was defined in the script
 	auto obj = CreateObjectFromScript(isolate, context);
-
-	// Set the internal field for the parent (which should be defined as the Component function template)
-	auto componentObj = obj->FindInstanceInPrototypeChain(scriptSys->GetTemplate(ObjectType::SCRIPT_COMPONENT));
-	componentObj->SetInternalField(0, v8::External::New(isolate, this));
 
 	// Remove our previously created script object and set to the new one
 	SetScriptObject(obj);
@@ -90,12 +103,7 @@ void ScriptComponent::Init()
 	auto render = obj->Get(renderString);
 
 	if (obj->Has(initString))
-	{
 		_scriptInit.Reset(isolate, v8::Local<v8::Function>::Cast(init));
-
-		// Call Init function in the script
-		v8::Local<v8::Function>::Cast(init)->Call(obj, 0, nullptr);
-	}
 
 	if (obj->Has(updateString))
 		_scriptUpdate.Reset(isolate, v8::Local<v8::Function>::Cast(update));
@@ -105,6 +113,22 @@ void ScriptComponent::Init()
 
 }
 
+void ScriptComponent::InitScript()
+{
+	if (_scriptInit.IsEmpty()) return;
+
+	auto scriptSys = ScriptSystem::GetInstance();
+
+	// Create a scope
+	v8::HandleScope handleScope(scriptSys->GetIsolate());
+	v8::Context::Scope scope(scriptSys->GetContext()->GetLocal());
+
+	auto init = _scriptInit.Get(scriptSys->GetIsolate());
+	auto obj = _scriptObj.Get(scriptSys->GetIsolate());
+
+	init->Call(obj, 0, nullptr);
+}
+
 void ScriptComponent::Update()
 {
 	if (_scriptUpdate.IsEmpty()) return;
@@ -112,6 +136,7 @@ void ScriptComponent::Update()
 	auto scriptSys = ScriptSystem::GetInstance();
 
 	// Create a scope
+	v8::HandleScope handleScope(scriptSys->GetIsolate());
 	v8::Context::Scope scope(scriptSys->GetContext()->GetLocal());
 
 	auto update = _scriptUpdate.Get(scriptSys->GetIsolate());
@@ -127,6 +152,7 @@ void ScriptComponent::Render(int viewId)
 	auto scriptSys = ScriptSystem::GetInstance();
 
 	// Create a scope
+	v8::HandleScope handleScope(scriptSys->GetIsolate());
 	v8::Context::Scope scope(scriptSys->GetContext()->GetLocal());
 
 	auto render = _scriptRender.Get(scriptSys->GetIsolate());
@@ -135,9 +161,22 @@ void ScriptComponent::Render(int viewId)
 	render->Call(obj, 0, nullptr);
 }
 
-ZObject * ScriptComponent::CreateInstance(std::string name, ObjectType type)
+ZObject* ScriptComponent::CreateInstance(std::string name, ObjectType type)
 {
 	return new ScriptComponent(name);
+}
+
+ZObject* ScriptComponent::Copy(std::string name, ZObject* object)
+{
+	if (object == nullptr || object->GetType() != SCRIPT_COMPONENT)
+		return nullptr;
+
+	auto source = static_cast<ScriptComponent*>(object);
+	auto copy = new ScriptComponent(name);
+
+	copy->SetScript(source->GetScript());
+
+	return copy;
 }
 
 ScriptComponent::~ScriptComponent()

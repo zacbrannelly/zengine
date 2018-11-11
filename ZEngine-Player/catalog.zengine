@@ -1,0 +1,7 @@
+0,13=test_material.asset
+1,14=models/suit/nanosuit.obj
+2,16=scripts/test.js
+3,16=scripts/rotate.js
+4,16=scripts/head.js
+5,16=scripts/collider.js
+6,16=scripts/food.js

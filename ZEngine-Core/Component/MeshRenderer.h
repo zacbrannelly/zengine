@@ -26,6 +26,7 @@ public:
 	virtual void Render(int viewId);
 
 	static ZObject* CreateInstance(std::string name, ObjectType type);
+	static ZObject* Copy(std::string name, ZObject* object);
 
 private:
 	Mesh* _mesh;

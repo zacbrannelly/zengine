@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../Map/Objects/ZObject.h"
+enum ObjectType;
+
 #include <include/v8.h>
 
 class IScriptable

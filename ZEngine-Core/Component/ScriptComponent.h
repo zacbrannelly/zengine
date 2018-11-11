@@ -12,6 +12,7 @@ public:
 	~ScriptComponent();
 
 	void Init() override;
+	void InitScript();
 	void Update() override;
 	void Render(int viewId) override;
 
@@ -26,5 +27,6 @@ private:
 	Script* _script;
 public:
 	static ZObject* CreateInstance(std::string name, ObjectType type);
+	static ZObject* Copy(std::string name, ZObject* object);
 };
 

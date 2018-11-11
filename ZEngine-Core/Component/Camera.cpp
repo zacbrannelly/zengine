@@ -214,6 +214,28 @@ ZObject* Camera::CreateInstance(string name, ObjectType type)
 	return new Camera();
 }
 
+ZObject* Camera::Copy(string name, ZObject* object)
+{
+	if (object == nullptr || object->GetType() != CAMERA)
+		return nullptr;
+
+	auto source = static_cast<Camera*>(object);
+	auto copy = new Camera();
+
+	copy->SetClearColor(source->GetClearColor());
+	copy->SetClearFlags(source->GetClearFlags());
+	copy->SetNear(source->GetNear());
+	copy->SetFar(source->GetFar());
+	copy->SetFieldOfView(source->GetFieldOfView());
+	copy->SetOrthoSize(source->GetOrthoSize());
+	copy->SetProjectionMode(source->GetProjectionMode());
+	copy->SetRenderToTexture(source->IsRenderingToTexture());
+	copy->SetViewId(source->GetViewId());
+	copy->SetViewport(source->GetViewportX(), source->GetViewportY(), source->GetViewportWidth(), source->GetViewportHeight());
+
+	return copy;
+}
+
 Camera::~Camera()
 {
 	if (IsRenderingToTexture())

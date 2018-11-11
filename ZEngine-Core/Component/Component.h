@@ -1,12 +1,11 @@
 #pragma once
 
 #include "../Map/Objects/ZObject.h"
-#include "../Scripting/IScriptable.h"
 #include <include/v8.h>
 
 class Entity;
 
-class Component : public ZObject, public IScriptable
+class Component : public ZObject
 {
 public:
 	Component(std::string name, ObjectType type);

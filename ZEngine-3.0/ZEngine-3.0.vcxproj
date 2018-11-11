@@ -157,6 +157,7 @@
     <ClCompile Include="Container.cpp" />
     <ClCompile Include="Editor.cpp" />
     <ClCompile Include="experimental.cpp" />
+    <ClCompile Include="GameView.cpp" />
     <ClCompile Include="GUIImage.cpp" />
     <ClCompile Include="GUILibrary.cpp" />
     <ClCompile Include="GUIWindow.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="CodeEditor.h" />
     <ClInclude Include="Container.h" />
     <ClInclude Include="Editor.h" />
+    <ClInclude Include="GameView.h" />
     <ClInclude Include="GUIElement.h" />
     <ClInclude Include="GUIImage.h" />
     <ClInclude Include="GUILibrary.h" />

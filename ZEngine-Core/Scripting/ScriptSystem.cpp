@@ -3,19 +3,23 @@
 #include "../Component/Transform.h"
 #include "../Map/Objects/Entity.h"
 #include "../Input/InputManager.h"
+#include "../Map/Map.h"
 
 #include "../Scripting/Wrappers/Vec2Wrapper.h"
 #include "../Scripting/Wrappers/Vec3Wrapper.h"
+#include "../Scripting/Wrappers/TimeWrapper.h"
+#include "../Scripting/Wrappers/MapManagerWrapper.h"
+#include "../Scripting/Wrappers/FactoryWrapper.h"
 
 #include <iostream>
 
-using namespace v8;
-
 // Global callback declarations
-void LogCallback(const FunctionCallbackInfo<Value>& info);
+void LogCallback(const v8::FunctionCallbackInfo<v8::Value>& info);
 
 bool ScriptSystem::Init(const char* arg0)
 {
+	using namespace v8;
+
 	// Initialize V8
 	V8::InitializeICUDefaultLocation(arg0);
 	V8::InitializeExternalStartupData(arg0);
@@ -49,16 +53,16 @@ bool ScriptSystem::Init(const char* arg0)
 	return _isolate != nullptr;
 }
 
-void ScriptSystem::SetupCallbacks(Local<ObjectTemplate>& globalTemplate)
+void ScriptSystem::SetupCallbacks(v8::Local<v8::ObjectTemplate>& globalTemplate)
 {
-	HandleScope handleScope(_isolate);
+	v8::HandleScope handleScope(_isolate);
 
-	globalTemplate->Set(GetString("log"), FunctionTemplate::New(_isolate, LogCallback));
+	globalTemplate->Set(GetString("log"), v8::FunctionTemplate::New(_isolate, LogCallback));
 }
 
 void ScriptSystem::SetupTemplates()
 {
-	Context::Scope scope(_context->GetLocal());
+	v8::Context::Scope scope(_context->GetLocal());
 	auto global = _context->GetLocal()->Global();
 
 	// Setup template bindings for objects that are used inside JS that are not global
@@ -66,15 +70,19 @@ void ScriptSystem::SetupTemplates()
 	_templates[ObjectType::SCRIPT_COMPONENT] = Component::GetTemplate(_isolate, global);
 	_templates[ObjectType::ENTITY] = Entity::GetTemplate(_isolate);
 	_templates[ObjectType::TRANSFORM] = Transform::GetTemplate(_isolate);
+	_templates[ObjectType::MAP] = Map::GetTemplate(_isolate);
 
 	// Setup basic classes that can be created in JS code (have C++ constructors)
 	Vec2Wrapper::Install("vec2", global);
 	Vec3Wrapper::Install("vec3", global);
+	MapManagerWrapper::Install("MAP_MANAGER", global);
+	TimeWrapper::Install("TIME_OBJECT", global);
+	FactoryWrapper::Install("FACTORY_OBJECT", global);
 }
 
 void ScriptSystem::SetupGlobalBindings()
 {
-	Context::Scope scope(_context->GetLocal());
+	v8::Context::Scope scope(_context->GetLocal());
 	auto global = _context->GetLocal()->Global();
 
 	// TODO: Setup global bindings (objects that are attached to the global namespace)
@@ -84,6 +92,13 @@ void ScriptSystem::SetupGlobalBindings()
 
 	// Bind the Input Button Codes
 	InstallButtonCodesIntoScripting(this); // From InputTypes.cpp
+
+	FactoryWrapper::RegisterEnums();
+
+	// Bind the global objects (managers usually) 
+	global->Set(GetString("Time"), TimeWrapper::NewInstance()->GetObject());
+	global->Set(GetString("MapManager"), MapManagerWrapper::NewInstance()->GetObject());
+	global->Set(GetString("Factory"), FactoryWrapper::NewInstance()->GetObject());
 }
 
 void ScriptSystem::Run(std::string code)
@@ -107,12 +122,12 @@ void ScriptSystem::Run(std::string code)
 
 v8::Local<v8::String> ScriptSystem::GetString(std::string value) const
 {
-	return String::NewFromUtf8(_isolate, value.c_str());
+	return v8::String::NewFromUtf8(_isolate, value.c_str());
 }
 
-std::string ScriptSystem::CastString(Local<String>& stringObj) const
+std::string ScriptSystem::CastString(v8::Local<v8::String>& stringObj) const
 {
-	String::Utf8Value utfString(_isolate, stringObj);
+	v8::String::Utf8Value utfString(_isolate, stringObj);
 	return std::string(*utfString);
 }
 
@@ -123,7 +138,7 @@ v8::Local<v8::FunctionTemplate> ScriptSystem::GetTemplate(ObjectType type)
 		return _templates[type].Get(_isolate);
 	}
 
-	return Local<FunctionTemplate>();
+	return v8::Local<v8::FunctionTemplate>();
 }
 
 bool ScriptSystem::HasTemplate(ObjectType type) const
@@ -131,7 +146,7 @@ bool ScriptSystem::HasTemplate(ObjectType type) const
 	return _templates.find(type) != _templates.end();
 }
 
-Isolate* ScriptSystem::GetIsolate() const
+v8::Isolate* ScriptSystem::GetIsolate() const
 {
 	return _isolate;
 }
@@ -148,6 +163,9 @@ void ScriptSystem::Shutdown()
 	// Clean up wrappers
 	Vec2Wrapper::DestroyTemplate();
 	Vec3Wrapper::DestroyTemplate();
+	TimeWrapper::DestroyTemplate();
+	MapManagerWrapper::DestroyTemplate();
+	FactoryWrapper::DestroyTemplate();
 
 	delete _context;
 
@@ -158,7 +176,7 @@ void ScriptSystem::Shutdown()
 	delete _allocator;
 }
 
-void LogCallback(const FunctionCallbackInfo<Value>& info)
+void LogCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
 {
 	if (info.Length() <= 0)
 	{
@@ -167,10 +185,10 @@ void LogCallback(const FunctionCallbackInfo<Value>& info)
 	}
 
 	auto isolate = info.GetIsolate();
-	HandleScope handleScope(isolate);
+	v8::HandleScope handleScope(isolate);
 
 	auto value = info[0];
-	String::Utf8Value stringValue(isolate, value);
+	v8::String::Utf8Value stringValue(isolate, value);
 
 	std::cout << "LOG: " << *stringValue << std::endl;
 }

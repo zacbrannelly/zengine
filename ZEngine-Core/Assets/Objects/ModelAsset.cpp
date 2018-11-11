@@ -46,7 +46,7 @@ bool ModelAsset::Load(std::string path)
 
 	if (scene->HasMaterials())
 	{
-		_materials = LoadMaterials(scene);
+		//_materials = LoadMaterials(scene);
 	}
 
 	return true;

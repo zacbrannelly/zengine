@@ -72,3 +72,17 @@ ZObject* MeshRenderer::CreateInstance(std::string name, ObjectType type)
 {
 	return new MeshRenderer();
 }
+
+ZObject* MeshRenderer::Copy(string name, ZObject* object)
+{
+	if (object == nullptr || object->GetType() != MESH_RENDERER)
+		return nullptr;
+
+	auto source = static_cast<MeshRenderer*>(object);
+	auto copy = new MeshRenderer();
+
+	copy->SetMaterials(source->GetMaterials());
+	copy->SetMesh(source->GetMesh());
+
+	return copy;
+}

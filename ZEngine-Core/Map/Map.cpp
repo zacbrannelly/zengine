@@ -2,6 +2,7 @@
 #include "Objects/Entity.h"
 #include "../Component/Camera.h"
 #include "../Component/Transform.h"
+#include "../Scripting/ScriptSystem.h"
 
 #include <algorithm>
 
@@ -14,6 +15,22 @@ Map::Map(std::string name) : ZObject(name, ObjectType::MAP)
 ZObject* Map::CreateInstance(std::string name, ObjectType type)
 {
 	return new Map(name);
+}
+
+void Map::Init()
+{
+	for (int i = 0; i < _entities.size(); i++)
+	{
+		_entities[i]->InitComponents();
+	}
+}
+
+void Map::InitScripts()
+{
+	for (int i = 0; i < _entities.size(); i++)
+	{
+		_entities[i]->InitScripts();
+	}
 }
 
 void Map::Add(Entity* entity)
@@ -89,6 +106,12 @@ Entity* Map::Find(string name)
 	return nullptr;
 }
 
+Entity* Map::FindWithComponent(string componentName)
+{
+	auto it = find_if(_entities.begin(), _entities.end(), [&componentName](auto e) { return e->GetComponentByName(componentName) != nullptr; });
+	return it != _entities.end() ? *it : nullptr;
+}
+
 vector<Entity*> Map::FindAll(string name)
 {
 	vector<Entity*> result;
@@ -135,11 +158,13 @@ const vector<Camera*>& Map::GetCameras() const
 
 void Map::Update()
 {
-	for (auto entity : _entities)
+	for (int i = 0; i < _entities.size(); i++)
 	{
-		for (auto component : entity->GetAllComponents())
+		auto entity = _entities[i];
+		
+		for (int j = 0; j < entity->GetAllComponents().size(); j++)
 		{
-			component->Update();
+			entity->GetAllComponents()[j]->Update();
 		}
 	}
 }
@@ -158,8 +183,10 @@ void Map::Render()
 
 void Map::RenderWorld(int viewId)
 {
-	for (auto entity : _entities)
+	for (int i = 0; i < _entities.size(); i++)
 	{
+		auto entity = _entities[i];
+
 		for (auto component : entity->GetAllComponents())
 		{
 			if (component->GetType() == ObjectType::CAMERA) continue;
@@ -176,4 +203,123 @@ Map::~Map()
 		if (entity != nullptr)
 			delete entity;
 	}
+}
+
+void Callback_Map_Getter(v8::Local<v8::String> nameObj, const v8::PropertyCallbackInfo<v8::Value>& info)
+{
+	auto sys = ScriptSystem::GetInstance();
+	auto name = sys->CastString(nameObj);
+	auto wrap = v8::Local<v8::External>::Cast(info.Holder()->GetInternalField(0));
+
+	auto scriptableObject = static_cast<IScriptable*>(wrap->Value());
+	auto map = static_cast<Map*>(scriptableObject);
+
+	if (map == nullptr)
+		return;
+
+	if (name == "name")
+	{
+		info.GetReturnValue().Set(sys->GetString(map->GetName()));
+	}
+}
+
+void Callback_Map_Setter(v8::Local<v8::String> nameObj, v8::Local<v8::Value> value, const v8::PropertyCallbackInfo<void>& info)
+{
+	auto sys = ScriptSystem::GetInstance();
+	auto name = sys->CastString(nameObj);
+	auto wrap = v8::Local<v8::External>::Cast(info.Holder()->GetInternalField(0));
+
+	auto scriptableObject = static_cast<IScriptable*>(wrap->Value());
+	auto map = static_cast<Map*>(scriptableObject);
+
+	if (map == nullptr)
+		return;
+}
+
+void Callback_Map_Add(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+	if (info.Length() == 1 && info[0]->IsObject())
+	{
+		auto sys = ScriptSystem::GetInstance();
+		auto object = info[0]->ToObject(info.GetIsolate());
+		auto wrap = v8::Local<v8::External>::Cast(object->GetInternalField(0));
+		auto scriptable = static_cast<IScriptable*>(wrap->Value());
+		auto entity = static_cast<Entity*>(scriptable);
+
+		if (entity != nullptr)
+		{
+			wrap = v8::Local<v8::External>::Cast(info.Holder()->GetInternalField(0));
+			scriptable = static_cast<IScriptable*>(wrap->Value());
+			auto map = static_cast<Map*>(scriptable);
+
+			if (map != nullptr)
+			{
+				map->Add(entity);
+			}
+		}
+	}
+}
+
+void Callback_Map_Remove(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+	if (info.Length() == 1 && info[0]->IsObject())
+	{
+		auto sys = ScriptSystem::GetInstance();
+		auto object = info[0]->ToObject(info.GetIsolate());
+		auto wrap = v8::Local<v8::External>::Cast(object->GetInternalField(0));
+		auto scriptable = static_cast<IScriptable*>(wrap->Value());
+		auto entity = static_cast<Entity*>(scriptable);
+
+		if (entity != nullptr)
+		{
+			wrap = v8::Local<v8::External>::Cast(info.Holder()->GetInternalField(0));
+			scriptable = static_cast<IScriptable*>(wrap->Value());
+			auto map = static_cast<Map*>(scriptable);
+
+			if (map != nullptr)
+			{
+				map->Remove(entity);
+			}
+		}
+	}
+}
+
+void Callback_Map_Find(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+	auto wrap = v8::Local<v8::External>::Cast(info.Holder()->GetInternalField(0));
+	auto scriptable = static_cast<IScriptable*>(wrap->Value());
+	auto map = static_cast<Map*>(scriptable);
+
+	if (map == nullptr || info.Length() != 1 || !info[0]->IsString())
+	{
+		info.GetReturnValue().SetNull();
+		return;
+	}
+
+	auto objName = ScriptSystem::GetInstance()->CastString(info[0]->ToString(info.GetIsolate()));
+	auto obj = map->Find(objName);
+
+	if (obj != nullptr)
+	{
+		info.GetReturnValue().Set(obj->GetScriptObject());
+	}
+	else
+	{
+		info.GetReturnValue().SetNull();
+	}
+}
+
+v8::Global<v8::FunctionTemplate> Map::GetTemplate(v8::Isolate* isolate)
+{
+	using namespace v8;
+	auto sys = ScriptSystem::GetInstance();
+	auto constructor = FunctionTemplate::New(isolate);
+
+	constructor->InstanceTemplate()->SetInternalFieldCount(1);
+	constructor->InstanceTemplate()->SetAccessor(sys->GetString("name"), Callback_Map_Getter, Callback_Map_Setter);
+	constructor->InstanceTemplate()->Set(isolate, "Add", FunctionTemplate::New(isolate, Callback_Map_Add));
+	constructor->InstanceTemplate()->Set(isolate, "Remove", FunctionTemplate::New(isolate, Callback_Map_Remove));
+	constructor->InstanceTemplate()->Set(isolate, "Find", FunctionTemplate::New(isolate, Callback_Map_Find));
+
+	return v8::Global<FunctionTemplate>(isolate, constructor);
 }
