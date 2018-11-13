@@ -23,12 +23,29 @@ Vec2Wrapper* Vec2Wrapper::ConstructorImpl(const FunctionCallbackInfo<Value>& inf
 	return newInstance;
 }
 
+void Callback_Vec2_Set(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+	if (info.Length() != 2 || !info[0]->IsNumber() || !info[1]->IsNumber())
+		return;
+
+	auto sys = ScriptSystem::GetInstance();
+
+	auto wrap = v8::Local<v8::External>::Cast(info.Holder()->ToObject(sys->GetIsolate())->GetInternalField(0));
+	auto vec2 = static_cast<Vec2Wrapper*>(wrap->Value());
+
+	float x = info[0]->ToNumber(sys->GetIsolate())->Value();
+	float y = info[1]->ToNumber(sys->GetIsolate())->Value();
+	
+	vec2->SetData({ x, y });
+}
+
 void Vec2Wrapper::InstallImpl(v8::Local<v8::ObjectTemplate>& temp)
 {
 	auto sys = ScriptSystem::GetInstance();
 
 	temp->SetAccessor(sys->GetString("x"), Getter, Setter);
 	temp->SetAccessor(sys->GetString("y"), Getter, Setter);
+	temp->Set(sys->GetIsolate(), "Set", v8::FunctionTemplate::New(sys->GetIsolate(), Callback_Vec2_Set));
 }
 
 void Vec2Wrapper::GetterImpl(std::string name, const v8::PropertyCallbackInfo<v8::Value>& info)

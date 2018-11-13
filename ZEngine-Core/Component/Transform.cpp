@@ -189,11 +189,22 @@ void Transform_GetPositionCallback(const v8::FunctionCallbackInfo<v8::Value>& in
 	auto scriptableObj = static_cast<IScriptable*>(wrapper->Value());
 	auto transform = static_cast<Transform*>(scriptableObj);
 
-	// TODO: Try not to create a new instance every time, perhaps make one instance and save as private field..
-	auto wrapVec3 = Vec3Wrapper::NewInstance();
-	wrapVec3->SetData(transform->GetPosition());
+	if (info.Length() == 0)
+	{
+		// TODO: Try not to create a new instance every time, perhaps make one instance and save as private field..
+		auto wrapVec3 = Vec3Wrapper::NewInstance();
+		wrapVec3->SetData(transform->GetPosition());
 
-	info.GetReturnValue().Set(wrapVec3->GetObject());
+		info.GetReturnValue().Set(wrapVec3->GetObject());
+	}
+	else if (info.Length() == 1)
+	{
+		wrapper = v8::Local<v8::External>::Cast(info[0]->ToObject(info.GetIsolate())->GetInternalField(0));
+		auto wrapVec3 = static_cast<Vec3Wrapper*>(wrapper->Value());
+		wrapVec3->SetData(transform->GetPosition());
+
+		info.GetReturnValue().Set(wrapVec3->GetObject());
+	}
 }
 
 void Transform_GetRotationCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
@@ -203,11 +214,22 @@ void Transform_GetRotationCallback(const v8::FunctionCallbackInfo<v8::Value>& in
 	auto scriptableObj = static_cast<IScriptable*>(wrapper->Value());
 	auto transform = static_cast<Transform*>(scriptableObj);
 
-	// TODO: Try not to create a new instance every time, perhaps make one instance and save as private field..
-	auto wrapVec3 = Vec3Wrapper::NewInstance();
-	wrapVec3->SetData(transform->GetRotation());
+	if (info.Length() == 0)
+	{
+		// TODO: Try not to create a new instance every time, perhaps make one instance and save as private field..
+		auto wrapVec3 = Vec3Wrapper::NewInstance();
+		wrapVec3->SetData(transform->GetRotation());
 
-	info.GetReturnValue().Set(wrapVec3->GetObject());
+		info.GetReturnValue().Set(wrapVec3->GetObject());
+	}
+	else if (info.Length() == 1)
+	{
+		wrapper = v8::Local<v8::External>::Cast(info[0]->ToObject(info.GetIsolate())->GetInternalField(0));
+		auto wrapVec3 = static_cast<Vec3Wrapper*>(wrapper->Value());
+		wrapVec3->SetData(transform->GetPosition());
+
+		info.GetReturnValue().Set(wrapVec3->GetObject());
+	}
 }
 
 void Transform_GetScaleCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
@@ -217,11 +239,22 @@ void Transform_GetScaleCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
 	auto scriptableObj = static_cast<IScriptable*>(wrapper->Value());
 	auto transform = static_cast<Transform*>(scriptableObj);
 
-	// TODO: Try not to create a new instance every time, perhaps make one instance and save as private field..
-	auto wrapVec3 = Vec3Wrapper::NewInstance();
-	wrapVec3->SetData(transform->GetScale());
+	if (info.Length() == 0)
+	{
+		// TODO: Try not to create a new instance every time, perhaps make one instance and save as private field..
+		auto wrapVec3 = Vec3Wrapper::NewInstance();
+		wrapVec3->SetData(transform->GetScale());
 
-	info.GetReturnValue().Set(wrapVec3->GetObject());
+		info.GetReturnValue().Set(wrapVec3->GetObject());
+	}
+	else if (info.Length() == 1)
+	{
+		wrapper = v8::Local<v8::External>::Cast(info[0]->ToObject(info.GetIsolate())->GetInternalField(0));
+		auto wrapVec3 = static_cast<Vec3Wrapper*>(wrapper->Value());
+		wrapVec3->SetData(transform->GetPosition());
+
+		info.GetReturnValue().Set(wrapVec3->GetObject());
+	}
 }
 
 void Transform_Getter(v8::Local<v8::String> nameObj, const v8::PropertyCallbackInfo<v8::Value>& info)
