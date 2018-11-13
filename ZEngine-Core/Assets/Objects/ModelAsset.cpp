@@ -24,7 +24,7 @@ Asset* ModelAsset::CreateInstance(std::string name)
 
 bool ModelAsset::Load(std::string path)
 {
-	const aiScene* scene = _importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipWindingOrder);
+	const aiScene* scene = _importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
 
 	if (scene == nullptr)
 	{

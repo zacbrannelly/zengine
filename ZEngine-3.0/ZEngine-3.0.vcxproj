@@ -106,7 +106,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\assimp\include;..\..\v8\v8\include;..\..\v8\v8\;..\..\ZEngine-3.0;..\..\ZEngine-3.0\ZEngine-3.0\glm;..\..\bx\include;..\..\bgfx\3rdparty;..\..\bgfx\include;..\..\ZEngine-3.0\ZEngine-3.0\glew-2.1.0\include\GL;..\..\ZEngine-3.0\ZEngine-3.0\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\SDL2\include;..\..\assimp\include;..\..\v8\v8\include;..\..\v8\v8\;..\..\ZEngine-3.0;..\..\ZEngine-3.0\ZEngine-3.0\glm;..\..\bx\include;..\..\bgfx\3rdparty;..\..\bgfx\include;..\..\ZEngine-3.0\ZEngine-3.0\glew-2.1.0\include\GL;..\..\ZEngine-3.0\ZEngine-3.0\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>

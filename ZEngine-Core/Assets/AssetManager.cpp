@@ -8,6 +8,7 @@
 #include "Objects/MapAsset.h"
 #include "Objects/ModelAsset.h"
 #include "Objects/ScriptAsset.h"
+#include "Objects/AudioAsset.h"
 
 void AssetManager::Init()
 {
@@ -18,6 +19,7 @@ void AssetManager::Init()
 	_assetConstructors[ObjectType::MAP_ASSET] = MapAsset::CreateInstance;
 	_assetConstructors[ObjectType::MODEL_ASSET] = ModelAsset::CreateInstance;
 	_assetConstructors[ObjectType::SCRIPT_ASSET] = ScriptAsset::CreateInstance;
+	_assetConstructors[ObjectType::AUDIO_ASSET] = AudioAsset::CreateInstance;
 }
 
 void AssetManager::SetCatalog(AssetCatalog* catalog)

@@ -1,6 +1,7 @@
 #include "ScriptSystem.h"
 #include "../Component/Component.h"
 #include "../Component/Transform.h"
+#include "../Component/AudioSource.h"
 #include "../Map/Objects/Entity.h"
 #include "../Input/InputManager.h"
 #include "../Map/Map.h"
@@ -71,6 +72,7 @@ void ScriptSystem::SetupTemplates()
 	_templates[ObjectType::ENTITY] = Entity::GetTemplate(_isolate);
 	_templates[ObjectType::TRANSFORM] = Transform::GetTemplate(_isolate);
 	_templates[ObjectType::MAP] = Map::GetTemplate(_isolate);
+	_templates[ObjectType::AUDIO_SOURCE] = AudioSource::GetTemplate(_isolate);
 
 	// Setup basic classes that can be created in JS code (have C++ constructors)
 	Vec2Wrapper::Install("vec2", global);

@@ -28,6 +28,7 @@
 #include <ZEngine-Core\Assets\AssetCatalog.h>
 #include <ZEngine-Core\Physics\Time.h>
 #include <ZEngine-Core\Map\MapManager.h>
+#include <ZEngine-Core\Audio\AudioSystem.h>
 #include <glm/glm.hpp>
 
 #include "GUILibrary.h"
@@ -109,6 +110,9 @@ int main(int argc, char* argv[])
 	auto inputManager = InputManager::GetInstance();
 	inputManager->Init(&display);
 
+	auto audioSystem = AudioSystem::GetInstance();
+	audioSystem->Init();
+
 	// Init graphics sub-system
 	auto graphics = Graphics::GetInstance();
 	graphics->Init(&display);
@@ -161,6 +165,7 @@ int main(int argc, char* argv[])
 	gui->Shutdown();
 	assetManager->Shutdown();
 	graphics->Shutdown();
+	audioSystem->Shutdown();
 	inputManager->Shutdown();
 	display.Shutdown();
 	scriptSystem->Shutdown();

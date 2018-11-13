@@ -10,12 +10,15 @@
 #include "../Component/Transform.h"
 #include "../Component/TestRenderer.h"
 #include "../Component/ScriptComponent.h"
+#include "../Component/AudioSource.h"
+
 #include "../Scripting/Script.h"
 
 #include "../Component/Importers/TransformImporter.h"
 #include "../Component/Importers/CameraImporter.h"
 #include "../Component/Importers/MeshRendererImporter.h"
 #include "../Component/Importers/ScriptComponentImporter.h"
+#include "../Component/Importers/AudioSourceImporter.h"
 
 std::map<ObjectType, ConstructorFunc> Factory::_typeConstructors;
 std::map<ObjectType, CopyFunc> Factory::_copyFunctions;
@@ -34,6 +37,7 @@ void Factory::Init()
 	RegisterType(ObjectType::MESH_RENDERER, &MeshRenderer::CreateInstance);
 	RegisterType(ObjectType::SCRIPT, &Script::CreateInstance);
 	RegisterType(ObjectType::SCRIPT_COMPONENT, &ScriptComponent::CreateInstance);
+	RegisterType(ObjectType::AUDIO_SOURCE, &AudioSource::CreateInstance);
 	RegisterType(ObjectType::TEST_RENDERER, &TestRenderer::CreateInstance);
 
 	// Register copy instatiators (real-time copying)
@@ -42,6 +46,7 @@ void Factory::Init()
 	RegisterCopyType(ObjectType::MESH_RENDERER, &MeshRenderer::Copy);
 	RegisterCopyType(ObjectType::CAMERA, &Camera::Copy);
 	RegisterCopyType(ObjectType::SCRIPT_COMPONENT, &ScriptComponent::Copy);
+	RegisterCopyType(ObjectType::AUDIO_SOURCE, &AudioSource::Copy);
 
 	// Register importers (from JSON objects)
 	TransformImporter::Init();
@@ -55,6 +60,9 @@ void Factory::Init()
 
 	ScriptComponentImporter::Init();
 	RegisterTypeImporter(ObjectType::SCRIPT_COMPONENT, ScriptComponentImporter::Import);
+
+	AudioSourceImporter::Init();
+	RegisterTypeImporter(ObjectType::AUDIO_SOURCE, AudioSourceImporter::Import);
 }
 
 void Factory::RegisterType(ObjectType type, ConstructorFunc constructor)

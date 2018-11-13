@@ -75,17 +75,17 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\v8\v8\include;..\..\v8\v8;..\..\ZEngine-3.0\ZEngine-3.0\glm;..\..\bx\include;..\..\bimg\include;..\..\assimp\include;..\..\bgfx\include;..\..\ZEngine-3.0\ZEngine-3.0\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\SDL2\include;..\..\v8\v8\include;..\..\v8\v8;..\..\ZEngine-3.0\ZEngine-3.0\glm;..\..\bx\include;..\..\bimg\include;..\..\assimp\include;..\..\bgfx\include;..\..\ZEngine-3.0\ZEngine-3.0\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\..\ZEngine-3.0\ZEngine-3.0\glfw\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib>
-      <AdditionalDependencies>v8.dll.lib;v8_libbase.dll.lib;v8_libplatform.dll.lib;icui18n.dll.lib;icuuc.dll.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>v8.dll.lib;v8_libbase.dll.lib;v8_libplatform.dll.lib;icui18n.dll.lib;icuuc.dll.lib;assimp-vc140-mt.lib;SDL2.lib;SDL2main.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>..\..\assimp\lib\x64;..\..\v8\v8\out.gn\x64.debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\assimp\lib\x64;..\..\SDL2\lib\x64;..\..\v8\v8\out.gn\x64.debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -125,6 +125,10 @@
     <ClInclude Include="Assets\AssetCatalog.h" />
     <ClInclude Include="Assets\Asset.h" />
     <ClInclude Include="Assets\AssetManager.h" />
+    <ClInclude Include="Assets\Objects\AudioAsset.h" />
+    <ClInclude Include="Component\Importers\AudioSourceImporter.h" />
+    <ClInclude Include="Component\AudioSource.h" />
+    <ClInclude Include="Audio\AudioSystem.h" />
     <ClInclude Include="Component\Importers\ComponentImporter.h" />
     <ClInclude Include="Component\Importers\CameraImporter.h" />
     <ClInclude Include="Component\MeshRenderer.h" />
@@ -182,6 +186,10 @@
     <ClCompile Include="Assets\AssetCatalog.cpp" />
     <ClCompile Include="Assets\Asset.cpp" />
     <ClCompile Include="Assets\AssetManager.cpp" />
+    <ClCompile Include="Assets\Objects\AudioAsset.cpp" />
+    <ClCompile Include="Component\Importers\AudioSourceImporter.cpp" />
+    <ClCompile Include="Component\AudioSource.cpp" />
+    <ClCompile Include="Audio\AudioSystem.cpp" />
     <ClCompile Include="Component\Importers\CameraImporter.cpp" />
     <ClCompile Include="Component\Camera.cpp" />
     <ClCompile Include="Component\Component.cpp" />
