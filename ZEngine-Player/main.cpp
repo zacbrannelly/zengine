@@ -12,6 +12,7 @@
 #include "../ZEngine-Core/Physics/Time.h"
 #include "../ZEngine-Core/Map/Map.h"
 #include "../ZEngine-Core/Map/MapManager.h"
+#include "../ZEngine-Core/Audio/AudioSystem.h"
 
 #include <Windows.h>
 
@@ -30,6 +31,9 @@ int main(int argc, char* argv[])
 
 	auto inputManager = InputManager::GetInstance();
 	inputManager->Init(&display);
+
+	auto audioSystem = AudioSystem::GetInstance();
+	audioSystem->Init();
 
 	// Init graphics sub-system
 	auto graphics = Graphics::GetInstance();
@@ -84,6 +88,7 @@ int main(int argc, char* argv[])
 	assetManager->Shutdown();
 	graphics->Shutdown();
 	inputManager->Shutdown();
+	audioSystem->Shutdown();
 	display.Shutdown();
 	scriptSystem->Shutdown();
 	time->Shutdown();
