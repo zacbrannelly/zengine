@@ -51,20 +51,40 @@
 					
 					"position": [0, 0, 0],
 					"rotation": [0, 0, 0],
-					"scale": [1, 1, 1]
+					"scale": [0.01, 0.01, 0.01]
 				},
 				{
 					"name": "Test Renderer (from file)",
 					"type": 7,
 					
-					"model": 1,
-					"materials": [ 0 ]
+					"model": 6,
+					"materials": [ 7, 8 ]
 				},
 				{
 					"name": "TestComponent",
 					"type": 9,
 					
 					"script": 2
+				}
+			]
+		},
+		{
+			"name": "Sphere",
+			"components":
+			[
+				{
+					"name": "Transform",
+					"type": 5, 
+					
+					"position": [0, 0, 0],
+					"rotation": [0, 0, 0],
+					"scale": [1, 1, 1]
+				},
+				{
+					"name": "MeshRenderer",
+					"type": 7,
+					"primitive": "sphere",
+					"materials": [ 9 ]
 				}
 			]
 		}

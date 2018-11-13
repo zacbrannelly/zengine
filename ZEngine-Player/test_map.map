@@ -19,53 +19,35 @@
 					"type": 4,
 					
 					"clearColor": [1, 0, 0, 1],
-					"viewport": [0, 0, 1024, 600],
+					"viewport": [0, 0, 1366, 768],
 					"projection": 0
-				}
-			],
-			
-			"children":
-			[
+				},
 				{
-					"name": "Test Empty Object (Child)",
-					"components": 
-					[
-						{
-							"name": "Transform",
-							"type": 5, 
+					"name": "AudioSource",
+					"type": 18,
 					
-							"position": [0, 20, 0],
-							"rotation": [0, 0, 0],
-							"scale": [1, 1, 1]
-						}
-					]
+					"audio": 13,
+					"autoplay": true
 				}
 			]
 		},
 		{
-			"name": "Test Empty Object",
-			"components": 
+			"name": "Background",
+			"components":
 			[
 				{
 					"name": "Transform",
-					"type": 5, 
+					"type": 5,
 					
-					"position": [0, 0, 0],
+					"position": [0, 0, 10],
 					"rotation": [0, 0, 0],
-					"scale": [1, 1, 1]
+					"scale": [20, 20, 1]
 				},
 				{
-					"name": "Test Renderer (from file)",
+					"name": "MeshRenderer 5",
 					"type": 7,
-					
-					"model": 1,
-					"materials": [ 0 ]
-				},
-				{
-					"name": "TestComponent",
-					"type": 9,
-					
-					"script": 2
+					"primitive": "rectangle",
+					"materials": [ 14 ]
 				}
 			]
 		},
@@ -77,16 +59,16 @@
 					"name": "Transform",
 					"type": 5, 
 					
-					"position": [0, 0, 0],
+					"position": [-5, 0, 0],
 					"rotation": [0, 0, 0],
-					"scale": [0.2, 0.2, 0.2]
+					"scale": [0.3, 0.3, 0.3]
 				},
 				{
 					"name": "MeshRender 2",
 					"type": 7,
 					
-					"primitive": "cube",
-					"materials": [ 0 ]
+					"primitive": "sphere",
+					"materials": [ 15 ]
 				},
 				{
 					"name": "RotateComponent",
@@ -95,16 +77,22 @@
 					"script": 3
 				},
 				{
+					"name": "BoxCollider2D",
+					"type": 9,
+					
+					"script": 5
+				},
+				{
 					"name": "HeadComponent",
 					"type": 9,
 					
 					"script": 4
 				},
 				{
-					"name": "BoxCollider2D",
+					"name": "BodyComponent",
 					"type": 9,
 					
-					"script": 5
+					"script": 7
 				}
 			]
 		},
@@ -118,14 +106,14 @@
 					
 					"position": [0, 0, 0],
 					"rotation": [0, 0, 0],
-					"scale": [0.2, 0.2, 0.2]
+					"scale": [0.5, 0.5, 0.5]
 				},
 				{
 					"name": "MeshRender 2",
 					"type": 7,
 					
-					"primitive": "cube",
-					"materials": [ 0 ]
+					"model": 9,
+					"materials": [ 10, 11 ]
 				},
 				{
 					"name": "FoodComponent",
@@ -134,10 +122,22 @@
 					"script": 6
 				},
 				{
+					"name": "RotateComponent",
+					"type": 9,
+					
+					"script": 3
+				},
+				{
 					"name": "BoxCollider2D",
 					"type": 9,
 					
 					"script": 5
+				},
+				{
+					"name": "AudioSource",
+					"type": 18,
+					
+					"audio": 12 
 				}
 			]
 		}

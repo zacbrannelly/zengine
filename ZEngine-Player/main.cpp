@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 	scriptSystem->Init(argv[0]);
 
 	// Init window
-	Display display("ZEngine 3.0 - Player | By Zac Brannelly", 1024, 600);
+	Display display("ZEngine 3.0 - Player | By Zac Brannelly", 1366, 768);
 	display.Init();
 
 	auto inputManager = InputManager::GetInstance();

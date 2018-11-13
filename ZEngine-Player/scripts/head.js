@@ -1,23 +1,29 @@
 function HeadComponent()
 {
-	this.speed = 2;
+	this.speed = 4;
 	this.velocity = new vec3(this.speed, 0, 0);
 	this.boxCollider = null;
 	this.food = null;
 	this.body = [];
+	
+	// Create once (avoiding GC)
+	this.position = new vec3(0, 0, 0);
 }
 
 HeadComponent.prototype.Init = function()
 {
 	this.boxCollider = this.owner.GetComponent("BoxCollider2D");
-	this.boxCollider.width = 0.4;
-	this.boxCollider.height = 0.4;
+	this.boxCollider.width = this.owner.transform.scale.x * 2;
+	this.boxCollider.height = this.owner.transform.scale.y * 2;
+	
+	this.body.push(this.owner);
 	
 	this.food = MapManager.currentMap.Find("Food").GetComponent("FoodComponent");
 }
 
 HeadComponent.prototype.Update = function()
 {
+	// Move according to input
 	if (Input.GetButtonDown(BUTTON_KEY_A))
 	{
 		this.velocity.x = -this.speed;
@@ -40,24 +46,39 @@ HeadComponent.prototype.Update = function()
 		this.velocity.y = -this.speed;
 	}
 	
-	var position = this.owner.transform.position;
-	this.owner.transform.position = new vec3(position.x + this.velocity.x * Time.delta, position.y + this.velocity.y * Time.delta, position.y + this.velocity.z * Time.delta);
+	// Update the position of the object using velocity
+	var position = this.owner.transform.GetPosition(this.position);
+	this.owner.transform.SetPosition(position.x + this.velocity.x * Time.delta, position.y + this.velocity.y * Time.delta, position.y + this.velocity.z * Time.delta);
 	
+	// Check if we have eaten the food
 	if (this.food.boxCollider.Intersects(this.boxCollider))
 	{
 		this.food.Eat();
+		this.SpawnBody();
 	}
+}
+
+HeadComponent.prototype.SpawnBody = function()
+{
+	// Copy the last body object in the body list
+	var source = this.body[this.body.length - 1];
+	var copy = Factory.Copy("Body " + this.body.length, this.body[this.body.length - 1]);
+				
+	// Remove the head component, if any (first clone is the head)
+	var headComp = copy.GetComponent("HeadComponent");
+	if (headComp != null)
+		copy.RemoveComponent(headComp);
+		
+	// Get the body components from the source and copy
+	var sourceBodyComp = source.GetComponent("BodyComponent");
+	var bodyComponent = copy.GetComponent("BodyComponent");
 	
-	if (Input.GetButtonUp(BUTTON_KEY_T))
-	{
-		var copy = Factory.Copy(this.owner);
+	// Add the new body part to the map and body array
+	MapManager.currentMap.Add(copy);
+	this.body.push(copy);
 		
-		// Remove the head component
-		var headComp = copy.GetComponent("HeadComponent");
-		headComp.RemoveComponent(headComp);
-		
-		MapManager.currentMap.Add(copy);
-	}
+	// Link the new copy to the source body component (so it follows the source obj)
+	sourceBodyComp.child = copy;
 }
 
 HeadComponent.prototype.Render = function()
