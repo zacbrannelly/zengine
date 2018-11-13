@@ -1,0 +1,82 @@
+{
+	"name": "plastic_mat",
+	"shader": "shaders/pbr_direct.shader",
+	
+	"textures": [
+		{
+			"name": "albedoTexture",
+			"path": "materials/plastic/scuffed-plastic6-alb.png"
+		},
+		{
+			"name": "normalTexture",
+			"path": "materials/plastic/scuffed-plastic-normal.png"
+		},
+		{
+			"name": "roughnessTexture",
+			"path": "materials/plastic/scuffed-plastic-rough.png"
+		},
+		{
+			"name": "metallicTexture",
+			"path": "materials/plastic/scuffed-plastic-metal.png"
+		},
+		{
+			"name": "aoTexture", 
+			"path": "materials/plastic/scuffed-plastic-ao.png"
+		}
+	], 
+	
+	"uniforms": [
+		{
+			"name": "albedoTint",
+			"type": 2,
+			"numElements": 1,
+			"values": [ 1, 1, 1, 1 ]
+		},
+		{
+			"name": "roughness",
+			"type": 2,
+			"numElements": 1,
+			"values": [ 1, 1, 1, 1 ]
+		},
+		{
+			"name": "metallic",
+			"type": 2,
+			"numElements": 1,
+			"values": [ 1, 1, 1, 1 ]
+		},
+		{
+			"name": "ao",
+			"type": 2,
+			"numElements": 1,
+			"values": [ 1, 1, 1, 1 ]
+		},
+		{
+			"name": "lightPositions",
+			"type": 2,
+			"numElements": 4,
+			"values": [ 
+						-10, -10, -10, 1, 
+						 10,  10, -10, 1, 
+						-10,  10, -10, 1, 
+						 10, -10, -10, 1 
+					]
+		},
+		{
+			"name": "lightColors",
+			"type": 2,
+			"numElements": 4,
+			"values": [
+						300, 300, 300, 1, 
+						300, 300, 300, 1, 
+						300, 300, 300, 1, 
+						300, 300, 300, 1 
+					]
+		},
+		{
+			"name": "camPos",
+			"type": 2,
+			"numElements": 1,
+			"values": [ 0, 0, -10, 1 ]
+		}
+	]
+}

@@ -1,0 +1,82 @@
+{
+	"name": "coke_material",
+	"shader": "shaders/pbr_direct.shader",
+	
+	"textures": [
+		{
+			"name": "albedoTexture",
+			"path": "models/coke/Coca-Cola 01.jpg"
+		},
+		{
+			"name": "normalTexture",
+			"path": "blank_normal.png"
+		},
+		{
+			"name": "roughnessTexture",
+			"path": "blank_ao.png"
+		},
+		{
+			"name": "metallicTexture",
+			"path": "blank_ao.png"
+		},
+		{
+			"name": "aoTexture", 
+			"path": "blank_ao.png"
+		}
+	], 
+	
+	"uniforms": [
+		{
+			"name": "albedoTint",
+			"type": 2,
+			"numElements": 1,
+			"values": [ 1, 1, 1, 1 ]
+		},
+		{
+			"name": "roughness",
+			"type": 2,
+			"numElements": 1,
+			"values": [ 1, 1, 1, 1 ]
+		},
+		{
+			"name": "metallic",
+			"type": 2,
+			"numElements": 1,
+			"values": [ 1, 1, 1, 1 ]
+		},
+		{
+			"name": "ao",
+			"type": 2,
+			"numElements": 1,
+			"values": [ 1, 1, 1, 1 ]
+		},
+		{
+			"name": "lightPositions",
+			"type": 2,
+			"numElements": 4,
+			"values": [ 
+						-10, -10, -10, 1, 
+						 10,  10, -10, 1, 
+						-10,  10, -10, 1, 
+						 10, -10, -10, 1 
+					]
+		},
+		{
+			"name": "lightColors",
+			"type": 2,
+			"numElements": 4,
+			"values": [
+						300, 300, 300, 1, 
+						300, 300, 300, 1, 
+						300, 300, 300, 1, 
+						300, 300, 300, 1 
+					]
+		},
+		{
+			"name": "camPos",
+			"type": 2,
+			"numElements": 1,
+			"values": [ 0, 0, -10, 1 ]
+		}
+	]
+} 
