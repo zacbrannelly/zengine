@@ -72,9 +72,6 @@
     <ClCompile Include="MainMenuBar.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
-    <ClCompile Include="Inspector.cpp">
-      <Filter>Windows</Filter>
-    </ClCompile>
     <ClCompile Include="Editor.cpp">
       <Filter>Main</Filter>
     </ClCompile>
@@ -83,6 +80,9 @@
     </ClCompile>
     <ClCompile Include="GameView.cpp">
       <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Inspector.cpp">
+      <Filter>Inspectors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -128,9 +128,6 @@
     <ClInclude Include="MainMenuBar.h">
       <Filter>GUI</Filter>
     </ClInclude>
-    <ClInclude Include="Inspector.h">
-      <Filter>Windows</Filter>
-    </ClInclude>
     <ClInclude Include="Editor.h">
       <Filter>Main</Filter>
     </ClInclude>
@@ -139,6 +136,9 @@
     </ClInclude>
     <ClInclude Include="GameView.h">
       <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Inspector.h">
+      <Filter>Inspectors</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

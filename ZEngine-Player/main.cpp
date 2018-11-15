@@ -66,19 +66,37 @@ int main(int argc, char* argv[])
 
 	mapManager->SetCurrentMap(mapAsset->GetMap());
 
+	double t = 0.0;
+	const double dt = 1.0 / 60.0;
+
+	double currentTime = time->GetTime();
+	double accumulator = 0.0;
+
 	while (!display.CloseRequested())
 	{
-		inputManager->Reset();
-		display.Update();
-		
-		if (mapManager->GetCurrentMap() != nullptr)
+		double newTime = time->GetTime();
+		double frameTime = newTime - currentTime;
+		currentTime = newTime;
+
+		accumulator += frameTime;
+
+		while (accumulator >= dt)
 		{
-			mapManager->GetCurrentMap()->Update();
-			mapManager->GetCurrentMap()->Render();
+			inputManager->Reset();
+			display.Update();
+
+			if (mapManager->GetCurrentMap() != nullptr)
+			{
+				mapManager->GetCurrentMap()->Update();
+			}
+
+			time->Tick();
+
+			accumulator -= dt;
 		}
 		
+		mapManager->GetCurrentMap()->Render();
 		graphics->Render();
-		time->Tick();
 
 		std::stringstream fps;
 		fps << "ZEngine 3.0 - Player | By Zac Brannelly | " << "FPS: " << time->GetFPS();

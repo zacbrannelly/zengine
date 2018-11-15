@@ -69,8 +69,6 @@ void MapView::RenderInWindow()
 		if (startPlaying)
 		{
 			_isPlaying = !_isPlaying;
-
-			//TODO: Start playing the map when this is true
 		}
 
 		ImGui::SameLine();
@@ -115,6 +113,11 @@ void MapView::RenderElement()
 	// Render the world without the internal cameras
 	if (_editor->GetSelectedMap() != nullptr)
 	{
+		if (_isPlaying)
+		{
+			_editor->GetSelectedMap()->Update();
+		}
+
 		_editor->GetSelectedMap()->RenderWorld(_viewCamera->GetViewId());
 	}
 

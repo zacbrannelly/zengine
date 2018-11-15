@@ -1,0 +1,11 @@
+{
+	"name": "background_mat",
+	"shader": "shaders/standard_unlit.shader",
+	"textures": 
+	[
+		{
+			"name": "texColor",
+			"path": "materials/background/background.png"
+		}
+	]
+}

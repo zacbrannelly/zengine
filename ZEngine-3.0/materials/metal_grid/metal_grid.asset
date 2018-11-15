@@ -1,5 +1,5 @@
 {
-	"name": "metal_grid",
+	"name": "slate_material",
 	"shader": "shaders/pbr_direct.shader",
 	
 	"textures": [

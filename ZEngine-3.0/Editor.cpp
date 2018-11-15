@@ -131,6 +131,9 @@ int main(int argc, char* argv[])
 	// This container will hold all of the GUI elements
 	Editor* editorContainer = new Editor();
 
+	auto mapManager = MapManager::GetInstance();
+	mapManager->SetCurrentMap(editorContainer->GetSelectedMap());
+
 	while (!display.CloseRequested())
 	{
 		// Reset the input manager (so the release function works)
