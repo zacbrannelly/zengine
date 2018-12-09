@@ -5,6 +5,7 @@
 
 #include "TransformInspector.h"
 #include "CameraInspector.h"
+#include "MeshRendererInspector.h"
 
 InspectorWindow::InspectorWindow(Editor* context) : GUIWindow("Inspector Window", 400, 1000, false)
 {
@@ -13,6 +14,7 @@ InspectorWindow::InspectorWindow(Editor* context) : GUIWindow("Inspector Window"
 	// Register the inspectors for components here
 	_inspectors[ObjectType::TRANSFORM] = new TransformInspector();
 	_inspectors[ObjectType::CAMERA] = new CameraInspector();
+	_inspectors[ObjectType::MESH_RENDERER] = new MeshRendererInspector();
 }
 
 Inspector* InspectorWindow::GetInspector(ObjectType type)
