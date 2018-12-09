@@ -4,6 +4,8 @@
 #include <ZEngine-Core/Map/Map.h>
 #include <ZEngine-Core/Map/Objects/Entity.h>
 #include <ZEngine-Core/Component/Transform.h>
+#include <ZEngine-Core/Audio/AudioSystem.h>
+#include <ZEngine-Core/Map/MapManager.h>
 
 #include "Editor.h"
 #include "TransformInspector.h"
@@ -15,6 +17,8 @@ MapView::MapView(Editor* editor) : GUIWindow("Map View", 1024, 850, false)
 {
 	_editor = editor;
 	_isPlaying = false;
+	_isPaused = false;
+	_previewMap = nullptr;
 
 	// We must create an entity (so we can transform the camera) and translate it back 10 units
 	_viewEntity = Factory::CreateInstance<Entity>("View Object", ObjectType::ENTITY);
@@ -47,6 +51,81 @@ MapView::MapView(Editor* editor) : GUIWindow("Map View", 1024, 850, false)
 	SetFlags(ImGuiWindowFlags_AlwaysAutoResize);
 }
 
+void MapView::Play()
+{
+	if (_isPlaying)
+		return;
+
+	// Ensure sound will work
+	auto audioSys = AudioSystem::GetInstance();
+	audioSys->Resume(-1);
+	audioSys->ResumeMusic();
+	
+	// If paused, resume the game
+	if (_isPaused)
+	{
+		_isPaused = false;
+		_isPlaying = true;
+		return;
+	}
+
+	_isPlaying = true;
+
+	// Copy the original map (so we don't break the original during play)
+	_originalMap = _editor->GetSelectedMap();
+	_previewMap = Factory::Copy<Map>(_originalMap->GetName(), _originalMap);
+
+	auto mapManager = MapManager::GetInstance();
+
+	// Set the copy as the "selected" map (so both the editor and scripting engine know)
+	mapManager->SetCurrentMap(_previewMap);
+	_editor->SetSelectedMap(_previewMap);
+
+}
+
+void MapView::Pause()
+{
+	if (_isPaused)
+	{
+		Play();
+		return;
+	}
+
+	_isPlaying = false;
+	_isPaused = true;
+
+	// Pause all sound
+	auto audioSys = AudioSystem::GetInstance();
+	audioSys->Pause(-1);
+	audioSys->PauseMusic();
+}
+
+void MapView::Stop()
+{
+	if (!_isPlaying && !_isPaused)
+		return;
+
+	_isPlaying = false;
+	_isPaused = false;
+
+	// Delete the copy map
+	delete _previewMap;
+	_previewMap = nullptr;
+
+	// Set selected entity to null so the inspector doesnt freak ouot
+	_editor->SetSelectedEntity(nullptr);
+
+	// Put the original map back as "selected"
+	auto mapManager = MapManager::GetInstance();
+	mapManager->SetCurrentMap(_originalMap);
+	_editor->SetSelectedMap(_originalMap);
+
+	// Stop all audio
+	auto audioSys = AudioSystem::GetInstance();
+	audioSys->Stop();
+	audioSys->StopMusic();
+}
+
 void MapView::ProcessInput()
 {
 }
@@ -69,19 +148,30 @@ void MapView::RenderInWindow()
 
 		if (startPlaying)
 		{
-			_isPlaying = !_isPlaying;
+			Play();
 		}
-
+		
 		ImGui::SameLine();
-		if (ImGui::Button("Pause", ImVec2(80, 0)))
-		{
 
+		bool startPause = false;
+		if (_isPaused)
+		{
+			ImGui::PushStyleColor(0, ImVec4(1, 0, 0, 1));
+			startPause = ImGui::Button("Pause", ImVec2(80, 0));
+			ImGui::PopStyleColor();
 		}
+		else
+		{
+			startPause = ImGui::Button("Pause", ImVec2(80, 0));
+		}
+
+		if (startPause)
+			Pause();
 
 		ImGui::SameLine();
 		if (ImGui::Button("Stop", ImVec2(80, 0)))
 		{
-			_isPlaying = false;
+			Stop();
 		}
 	}
 
