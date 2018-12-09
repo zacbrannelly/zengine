@@ -95,6 +95,19 @@ bool AssetCatalog::GetAssetPathFromID(int id, std::string& path, ObjectType& typ
 	return false;
 }
 
+std::vector<CatalogEntry> AssetCatalog::GetAssetsByType(ObjectType type)
+{
+	std::vector<CatalogEntry> results;
+
+	for (auto& entry : _catalog)
+	{
+		if (entry.type == type)
+			results.push_back(entry);
+	}
+
+	return results;
+}
+
 const std::vector<CatalogEntry>& AssetCatalog::GetCatalogList() const
 {
 	return _catalog;

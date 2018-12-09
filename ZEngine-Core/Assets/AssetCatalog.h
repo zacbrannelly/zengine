@@ -24,6 +24,7 @@ public:
 
 	void RegisterAsset(Asset* asset);
 	bool GetAssetPathFromID(int id, std::string& path, ObjectType& type);
+	std::vector<CatalogEntry> GetAssetsByType(ObjectType type);
 
 	const std::vector<CatalogEntry>& GetCatalogList() const;
 
