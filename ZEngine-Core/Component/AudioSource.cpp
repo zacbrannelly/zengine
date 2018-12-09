@@ -7,6 +7,9 @@ using namespace std;
 AudioSource::AudioSource() : Component("AudioSource", AUDIO_SOURCE)
 {
 	_audioAsset = nullptr;
+	_playingChannel = -1;
+	_autoPlay = false;
+	_hasAutoPlayed = false;
 }
 
 void AudioSource::SetAudio(AudioAsset* asset)
@@ -70,18 +73,20 @@ void AudioSource::Stop()
 
 void AudioSource::Init()
 {
-	if (IsAutoPlay())
-		Play();
+
 }
 
 void AudioSource::Update()
 {
-
+	if (!_hasAutoPlayed && IsAutoPlay())
+	{
+		Play();
+		_hasAutoPlayed = true;
+	}
 }
 
 void AudioSource::Render(int viewId)
 {
-
 }
 
 AudioSource::~AudioSource()

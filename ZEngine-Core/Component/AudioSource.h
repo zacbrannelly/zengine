@@ -27,6 +27,7 @@ public:
 private:
 	AudioAsset* _audioAsset;
 	bool _autoPlay;
+	bool _hasAutoPlayed;
 	int _playingChannel;
 
 public:
