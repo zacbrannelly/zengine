@@ -18,6 +18,7 @@ GameView::GameView(Editor* editor) : GUIWindow("Game View", 1024, 600, false)
 
 	// Make image linked to the view camera then add it as a GUI element
 	_viewImage = new GUIImage(_mainCamera->GetRenderTexture(), _mainCamera->GetViewportWidth(), _mainCamera->GetViewportHeight());
+	_viewImage->FlipVertically();
 	Add(_viewImage);
 	
 	SetFlags(ImGuiWindowFlags_AlwaysAutoResize);

@@ -13,6 +13,9 @@ public:
 	float GetWidth() const;
 	float GetHeight() const;
 
+	void FlipVertically();
+	bool IsFlippedVertically() const;
+
 	void SetTexture(bgfx::TextureHandle texture);
 	bgfx::TextureHandle GetTexture() const;
 
@@ -20,6 +23,7 @@ public:
 
 private:
 	bgfx::TextureHandle _texture;
+	bool _flippedVertically;
 	float _width;
 	float _height;
 };

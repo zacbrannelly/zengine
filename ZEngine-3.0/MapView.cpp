@@ -34,6 +34,7 @@ MapView::MapView(Editor* editor) : GUIWindow("Map View", 1024, 850, false)
 
 	// Make image linked to the view camera then add it as a GUI element
 	_viewImage = new GUIImage(_viewCamera->GetRenderTexture(), _viewCamera->GetViewportWidth(), _viewCamera->GetViewportHeight());
+	_viewImage->FlipVertically();
 	Add(_viewImage);
 
 	_transformInspector = new TransformInspector();
