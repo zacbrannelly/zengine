@@ -100,12 +100,13 @@ ZObject* AudioSource::CreateInstance(string name, ObjectType type)
 
 ZObject* AudioSource::Copy(string name, ZObject* object)
 {
-	if (object->GetType() == AUDIO_SOURCE)
+	if (object == nullptr || object->GetType() != AUDIO_SOURCE)
 		return nullptr;
 
 	auto source = static_cast<AudioSource*>(object);
 	auto copy = new AudioSource();
-
+	
+	copy->SetAutoPlay(source->IsAutoPlay());
 	copy->SetAudio(source->GetAudio());
 
 	return copy;

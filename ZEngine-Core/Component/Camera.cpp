@@ -229,9 +229,9 @@ ZObject* Camera::Copy(string name, ZObject* object)
 	copy->SetFieldOfView(source->GetFieldOfView());
 	copy->SetOrthoSize(source->GetOrthoSize());
 	copy->SetProjectionMode(source->GetProjectionMode());
-	copy->SetRenderToTexture(source->IsRenderingToTexture());
-	copy->SetViewId(source->GetViewId());
 	copy->SetViewport(source->GetViewportX(), source->GetViewportY(), source->GetViewportWidth(), source->GetViewportHeight());
+	copy->SetViewId(source->GetViewId());
+	copy->SetRenderToTexture(source->IsRenderingToTexture());
 
 	return copy;
 }
