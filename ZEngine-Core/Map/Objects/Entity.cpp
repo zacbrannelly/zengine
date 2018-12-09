@@ -22,6 +22,9 @@ ZObject* Entity::CreateInstance(string name, ObjectType type)
 
 ZObject* Entity::Copy(string name, ZObject* object)
 {
+	if (object == nullptr || object->GetType() != ENTITY)
+		return nullptr;
+
 	auto source = static_cast<Entity*>(object);
 	auto result = new Entity(name);
 
@@ -31,6 +34,15 @@ ZObject* Entity::Copy(string name, ZObject* object)
 
 		if (copy != nullptr)
 			result->AddComponent(copy, true);
+	}
+
+	// Recursively copy children of the entity 
+	for (auto child : source->GetTransform()->GetChildren())
+	{
+		auto childSource = child->GetOwner();
+		auto childResult = Factory::Copy<Entity>(childSource->GetName(), childSource);
+
+		childResult->GetTransform()->SetParent(result->GetTransform());
 	}
 
 	return result;

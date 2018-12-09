@@ -3,6 +3,7 @@
 #include "../Component/Camera.h"
 #include "../Component/Transform.h"
 #include "../Scripting/ScriptSystem.h"
+#include "../Misc/Factory.h"
 
 #include <algorithm>
 
@@ -15,6 +16,27 @@ Map::Map(std::string name) : ZObject(name, ObjectType::MAP)
 ZObject* Map::CreateInstance(std::string name, ObjectType type)
 {
 	return new Map(name);
+}
+
+ZObject* Map::Copy(std::string name, ZObject* object)
+{
+	if (object == nullptr || object->GetType() != MAP)
+		return nullptr;
+
+	auto source = static_cast<Map*>(object);
+	auto newMap = new Map(name);
+
+	for (auto entity : source->GetEntities())
+	{
+		// Only copy root objects since the children get copied (by Entity's Copy func) and added (by Map's Add func).
+		if (entity->GetTransform()->GetParent() == nullptr)
+		{
+			auto copyEntity = Factory::Copy<Entity>(entity->GetName(), entity);
+			newMap->Add(copyEntity);
+		}
+	}
+
+	return newMap;
 }
 
 void Map::Init()
@@ -46,6 +68,15 @@ void Map::Add(Entity* entity)
 		{
 			if (camera != nullptr)
 				_cameras.push_back(static_cast<Camera*>(camera));
+		}
+
+		// Recursively add child entities to the map too
+		if (entity->GetTransform()->GetChildren().size() > 0)
+		{
+			for (auto child : entity->GetTransform()->GetChildren())
+			{
+				Add(child->GetOwner());
+			}
 		}
 	}
 }

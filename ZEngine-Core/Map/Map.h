@@ -31,6 +31,7 @@ public:
 	void RenderWorld(int viewId);
 
 	static ZObject* CreateInstance(std::string name, ObjectType type);
+	static ZObject* Copy(std::string name, ZObject* object);
 	static v8::Global<v8::FunctionTemplate> GetTemplate(v8::Isolate* isolate);
 private:
 	std::vector<Entity*> _entities;

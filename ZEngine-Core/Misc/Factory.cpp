@@ -41,6 +41,7 @@ void Factory::Init()
 	RegisterType(ObjectType::TEST_RENDERER, &TestRenderer::CreateInstance);
 
 	// Register copy instatiators (real-time copying)
+	RegisterCopyType(ObjectType::MAP, &Map::Copy);
 	RegisterCopyType(ObjectType::ENTITY, &Entity::Copy);
 	RegisterCopyType(ObjectType::TRANSFORM, &Transform::Copy);
 	RegisterCopyType(ObjectType::MESH_RENDERER, &MeshRenderer::Copy);
