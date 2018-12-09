@@ -16,6 +16,7 @@ public:
 	Mesh* GetMesh() const;
 
 	void SetMaterial(Material* material);
+	void SetMaterial(Material* material, int index);
 	Material* GetMaterial() const;
 
 	void SetMaterials(const std::vector<Material*>& materials);

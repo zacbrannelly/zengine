@@ -32,6 +32,18 @@ void MeshRenderer::SetMaterial(Material* material)
 	}
 }
 
+void MeshRenderer::SetMaterial(Material* material, int index)
+{
+	if (index < 0 || index >= _materials.size())
+	{
+		_materials.push_back(material);
+	}
+	else
+	{
+		_materials[index] = material;
+	}
+}
+
 Material* MeshRenderer::GetMaterial() const
 {
 	return _materials.size() > 0 ? _materials.front() : nullptr;
