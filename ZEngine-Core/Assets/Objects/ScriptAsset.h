@@ -11,6 +11,7 @@ public:
 	~ScriptAsset();
 
 	bool Load(std::string path);
+	void Release() override;
 	
 	Script* GetScript() const;
 

@@ -97,6 +97,7 @@ Entity* MapAsset::LoadEntity(json::object_t& object)
 		}
 	}
 
+	// Recursively load all of the children entities
 	auto it = object.find("children");
 	if (it != object.end() && (*it).second.is_array())
 	{
@@ -108,6 +109,7 @@ Entity* MapAsset::LoadEntity(json::object_t& object)
 
 				if (childEntity != nullptr)
 				{
+					// Set the parent of the entity 
 					auto transform = static_cast<Transform*>(childEntity->GetComponent(TRANSFORM));
 					transform->SetParent(entity->GetTransform());
 
@@ -123,6 +125,12 @@ Entity* MapAsset::LoadEntity(json::object_t& object)
 Map* MapAsset::GetMap() const
 {
 	return _map;
+}
+
+void MapAsset::Release()
+{
+	if (_map != nullptr)
+		delete _map;
 }
 
 MapAsset::~MapAsset()

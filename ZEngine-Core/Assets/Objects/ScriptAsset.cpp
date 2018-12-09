@@ -33,8 +33,12 @@ Script* ScriptAsset::GetScript() const
 	return _script;
 }
 
-ScriptAsset::~ScriptAsset()
+void ScriptAsset::Release()
 {
 	if (_script != nullptr)
 		delete _script;
+}
+
+ScriptAsset::~ScriptAsset()
+{
 }

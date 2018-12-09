@@ -17,6 +17,7 @@ public:
 	~ModelAsset();
 
 	bool Load(std::string path) override;
+	void Release() override;
 
 	Mesh* GetMesh() const;
 	const std::vector<Material*> GetMaterials();

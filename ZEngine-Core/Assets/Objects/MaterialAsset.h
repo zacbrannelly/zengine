@@ -13,6 +13,7 @@ public:
 	~MaterialAsset();
 
 	bool Load(std::string path) override;
+	void Release() override;
 	Material* GetMaterial() const;
 
 	static Asset* CreateInstance(std::string name);

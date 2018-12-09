@@ -14,6 +14,7 @@ public:
 	~MapAsset();
 
 	bool Load(std::string path) override;
+	void Release() override;
 
 	Map* GetMap() const;
 

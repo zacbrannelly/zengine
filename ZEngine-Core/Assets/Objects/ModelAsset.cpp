@@ -33,6 +33,7 @@ bool ModelAsset::Load(std::string path)
 	}
 
 	_directory = path.substr(0, path.find_last_of('/'));
+	SetPath(path);
 
 	if (!scene->HasMeshes())
 	{
@@ -270,6 +271,16 @@ std::vector<Texture2D*> ModelAsset::LoadTextures(const aiMaterial* mat, aiTextur
 	}
 
 	return textures;
+}
+
+void ModelAsset::Release()
+{
+	delete _mesh;
+
+	for (auto& material : _materials)
+		delete material;
+
+	_materials.clear();
 }
 
 ModelAsset::~ModelAsset()

@@ -251,6 +251,12 @@ Material* MaterialAsset::GetMaterial() const
 	return _material;
 }
 
+void MaterialAsset::Release()
+{
+	if (_material != nullptr)
+		delete _material;
+}
+
 MaterialAsset::~MaterialAsset()
 {
 }
