@@ -36,10 +36,12 @@ ImGuiWindowFlags GUIWindow::GetFlags() const
 
 void GUIWindow::RenderElement()
 {
+	bool shouldRender = false;
+
 	if (_isChild)
-		ImGui::BeginChild(_title.c_str());
+		shouldRender = ImGui::BeginChild(_title.c_str());
 	else
-		ImGui::Begin(_title.c_str(), (bool*)0, _flags);
+		shouldRender = ImGui::Begin(_title.c_str(), (bool*)0, _flags);
 
 	ImGui::SetWindowSize(_title.c_str(), ImVec2(_width, _height), _shouldSetSize ? ImGuiCond_Always : ImGuiCond_FirstUseEver);
 	if (_shouldSetSize)
@@ -49,9 +51,12 @@ void GUIWindow::RenderElement()
 	_width = windowSize.x;
 	_height = windowSize.y;
 
-	Container::RenderElement();
-	RenderInWindow();
-	ProcessInput();
+	if (shouldRender)
+	{
+		Container::RenderElement();
+		RenderInWindow();
+		ProcessInput();
+	}
 
 	if (_isChild)
 		ImGui::EndChild();

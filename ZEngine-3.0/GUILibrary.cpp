@@ -3,6 +3,7 @@
 #include "imgui-includes.h"
 #include <ZEngine-Core\Display\Display.h>
 #include <ZEngine-Core\Input\InputManager.h>
+#include <ZEngine-Core\Rendering\Graphics.h>
 
 void GUILibrary::Init(Display* display)
 {
@@ -27,6 +28,17 @@ void GUILibrary::NewFrame()
 {
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
+
+	// Get the display size from ImGui & subtract from height (to account for the main menu)
+	auto displaySize = ImGui::GetIO().DisplaySize;
+	displaySize.y -= 25;
+
+	// Create a dockspace window that is the size of the display always 
+	ImGui::SetNextWindowPos(ImVec2(0, 25));
+	ImGui::SetNextWindowSize(displaySize);
+	ImGui::Begin("MainWindow", (bool*)0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoDecoration);
+	ImGui::DockSpace(ImGui::GetID("MyDockSpace"), ImVec2(0, 0), ImGuiDockNodeFlags_PassthruDockspace);
+	ImGui::End();
 }
 
 void GUILibrary::EndFrame()
