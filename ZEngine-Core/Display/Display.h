@@ -28,11 +28,34 @@ public:
 	void SetHeight(int height);
 	int GetHeight() const;
 
+	void SetDecorated(bool isDecorated);
+	bool IsDecorated() const;
+
+	void SetResizable(bool isResizable);
+	bool IsResizable() const;
+
+	void SetVisible(bool isVisible);
+	bool IsVisible() const;
+
+	void SetFullscreen(bool isFullscreen);
+	bool IsFullscreen() const;
+
+	void SetMaximizeOnCreation(bool willMaximize);
+	bool WillMaximizeOnCreation() const;
+
 	bool CloseRequested() const;
+	bool IsInitialized() const;
 private:
 	int _width, _height;
 	GLFWwindow* _handle;
 	std::string _title;
+
+	bool _isInitialized;
+	bool _isDecorated;
+	bool _isResizable;
+	bool _isVisible;
+	bool _isFullscreen;
+	bool _maximize;
 
 	static void CallbackWindowResize(GLFWwindow* handle, int newWidth, int newHeight);
 };

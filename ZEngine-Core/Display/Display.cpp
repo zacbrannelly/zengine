@@ -7,7 +7,12 @@
 
 Display::Display(std::string title, int width, int height) : _title(title), _width(width), _height(height), _handle(nullptr)
 {
-
+	_isInitialized = false;
+	_isFullscreen = false;
+	_isDecorated = true;
+	_isResizable = true;
+	_isVisible = true;
+	_maximize = false;
 }
 
 bool Display::Init()
@@ -20,7 +25,19 @@ bool Display::Init()
 
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
-	_handle = glfwCreateWindow(_width, _height, _title.c_str(), nullptr, nullptr);
+	glfwWindowHint(GLFW_DECORATED, _isDecorated ? GLFW_TRUE : GLFW_FALSE);
+	glfwWindowHint(GLFW_RESIZABLE, _isResizable ? GLFW_TRUE : GLFW_FALSE);
+	glfwWindowHint(GLFW_VISIBLE, _isVisible ? GLFW_TRUE : GLFW_FALSE);
+	glfwWindowHint(GLFW_MAXIMIZED, _maximize ? GLFW_TRUE : GLFW_FALSE);
+
+	GLFWmonitor* monitor = nullptr;
+
+	if (_isFullscreen)
+	{
+		monitor = glfwGetPrimaryMonitor();
+	}
+
+	_handle = glfwCreateWindow(_width, _height, _title.c_str(), monitor, nullptr);
 
 	if (_handle == nullptr)
 	{
@@ -30,6 +47,8 @@ bool Display::Init()
 
 	glfwSetWindowUserPointer(_handle, this);
 	glfwSetWindowSizeCallback(_handle, &Display::CallbackWindowResize);
+
+	_isInitialized = true;
 
 	return true;
 }
@@ -42,6 +61,11 @@ void Display::Update()
 bool Display::CloseRequested() const
 {
 	return _handle != nullptr ? glfwWindowShouldClose(_handle) : false;
+}
+
+bool Display::IsInitialized() const
+{
+	return _isInitialized;
 }
 
 void Display::Shutdown()
@@ -94,6 +118,72 @@ void Display::SetHeight(int height)
 int Display::GetHeight() const
 {
 	return _height;
+}
+
+void Display::SetFullscreen(bool isFullscreen)
+{
+	if (_isInitialized)
+	{
+		if (isFullscreen && !_isFullscreen)
+			glfwSetWindowMonitor(_handle, glfwGetPrimaryMonitor(), 0, 0, _width, _height, GLFW_DONT_CARE);
+		else if (!isFullscreen && _isFullscreen)
+			glfwSetWindowMonitor(_handle, nullptr, 0, 0, _width, _height, GLFW_DONT_CARE);
+	}
+
+	_isFullscreen = isFullscreen;
+}
+
+bool Display::IsFullscreen() const
+{
+	return _isFullscreen;
+}
+
+void Display::SetDecorated(bool isDecorated)
+{
+	_isDecorated = isDecorated;
+}
+
+bool Display::IsDecorated() const
+{
+	return _isDecorated;
+}
+
+void Display::SetVisible(bool isVisible)
+{
+	if (_isInitialized)
+	{
+		if (isVisible && !_isVisible)
+			glfwShowWindow(_handle);
+		else if (!isVisible && _isVisible)
+			glfwHideWindow(_handle);
+	}
+
+	_isVisible = isVisible;
+}
+
+bool Display::IsVisible() const
+{
+	return _isVisible;
+}
+
+void Display::SetResizable(bool isResizable)
+{
+	_isResizable = isResizable;
+}
+
+bool Display::IsResizable() const
+{
+	return _isResizable;
+}
+
+void Display::SetMaximizeOnCreation(bool willMaximize)
+{
+	_maximize = willMaximize;
+}
+
+bool Display::WillMaximizeOnCreation() const
+{
+	return _maximize;
 }
 
 void* Display::GetWin32Handle() const
