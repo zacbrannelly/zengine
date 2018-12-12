@@ -7,7 +7,7 @@ MainMenuBar::MainMenuBar()
 
 void MainMenuBar::RenderElement()
 {
-	ImGui::BeginMainMenuBar();
+	ImGui::BeginMenuBar();
 
 	if (ImGui::BeginMenu("File"))
 	{
@@ -35,7 +35,7 @@ void MainMenuBar::RenderElement()
 		ImGui::EndMenu();
 	}
 
-	ImGui::EndMainMenuBar();
+	ImGui::EndMenuBar();
 }
 
 

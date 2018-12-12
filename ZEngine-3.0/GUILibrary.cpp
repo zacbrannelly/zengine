@@ -29,20 +29,20 @@ void GUILibrary::NewFrame()
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
-	// Get the display size from ImGui & subtract from height (to account for the main menu)
+	// Get the display size from ImGui
 	auto displaySize = ImGui::GetIO().DisplaySize;
-	displaySize.y -= 25;
 
 	// Create a dockspace window that is the size of the display always 
-	ImGui::SetNextWindowPos(ImVec2(0, 25));
+	ImGui::SetNextWindowPos(ImVec2(0, 0));
 	ImGui::SetNextWindowSize(displaySize);
 	ImGui::Begin("MainWindow", (bool*)0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoDecoration);
 	ImGui::DockSpace(ImGui::GetID("MyDockSpace"), ImVec2(0, 0), ImGuiDockNodeFlags_PassthruDockspace);
-	ImGui::End();
 }
 
 void GUILibrary::EndFrame()
 {
+	ImGui::End();
+
 	ImGui::EndFrame();
 	imguiEndFrame();
 }
