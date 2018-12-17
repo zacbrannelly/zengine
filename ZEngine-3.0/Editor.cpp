@@ -103,19 +103,6 @@ Editor::~Editor()
 
 int main(int argc, char* argv[])
 {
-
-	/*Directory dir("scripts\\");
-
-	auto exists = dir.Exists();
-	auto empty = dir.IsEmpty();
-	auto fileExists = dir.FileExists("foodderp.js");
-	auto file = dir.FindFile("food.js");
-	auto files = dir.GetAllFiles();
-	auto jsFiles = dir.GetAllFilesWithExtention("js");
-	auto directories = dir.GetAllDirectories();
-
-	return 0;*/
-
 	// Initialize the factory (register the types)
 	Factory::Init();
 
