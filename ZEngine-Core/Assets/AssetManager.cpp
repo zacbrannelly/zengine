@@ -73,6 +73,11 @@ Asset* AssetManager::FindAssetFromPath(std::string path)
 	return it != _assets.end() ? *it : nullptr;
 }
 
+const std::vector<Asset*>& AssetManager::GetAssets() const
+{
+	return _assets;
+}
+
 bool AssetManager::ReloadAsset(std::string name)
 {
 	auto asset = GetAsset<Asset>(name);

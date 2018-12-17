@@ -15,7 +15,8 @@ Asset* ScriptAsset::CreateInstance(string name)
 
 bool ScriptAsset::Load(string path)
 {
-	_script = new Script(GetName());
+	if (_script == nullptr)
+			_script = new Script(GetName());
 
 	if (_script->CompileFromFile(path))
 	{

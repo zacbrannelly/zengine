@@ -40,6 +40,8 @@ public:
 		return nullptr;
 	}
 
+	const std::vector<Asset*>& GetAssets() const;
+
 private:
 	std::map<ObjectType, Asset*(*)(std::string)> _assetConstructors;
 	std::vector<Asset*> _assets;
