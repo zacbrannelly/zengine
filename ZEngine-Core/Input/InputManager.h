@@ -21,7 +21,9 @@ public:
 	void RegisterAxis(std::string name, ButtonCode code);
 
 	bool GetButtonDown(ButtonCode code);
+	bool GetButtonPressed(ButtonCode code);
 	bool GetButtonUp(ButtonCode code);
+	bool ButtonHasModifier(ButtonCode button, ButtonCode mod);
 	float GetAxis(std::string name);
 	float GetAxisRaw(std::string name);
 
@@ -38,7 +40,7 @@ public:
 	void SetupScriptBindings(v8::Isolate* isolate, v8::Local<v8::Object>& global);
 
 private:
-	void UpdateButton(ButtonCode code, int action);
+	void UpdateButton(ButtonCode code, int action, int mods);
 
 	static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	static void MousePositionCallback(GLFWwindow* window, double x, double y);
@@ -46,7 +48,9 @@ private:
 
 	glm::vec2 _mousePos;
 	std::map<ButtonCode, bool> _buttonDown;
+	std::map<ButtonCode, bool> _prevButtonDown;
 	std::map<ButtonCode, bool> _buttonUp;
+	std::map<ButtonCode, int> _buttonModifiers;
 	std::map<ButtonCode, float> _buttonAxis;
 	std::map<std::string, ButtonCode> _axisMapping;
 

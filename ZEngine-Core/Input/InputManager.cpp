@@ -14,6 +14,11 @@ void InputManager::Init(Display* display)
 
 void InputManager::Reset()
 {
+	for (auto& pair : _prevButtonDown)
+	{
+		pair.second = _buttonDown[pair.first];
+	}
+
 	for (auto& pair : _buttonUp)
 	{
 		pair.second = false;
@@ -67,12 +72,37 @@ bool InputManager::GetButtonDown(ButtonCode code)
 	return _buttonDown[code];
 }
 
+bool InputManager::GetButtonPressed(ButtonCode code)
+{
+	if (_buttonDown.find(code) == _buttonDown.end())
+	{
+		return false;
+	}
+
+	if (_prevButtonDown.find(code) == _prevButtonDown.end())
+	{
+		return false;
+	}
+
+	return _buttonDown[code] && !_prevButtonDown[code];
+}
+
 bool InputManager::GetButtonUp(ButtonCode code)
 {
 	if (_buttonUp.find(code) == _buttonUp.end())
 		_buttonUp[code] = false;
 
 	return _buttonUp[code];
+}
+
+bool InputManager::ButtonHasModifier(ButtonCode button, ButtonCode mod)
+{
+	if (_buttonModifiers.find(button) != _buttonModifiers.end())
+	{
+		return _buttonModifiers[button] & mod;
+	}
+
+	return false;
 }
 
 glm::vec2 InputManager::GetMousePos() const
@@ -119,30 +149,42 @@ void InputManager::RemoveMouseButtonCallback(GLFWmousebuttonfun cb)
 		_mouseButtonCallbacks.erase(it);
 }
 
-void InputManager::UpdateButton(ButtonCode code, int action)
+void InputManager::UpdateButton(ButtonCode code, int action, int mods)
 {
 	if (action == GLFW_PRESS)
 	{
-		_buttonDown[(ButtonCode)code] = true;
+		if (_buttonDown.find(code) != _buttonDown.end())
+		{
+			_prevButtonDown[code] = _buttonDown[code];
+		}
+
+		_buttonDown[code] = true;
 
 		// TODO: Smooth the values
-		_buttonAxis[(ButtonCode)code] = 1.0f;
+		_buttonAxis[code] = 1.0f;
 	}
 	else if (action == GLFW_RELEASE)
 	{
-		_buttonDown[(ButtonCode)code] = false;
-		_buttonUp[(ButtonCode)code] = true;
+		if (_buttonDown.find(code) != _buttonDown.end())
+		{
+			_prevButtonDown[code] = _buttonDown[code];
+		}
+
+		_buttonDown[code] = false;
+		_buttonUp[code] = true;
 
 		// TODO: Smooth the values
-		_buttonAxis[(ButtonCode)code] = 0.0f;
+		_buttonAxis[code] = 0.0f;
 	}
+
+	_buttonModifiers[code] = mods;
 }
 
 void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	// Update the internal state
 	auto instance = InputManager::GetInstance();
-	instance->UpdateButton((ButtonCode)key, action);
+	instance->UpdateButton((ButtonCode)key, action, mods);
 
 	// Call registered callbacks
 	for (auto callback : instance->_keyCallbacks)
@@ -170,7 +212,7 @@ void InputManager::MouseButtonCallback(GLFWwindow* window, int button, int actio
 {
 	// Update the internal state
 	auto instance = InputManager::GetInstance();
-	instance->UpdateButton((ButtonCode)button, action);
+	instance->UpdateButton((ButtonCode)button, action, mods);
 
 	// Call registered callbacks
 	for (auto callback : instance->_mouseButtonCallbacks)
@@ -222,9 +264,26 @@ void InputManager_GetButtonDown(const v8::FunctionCallbackInfo<v8::Value>& info)
 	info.GetReturnValue().Set(input->GetButtonDown(code));
 }
 
-void InputManager_GetButtonUp(const v8::FunctionCallbackInfo<v8::Value>& info)
+void InputManager_ButtonHasModifier(const v8::FunctionCallbackInfo<v8::Value>& info)
 {
+	if (info.Length() != 2 || !info[0]->IsInt32() || !info[1]->IsInt32())
+	{
+		info.GetReturnValue().Set(false);
+		return;
+	}
 
+	auto input = InputManager::GetInstance();
+	auto sys = ScriptSystem::GetInstance();
+
+	// Extract the codes from the args
+	auto button = (ButtonCode)info[0]->ToInt32(info.GetIsolate())->Int32Value(sys->GetContext()->GetLocal()).ToChecked();
+	auto mod = (ButtonCode)info[1]->ToInt32(info.GetIsolate())->Int32Value(sys->GetContext()->GetLocal()).ToChecked();
+
+	info.GetReturnValue().Set(input->ButtonHasModifier(button, mod));
+}
+
+void InputManager_GetButtonPressed(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
 	if (info.Length() != 1 || !info[0]->IsInt32())
 	{
 		info.GetReturnValue().Set(false);
@@ -234,7 +293,24 @@ void InputManager_GetButtonUp(const v8::FunctionCallbackInfo<v8::Value>& info)
 	auto input = InputManager::GetInstance();
 	auto sys = ScriptSystem::GetInstance();
 
-	// Extract the code form the args
+	// Extract the code frpm the args
+	auto code = (ButtonCode)info[0]->ToInt32(info.GetIsolate())->Int32Value(sys->GetContext()->GetLocal()).ToChecked();
+
+	info.GetReturnValue().Set(input->GetButtonPressed(code));
+}
+
+void InputManager_GetButtonUp(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+	if (info.Length() != 1 || !info[0]->IsInt32())
+	{
+		info.GetReturnValue().Set(false);
+		return;
+	}
+
+	auto input = InputManager::GetInstance();
+	auto sys = ScriptSystem::GetInstance();
+
+	// Extract the code frpm the args
 	auto code = (ButtonCode)info[0]->ToInt32(info.GetIsolate())->Int32Value(sys->GetContext()->GetLocal()).ToChecked();
 
 	info.GetReturnValue().Set(input->GetButtonUp(code));
@@ -301,7 +377,9 @@ void InputManager::SetupScriptBindings(v8::Isolate* isolate, v8::Local<v8::Objec
 	auto inputObj = temp->NewInstance();
 
 	inputObj->Set(sys->GetString("GetButtonDown"), Function::New(isolate, InputManager_GetButtonDown));
+	inputObj->Set(sys->GetString("GetButtonPressed"), Function::New(isolate, InputManager_GetButtonPressed));
 	inputObj->Set(sys->GetString("GetButtonUp"), Function::New(isolate, InputManager_GetButtonUp));
+	inputObj->Set(sys->GetString("ButtonHasModifier"), Function::New(isolate, InputManager_ButtonHasModifier));
 
 	inputObj->Set(sys->GetString("RegisterAxis"), Function::New(isolate, InputManager_RegisterAxis));
 	inputObj->Set(sys->GetString("GetAxis"), Function::New(isolate, InputManager_GetAxis));
