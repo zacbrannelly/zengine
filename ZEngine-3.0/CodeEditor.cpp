@@ -3,6 +3,7 @@
 #include "imgui-includes.h"
 #include "File.h"
 
+#include <ZEngine-Core/Input/InputManager.h>
 #include <iostream>
 
 using namespace std;
@@ -60,6 +61,18 @@ void CodeEditor::ProcessInput()
 
 void CodeEditor::RenderInWindow()
 {
+	// Detect shortcuts in here
+	if (ImGui::IsWindowFocused())
+	{
+		auto input = InputManager::GetInstance();
+
+		// Save shortcut
+		if (input->GetButtonPressed(BUTTON_KEY_S) && input->ButtonHasModifier(BUTTON_KEY_S, BUTTON_MOD_CONTROL))
+		{
+			Save();
+		}
+	}
+
 	if (ImGui::BeginMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
