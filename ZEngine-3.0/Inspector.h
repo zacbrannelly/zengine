@@ -13,6 +13,7 @@ public:
 	Component* GetValue() const;
 
 	virtual void RenderElement() = 0;
+	GUIElementType GetType();
 
 private:
 	Component* _value;

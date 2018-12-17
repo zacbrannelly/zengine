@@ -19,12 +19,12 @@ HeadComponent.prototype.Init = function()
 	this.body.push(this.owner);
 	
 	this.food = MapManager.currentMap.Find("Food").GetComponent("FoodComponent");
-}
+} 
 
 HeadComponent.prototype.Update = function()
 {
 	// Move according to input
-	if (Input.GetButtonDown(BUTTON_KEY_A))
+	if (Input.GetButtonDown(BUTTON_KEY_A)) 
 	{
 		this.velocity.x = -this.speed;
 		this.velocity.y = 0;

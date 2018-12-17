@@ -7,5 +7,6 @@ public:
 	~MainMenuBar();
 
 	void RenderElement() override;
+	GUIElementType GetType() override;
 };
 

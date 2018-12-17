@@ -1,5 +1,5 @@
 #include "Container.h"
-
+#include "GUIWindow.h"
 
 Container::Container()
 {
@@ -24,16 +24,40 @@ void Container::Remove(GUIElement* element)
 
 void Container::RenderElement()
 {
-	for (auto element : _elements)
+	std::vector<GUIElement*> killList;
+
+	for (int i = 0; i < _elements.size(); ++i)
 	{
-		if (element != nullptr)
+		if (_elements[i] != nullptr)
+		{
+			auto element = _elements[i];
+
 			element->RenderElement();
+
+			if (element->GetType() == GUI_TYPE_WINDOW || element->GetType() == GUI_TYPE_CODE_EDITOR)
+			{
+				auto window = static_cast<GUIWindow*>(element);
+
+				if (window->IsCloseRequested())
+				{
+					killList.push_back(window);
+				}
+			}
+		}
 	}
+
+	for (auto element : killList)
+		Remove(element);
 }
 
 const std::vector<GUIElement*>& Container::GetElements() const
 {
 	return _elements;
+}
+
+GUIElementType Container::GetType()
+{
+	return GUI_TYPE_CONTAINER;
 }
 
 Container::~Container()

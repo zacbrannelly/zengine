@@ -38,6 +38,10 @@ void MainMenuBar::RenderElement()
 	ImGui::EndMenuBar();
 }
 
+GUIElementType MainMenuBar::GetType()
+{
+	return GUI_TYPE_MAIN_MENU_BAR;
+}
 
 MainMenuBar::~MainMenuBar()
 {

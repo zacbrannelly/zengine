@@ -87,6 +87,24 @@
     <ClCompile Include="MeshRendererInspector.cpp">
       <Filter>Inspectors</Filter>
     </ClCompile>
+    <ClCompile Include="LogWindow.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="File.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="Directory.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetImporter.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetExplorer.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="UnsavedDialog.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\bgfx\3rdparty\dear-imgui\imgui_impl_glfw.h">
@@ -145,6 +163,24 @@
     </ClInclude>
     <ClInclude Include="MeshRendererInspector.h">
       <Filter>Inspectors</Filter>
+    </ClInclude>
+    <ClInclude Include="LogWindow.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="File.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="Directory.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetImporter.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetExplorer.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="UnsavedDialog.h">
+      <Filter>Windows</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

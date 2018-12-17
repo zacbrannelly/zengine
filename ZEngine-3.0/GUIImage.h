@@ -20,6 +20,7 @@ public:
 	bgfx::TextureHandle GetTexture() const;
 
 	void RenderElement() override;
+	GUIElementType GetType() override;
 
 private:
 	bgfx::TextureHandle _texture;

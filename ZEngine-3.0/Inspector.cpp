@@ -17,6 +17,11 @@ Component* Inspector::GetValue() const
 	return _value;
 }
 
+GUIElementType Inspector::GetType()
+{
+	return GUI_TYPE_INSPECTOR;
+}
+
 Inspector::~Inspector()
 {
 }

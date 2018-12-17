@@ -49,6 +49,11 @@ void GUIImage::RenderElement()
 	ImGui::Image(_texture, ImVec2(_width, _height), ImVec2(0, _flippedVertically ? 1 : 0), ImVec2(1, _flippedVertically ? 0 : 1));
 }
 
+GUIElementType GUIImage::GetType()
+{
+	return GUI_TYPE_IMAGE;
+}
+
 GUIImage::~GUIImage()
 {
 }

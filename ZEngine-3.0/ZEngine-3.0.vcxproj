@@ -152,23 +152,29 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\bgfx\3rdparty\dear-imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="AssetExplorer.cpp" />
+    <ClCompile Include="AssetImporter.cpp" />
     <ClCompile Include="CameraInspector.cpp" />
     <ClCompile Include="CodeEditor.cpp" />
     <ClCompile Include="Container.cpp" />
+    <ClCompile Include="Directory.cpp" />
     <ClCompile Include="Editor.cpp" />
     <ClCompile Include="experimental.cpp" />
+    <ClCompile Include="File.cpp" />
     <ClCompile Include="GameView.cpp" />
     <ClCompile Include="GUIImage.cpp" />
     <ClCompile Include="GUILibrary.cpp" />
     <ClCompile Include="GUIWindow.cpp" />
     <ClCompile Include="Inspector.cpp" />
     <ClCompile Include="InspectorWindow.cpp" />
+    <ClCompile Include="LogWindow.cpp" />
     <ClCompile Include="MainMenuBar.cpp" />
     <ClCompile Include="MapView.cpp" />
     <ClCompile Include="MaterialWriter.cpp" />
     <ClCompile Include="MeshRendererInspector.cpp" />
     <ClCompile Include="SceneGraphWindow.cpp" />
     <ClCompile Include="TransformInspector.cpp" />
+    <ClCompile Include="UnsavedDialog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\bgfx\.build\projects\vs2017\bgfx.vcxproj">
@@ -192,10 +198,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\bgfx\3rdparty\dear-imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="AssetExplorer.h" />
+    <ClInclude Include="AssetImporter.h" />
     <ClInclude Include="CameraInspector.h" />
     <ClInclude Include="CodeEditor.h" />
     <ClInclude Include="Container.h" />
+    <ClInclude Include="Directory.h" />
     <ClInclude Include="Editor.h" />
+    <ClInclude Include="File.h" />
     <ClInclude Include="GameView.h" />
     <ClInclude Include="GUIElement.h" />
     <ClInclude Include="GUIImage.h" />
@@ -204,12 +214,14 @@
     <ClInclude Include="imgui-includes.h" />
     <ClInclude Include="Inspector.h" />
     <ClInclude Include="InspectorWindow.h" />
+    <ClInclude Include="LogWindow.h" />
     <ClInclude Include="MainMenuBar.h" />
     <ClInclude Include="MapView.h" />
     <ClInclude Include="MaterialWriter.h" />
     <ClInclude Include="MeshRendererInspector.h" />
     <ClInclude Include="SceneGraphWindow.h" />
     <ClInclude Include="TransformInspector.h" />
+    <ClInclude Include="UnsavedDialog.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

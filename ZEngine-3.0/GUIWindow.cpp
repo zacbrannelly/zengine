@@ -1,10 +1,17 @@
 #include "GUIWindow.h"
-#include "imgui-includes.h"
 
 using namespace std;
 
 GUIWindow::GUIWindow(string title, int width, int height, bool isChild) : _title(title), _width(width), _height(height), _isChild(isChild), _shouldSetSize(false), _flags(0)
 {
+	_closeRequested = false;
+	_data = nullptr;
+	_shouldFocus = false;
+}
+
+void GUIWindow::Focus()
+{
+	_shouldFocus = true;
 }
 
 void GUIWindow::SetSize(int width, int height)
@@ -34,14 +41,76 @@ ImGuiWindowFlags GUIWindow::GetFlags() const
 	return _flags;
 }
 
+const ImVec2& GUIWindow::GetContentSize() const
+{
+	return _contentSize;
+}
+
+int GUIWindow::GetContentWidth() const
+{
+	return _contentSize.x;
+}
+
+int GUIWindow::GetContentHeight() const
+{
+	return _contentSize.y;
+}
+
+void GUIWindow::SetTitle(std::string title)
+{
+	_title = title;
+}
+
+const std::string& GUIWindow::GetTitle() const
+{
+	return _title;
+}
+
+void GUIWindow::SetCloseRequested(bool requested)
+{
+	_closeRequested = requested;
+}
+
+bool GUIWindow::IsCloseRequested() const
+{
+	return _closeRequested;
+}
+
+void GUIWindow::SetUserData(void* data)
+{
+	_data = data;
+}
+
+void* GUIWindow::GetUserData() const
+{
+	return _data;
+}
+
+bool GUIWindow::AllowClose()
+{
+	return true;
+}
+
 void GUIWindow::RenderElement()
 {
 	bool shouldRender = false;
+	bool open = true;
+
+	if (_shouldFocus)
+	{
+		ImGui::SetNextWindowFocus();
+		_shouldFocus = false;
+	}
 
 	if (_isChild)
 		shouldRender = ImGui::BeginChild(_title.c_str());
 	else
-		shouldRender = ImGui::Begin(_title.c_str(), (bool*)0, _flags);
+		shouldRender = ImGui::Begin(_title.c_str(), &open, _flags);
+
+	if (!open && AllowClose())
+	{
+		_closeRequested = true;
+	}
 
 	ImGui::SetWindowSize(_title.c_str(), ImVec2(_width, _height), _shouldSetSize ? ImGuiCond_Always : ImGuiCond_FirstUseEver);
 	if (_shouldSetSize)
@@ -50,6 +119,8 @@ void GUIWindow::RenderElement()
 	auto windowSize = ImGui::GetWindowSize();
 	_width = windowSize.x;
 	_height = windowSize.y;
+
+	_contentSize = ImGui::GetContentRegionAvail();
 
 	if (shouldRender)
 	{
@@ -62,6 +133,11 @@ void GUIWindow::RenderElement()
 		ImGui::EndChild();
 	else
 		ImGui::End();
+}
+
+GUIElementType GUIWindow::GetType()
+{
+	return GUI_TYPE_WINDOW;
 }
 
 GUIWindow::~GUIWindow()

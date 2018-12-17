@@ -14,6 +14,7 @@ public:
 	const std::vector<GUIElement*>& GetElements() const;
 
 	virtual void RenderElement() override;
+	virtual GUIElementType GetType() override;
 
 private:
 	std::vector<GUIElement*> _elements;

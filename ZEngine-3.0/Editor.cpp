@@ -38,6 +38,9 @@
 #include "SceneGraphWindow.h"
 #include "GUIImage.h"
 #include "GameView.h"
+#include "AssetImporter.h"
+#include "AssetExplorer.h"
+#include "LogWindow.h"
 
 #include "imgui-includes.h"
 
@@ -61,6 +64,9 @@ Editor::Editor()
 	Add(new InspectorWindow(this));
 	Add(new SceneGraphWindow(this));
 	Add(new GameView(this));
+	Add(new AssetImporter());
+	Add(new AssetExplorer(this));
+	Add(new LogWindow());
 }
 
 void Editor::Update()
@@ -92,8 +98,24 @@ Editor::~Editor()
 {
 }
 
+#include "Directory.h"
+#include "File.h"
+
 int main(int argc, char* argv[])
 {
+
+	/*Directory dir("scripts\\");
+
+	auto exists = dir.Exists();
+	auto empty = dir.IsEmpty();
+	auto fileExists = dir.FileExists("foodderp.js");
+	auto file = dir.FindFile("food.js");
+	auto files = dir.GetAllFiles();
+	auto jsFiles = dir.GetAllFilesWithExtention("js");
+	auto directories = dir.GetAllDirectories();
+
+	return 0;*/
+
 	// Initialize the factory (register the types)
 	Factory::Init();
 
