@@ -21,7 +21,7 @@ GameView::GameView(Editor* editor) : GUIWindow("Game View", 1024, 600, false)
 	_viewImage->FlipVertically();
 	Add(_viewImage);
 	
-	SetFlags(ImGuiWindowFlags_AlwaysAutoResize);
+	SetFlags(ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_HorizontalScrollbar);
 }
 
 void GameView::ProcessInput()
