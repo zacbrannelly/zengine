@@ -44,6 +44,9 @@ MapView::MapView(Editor* editor) : GUIWindow("Map View", 1024, 850, false)
 	_viewImage->FlipVertically();
 	Add(_viewImage);
 
+	_aspectRatioW = 16;
+	_aspectRatioH = 9;
+
 	_transformInspector = new TransformInspector();
 	_cameraInspector = new CameraInspector();
 
@@ -148,6 +151,8 @@ void MapView::ProcessInput()
 
 void MapView::RenderInWindow()
 {
+	_viewImage->SetSize(GetContentWidth(), GetContentWidth() * (_aspectRatioH / _aspectRatioW));
+
 	// Playback buttons
 	{
 		bool startPlaying = false;
@@ -194,10 +199,13 @@ void MapView::RenderInWindow()
 	// Allow the user to change the size of the texture being rendered in the window
 	if (ImGui::CollapsingHeader("View Settings"))
 	{
-		float screenSize[] = { _viewImage->GetWidth(), _viewImage->GetHeight() };
-		if (ImGui::InputFloat2("Screen Size", screenSize, "%.1f"))
+		float aspectRatio[] = { _aspectRatioW, _aspectRatioH };
+		if (ImGui::InputFloat2("Aspect Ratio", aspectRatio, "%.1f"))
 		{
-			_viewImage->SetSize(screenSize[0], screenSize[1]);
+			_aspectRatioW = aspectRatio[0];
+			_aspectRatioH = aspectRatio[1];
+
+			_viewImage->SetSize(GetContentWidth(), GetContentWidth() * (_aspectRatioH / _aspectRatioW));
 		}
 	}
 

@@ -38,5 +38,6 @@ private:
 
 	bool _isPlaying;
 	bool _isPaused;
+	float _aspectRatioW, _aspectRatioH;
 };
 
