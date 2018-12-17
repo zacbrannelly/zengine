@@ -34,7 +34,7 @@ MapView::MapView(Editor* editor) : GUIWindow("Map View", 1024, 850, false)
 	// Set default values for the camera
 	_viewCamera->SetProjectionMode(Camera::ProjectionMode::ORTHOGRAPHIC);
 	_viewCamera->SetFieldOfView(60.0f);
-	_viewCamera->SetViewport(0, 0, 1024, 600);
+	_viewCamera->SetViewport(0, 0, 1920, 1080);
 	_viewCamera->SetClearColor(0, 0, 1, 1.0f);
 	_viewCamera->SetViewId(1);
 	_viewCamera->SetRenderToTexture(true);
