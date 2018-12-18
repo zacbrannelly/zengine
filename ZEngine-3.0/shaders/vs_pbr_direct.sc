@@ -1,7 +1,7 @@
 $input a_position, a_color0, a_normal, a_texcoord0
 $output v_color0, v_texcoord0, v_normal, v_fragPos
 
-#include "../../../src/bgfx_shader.sh"
+#include "lib/bgfx_shader.sh"
 
 void main()
 {

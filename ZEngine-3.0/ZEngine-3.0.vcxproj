@@ -192,6 +192,9 @@
     <ProjectReference Include="..\..\bgfx\.build\projects\vs2017\example-common.vcxproj">
       <Project>{a788128c-9356-0692-7cea-76b86857e2f6}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\bgfx\.build\projects\vs2017\libshaderc.vcxproj">
+      <Project>{c58443d6-eb42-42ea-b7e3-78f28f152ae8}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\ZEngine-Core\ZEngine-Core.vcxproj">
       <Project>{c1652a2e-cc29-4a3a-b35d-f081bdbbcbab}</Project>
     </ProjectReference>

@@ -43,6 +43,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "texturev", "..\bgfx\.build\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZEngine-Player", "ZEngine-Player\ZEngine-Player.vcxproj", "{D82C704D-8BEF-4EAC-A15E-2661A8A28848}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libshaderc", "..\bgfx\.build\projects\vs2017\libshaderc.vcxproj", "{C58443D6-EB42-42EA-B7E3-78F28F152AE8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -179,6 +181,14 @@ Global
 		{D82C704D-8BEF-4EAC-A15E-2661A8A28848}.Release|x64.Build.0 = Release|x64
 		{D82C704D-8BEF-4EAC-A15E-2661A8A28848}.Release|x86.ActiveCfg = Release|Win32
 		{D82C704D-8BEF-4EAC-A15E-2661A8A28848}.Release|x86.Build.0 = Release|Win32
+		{C58443D6-EB42-42EA-B7E3-78F28F152AE8}.Debug|x64.ActiveCfg = Debug|x64
+		{C58443D6-EB42-42EA-B7E3-78F28F152AE8}.Debug|x64.Build.0 = Debug|x64
+		{C58443D6-EB42-42EA-B7E3-78F28F152AE8}.Debug|x86.ActiveCfg = Debug|Win32
+		{C58443D6-EB42-42EA-B7E3-78F28F152AE8}.Debug|x86.Build.0 = Debug|Win32
+		{C58443D6-EB42-42EA-B7E3-78F28F152AE8}.Release|x64.ActiveCfg = Release|x64
+		{C58443D6-EB42-42EA-B7E3-78F28F152AE8}.Release|x64.Build.0 = Release|x64
+		{C58443D6-EB42-42EA-B7E3-78F28F152AE8}.Release|x86.ActiveCfg = Release|Win32
+		{C58443D6-EB42-42EA-B7E3-78F28F152AE8}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -197,6 +207,7 @@ Global
 		{FF44D591-6B24-542D-743C-DF03E09ABA8E} = {4BB3820B-F69B-4C5F-ADFE-9F01CCEEFF81}
 		{B9F8A108-A5C5-FC13-CEDE-EABBBA0A32A2} = {4BB3820B-F69B-4C5F-ADFE-9F01CCEEFF81}
 		{CCF8A108-B8C5-FC13-E1DE-EABBCD0A32A2} = {4BB3820B-F69B-4C5F-ADFE-9F01CCEEFF81}
+		{C58443D6-EB42-42EA-B7E3-78F28F152AE8} = {4BB3820B-F69B-4C5F-ADFE-9F01CCEEFF81}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F4F57804-8A4B-40EE-A2DC-F5761A320F6B}
