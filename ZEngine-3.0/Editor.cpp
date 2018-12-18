@@ -92,9 +92,6 @@ Editor::~Editor()
 {
 }
 
-#include "Directory.h"
-#include "File.h"
-
 int main(int argc, char* argv[])
 {
 	// Initialize the factory (register the types)
