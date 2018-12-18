@@ -6,6 +6,7 @@
 
 #include <ZEngine-Core/Assets/AssetManager.h>
 #include <ZEngine-Core/Assets/AssetCatalog.h>
+#include <ZEngine-Core/Assets/Objects/MapAsset.h>
 
 AssetExplorer::AssetExplorer(Editor* editor) : GUIWindow("Asset Explorer", 300, 150, false)
 {
@@ -33,30 +34,50 @@ void AssetExplorer::RenderAssetButtons(const std::vector<CatalogEntry>& items)
 
 			if (ImGui::IsMouseDoubleClicked(0))
 			{
-				// TODO: Launch asset specific actions
+				OpenAsset(item.path, (ObjectType)item.type);
+			}
+		}
+	}
+}
 
-				if (item.type == SCRIPT_ASSET)
+void AssetExplorer::OpenAsset(std::string path, ObjectType type)
+{
+	if (type == SCRIPT_ASSET)
+	{
+		bool alreadyOpen = false;
+
+		for (auto element : _editor->GetElements())
+		{
+			if (element->GetType() == GUI_TYPE_CODE_EDITOR)
+			{
+				auto editor = static_cast<CodeEditor*>(element);
+
+				if (editor->GetFile().GetPath() == path)
 				{
-					bool alreadyOpen = false;
-
-					for (auto element : _editor->GetElements())
-					{
-						if (element->GetType() == GUI_TYPE_CODE_EDITOR)
-						{
-							auto editor = static_cast<CodeEditor*>(element);
-
-							if (editor->GetFile().GetPath() == item.path)
-							{
-								alreadyOpen = true;
-								editor->Focus();
-								break;
-							}
-						}
-					}
-
-					if (!alreadyOpen)
-						_editor->Add(new CodeEditor(item.path));
+					alreadyOpen = true;
+					editor->Focus();
+					break;
 				}
+			}
+		}
+
+		if (!alreadyOpen)
+			_editor->Add(new CodeEditor(path));
+	}
+	else if (type == MAP_ASSET)
+	{
+		auto mapAsset = _manager->FindAssetFromPath(path);
+
+		if (mapAsset == nullptr)
+			mapAsset = _manager->LoadAsset("", path, MAP_ASSET);
+
+		if (mapAsset != nullptr)
+		{
+			auto map = mapAsset->Cast<MapAsset>()->GetMap();
+			
+			if (map != _editor->GetSelectedMap())
+			{
+				_editor->SetSelectedMap(map);
 			}
 		}
 	}

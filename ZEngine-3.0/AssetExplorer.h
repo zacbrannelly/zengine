@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <ZEngine-Core/Map/Objects/ZObject.h>
 
 #include "GUIWindow.h"
 
@@ -20,6 +21,7 @@ public:
 	void RenderInWindow() override;
 
 private:
+	void OpenAsset(std::string path, ObjectType type);
 	void RenderAssetButtons(const std::vector<CatalogEntry>& items);
 	
 	Editor* _editor;

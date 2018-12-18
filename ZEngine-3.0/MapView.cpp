@@ -35,7 +35,7 @@ MapView::MapView(Editor* editor) : GUIWindow("Map View", 1024, 850, false)
 	_viewCamera->SetProjectionMode(Camera::ProjectionMode::ORTHOGRAPHIC);
 	_viewCamera->SetFieldOfView(60.0f);
 	_viewCamera->SetViewport(0, 0, 1920, 1080);
-	_viewCamera->SetClearColor(0, 0, 1, 1.0f);
+	_viewCamera->SetClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	_viewCamera->SetViewId(1);
 	_viewCamera->SetRenderToTexture(true);
 
@@ -59,7 +59,7 @@ MapView::MapView(Editor* editor) : GUIWindow("Map View", 1024, 850, false)
 
 void MapView::Play()
 {
-	if (_isPlaying)
+	if (_isPlaying || _editor->GetSelectedMap() == nullptr)
 		return;
 
 	// Ensure sound will work
@@ -104,6 +104,9 @@ void MapView::Play()
 
 void MapView::Pause()
 {
+	if (_editor->GetSelectedMap() == nullptr)
+		return;
+
 	if (_isPaused)
 	{
 		Play();
@@ -121,7 +124,7 @@ void MapView::Pause()
 
 void MapView::Stop()
 {
-	if (!_isPlaying && !_isPaused)
+	if ((!_isPlaying && !_isPaused) || _editor->GetSelectedMap() == nullptr)
 		return;
 
 	_isPlaying = false;

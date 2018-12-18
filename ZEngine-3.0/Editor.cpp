@@ -46,18 +46,10 @@
 
 Editor::Editor()
 {
-	// Create a test asset catalog
+	// Load a test catalog (replace this with a way for the user to load the catalog)
 	auto testCatalog = new AssetCatalog();
 	testCatalog->LoadCatalog();
 	AssetManager::GetInstance()->SetCatalog(testCatalog);
-
-	// Load some default shaders
-	AssetManager::GetInstance()->LoadAsset("standard_unlit", "shaders/standard_unlit.shader", ObjectType::SHADER_ASSET);
-
-	auto mapAsset = AssetManager::GetInstance()->LoadAsset("test_map", "test_map.map", MAP_ASSET)->Cast<MapAsset>();
-	auto testMap = mapAsset->GetMap();
-
-	SetSelectedMap(testMap);
 
 	Add(new MainMenuBar());
 	Add(new MapView(this));
@@ -77,6 +69,8 @@ void Editor::Update()
 void Editor::SetSelectedMap(Map* map)
 {
 	_selectedMap = map;
+
+	MapManager::GetInstance()->SetCurrentMap(map);
 }
 
 Map* Editor::GetSelectedMap() const
@@ -139,9 +133,6 @@ int main(int argc, char* argv[])
 
 	// This container will hold all of the GUI elements
 	Editor* editorContainer = new Editor();
-
-	auto mapManager = MapManager::GetInstance();
-	mapManager->SetCurrentMap(editorContainer->GetSelectedMap());
 
 	while (!display.CloseRequested())
 	{

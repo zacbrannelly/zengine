@@ -16,6 +16,8 @@ public:
 	GameView(Editor* map);
 	~GameView();
 
+	void SetupCamera();
+
 	void ProcessInput() override;
 	void RenderInWindow() override;
 	void RenderElement() override;
