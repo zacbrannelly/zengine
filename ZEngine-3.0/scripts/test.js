@@ -23,7 +23,7 @@ TestComponent.prototype.Update = function()
 {
 	// Called once per frame
 	
-};	
+}	
 
 TestComponent.prototype.Render = function()
 {

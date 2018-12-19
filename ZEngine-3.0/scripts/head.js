@@ -62,22 +62,19 @@ HeadComponent.prototype.SpawnBody = function()
 {
 	// Copy the last body object in the body list
 	var source = this.body[this.body.length - 1];
-	var copy = Factory.Copy("Body " + this.body.length, this.body[this.body.length - 1]);
+	var copy = Factory.Copy("Body " + this.body.length, source);
 				
 	// Remove the head component, if any (first clone is the head)
 	var headComp = copy.GetComponent("HeadComponent");
 	if (headComp != null)
 		copy.RemoveComponent(headComp);
-		
-	// Get the body components from the source and copy
-	var sourceBodyComp = source.GetComponent("BodyComponent");
-	var bodyComponent = copy.GetComponent("BodyComponent");
 	
 	// Add the new body part to the map and body array
 	MapManager.currentMap.Add(copy);
 	this.body.push(copy);
 		
 	// Link the new copy to the source body component (so it follows the source obj)
+	var sourceBodyComp = source.GetComponent("BodyComponent");
 	sourceBodyComp.child = copy;
 }
 
