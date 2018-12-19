@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
@@ -105,6 +105,9 @@
     <ClCompile Include="UnsavedDialog.cpp">
       <Filter>Windows</Filter>
     </ClCompile>
+    <ClCompile Include="GUITextField.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\bgfx\3rdparty\dear-imgui\imgui_impl_glfw.h">
@@ -181,6 +184,9 @@
     </ClInclude>
     <ClInclude Include="UnsavedDialog.h">
       <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="GUITextField.h">
+      <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
