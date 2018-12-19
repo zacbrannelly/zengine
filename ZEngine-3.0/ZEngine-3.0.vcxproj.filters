@@ -37,6 +37,9 @@
     <Filter Include="Asset Builders">
       <UniqueIdentifier>{766edefa-a5ef-426d-b87e-dc05b50e0810}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Windows\Asset Editors">
+      <UniqueIdentifier>{1cc4d1f7-5e0a-4417-b232-cf1c8cb12ad9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\bgfx\3rdparty\dear-imgui\imgui_impl_glfw.cpp">
@@ -55,9 +58,6 @@
       <Filter>Windows</Filter>
     </ClCompile>
     <ClCompile Include="SceneGraphWindow.cpp">
-      <Filter>Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="CodeEditor.cpp">
       <Filter>Windows</Filter>
     </ClCompile>
     <ClCompile Include="CameraInspector.cpp">
@@ -120,6 +120,12 @@
     <ClCompile Include="GUITextField.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
+    <ClCompile Include="ShaderEditor.cpp">
+      <Filter>Windows\Asset Editors</Filter>
+    </ClCompile>
+    <ClCompile Include="CodeEditor.cpp">
+      <Filter>Windows\Asset Editors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\bgfx\3rdparty\dear-imgui\imgui_impl_glfw.h">
@@ -138,9 +144,6 @@
       <Filter>Windows</Filter>
     </ClInclude>
     <ClInclude Include="SceneGraphWindow.h">
-      <Filter>Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="CodeEditor.h">
       <Filter>Windows</Filter>
     </ClInclude>
     <ClInclude Include="CameraInspector.h">
@@ -205,6 +208,12 @@
     </ClInclude>
     <ClInclude Include="GUITextField.h">
       <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderEditor.h">
+      <Filter>Windows\Asset Editors</Filter>
+    </ClInclude>
+    <ClInclude Include="CodeEditor.h">
+      <Filter>Windows\Asset Editors</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

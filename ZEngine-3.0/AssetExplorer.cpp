@@ -2,6 +2,7 @@
 #include "File.h"
 #include "Editor.h"
 #include "CodeEditor.h"
+#include "ShaderEditor.h"
 #include "imgui-includes.h"
 
 #include <ZEngine-Core/Assets/AssetManager.h>
@@ -80,6 +81,11 @@ void AssetExplorer::OpenAsset(std::string path, ObjectType type)
 				_editor->SetSelectedMap(map);
 			}
 		}
+	}
+	else if (type == SHADER_ASSET)
+	{
+		auto shaderEditor = new ShaderEditor(path);
+		Add(shaderEditor);
 	}
 }
 

@@ -175,6 +175,7 @@
     <ClCompile Include="MeshRendererInspector.cpp" />
     <ClCompile Include="SceneGraphWindow.cpp" />
     <ClCompile Include="ShaderBuilder.cpp" />
+    <ClCompile Include="ShaderEditor.cpp" />
     <ClCompile Include="ShaderImporter.cpp" />
     <ClCompile Include="TransformInspector.cpp" />
     <ClCompile Include="UnsavedDialog.cpp" />
@@ -228,6 +229,7 @@
     <ClInclude Include="MeshRendererInspector.h" />
     <ClInclude Include="SceneGraphWindow.h" />
     <ClInclude Include="ShaderBuilder.h" />
+    <ClInclude Include="ShaderEditor.h" />
     <ClInclude Include="ShaderImporter.h" />
     <ClInclude Include="TransformInspector.h" />
     <ClInclude Include="UnsavedDialog.h" />
