@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
@@ -30,6 +30,12 @@
     </Filter>
     <Filter Include="IO">
       <UniqueIdentifier>{e1e20fca-cbdb-4422-98c0-7c0f636af133}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows\Asset Importers">
+      <UniqueIdentifier>{2c16af9c-2391-42d5-bf94-0de1ae88dd98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Asset Builders">
+      <UniqueIdentifier>{766edefa-a5ef-426d-b87e-dc05b50e0810}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -104,6 +110,12 @@
     </ClCompile>
     <ClCompile Include="UnsavedDialog.cpp">
       <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderImporter.cpp">
+      <Filter>Windows\Asset Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderBuilder.cpp">
+      <Filter>Asset Builders</Filter>
     </ClCompile>
     <ClCompile Include="GUITextField.cpp">
       <Filter>GUI</Filter>
@@ -184,6 +196,12 @@
     </ClInclude>
     <ClInclude Include="UnsavedDialog.h">
       <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderImporter.h">
+      <Filter>Windows\Asset Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderBuilder.h">
+      <Filter>Asset Builders</Filter>
     </ClInclude>
     <ClInclude Include="GUITextField.h">
       <Filter>GUI</Filter>

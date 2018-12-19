@@ -23,12 +23,16 @@ public:
 	bool SaveCatalog(std::string path = "catalog.zengine");
 
 	void RegisterAsset(Asset* asset);
+	void RegisterAsset(std::string path, ObjectType type);
+
+	bool HasAsset(std::string assetPath);
 	bool GetAssetPathFromID(int id, std::string& path, ObjectType& type);
 	std::vector<CatalogEntry> GetAssetsByType(ObjectType type);
 
 	const std::vector<CatalogEntry>& GetCatalogList() const;
-
+	const std::string& GetLastCatalogPath() const;
 private:
+	std::string _lastCatalogPath;
 	std::vector<CatalogEntry> _catalog;
 	int _count;
 };

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <map>
 #include <string> 
 #include <ZEngine-Core/Map/Objects/ZObject.h>
 
@@ -25,6 +26,7 @@ public:
 private:
 	AssetManager* _assetManager;
 	Directory* _rootFolder;
+	std::map<std::string, ObjectType> _validExtensions;
 	std::vector<Directory> _cachedFolders;
 	std::vector<File> _cachedFiles;
 	std::string _selectedName;

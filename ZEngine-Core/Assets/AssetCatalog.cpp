@@ -41,13 +41,16 @@ bool AssetCatalog::LoadCatalog(string path)
 				_catalog.push_back({ id, path, type });
 
 				// Get highest count (for adding new items to the catelog)
-				if (id + 1 > _count);
+				if (id + 1 > _count)
 					_count = id + 1;
 			}
 			catch (std::exception) {}
 		}
 
 		in.close();
+
+		_lastCatalogPath = path;
+		return true;
 	}
 
 	return false;
@@ -74,10 +77,23 @@ bool AssetCatalog::SaveCatalog(string path)
 
 void AssetCatalog::RegisterAsset(Asset* asset)
 {
-	if (asset == nullptr) return;
+	if (asset != nullptr)
+		RegisterAsset(asset->GetPath(), asset->GetType());
+}
 
-	_catalog.push_back({ _count, asset->GetPath(), asset->GetType() });
+void AssetCatalog::RegisterAsset(std::string path, ObjectType type)
+{
+	_catalog.push_back({ _count, path, type });
 	_count++;
+}
+
+bool AssetCatalog::HasAsset(std::string assetPath)
+{
+	return any_of(_catalog.begin(), _catalog.end(), 
+	[&assetPath](const auto& item) 
+	{ 
+		return item.path == assetPath;
+	});
 }
 
 bool AssetCatalog::GetAssetPathFromID(int id, std::string& path, ObjectType& type)
@@ -111,6 +127,11 @@ std::vector<CatalogEntry> AssetCatalog::GetAssetsByType(ObjectType type)
 const std::vector<CatalogEntry>& AssetCatalog::GetCatalogList() const
 {
 	return _catalog;
+}
+
+const std::string& AssetCatalog::GetLastCatalogPath() const
+{
+	return _lastCatalogPath;
 }
 
 AssetCatalog::~AssetCatalog()

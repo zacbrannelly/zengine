@@ -1,4 +1,5 @@
 #include "AssetImporter.h"
+#include "ShaderImporter.h"
 #include "Directory.h"
 #include "File.h"
 #include "imgui-includes.h"
@@ -6,8 +7,19 @@
 #include <ZEngine-Core/Assets/AssetManager.h>
 #include <ZEngine-Core/Assets/AssetCatalog.h>
 
+#define REGISTER_EXTENSION(x, y) _validExtensions[x] = y
+
 AssetImporter::AssetImporter() : GUIWindow("Asset Importer", 200, 150, false)
 {
+	REGISTER_EXTENSION("png", TEXTURE_ASSET);
+	REGISTER_EXTENSION("jpg", TEXTURE_ASSET);
+	REGISTER_EXTENSION("map", MAP_ASSET);
+	REGISTER_EXTENSION("shader", SHADER_ASSET);
+	REGISTER_EXTENSION("js", SCRIPT_ASSET);
+	REGISTER_EXTENSION("wav", AUDIO_ASSET);
+	REGISTER_EXTENSION("mp3", AUDIO_ASSET);
+	REGISTER_EXTENSION("obj", MODEL_ASSET);
+
 	_assetManager = AssetManager::GetInstance();
 	_rootFolder = new Directory("./");
 
@@ -58,6 +70,13 @@ void AssetImporter::RenderInWindow()
 			if (ImGui::IsMouseDoubleClicked(0))
 			{
 				// TODO: Attempt to import the file
+
+				auto extension = Directory::GetExtension(file.GetPath());
+
+				if (extension == "sc")
+				{
+					Add(new ShaderImporter(this, file.GetPath()));
+				}
 			}
 		}
 
@@ -66,6 +85,9 @@ void AssetImporter::RenderInWindow()
 
 	if (newRoot != nullptr)
 	{
+		if (_rootFolder != nullptr)
+			delete _rootFolder;
+
 		_rootFolder = newRoot;
 		Refresh();
 	}

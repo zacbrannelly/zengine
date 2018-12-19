@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -174,6 +174,8 @@
     <ClCompile Include="MaterialWriter.cpp" />
     <ClCompile Include="MeshRendererInspector.cpp" />
     <ClCompile Include="SceneGraphWindow.cpp" />
+    <ClCompile Include="ShaderBuilder.cpp" />
+    <ClCompile Include="ShaderImporter.cpp" />
     <ClCompile Include="TransformInspector.cpp" />
     <ClCompile Include="UnsavedDialog.cpp" />
   </ItemGroup>
@@ -225,6 +227,8 @@
     <ClInclude Include="MaterialWriter.h" />
     <ClInclude Include="MeshRendererInspector.h" />
     <ClInclude Include="SceneGraphWindow.h" />
+    <ClInclude Include="ShaderBuilder.h" />
+    <ClInclude Include="ShaderImporter.h" />
     <ClInclude Include="TransformInspector.h" />
     <ClInclude Include="UnsavedDialog.h" />
   </ItemGroup>
