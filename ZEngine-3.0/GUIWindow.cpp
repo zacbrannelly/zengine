@@ -7,6 +7,7 @@ GUIWindow::GUIWindow(string title, int width, int height, bool isChild) : _title
 	_closeRequested = false;
 	_data = nullptr;
 	_shouldFocus = false;
+	_isDirty = false;
 }
 
 void GUIWindow::Focus()
@@ -86,6 +87,16 @@ void* GUIWindow::GetUserData() const
 	return _data;
 }
 
+void GUIWindow::SetDirty(bool dirty)
+{
+	_isDirty = dirty;
+}
+
+bool GUIWindow::IsDirty() const
+{
+	return _isDirty;
+}
+
 bool GUIWindow::AllowClose()
 {
 	return true;
@@ -102,10 +113,15 @@ void GUIWindow::RenderElement()
 		_shouldFocus = false;
 	}
 
+	auto flags = _flags;
+
+	if (_isDirty)
+		flags |= ImGuiWindowFlags_UnsavedDocument;
+
 	if (_isChild)
 		shouldRender = ImGui::BeginChild(_title.c_str());
 	else
-		shouldRender = ImGui::Begin(_title.c_str(), &open, _flags);
+		shouldRender = ImGui::Begin(_title.c_str(), &open, flags);
 
 	if (!open && AllowClose())
 	{

@@ -34,6 +34,9 @@ public:
 	void SetFlags(ImGuiWindowFlags flags);
 	ImGuiWindowFlags GetFlags() const;
 
+	void SetDirty(bool dirty);
+	bool IsDirty() const;
+
 	virtual bool AllowClose();
 	void SetCloseRequested(bool closeRequested);
 	bool IsCloseRequested() const;
@@ -46,6 +49,7 @@ private:
 	bool _shouldSetSize;
 	bool _shouldFocus;
 	bool _closeRequested;
+	bool _isDirty;
 	ImGuiWindowFlags _flags;
 	void* _data;
 };

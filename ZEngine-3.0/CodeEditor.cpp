@@ -119,19 +119,6 @@ const File& CodeEditor::GetFile()
 	return *_file;
 }
 
-void CodeEditor::SetDirty(bool dirty)
-{
-	if (dirty && !(GetFlags() & ImGuiWindowFlags_UnsavedDocument))
-		SetFlags(GetFlags() | ImGuiWindowFlags_UnsavedDocument);
-	else if (!dirty && GetFlags() & ImGuiWindowFlags_UnsavedDocument)
-		SetFlags(ImGuiWindowFlags_MenuBar);
-}
-
-bool CodeEditor::IsDirty() const
-{
-	return GetFlags() & ImGuiWindowFlags_UnsavedDocument;
-}
-
 int CodeEditor::TextInputCallback(ImGuiInputTextCallbackData* data)
 {
 	// Check whether changes have been made since last save

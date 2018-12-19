@@ -18,9 +18,6 @@ public:
 
 	const File& GetFile();
 
-	void SetDirty(bool dirty);
-	bool IsDirty() const;
-
 	void Save();
 
 private:
