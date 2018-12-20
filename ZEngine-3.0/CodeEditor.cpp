@@ -3,6 +3,9 @@
 #include "imgui-includes.h"
 #include "File.h"
 
+#include <ZEngine-Core/Assets/AssetManager.h>
+#include <ZEngine-Core/Assets/Objects/ScriptAsset.h>
+#include <ZEngine-Core/Scripting/Script.h>
 #include <ZEngine-Core/Input/InputManager.h>
 #include <iostream>
 
@@ -41,6 +44,20 @@ void CodeEditor::Save()
 
 		// Ensure the doc isn't considered dirty anymore
 		SetDirty(false);
+
+		// Hot reload the script so changes are reflected when playing in editor
+		HotReload();
+	}
+}
+
+void CodeEditor::HotReload()
+{
+	auto asset = AssetManager::GetInstance()->FindAssetFromPath(_file->GetPath());
+
+	if (asset != nullptr)
+	{
+		if (asset->Load(_file->GetPath()))
+			asset->Cast<ScriptAsset>()->GetScript()->Execute();
 	}
 }
 
@@ -77,7 +94,7 @@ void CodeEditor::RenderInWindow()
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			if (ImGui::MenuItem("Save", "Ctrl+S", false))
+			if (ImGui::MenuItem("Save & Build", "Ctrl+S", false))
 			{
 				Save();
 			}

@@ -19,6 +19,7 @@ public:
 	const File& GetFile();
 
 	void Save();
+	void HotReload();
 
 private:
 	static int TextInputCallback(ImGuiInputTextCallbackData* data);

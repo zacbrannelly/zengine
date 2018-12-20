@@ -77,19 +77,6 @@ void MapView::Play()
 
 	_isPlaying = true;
 
-	// Recompile all of the scripts (THIS SHOULD BE DONE ELSEWHERE)
-	for (auto asset : AssetManager::GetInstance()->GetAssets())
-	{
-		if (asset->GetType() == SCRIPT_ASSET)
-		{
-			auto scriptAsset = static_cast<ScriptAsset*>(asset);
-			if (scriptAsset->Load(asset->GetPath()))
-			{
-				scriptAsset->GetScript()->Execute();
-			}
-		}
-	}
-
 	// Copy the original map (so we don't break the original during play)
 	_originalMap = _editor->GetSelectedMap();
 	_previewMap = Factory::Copy<Map>(_originalMap->GetName(), _originalMap);
