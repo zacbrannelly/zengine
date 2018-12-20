@@ -15,7 +15,7 @@ uniform vec4 ao;
 // lights
 uniform vec4 lightPositions[4];
 uniform vec4 lightColors[4];
-
+ 
 uniform vec4 camPos;
 
 const float PI = 3.14159265359;

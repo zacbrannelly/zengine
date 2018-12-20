@@ -49,9 +49,9 @@ bool File::Delete()
 	return remove(_path.c_str()) == 0;
 }
 
-bool File::ReadContent(char* buffer, int bufferLen) const
+bool File::ReadContent(char* buffer, int bufferLen, bool isBinary) const
 {
-	ifstream in(_path, ios::in | ios::ate);
+	ifstream in(_path, ios::in | ios::ate | (isBinary ? ios::binary : 0));
 
 	if (!in.is_open())
 		return false;
@@ -71,9 +71,9 @@ bool File::ReadContent(char* buffer, int bufferLen) const
 	return true;
 }
 
-bool File::WriteContent(const char* buffer, int bufferLen) const
+bool File::WriteContent(const char* buffer, int bufferLen, bool isBinary) const
 {
-	ofstream out(_path, ios::out);
+	ofstream out(_path, ios::out | (isBinary ? ios::binary : 0));
 
 	if (!out.is_open())
 	{

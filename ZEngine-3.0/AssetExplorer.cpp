@@ -45,8 +45,6 @@ void AssetExplorer::OpenAsset(std::string path, ObjectType type)
 {
 	if (type == SCRIPT_ASSET)
 	{
-		bool alreadyOpen = false;
-
 		for (auto element : _editor->GetElements())
 		{
 			if (element->GetType() == GUI_TYPE_CODE_EDITOR)
@@ -55,15 +53,13 @@ void AssetExplorer::OpenAsset(std::string path, ObjectType type)
 
 				if (editor->GetFile().GetPath() == path)
 				{
-					alreadyOpen = true;
 					editor->Focus();
-					break;
+					return;
 				}
 			}
 		}
 
-		if (!alreadyOpen)
-			_editor->Add(new CodeEditor(path));
+		_editor->Add(new CodeEditor(path));
 	}
 	else if (type == MAP_ASSET)
 	{
@@ -84,8 +80,21 @@ void AssetExplorer::OpenAsset(std::string path, ObjectType type)
 	}
 	else if (type == SHADER_ASSET)
 	{
-		auto shaderEditor = new ShaderEditor(path);
-		Add(shaderEditor);
+		for (auto& element : _editor->GetElements())
+		{
+			if (element->GetType() == GUI_TYPE_SHADER_EDITOR)
+			{
+				auto shaderEditor = static_cast<ShaderEditor*>(element);
+				
+				if (shaderEditor->GetAssetPath() == path)
+				{
+					shaderEditor->Focus();
+					return;
+				}
+			}
+		}
+
+		_editor->Add(new ShaderEditor(path));
 	}
 }
 

@@ -14,8 +14,8 @@ public:
 
 	virtual bool Exists() const;
 
-	virtual bool ReadContent(char* buffer, int bufferLen) const;
-	virtual bool WriteContent(const char* buffer, int bufferLen) const;
+	virtual bool ReadContent(char* buffer, int bufferLen, bool isBinary = false) const;
+	virtual bool WriteContent(const char* buffer, int bufferLen, bool isBinary = false) const;
 
 	const std::string& GetFilename() const;
 	const std::string& GetPath() const;

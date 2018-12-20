@@ -3,9 +3,11 @@
 #include "File.h"
 #include "GUITextField.h"
 #include "ShaderBuilder.h"
+#include "UnsavedDialog.h"
 
 #include <fstream>
 #include <ZEngine-Core/Input/InputManager.h>
+#include <ZEngine-Core/Assets/AssetManager.h>
 #include <../json/json.hpp>
 
 using namespace nlohmann;
@@ -14,6 +16,8 @@ ShaderEditor::ShaderEditor(std::string assetPath) : GUIWindow("Shader Editor - "
 {
 	_assetPath = assetPath;
 	_currentPass = 0;
+	_showUnsavedDialog = false;
+	_unsavedDialog = new UnsavedDialog();
 
 	if (!RetrieveSourcePaths())
 		_currentPass = -1;
@@ -33,6 +37,8 @@ ShaderEditor::ShaderEditor(std::string assetPath) : GUIWindow("Shader Editor - "
 		_fragSourceField->SetText(_passes[_currentPass].workingFragSource);
 		_varySourceField->SetText(_passes[_currentPass].workingVarySource);
 	}
+
+	SetFlags(ImGuiWindowFlags_MenuBar);
 }
 
 bool ShaderEditor::RetrieveSourcePaths()
@@ -148,7 +154,10 @@ bool ShaderEditor::Save()
 				return false;
 
 			if (!ShaderBuilder::BuildToFile(SB_VERTEX, pass.vertSourcePath, pass.varySourcePath))
+			{
+				vertFile.WriteContent(&pass.originalVertSource[0], pass.originalVertSource.size());
 				return false;
+			}
 
 			pass.originalVertSource = pass.workingVertSource;
 		}
@@ -162,13 +171,29 @@ bool ShaderEditor::Save()
 				return false;
 
 			if (!ShaderBuilder::BuildToFile(SB_FRAGMENT, pass.fragSourcePath, pass.varySourcePath))
+			{
+				fragFile.WriteContent(&pass.originalFragSource[0], pass.originalFragSource.size());
 				return false;
+			}
 
 			pass.originalFragSource = pass.workingFragSource;
 		}
 	}
 
+	SetDirty(false);
+	HotReload();
+
 	return true;
+}
+
+void ShaderEditor::HotReload()
+{
+	auto asset = AssetManager::GetInstance()->FindAssetFromPath(_assetPath);
+
+	if (asset != nullptr)
+	{
+		asset->Load(_assetPath);
+	}
 }
 
 void ShaderEditor::ProcessInput()
@@ -177,14 +202,25 @@ void ShaderEditor::ProcessInput()
 	{
 		auto input = InputManager::GetInstance();
 
+		// CTRL+S Shortcut - Save & Build
 		if (input->GetButtonPressed(BUTTON_KEY_S) && input->ButtonHasModifier(BUTTON_KEY_S, BUTTON_MOD_CONTROL))
 		{
-			if (Save())
-			{
-				SetDirty(false);
-			}
+			Save();
 		}
 	}
+}
+
+bool ShaderEditor::AllowClose()
+{
+	if (IsDirty())
+		_showUnsavedDialog = true;
+
+	return !IsDirty();
+}
+
+const std::string& ShaderEditor::GetAssetPath() const
+{
+	return _assetPath;
 }
 
 void ShaderEditor::RenderInWindow()
@@ -194,6 +230,21 @@ void ShaderEditor::RenderInWindow()
 		// TODO: Show some error message
 		SetCloseRequested(true);
 		return;
+	}
+
+	if (ImGui::BeginMenuBar())
+	{
+		if (ImGui::BeginMenu("File"))
+		{
+			if (ImGui::MenuItem("Save & Build", "CTRL+S"))
+			{
+				Save();
+			}
+
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMenuBar();
 	}
 
 	int prevPass = _currentPass;
@@ -281,6 +332,36 @@ void ShaderEditor::RenderInWindow()
 
 		ImGui::EndTabBar();
 	}
+
+	if (_showUnsavedDialog)
+	{
+		_unsavedDialog->RenderElement();
+
+		if (_unsavedDialog->ShouldClose())
+		{
+			_showUnsavedDialog = false;
+			_unsavedDialog->Reset();
+		}
+		else if (_unsavedDialog->ShouldNotSave())
+		{
+			SetCloseRequested(true);
+		}
+		else if (_unsavedDialog->ShouldSave())
+		{
+			if (Save())
+				SetCloseRequested(true);
+			else
+			{
+				_showUnsavedDialog = false;
+				_unsavedDialog->Reset();
+			}
+		}
+	}
+}
+
+GUIElementType ShaderEditor::GetType()
+{
+	return GUI_TYPE_SHADER_EDITOR;
 }
 
 ShaderEditor::~ShaderEditor()
@@ -288,4 +369,5 @@ ShaderEditor::~ShaderEditor()
 	delete _vertSourceField;
 	delete _fragSourceField;
 	delete _varySourceField;
+	delete _unsavedDialog;
 }

@@ -3,6 +3,7 @@
 #include <vector>
 #include "GUIWindow.h"
 
+class UnsavedDialog;
 class GUITextField;
 
 struct ShaderEditorPass
@@ -28,15 +29,23 @@ public:
 
 	void ProcessInput() override;
 	void RenderInWindow() override;
+	GUIElementType GetType() override;
+
+	bool AllowClose() override;
+
+	const std::string& GetAssetPath() const;
 
 private:
 	bool RetrieveSourcePaths();
 	bool ReadSourceFiles();
 	bool Save();
+	void HotReload();
 
 	std::string _assetPath;
 	int _currentPass;
 	std::vector<ShaderEditorPass> _passes;
+	bool _showUnsavedDialog;
+	UnsavedDialog* _unsavedDialog;
 
 	GUITextField* _vertSourceField;
 	GUITextField* _fragSourceField;

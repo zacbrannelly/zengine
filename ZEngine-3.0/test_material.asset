@@ -1,6 +1,6 @@
 {
 	"name": "test_material",
-	"shader": "shaders/pbr_direct.shader",
+	"shader": 18,
 	
 	"textures": [
 		{

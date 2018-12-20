@@ -33,7 +33,10 @@ bool ShaderAsset::Load(std::string path)
 	else
 		return false;
 
-	_shader = new Shader(name);
+	if (_shader == nullptr)
+		_shader = new Shader(name);
+	else
+		_shader->Release();
 
 	// Get passes
 	it = root.find("pass");

@@ -19,6 +19,7 @@ public:
 	~Shader();
 
 	bool Load(std::string vertPath, std::string fragPath, uint64_t state = 0, int pass = 0);
+	void Release();
 
 	const bgfx::ProgramHandle& GetHandle(int pass = 0) const;
 	const bgfx::ShaderHandle& GetVertexShader(int pass = 0) const;

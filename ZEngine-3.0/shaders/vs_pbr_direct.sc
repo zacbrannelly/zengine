@@ -10,5 +10,5 @@ void main()
     v_normal = mat3(u_model[0]) * a_normal;   
 	v_color0 = a_color0;
 	
-    gl_Position =  u_proj * u_view * vec4(v_fragPos, 1.0);
+    gl_Position =  u_proj * u_view * vec4(v_fragPos, 1.0); 
 }

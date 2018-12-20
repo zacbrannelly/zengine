@@ -3,6 +3,7 @@
 #include "TextureAsset.h"
 
 #include "../AssetManager.h"
+#include "../AssetCatalog.h"
 
 #include "../../json/json.hpp"
 #include "../../Rendering/Material.h"
@@ -72,8 +73,7 @@ bool MaterialAsset::Load(string path)
 	it = root.find("shader");
 	if (it != root.end())
 	{
-		auto shaderPath = (*it).get<std::string>();
-		ReadShader(shaderPath, material);
+		ReadShader(*it, material);
 	}
 
 	_material = material;
@@ -162,9 +162,24 @@ void MaterialAsset::ReadUniforms(json::array_t& values, Material* material)
 	}
 }
 
-void MaterialAsset::ReadShader(json::string_t& path, Material* material)
+void MaterialAsset::ReadShader(json& identifier, Material* material)
 {
 	auto assetManager = AssetManager::GetInstance();
+	auto catalog = assetManager->GetCatalog();
+
+	string path = "";
+	ObjectType type;
+
+	if (identifier.is_string())
+		path = identifier.get<string>();
+	else if (catalog != nullptr)
+	{
+		if (!catalog->GetAssetPathFromID(identifier.get<int>(), path, type))
+		{
+			cout << "Failed to find the shader for material: " << _material->GetName() << endl;
+			return;
+		}
+	}
 
 	auto asset = assetManager->FindAssetFromPath(path);
 

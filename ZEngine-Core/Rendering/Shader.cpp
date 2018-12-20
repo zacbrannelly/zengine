@@ -51,6 +51,19 @@ bool Shader::Load(std::string vertPath, std::string fragPath, uint64_t state, in
 	return true;
 }
 
+void Shader::Release()
+{
+	// Destroy any previous shader handles
+	for (auto& pass : _pass)
+	{
+		if (pass.program.idx != bgfx::kInvalidHandle)
+			bgfx::destroy(pass.program);
+	}
+
+	// Remove all previous passes
+	_pass.clear();
+}
+
 const bgfx::ProgramHandle& Shader::GetHandle(int pass) const
 {
 	return _pass[pass].program;

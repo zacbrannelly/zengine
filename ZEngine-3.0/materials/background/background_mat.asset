@@ -1,6 +1,6 @@
 {
 	"name": "background_mat",
-	"shader": "shaders/standard_unlit.shader",
+	"shader": 17,
 	"textures": 
 	[
 		{

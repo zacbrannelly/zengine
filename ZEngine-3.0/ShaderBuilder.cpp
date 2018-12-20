@@ -16,7 +16,7 @@ bool ShaderBuilder::BuildToFile(ShaderBuilderType type, const std::string& path,
 
 	// Write to a file 
 	File binOutput(path + ".bin");
-	result = binOutput.WriteContent((const char*)data, size);
+	result = binOutput.WriteContent((const char*)data, size, true);
 
 	// TODO: There may be a memory leak here!
 
@@ -29,7 +29,7 @@ bool ShaderBuilder::Build(ShaderBuilderType type, const std::string& path, const
 
 	if (type == SB_FRAGMENT)
 		shaderType = shaderc::ST_FRAGMENT;
-	else
+	else if (type == SB_COMPUTE)
 		shaderType = shaderc::ST_COMPUTE;
 
 	auto result = shaderc::compileShader(shaderType, path.c_str(), nullptr, varyingDefPath.c_str());
