@@ -17,6 +17,8 @@ void Container::Remove(GUIElement* element)
 		if (*it == element)
 		{
 			_elements.erase(it);
+			delete element;
+
 			break;
 		}
 	}
