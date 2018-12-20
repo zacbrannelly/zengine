@@ -81,9 +81,6 @@
     <ClCompile Include="Editor.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="MaterialWriter.cpp">
-      <Filter>IO</Filter>
-    </ClCompile>
     <ClCompile Include="GameView.cpp">
       <Filter>Windows</Filter>
     </ClCompile>
@@ -169,9 +166,6 @@
     </ClInclude>
     <ClInclude Include="Editor.h">
       <Filter>Main</Filter>
-    </ClInclude>
-    <ClInclude Include="MaterialWriter.h">
-      <Filter>IO</Filter>
     </ClInclude>
     <ClInclude Include="GameView.h">
       <Filter>Windows</Filter>
