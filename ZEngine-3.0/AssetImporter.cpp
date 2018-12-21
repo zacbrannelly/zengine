@@ -4,6 +4,8 @@
 #include "File.h"
 #include "imgui-includes.h"
 
+#include "CreateScriptDialog.h"
+
 #include <ZEngine-Core/Assets/AssetManager.h>
 #include <ZEngine-Core/Assets/AssetCatalog.h>
 
@@ -24,6 +26,7 @@ AssetImporter::AssetImporter() : GUIWindow("Asset Importer", 200, 150, false)
 	_rootFolder = new Directory("./");
 
 	Refresh();
+	SetFlags(ImGuiWindowFlags_MenuBar);
 }
 
 void AssetImporter::Refresh()
@@ -39,6 +42,39 @@ void AssetImporter::ProcessInput()
 
 void AssetImporter::RenderInWindow()
 {
+	ImGui::BeginMenuBar();
+	{
+		if (ImGui::BeginMenu("Create"))
+		{
+			if (ImGui::MenuItem("Map"))
+			{
+
+			}
+
+			if (ImGui::MenuItem("Script"))
+			{
+				auto dialog = new CreateScriptDialog(_rootFolder->GetPath());
+				dialog->Show();
+
+				Add(dialog);
+			}
+
+			if (ImGui::MenuItem("Shader"))
+			{
+
+			}
+
+			if (ImGui::MenuItem("Material"))
+			{
+
+			}
+
+			ImGui::EndMenu();
+		}
+
+	}
+	ImGui::EndMenuBar();
+
 	ImGui::Columns(2, "asset_importer", false);
 
 	Directory* newRoot = nullptr;
