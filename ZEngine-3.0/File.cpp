@@ -15,7 +15,7 @@ bool File::Create()
 {
 	ofstream out(_path, ios::out);
 
-	if (out.is_open())
+	if (!out.is_open())
 		return false;
 
 	out.close();
