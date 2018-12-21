@@ -36,6 +36,7 @@ public:
 	void SetTexture(const std::string& name, bgfx::TextureHandle texture);
 
 	void Apply();
+	void Release();
 
 	void SetShader(Shader* shader);
 	Shader* GetShader() const;

@@ -111,6 +111,18 @@ bool AssetCatalog::GetAssetPathFromID(int id, std::string& path, ObjectType& typ
 	return false;
 }
 
+int AssetCatalog::GetAssetIDFromPath(std::string path)
+{
+	auto it = find_if(_catalog.begin(), _catalog.end(), [&path](auto item) { return item.path == path; });
+
+	if (it != _catalog.end())
+	{
+		return it->id;
+	}
+
+	return -1;
+}
+
 std::vector<CatalogEntry> AssetCatalog::GetAssetsByType(ObjectType type)
 {
 	std::vector<CatalogEntry> results;

@@ -16,6 +16,7 @@ using namespace nlohmann;
 
 MaterialAsset::MaterialAsset(string name) : Asset(name, ObjectType::MATERIAL_ASSET)
 {
+	_material = nullptr;
 }
 
 Asset* MaterialAsset::CreateInstance(string name)
@@ -38,16 +39,19 @@ bool MaterialAsset::Load(string path)
 	root << in;
 
 	auto assetManager = AssetManager::GetInstance();
-	Material* material = nullptr;
 
 	// Extract the name from the json object and instantiate a new material 
 	auto it = root.find("name");
-	if (it != root.end() && (*it).is_string())
+	if (it != root.end() && (*it).is_string() && _material == nullptr)
 	{
-		material = new Material((*it).get<string>());
+		_material = new Material((*it).get<string>());
+	}
+	else if (_material != nullptr)
+	{
+		_material->Release();
 	}
 
-	if (material == nullptr)
+	if (_material == nullptr)
 	{
 		cout << "MATERIAL_ASSET: Invalid material, no name was found!" << endl;
 		return false;
@@ -58,7 +62,7 @@ bool MaterialAsset::Load(string path)
 	if (it != root.end())
 	{
 		auto textureArray = (*it).get<json::array_t>();
-		ReadTextures(textureArray, material);
+		ReadTextures(textureArray, _material);
 	}
 
 	// Load uniforms
@@ -66,17 +70,17 @@ bool MaterialAsset::Load(string path)
 	if (it != root.end())
 	{
 		auto uniformsArray = (*it).get<json::array_t>();
-		ReadUniforms(uniformsArray, material);
+		ReadUniforms(uniformsArray, _material);
 	}
 
 	// Load shader
 	it = root.find("shader");
 	if (it != root.end())
 	{
-		ReadShader(*it, material);
+		ReadShader(*it, _material);
 	}
 
-	_material = material;
+	SetPath(path);
 
 	return true;
 }
@@ -91,20 +95,44 @@ void MaterialAsset::ReadTextures(json::array_t& values, Material* material)
 		if (!item.is_object()) continue;
 
 		auto textureObj = item.get<json::object_t>();
-
 		auto samplerName = textureObj.at("name");
-		auto path = textureObj.at("path");
+		
+		string path;
 
-		if (samplerName.is_string() && path.is_string())
+		auto it = textureObj.find("id");
+		if (it != textureObj.end())
+		{
+			ObjectType type;
+			if (!assetManager->GetCatalog()->GetAssetPathFromID(it->second.get<int>(), path, type))
+			{
+				cout << "MATERIAL_ASSET: Failed to find texture for sampler: " << samplerName.get<string>() << endl;
+				continue;
+			}
+		}
+		else
+		{
+			it = textureObj.find("path");
+
+			if (it != textureObj.end())
+				path = it->second.get<string>();
+			else
+			{
+				cout << "MATERIAL_ASSET: Failed to find texture for sampler: " << samplerName.get<string>() << endl;
+				continue;
+			}
+		}
+
+
+		if (samplerName.is_string())
 		{
 			material->RegisterSampler(samplerName.get<string>());
 
 			// Check whether the texture is already loaded
-			auto textureAsset = assetManager->FindAssetFromPath(path.get<string>());
+			auto textureAsset = assetManager->FindAssetFromPath(path);
 
 			if (textureAsset == nullptr)
 			{
-				textureAsset = assetManager->LoadAsset(samplerName.get<string>(), path.get<string>(), TEXTURE_ASSET);
+				textureAsset = assetManager->LoadAsset(samplerName.get<string>(), path, TEXTURE_ASSET);
 				textureAsset->Cast<TextureAsset>()->LoadTexture();
 			}
 

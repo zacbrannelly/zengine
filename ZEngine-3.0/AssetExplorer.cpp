@@ -3,6 +3,7 @@
 #include "Editor.h"
 #include "CodeEditor.h"
 #include "ShaderEditor.h"
+#include "MaterialEditor.h"
 #include "imgui-includes.h"
 
 #include <ZEngine-Core/Assets/AssetManager.h>
@@ -95,6 +96,10 @@ void AssetExplorer::OpenAsset(std::string path, ObjectType type)
 		}
 
 		_editor->Add(new ShaderEditor(path));
+	}
+	else if (type == MATERIAL_ASSET)
+	{
+		_editor->Add(new MaterialEditor(path));
 	}
 }
 

@@ -27,6 +27,7 @@ public:
 
 	bool HasAsset(std::string assetPath);
 	bool GetAssetPathFromID(int id, std::string& path, ObjectType& type);
+	int GetAssetIDFromPath(std::string path);
 	std::vector<CatalogEntry> GetAssetsByType(ObjectType type);
 
 	const std::vector<CatalogEntry>& GetCatalogList() const;

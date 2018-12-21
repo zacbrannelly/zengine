@@ -101,6 +101,28 @@ void Material::Apply()
 	}
 }
 
+void Material::Release()
+{
+	_shader = nullptr;
+
+	for (auto pair : _textureSamplers)
+	{
+		bgfx::destroy(pair.second.handle);
+	}
+
+	_textureSamplers.clear();
+
+	for (auto pair : _uniforms)
+	{
+		if (pair.second.data != nullptr)
+			delete pair.second.data;
+
+		bgfx::destroy(pair.second.handle);
+	}
+
+	_uniforms.clear();
+}
+
 ZObject* Material::CreateInstance(std::string name, ObjectType type)
 {
 	return new Material(name);

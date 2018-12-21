@@ -171,6 +171,8 @@
     <ClCompile Include="LogWindow.cpp" />
     <ClCompile Include="MainMenuBar.cpp" />
     <ClCompile Include="MapView.cpp" />
+    <ClCompile Include="MaterialBuilder.cpp" />
+    <ClCompile Include="MaterialEditor.cpp" />
     <ClCompile Include="MeshRendererInspector.cpp" />
     <ClCompile Include="SceneGraphWindow.cpp" />
     <ClCompile Include="ShaderBuilder.cpp" />
@@ -224,6 +226,8 @@
     <ClInclude Include="LogWindow.h" />
     <ClInclude Include="MainMenuBar.h" />
     <ClInclude Include="MapView.h" />
+    <ClInclude Include="MaterialBuilder.h" />
+    <ClInclude Include="MaterialEditor.h" />
     <ClInclude Include="MeshRendererInspector.h" />
     <ClInclude Include="SceneGraphWindow.h" />
     <ClInclude Include="ShaderBuilder.h" />
