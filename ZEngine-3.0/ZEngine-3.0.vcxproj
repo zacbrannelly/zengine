@@ -162,6 +162,7 @@
     <ClCompile Include="experimental.cpp" />
     <ClCompile Include="File.cpp" />
     <ClCompile Include="GameView.cpp" />
+    <ClCompile Include="GUIDialog.cpp" />
     <ClCompile Include="GUIImage.cpp" />
     <ClCompile Include="GUILibrary.cpp" />
     <ClCompile Include="GUINameGenerator.cpp" />
@@ -216,6 +217,7 @@
     <ClInclude Include="Editor.h" />
     <ClInclude Include="File.h" />
     <ClInclude Include="GameView.h" />
+    <ClInclude Include="GUIDialog.h" />
     <ClInclude Include="GUIElement.h" />
     <ClInclude Include="GUIImage.h" />
     <ClInclude Include="GUILibrary.h" />
