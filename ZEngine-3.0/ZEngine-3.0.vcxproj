@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -164,6 +164,7 @@
     <ClCompile Include="GameView.cpp" />
     <ClCompile Include="GUIImage.cpp" />
     <ClCompile Include="GUILibrary.cpp" />
+    <ClCompile Include="GUINameGenerator.cpp" />
     <ClCompile Include="GUITextField.cpp" />
     <ClCompile Include="GUIWindow.cpp" />
     <ClCompile Include="Inspector.cpp" />
@@ -218,6 +219,7 @@
     <ClInclude Include="GUIElement.h" />
     <ClInclude Include="GUIImage.h" />
     <ClInclude Include="GUILibrary.h" />
+    <ClInclude Include="GUINameGenerator.h" />
     <ClInclude Include="GUITextField.h" />
     <ClInclude Include="GUIWindow.h" />
     <ClInclude Include="imgui-includes.h" />
