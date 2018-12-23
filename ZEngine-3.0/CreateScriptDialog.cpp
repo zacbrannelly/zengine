@@ -1,4 +1,5 @@
 #include "CreateScriptDialog.h"
+#include "BrowserDialog.h"
 #include "GUITextField.h"
 
 #include "Directory.h"
@@ -15,6 +16,11 @@ CreateScriptDialog::CreateScriptDialog(std::string basePath) : GUIDialog("Create
 	_basePath = basePath;
 	_nameField = new GUITextField("Script Name");
 	_pathField = new GUITextField("Script Path");
+
+	_browser = new BrowserDialog("./", BROWSER_SAVE_FILE);
+	_browser->SetFilter({ "js" });
+	_browser->SetSaveExtension("js");
+	Add(_browser);
 
 	_pathField->SetText(basePath);
 
@@ -132,26 +138,45 @@ void CreateScriptDialog::ProcessInput()
 {
 	if (GetResult() == DIALOG_RESULT_CLOSE)
 		Close();
-}
 
-void CreateScriptDialog::RenderInWindow()
-{
-	_nameField->RenderElement();
+	if (_browser->IsVisible())
+	{
+		if (_browser->GetResult() == DIALOG_RESULT_CLOSE)
+			_browser->Hide();
+		else if (_browser->GetResult() == DIALOG_RESULT_OK)
+		{
+			// Retrieve paths from the browser
+			_pathField->SetText(_browser->GetFile().GetRelativePath());
+			_nameField->SetText(_browser->GetFile().GetName());
+			_basePath = _browser->GetDirectory().GetPathRelativeTo();
+
+			_browser->Hide();
+		}
+	}
 
 	if (_nameField->GetText() != "")
 		_pathField->SetText(_basePath + _nameField->GetText() + ".js");
 	else
 		_pathField->SetText(_basePath);
 
-	ImGui::Button("...");
-
-	ImGui::SameLine();
-	_pathField->RenderElement();
-
 	if (_pathField->GetText() != _basePath + _nameField->GetText() + ".js")
 	{
 		_basePath = Directory::GetBasePath(_pathField->GetText());
 	}
+}
+
+void CreateScriptDialog::RenderInWindow()
+{
+	_nameField->RenderElement();
+
+	if (ImGui::Button("..."))
+	{
+		_browser->SetDirectory(_pathField->GetText());
+		_browser->Show();
+	}
+
+	ImGui::SameLine();
+	_pathField->RenderElement();
 
 	ImGui::Separator();
 

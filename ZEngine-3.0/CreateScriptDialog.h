@@ -2,6 +2,7 @@
 
 #include "GUIDialog.h"
 
+class BrowserDialog;
 class GUITextField;
 
 class CreateScriptDialog : public GUIDialog
@@ -22,6 +23,7 @@ private:
 	std::string _basePath;
 	GUITextField* _nameField;
 	GUITextField* _pathField;
+	BrowserDialog* _browser;
 
 	bool _includeInit;
 	bool _includeUpdate;
