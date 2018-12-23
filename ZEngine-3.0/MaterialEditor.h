@@ -38,6 +38,7 @@ public:
 	void ProcessInput() override;
 	void RenderInWindow() override;
 	bool AllowClose() override;
+	GUIElementType GetType() override;
 
 	bool LoadData();
 	bool Save();

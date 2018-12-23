@@ -463,6 +463,11 @@ const std::string& MaterialEditor::GetAssetPath() const
 	return _assetFile->GetPath();
 }
 
+GUIElementType MaterialEditor::GetType()
+{
+	return GUI_TYPE_MATERIAL_EDITOR;
+}
+
 MaterialEditor::~MaterialEditor()
 {
 	delete _assetFile;

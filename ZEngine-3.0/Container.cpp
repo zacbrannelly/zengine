@@ -37,7 +37,7 @@ void Container::RenderElement()
 			element->RenderElement();
 
 			// TODO: Find a more scalable way to check if it is a window
-			if (element->GetType() == GUI_TYPE_WINDOW || element->GetType() == GUI_TYPE_CODE_EDITOR || element->GetType() == GUI_TYPE_SHADER_EDITOR)
+			if (element->GetType() == GUI_TYPE_WINDOW || element->GetType() == GUI_TYPE_CODE_EDITOR || element->GetType() == GUI_TYPE_SHADER_EDITOR || element->GetType() == GUI_TYPE_MATERIAL_EDITOR)
 			{
 				auto window = static_cast<GUIWindow*>(element);
 

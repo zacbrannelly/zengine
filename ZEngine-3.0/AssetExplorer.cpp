@@ -99,6 +99,20 @@ void AssetExplorer::OpenAsset(std::string path, ObjectType type)
 	}
 	else if (type == MATERIAL_ASSET)
 	{
+		for (auto& element : _editor->GetElements())
+		{
+			if (element->GetType() == GUI_TYPE_MATERIAL_EDITOR)
+			{
+				auto matEditor = static_cast<MaterialEditor*>(element);
+
+				if (matEditor->GetAssetPath() == path)
+				{
+					matEditor->Focus();
+					return;
+				}
+			}
+		}
+
 		_editor->Add(new MaterialEditor(path));
 	}
 }
