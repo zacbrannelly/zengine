@@ -8,6 +8,8 @@ public:
 	File(std::string path);
 	~File();
 
+	virtual void Set(std::string path);
+
 	virtual bool Create();
 	virtual bool Move(std::string newPath);
 	virtual bool Delete();
@@ -19,7 +21,9 @@ public:
 
 	const std::string& GetFilename() const;
 	const std::string& GetPath() const;
-
+	std::string GetRelativePath(std::string to = "./") const;
+	std::string GetName() const;
+	std::string GetExtension() const;
 private:
 	std::string _path;
 	std::string _filename;

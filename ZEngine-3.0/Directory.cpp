@@ -5,10 +5,17 @@
 #include <iostream>
 #include <algorithm>
 #include <Windows.h>
+#include <Shlwapi.h>
 
 using namespace std;
 
 Directory::Directory(string path)
+{
+	_fullpath = ConvertPath(path);
+	_name = GetFilename(_fullpath);
+}
+
+void Directory::Set(string path)
 {
 	_fullpath = ConvertPath(path);
 	_name = GetFilename(_fullpath);
@@ -92,6 +99,32 @@ const string& Directory::GetName() const
 const string& Directory::GetPath() const
 {
 	return _fullpath;
+}
+
+string Directory::GetAbsolutePath() const
+{
+	char buffer[MAX_PATH] = "";
+	GetFullPathNameA(_fullpath.c_str(), MAX_PATH, buffer, nullptr);
+
+	return ConvertPath(string(buffer));
+}
+
+string Directory::GetPathRelativeTo(std::string path) const
+{
+	char buffer[MAX_PATH] = "";
+
+	auto from = Directory(path).GetAbsolutePath();
+	auto to = GetAbsolutePath();
+
+	from = ConvertPathDelimiter(from, '\\');
+	to = ConvertPathDelimiter(to, '\\');
+
+	if (PathRelativePathToA(buffer, from.c_str(), FILE_ATTRIBUTE_DIRECTORY, to.c_str(), FILE_ATTRIBUTE_NORMAL))
+	{
+		return ConvertPath(string(buffer));
+	}
+
+	return "";
 }
 
 File Directory::FindFile(string filename) const
@@ -220,7 +253,7 @@ string Directory::GetExtension(string fullpath)
 	auto filename = GetFilename(fullpath);
 	auto data = StringUtil::Split(filename, '.');
 
-	if (data.size() == 0)
+	if (data.size() == 0 || data.size() == 1)
 	{
 		return string("");
 	}
@@ -250,6 +283,22 @@ std::string Directory::ConvertPath(std::string path)
 			return '/'; 
 
 		return c; 
+	});
+
+	return path;
+}
+
+string Directory::ConvertPathDelimiter(std::string path, char delim)
+{
+	auto currDelim = GetPathDelimiter(path);
+
+	transform(path.begin(), path.end(), path.begin(),
+	[&delim, &currDelim](auto c)
+	{
+		if (c == currDelim)
+			return delim;
+		
+		return c;
 	});
 
 	return path;

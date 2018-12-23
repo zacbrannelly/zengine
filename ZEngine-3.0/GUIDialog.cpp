@@ -49,7 +49,7 @@ void GUIDialog::RenderElement()
 		Show();
 	}
 
-	ImGui::SetNextWindowSize(ImVec2(GetWidth(), GetHeight()));
+	ImGui::SetNextWindowSize(ImVec2(GetWidth(), GetHeight()), ImGuiCond_Appearing);
 
 	bool open = true;
 	bool begin = !_isModal ? ImGui::BeginPopup(GetTitle().c_str(), GetFlags()) : ImGui::BeginPopupModal(GetTitle().c_str(), &open, GetFlags());

@@ -43,6 +43,9 @@
     <Filter Include="Windows\Asset Creators">
       <UniqueIdentifier>{c27af162-2c6f-4aa4-a396-d274bec7f2d1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Windows\General Dialogs">
+      <UniqueIdentifier>{8e45775e-d232-4e8d-8ae1-ece8bcb3976e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\bgfx\3rdparty\dear-imgui\imgui_impl_glfw.cpp">
@@ -140,6 +143,12 @@
     </ClCompile>
     <ClCompile Include="GUINameGenerator.cpp">
       <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="BrowserDialog.cpp">
+      <Filter>Windows\General Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="NewFolderDialog.cpp">
+      <Filter>Windows\General Dialogs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -241,6 +250,12 @@
     </ClInclude>
     <ClInclude Include="GUINameGenerator.h">
       <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="BrowserDialog.h">
+      <Filter>Windows\General Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="NewFolderDialog.h">
+      <Filter>Windows\General Dialogs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -113,7 +113,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\..\ZEngine-3.0\ZEngine-3.0\glew-2.1.0\lib\Release\x64;..\..\ZEngine-3.0\ZEngine-3.0\glfw\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;Shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -154,6 +154,7 @@
     <ClCompile Include="..\..\bgfx\3rdparty\dear-imgui\imgui_impl_glfw.cpp" />
     <ClCompile Include="AssetExplorer.cpp" />
     <ClCompile Include="AssetImporter.cpp" />
+    <ClCompile Include="BrowserDialog.cpp" />
     <ClCompile Include="CameraInspector.cpp" />
     <ClCompile Include="CodeEditor.cpp" />
     <ClCompile Include="Container.cpp" />
@@ -177,6 +178,7 @@
     <ClCompile Include="MaterialBuilder.cpp" />
     <ClCompile Include="MaterialEditor.cpp" />
     <ClCompile Include="MeshRendererInspector.cpp" />
+    <ClCompile Include="NewFolderDialog.cpp" />
     <ClCompile Include="SceneGraphWindow.cpp" />
     <ClCompile Include="ShaderBuilder.cpp" />
     <ClCompile Include="ShaderEditor.cpp" />
@@ -211,6 +213,7 @@
     <ClInclude Include="..\..\bgfx\3rdparty\dear-imgui\imgui_impl_glfw.h" />
     <ClInclude Include="AssetExplorer.h" />
     <ClInclude Include="AssetImporter.h" />
+    <ClInclude Include="BrowserDialog.h" />
     <ClInclude Include="CameraInspector.h" />
     <ClInclude Include="CodeEditor.h" />
     <ClInclude Include="Container.h" />
@@ -235,6 +238,7 @@
     <ClInclude Include="MaterialBuilder.h" />
     <ClInclude Include="MaterialEditor.h" />
     <ClInclude Include="MeshRendererInspector.h" />
+    <ClInclude Include="NewFolderDialog.h" />
     <ClInclude Include="SceneGraphWindow.h" />
     <ClInclude Include="ShaderBuilder.h" />
     <ClInclude Include="ShaderEditor.h" />

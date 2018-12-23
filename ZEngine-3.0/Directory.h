@@ -11,6 +11,8 @@ public:
 	Directory(std::string path);
 	virtual ~Directory();
 
+	virtual void Set(std::string newPath);
+
 	virtual bool Create();
 	virtual bool Move(std::string newPath);
 	virtual bool Delete();
@@ -20,6 +22,8 @@ public:
 
 	const std::string& GetName() const;
 	const std::string& GetPath() const;
+	std::string GetAbsolutePath() const;
+	std::string GetPathRelativeTo(std::string path = "./") const;
 
 	virtual File FindFile(std::string filename) const;
 	virtual Directory FindDirectory(std::string directoryName) const;
@@ -40,6 +44,7 @@ public:
 	static std::string GetExtension(std::string fullpath);
 	static std::string GetBasePath(std::string fullpath);
 	static char GetPathDelimiter(std::string path);
+	static std::string ConvertPathDelimiter(std::string path, char delim);
 	static std::string ConvertPath(std::string path);
 };
 

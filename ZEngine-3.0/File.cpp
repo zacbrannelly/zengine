@@ -11,6 +11,12 @@ File::File(string path)
 	_filename = Directory::GetFilename(path);
 }
 
+void File::Set(string path)
+{
+	_path = Directory::ConvertPath(path);
+	_filename = Directory::GetFilename(path);
+}
+
 bool File::Create()
 {
 	ofstream out(_path, ios::out);
@@ -108,6 +114,25 @@ const string& File::GetFilename() const
 const string& File::GetPath() const
 {
 	return _path;
+}
+
+string File::GetRelativePath(string to) const
+{
+	Directory dir(Directory::GetBasePath(_path));
+	auto relativeBase = dir.GetPathRelativeTo(to);
+
+	return relativeBase + _filename;
+}
+
+std::string File::GetName() const
+{
+	auto ext = GetExtension();
+	return _filename.substr(0, _filename.size() - ext.size() - 1);
+}
+
+string File::GetExtension() const
+{
+	return Directory::GetExtension(_path);
 }
 
 File::~File()
