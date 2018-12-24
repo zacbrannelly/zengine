@@ -158,6 +158,7 @@
     <ClCompile Include="CameraInspector.cpp" />
     <ClCompile Include="CodeEditor.cpp" />
     <ClCompile Include="Container.cpp" />
+    <ClCompile Include="CreateMaterialDialog.cpp" />
     <ClCompile Include="CreateScriptDialog.cpp" />
     <ClCompile Include="CreateShaderDialog.cpp" />
     <ClCompile Include="Directory.cpp" />
@@ -218,6 +219,7 @@
     <ClInclude Include="CameraInspector.h" />
     <ClInclude Include="CodeEditor.h" />
     <ClInclude Include="Container.h" />
+    <ClInclude Include="CreateMaterialDialog.h" />
     <ClInclude Include="CreateScriptDialog.h" />
     <ClInclude Include="CreateShaderDialog.h" />
     <ClInclude Include="Directory.h" />

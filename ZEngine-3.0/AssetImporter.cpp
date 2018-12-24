@@ -6,6 +6,7 @@
 
 #include "CreateScriptDialog.h"
 #include "CreateShaderDialog.h"
+#include "CreateMaterialDialog.h"
 
 #include <ZEngine-Core/Assets/AssetManager.h>
 #include <ZEngine-Core/Assets/AssetCatalog.h>
@@ -70,7 +71,10 @@ void AssetImporter::RenderInWindow()
 
 			if (ImGui::MenuItem("Material"))
 			{
+				auto dialog = new CreateMaterialDialog();
+				dialog->Show();
 
+				Add(dialog);
 			}
 
 			ImGui::EndMenu();

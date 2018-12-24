@@ -153,6 +153,9 @@
     <ClCompile Include="CreateShaderDialog.cpp">
       <Filter>Windows\Asset Creators</Filter>
     </ClCompile>
+    <ClCompile Include="CreateMaterialDialog.cpp">
+      <Filter>Windows\Asset Creators</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\bgfx\3rdparty\dear-imgui\imgui_impl_glfw.h">
@@ -261,6 +264,9 @@
       <Filter>Windows\General Dialogs</Filter>
     </ClInclude>
     <ClInclude Include="CreateShaderDialog.h">
+      <Filter>Windows\Asset Creators</Filter>
+    </ClInclude>
+    <ClInclude Include="CreateMaterialDialog.h">
       <Filter>Windows\Asset Creators</Filter>
     </ClInclude>
   </ItemGroup>
