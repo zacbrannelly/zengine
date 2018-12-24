@@ -260,16 +260,17 @@ void ShaderEditor::RenderInWindow()
 
 				if (_currentPass != prevPass)
 				{
-					const auto& pass = _passes[i];
-					auto& prevPassObj = _passes[prevPass];
+					const auto& newPass = _passes[i];
 
-					prevPassObj.workingVertSource = _vertSourceField->GetText();
-					prevPassObj.workingFragSource = _fragSourceField->GetText();
-					prevPassObj.workingVarySource = _varySourceField->GetText();
+					pass.workingVertSource = _vertSourceField->GetText();
+					pass.workingFragSource = _fragSourceField->GetText();
+					pass.workingVarySource = _varySourceField->GetText();
 
-					_vertSourceField->SetText(pass.workingVertSource);
-					_fragSourceField->SetText(pass.workingFragSource);
-					_varySourceField->SetText(pass.workingVarySource);
+					_vertSourceField->SetText(newPass.workingVertSource);
+					_fragSourceField->SetText(newPass.workingFragSource);
+					_varySourceField->SetText(newPass.workingVarySource);
+
+					pass = _passes[_currentPass];
 				}
 			}
 		}
