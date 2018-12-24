@@ -5,6 +5,7 @@
 #include "imgui-includes.h"
 
 #include "CreateScriptDialog.h"
+#include "CreateShaderDialog.h"
 
 #include <ZEngine-Core/Assets/AssetManager.h>
 #include <ZEngine-Core/Assets/AssetCatalog.h>
@@ -61,7 +62,10 @@ void AssetImporter::RenderInWindow()
 
 			if (ImGui::MenuItem("Shader"))
 			{
+				auto dialog = new CreateShaderDialog();
+				dialog->Show();
 
+				Add(dialog);
 			}
 
 			if (ImGui::MenuItem("Material"))

@@ -150,6 +150,9 @@
     <ClCompile Include="NewFolderDialog.cpp">
       <Filter>Windows\General Dialogs</Filter>
     </ClCompile>
+    <ClCompile Include="CreateShaderDialog.cpp">
+      <Filter>Windows\Asset Creators</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\bgfx\3rdparty\dear-imgui\imgui_impl_glfw.h">
@@ -256,6 +259,9 @@
     </ClInclude>
     <ClInclude Include="NewFolderDialog.h">
       <Filter>Windows\General Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="CreateShaderDialog.h">
+      <Filter>Windows\Asset Creators</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

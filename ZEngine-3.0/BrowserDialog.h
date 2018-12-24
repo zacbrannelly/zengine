@@ -26,6 +26,9 @@ public:
 	void SetSaveExtension(std::string extension);
 	const std::string& GetSaveExtension() const;
 
+	void SetUserData(void* data);
+	void* GetUserData() const;
+
 	void Refresh();
 
 	void ProcessInput() override;
@@ -57,4 +60,6 @@ private:
 	std::vector<Directory> _cachedDirs;
 	std::vector<File> _cachedFiles;
 	std::vector<std::string> _filter;
+
+	void* _userData;
 };

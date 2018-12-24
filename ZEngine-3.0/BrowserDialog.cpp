@@ -14,6 +14,7 @@ BrowserDialog::BrowserDialog(std::string basePath, BrowserDialogType type) : GUI
 	_selectedFile = new File("");
 	_type = type;
 	_saveExtension = "";
+	_userData = nullptr;
 
 	_pathField = new GUITextField(GUINameGenerator::GetUniqueName("Path"));
 	_nameField = new GUITextField(GUINameGenerator::GetUniqueName("Name"));
@@ -205,6 +206,16 @@ void BrowserDialog::SetSaveExtension(std::string extension)
 const std::string& BrowserDialog::GetSaveExtension() const
 {
 	return _saveExtension;
+}
+
+void BrowserDialog::SetUserData(void* data)
+{
+	_userData = data;
+}
+
+void* BrowserDialog::GetUserData() const
+{
+	return _userData;
 }
 
 void BrowserDialog::SetFilter(std::vector<std::string> extensions)
