@@ -165,20 +165,6 @@ void Graphics::SetTexture(uint8_t stage, bgfx::UniformHandle& sampler, bgfx::Tex
 	setTexture(stage, sampler, handle, flags);
 }
 
-void Graphics::Submit(int viewId, Material* material, uint64_t state)
-{
-	if (material == nullptr || material->GetShader() == nullptr) return;
-
-	material->Apply();
-
-	// Submit multiple draw calls for a multi-pass shader
-	for (auto& pass : material->GetShader()->GetPasses())
-	{
-		SetState(state | pass.state);
-		Submit(viewId, pass.program);
-	}
-}
-
 void Graphics::Submit(int viewId, bgfx::ProgramHandle program)
 {
 	submit(viewId, program);

@@ -3,7 +3,7 @@
 #include "DynamicVertexBuffer.h"
 #include "Material.h"
 #include "Graphics.h"
-
+#include "Shader.h"
 
 Mesh::Mesh(std::string name) : ZObject(name, ObjectType::MESH)
 {
@@ -169,13 +169,18 @@ void Mesh::Draw(int viewId, const std::vector<Material*>& materials, glm::mat4& 
 
 		if (material != nullptr)
 		{
-			graphics->SetTransform(transform);
-			graphics->SetVertexBuffer(0, _vertexBuffer);
-			graphics->SetVertexBuffer(1, _colorBuffer);
-			graphics->SetVertexBuffer(2, _texCoordBuffer);
-			graphics->SetVertexBuffer(3, _normalBuffer);
+			const auto& passes = material->GetShader()->GetPasses();
 
-			_subMeshes[i]->Draw(viewId, material, graphics);
+			for (const auto& pass : passes)
+			{
+				graphics->SetTransform(transform);
+				graphics->SetVertexBuffer(0, _vertexBuffer);
+				graphics->SetVertexBuffer(1, _colorBuffer);
+				graphics->SetVertexBuffer(2, _texCoordBuffer);
+				graphics->SetVertexBuffer(3, _normalBuffer);
+
+				_subMeshes[i]->Draw(viewId, material, graphics, pass);
+			}
 		}
 	}
 }
@@ -239,7 +244,7 @@ const std::vector<uint32_t>& SubMesh::GetIndices() const
 	return _indices;
 }
 
-void SubMesh::Draw(int viewId, Material* material, Graphics* graphics)
+void SubMesh::Draw(int viewId, Material* material, Graphics* graphics, const Pass& pass)
 {
 	uint64_t renderFlags = 0 | BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BGFX_STATE_WRITE_Z | BGFX_STATE_DEPTH_TEST_LESS | BGFX_STATE_CULL_CW | BGFX_STATE_MSAA;
 
@@ -258,8 +263,11 @@ void SubMesh::Draw(int viewId, Material* material, Graphics* graphics)
 		renderFlags |= BGFX_STATE_PT_TRISTRIP;
 	}
 
+	material->Apply();
 	graphics->SetIndexBuffer(_indexBuffer);
-	graphics->Submit(viewId, material, renderFlags);
+	graphics->SetState(renderFlags | pass.state);
+
+	graphics->Submit(viewId, pass.program);
 }
 
 SubMesh::~SubMesh()

@@ -9,6 +9,7 @@ class Material;
 class VertexBuffer;
 class IndexBuffer;
 class Graphics;
+struct Pass;
 
 enum DrawMode
 {
@@ -27,7 +28,7 @@ public:
 	void SetIndices(const std::vector<uint32_t>& indices);
 	const std::vector<uint32_t>& GetIndices() const;
 
-	void Draw(int viewId, Material* material, Graphics* graphics);
+	void Draw(int viewId, Material* material, Graphics* graphics, const Pass& pass);
 
 private:
 	std::vector<uint32_t> _indices;

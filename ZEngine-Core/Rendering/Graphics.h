@@ -39,7 +39,6 @@ public:
 	void SetUniform(bgfx::UniformHandle& uniform, const void* data, uint16_t numElements);
 	void SetTexture(uint8_t stage, bgfx::UniformHandle& sampler, bgfx::TextureHandle& handle);
 	void SetTexture(uint8_t stage, bgfx::UniformHandle& sampler, bgfx::TextureHandle& handle, uint32_t flags);
-	void Submit(int viewId, Material* material, uint64_t state);
 	void Submit(int viewId, bgfx::ProgramHandle program);
 
 	bgfx::FrameBufferHandle CreateFrameBuffer(int width, int height);
