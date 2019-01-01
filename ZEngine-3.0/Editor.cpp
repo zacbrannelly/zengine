@@ -31,6 +31,7 @@
 #include <ZEngine-Core\Audio\AudioSystem.h>
 #include <glm/glm.hpp>
 
+#include "ComponentExporter.h"
 #include "GUILibrary.h"
 #include "MainMenuBar.h"
 #include "MapView.h"
@@ -98,6 +99,7 @@ int main(int argc, char* argv[])
 	Factory::Init();
 
 	//TODO: Register any editor specific ZObject's here
+	ComponentExporter::RegisterAllTypes();
 
 	// Init scripting system
 	auto scriptSystem = ScriptSystem::GetInstance();
@@ -170,6 +172,8 @@ int main(int argc, char* argv[])
 	display.Shutdown();
 	scriptSystem->Shutdown();
 	time->Shutdown();
+
+	ComponentExporter::Cleanup();
 
 	return 0;
 }

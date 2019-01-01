@@ -14,7 +14,8 @@ Camera::Camera() : Component("Camera", ObjectType::CAMERA)
 	_clearFlags = BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH;
 	_zNear = 0.1f;
 	_zFar = 100.0f;
-
+	_viewport = { 0, 0, 1024, 600 };
+	_clearColor = { 1, 1, 1, 1 };
 	_orthoSize = 5.0f;
 	_fov = glm::radians(60.0f);
 }

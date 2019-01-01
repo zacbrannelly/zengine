@@ -52,7 +52,7 @@ ZObject* MeshRendererImporter::ImportImpl(string name, json::object_t& values)
 
 		// Required fields
 		auto vertices = ReadDynamicArray<float>("vertices", meshObj);
-		auto indices = ReadDynamicArray<unsigned int>("indices", meshObj);
+		auto indices = ReadDynamicArray<json::array_t>("indices", meshObj);
 
 		// Optional fields
 		auto colors = ReadDynamicArray<float>("colors", meshObj);
@@ -65,7 +65,17 @@ ZObject* MeshRendererImporter::ImportImpl(string name, json::object_t& values)
 
 		auto mesh = Factory::CreateInstance<Mesh>(name + "_mesh", MESH);
 		mesh->SetVertices(vertexData);
-		mesh->SetIndices(indices);
+
+		for (int i = 0; i < indices.size(); i++)
+		{
+			auto& subMesh = indices[i];
+			auto data = vector<unsigned int>(subMesh.size(), 0);
+			
+			for (const auto& index : subMesh)
+				data.push_back(index.get<unsigned int>());
+
+			mesh->SetIndices(i, data);
+		}
 
 		if (colors.size() > 0)
 		{

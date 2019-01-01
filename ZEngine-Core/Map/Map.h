@@ -19,7 +19,7 @@ public:
 	Entity* Find(std::string name);
 	Entity* FindWithComponent(std::string componentName);
 	std::vector<Entity*> FindAll(std::string name);
-	const std::vector<Entity*>& GetEntities();
+	const std::vector<Entity*>& GetEntities() const;
 
 	void RegisterCameras();
 	const std::vector<Camera*>& GetCameras() const;

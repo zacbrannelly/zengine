@@ -46,6 +46,9 @@
     <Filter Include="Windows\General Dialogs">
       <UniqueIdentifier>{8e45775e-d232-4e8d-8ae1-ece8bcb3976e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Asset Builders\Exporters">
+      <UniqueIdentifier>{e78f2195-1f69-4fab-b9a2-3d12a9b9b21d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\bgfx\3rdparty\dear-imgui\imgui_impl_glfw.cpp">
@@ -155,6 +158,30 @@
     </ClCompile>
     <ClCompile Include="CreateMaterialDialog.cpp">
       <Filter>Windows\Asset Creators</Filter>
+    </ClCompile>
+    <ClCompile Include="CreateMapDialog.cpp">
+      <Filter>Windows\Asset Creators</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentExporter.cpp">
+      <Filter>Asset Builders\Exporters</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformExporter.cpp">
+      <Filter>Asset Builders\Exporters</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraExporter.cpp">
+      <Filter>Asset Builders\Exporters</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioSourceExporter.cpp">
+      <Filter>Asset Builders\Exporters</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptComponentExporter.cpp">
+      <Filter>Asset Builders\Exporters</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshRendererExporter.cpp">
+      <Filter>Asset Builders\Exporters</Filter>
+    </ClCompile>
+    <ClCompile Include="MapBuilder.cpp">
+      <Filter>Asset Builders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -268,6 +295,30 @@
     </ClInclude>
     <ClInclude Include="CreateMaterialDialog.h">
       <Filter>Windows\Asset Creators</Filter>
+    </ClInclude>
+    <ClInclude Include="CreateMapDialog.h">
+      <Filter>Windows\Asset Creators</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentExporter.h">
+      <Filter>Asset Builders\Exporters</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformExporter.h">
+      <Filter>Asset Builders\Exporters</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraExporter.h">
+      <Filter>Asset Builders\Exporters</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioSourceExporter.h">
+      <Filter>Asset Builders\Exporters</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptComponentExporter.h">
+      <Filter>Asset Builders\Exporters</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshRendererExporter.h">
+      <Filter>Asset Builders\Exporters</Filter>
+    </ClInclude>
+    <ClInclude Include="MapBuilder.h">
+      <Filter>Asset Builders</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

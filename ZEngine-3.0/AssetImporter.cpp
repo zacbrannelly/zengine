@@ -7,6 +7,7 @@
 #include "CreateScriptDialog.h"
 #include "CreateShaderDialog.h"
 #include "CreateMaterialDialog.h"
+#include "CreateMapDialog.h"
 
 #include <ZEngine-Core/Assets/AssetManager.h>
 #include <ZEngine-Core/Assets/AssetCatalog.h>
@@ -50,7 +51,10 @@ void AssetImporter::RenderInWindow()
 		{
 			if (ImGui::MenuItem("Map"))
 			{
+				auto dialog = new CreateMapDialog(_rootFolder->GetPath());
+				dialog->Show();
 
+				Add(dialog);
 			}
 
 			if (ImGui::MenuItem("Script"))
@@ -63,7 +67,7 @@ void AssetImporter::RenderInWindow()
 
 			if (ImGui::MenuItem("Shader"))
 			{
-				auto dialog = new CreateShaderDialog();
+				auto dialog = new CreateShaderDialog(_rootFolder->GetPath());
 				dialog->Show();
 
 				Add(dialog);
@@ -71,7 +75,7 @@ void AssetImporter::RenderInWindow()
 
 			if (ImGui::MenuItem("Material"))
 			{
-				auto dialog = new CreateMaterialDialog();
+				auto dialog = new CreateMaterialDialog(_rootFolder->GetPath());
 				dialog->Show();
 
 				Add(dialog);

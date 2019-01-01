@@ -156,7 +156,7 @@ vector<Entity*> Map::FindAll(string name)
 	return result;
 }
 
-const std::vector<Entity*>& Map::GetEntities()
+const std::vector<Entity*>& Map::GetEntities() const
 {
 	return _entities;
 }
