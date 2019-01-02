@@ -19,6 +19,9 @@ void GameView::SetupCamera()
 	// We can't setup without a map or camera
 	if (_editor->GetSelectedMap() != nullptr && _editor->GetSelectedMap()->GetCameras().size() > 0)
 	{
+		// Keep current map so we can detect change
+		_currentMap = _editor->GetSelectedMap();
+
 		// Make main camera render to texture
 		_mainCamera = _editor->GetSelectedMap()->GetCameras()[0];
 		_mainCamera->SetRenderToTexture(true);
@@ -54,7 +57,7 @@ void GameView::RenderInWindow()
 void GameView::RenderElement()
 {
 	// If no map, do nothing, if there is one, check if the camera is setup.
-	if (_mainCamera == nullptr)
+	if (_mainCamera == nullptr || _currentMap != _editor->GetSelectedMap())
 	{
 		SetupCamera();
 

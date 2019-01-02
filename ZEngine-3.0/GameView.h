@@ -7,6 +7,7 @@
 class Editor;
 class Camera;
 class Entity;
+class Map;
 class TransformInspector;
 class CameraInspector;
 
@@ -25,4 +26,5 @@ private:
 	GUIImage* _viewImage;
 	Editor* _editor;
 	Camera* _mainCamera;
+	Map* _currentMap;
 };
