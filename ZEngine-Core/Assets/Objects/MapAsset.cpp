@@ -66,6 +66,8 @@ bool MapAsset::Load(string path)
 		}
 	}
 
+	SetPath(path);
+
 	return true;
 }
 

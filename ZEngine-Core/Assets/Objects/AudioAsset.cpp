@@ -37,20 +37,16 @@ bool AudioAsset::Load(string path)
 	auto it = root.find("music");
 	if (it != root.end())
 	{
-		auto path = it->get<string>();
-
-		SetPath(path);
-		_sound = audioSys->LoadMusicData(path);
+		auto soundPath = it->get<string>();
+		_sound = audioSys->LoadMusicData(soundPath);
 	}
 
 	// Load sound data 
 	it = root.find("sound");
 	if (it != root.end())
 	{
-		auto path = it->get<string>();
-
-		SetPath(path);
-		_sound = audioSys->LoadSoundData(it->get<string>());
+		auto soundPath = it->get<string>();
+		_sound = audioSys->LoadSoundData(soundPath);
 	}
 
 	if (_sound.chunk == nullptr && _sound.music == nullptr)
@@ -88,6 +84,8 @@ bool AudioAsset::Load(string path)
 	it = root.find("fadeTime");
 	if (it != root.end())
 		_sound.fadeTime = it->get<int>();
+
+	SetPath(path);
 
 	return true;
 }
