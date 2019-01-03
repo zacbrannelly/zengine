@@ -8,6 +8,8 @@
 #include "../../Rendering/Mesh.h"
 #include "../../Rendering/MeshFactory.h"
 
+#include "../../Map/Objects/Entity.h"
+
 using namespace std;
 using namespace nlohmann;
 
@@ -48,11 +50,13 @@ ZObject* MeshRendererImporter::ImportImpl(string name, json::object_t& values)
 
 	if (HasKey("mesh", values))
 	{
+		Mesh* testMesh = nullptr;
+
 		auto meshObj = values.at("mesh").get<json::object_t>();
 
 		// Required fields
 		auto vertices = ReadDynamicArray<float>("vertices", meshObj);
-		auto indices = ReadDynamicArray<json::array_t>("indices", meshObj);
+		auto subMeshes = ReadDynamicArray<json::object_t>("subMesh", meshObj);
 
 		// Optional fields
 		auto colors = ReadDynamicArray<float>("colors", meshObj);
@@ -60,27 +64,31 @@ ZObject* MeshRendererImporter::ImportImpl(string name, json::object_t& values)
 		auto normals = ReadDynamicArray<float>("normals", meshObj);
 		
 		// Convert vertices from float[] to vec3[]
-		vector<glm::vec3> vertexData(vertices.size(), { 0, 0, 0 });
+		vector<glm::vec3> vertexData(vertices.size() / 3, { 0, 0, 0 });
 		memcpy(vertexData.data(), vertices.data(), sizeof(float) * vertices.size());
 
 		auto mesh = Factory::CreateInstance<Mesh>(name + "_mesh", MESH);
 		mesh->SetVertices(vertexData);
 
-		for (int i = 0; i < indices.size(); i++)
+		for (int i = 0; i < subMeshes.size(); i++)
 		{
-			auto& subMesh = indices[i];
-			auto data = vector<unsigned int>(subMesh.size(), 0);
-			
-			for (const auto& index : subMesh)
-				data.push_back(index.get<unsigned int>());
+			auto& subMesh = subMeshes[i];
+			const auto& indices = subMesh["indices"];
+			const auto& mode = subMesh["mode"];
+
+			// Convert the array of json int into vector of uint32
+			auto data = vector<uint32_t>();
+			for (const auto& index : indices)
+				data.push_back(index.get<uint32_t>());
 
 			mesh->SetIndices(i, data);
+			mesh->SetMode(i, (DrawMode)mode.get<uint32_t>());
 		}
 
 		if (colors.size() > 0)
 		{
 			// Convert colors from float[] to vec3[]
-			vector<glm::vec4> colorData(colors.size(), { 0, 0, 0, 1 });
+			vector<glm::vec4> colorData(colors.size() / 4, { 0, 0, 0, 1 });
 			memcpy(colorData.data(), colors.data(), sizeof(float) * colors.size());
 			mesh->SetColors(colorData);
 		}
@@ -88,7 +96,7 @@ ZObject* MeshRendererImporter::ImportImpl(string name, json::object_t& values)
 		if (normals.size() > 0)
 		{
 			// Convert normals from float[] to vec3[]
-			vector<glm::vec3> normalData(normals.size(), { 0, 0, 0 });
+			vector<glm::vec3> normalData(normals.size() / 3, { 0, 0, 0 });
 			memcpy(normalData.data(), normals.data(), sizeof(float) * normals.size());
 			mesh->SetNormals(normalData);
 		}
@@ -96,10 +104,9 @@ ZObject* MeshRendererImporter::ImportImpl(string name, json::object_t& values)
 		if (texCoords.size() > 0)
 		{
 			// Convert texCoords from float[] to vec3[]
-			vector<glm::vec2> texCoordData(texCoords.size(), { 0, 0 });
+			vector<glm::vec2> texCoordData(texCoords.size() / 2, { 0, 0 });
 			memcpy(texCoordData.data(), texCoords.data(), sizeof(float) * texCoords.size());
 			mesh->SetTextureCoords(texCoordData);
-
 		}
 
 		meshRenderer->SetMesh(mesh);

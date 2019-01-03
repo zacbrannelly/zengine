@@ -44,27 +44,54 @@ json MeshRendererExporter::ExportImpl(ZObject* obj)
 		auto mesh = meshRenderer->GetMesh();
 		auto& meshObj = result["mesh"] = json::object_t();
 
-		auto& vertices = result["vertices"] = json::array_t(mesh->GetVertices().size(), { 0, 0, 0 });
-		memcpy(&vertices[0], mesh->GetVertices().data(), mesh->GetVertices().size() * sizeof(glm::vec3));
+		auto& vertices = meshObj["vertices"] = json::array_t();
+		for (const auto& vert : mesh->GetVertices())
+		{
+			vertices.push_back(vert.x);
+			vertices.push_back(vert.y);
+			vertices.push_back(vert.z);
+		}
 
-		auto& colors = result["colors"] = json::array_t(mesh->GetColors().size(), { 0, 0, 0, 1 });
-		memcpy(&colors[0], mesh->GetColors().data(), mesh->GetColors().size() * sizeof(glm::vec4));
+		auto& colors = meshObj["colors"] = json::array_t();
+		for (const auto& color : mesh->GetColors())
+		{
+			colors.push_back(color.r);
+			colors.push_back(color.g);
+			colors.push_back(color.b);
+			colors.push_back(color.a);
+		}
 
-		auto& texCoords = result["texCoords"] = json::array_t(mesh->GetTextureCoords().size(), { 0, 0 });
-		memcpy(&texCoords[0], mesh->GetTextureCoords().data(), mesh->GetTextureCoords().size() * sizeof(glm::vec2));
+		auto& texCoords = meshObj["texCoords"] = json::array_t();
+		for (const auto& texCoord : mesh->GetTextureCoords())
+		{
+			texCoords.push_back(texCoord.x);
+			texCoords.push_back(texCoord.y);
+		}
 
-		auto& normals = result["normals"] = json::array_t(mesh->GetNormals().size(), { 0, 0, 0 });
-		memcpy(&normals[0], mesh->GetNormals().data(), mesh->GetNormals().size() * sizeof(glm::vec3));
+		auto& normals = meshObj["normals"] = json::array_t();
+		for (const auto& normal : mesh->GetNormals())
+		{
+			normals.push_back(normal.x);
+			normals.push_back(normal.y);
+			normals.push_back(normal.z);
+		}
 
-		auto& subMeshes = result["indices"] = json::array_t();
+		auto& subMeshes = meshObj["subMesh"] = json::array_t();
 
 		for (int i = 0; i < mesh->GetSubMeshCount(); i++)
 		{
 			const auto& indices = mesh->GetIndices(i);
-			auto jsonIndices = json::array_t(indices.size(), 0);
+			auto subMeshObj = json::object_t();
 
-			memcpy(jsonIndices.data(), indices.data(), indices.size() * sizeof(uint32_t));
-			subMeshes.push_back(jsonIndices);
+			subMeshObj["mode"] = (uint32_t)mesh->GetMode(i);
+			auto& jsonIndices = subMeshObj["indices"] = json::array_t();
+
+			for (const auto& i : indices)
+			{
+				jsonIndices.push_back(i);
+			}
+			
+			subMeshes.push_back(subMeshObj);
 		}
 	}
 

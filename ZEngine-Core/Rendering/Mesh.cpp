@@ -95,6 +95,18 @@ void Mesh::SetMode(int subMesh, DrawMode mode)
 	_subMeshes[subMesh]->SetMode(mode);
 }
 
+DrawMode Mesh::GetMode() const
+{
+	assert(_subMeshes.size() > 0);
+	return _subMeshes.front()->GetMode();
+}
+
+DrawMode Mesh::GetMode(int subMesh) const
+{
+	assert(_subMeshes.size() > subMesh);
+	return _subMeshes[subMesh]->GetMode();
+}
+
 void Mesh::SetVertices(const float* data, unsigned int numVertices)
 {
 	SetBuffer<glm::vec3>(_vertexBuffer, _vertexDecl, _vertices, data, numVertices);

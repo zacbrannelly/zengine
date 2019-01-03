@@ -54,6 +54,8 @@ public:
 
 	void SetMode(DrawMode mode);
 	void SetMode(int subMesh, DrawMode mode);
+	DrawMode GetMode() const;
+	DrawMode GetMode(int subMesh) const;
 
 	void SetVertices(const float* data, unsigned int numVertices);
 	void SetVertices(const std::vector<glm::vec3>& vertices);

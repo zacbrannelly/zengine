@@ -33,7 +33,7 @@ bool MapBuilder::BuildToFile(const std::string& path, const Map* map)
 			auto componentObj = ComponentExporter::Export(component);
 
 			if (!componentObj.is_null())
-				components.push_back(componentObj);
+				components.push_back(componentObj.get<json::object_t>());
 		}
 
 		entities.push_back(newEntityObj);
