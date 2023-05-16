@@ -6,7 +6,7 @@ TimeWrapper* TimeWrapper::ConstructorImpl(const v8::FunctionCallbackInfo<v8::Val
 	return GetInstance();
 }
 
-void TimeWrapper::InstallImpl(v8::Local<v8::ObjectTemplate>& temp)
+void TimeWrapper::InstallImpl(v8::Local<v8::ObjectTemplate> temp)
 {
 	auto sys = ScriptSystem::GetInstance();
 

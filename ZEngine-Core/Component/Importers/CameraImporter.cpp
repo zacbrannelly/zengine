@@ -5,7 +5,7 @@
 using namespace std;
 using namespace nlohmann;
 
-ZObject* CameraImporter::ImportImpl(std::string name, json::object_t& values)
+ZObject* CameraImporter::ImportImpl(std::string name, json& values)
 {
 	Camera* camera = Factory::CreateInstance<Camera>(name, CAMERA);
 

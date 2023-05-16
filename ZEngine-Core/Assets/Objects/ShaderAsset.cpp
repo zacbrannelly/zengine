@@ -1,5 +1,5 @@
 #include "ShaderAsset.h"
-#include "../../json/json.hpp"
+#include <nlohmann/json.hpp>
 #include <fstream>
 #include <iostream>
 
@@ -8,6 +8,7 @@ using namespace nlohmann;
 
 ShaderAsset::ShaderAsset(std::string name) : Asset(name, ObjectType::SHADER_ASSET)
 {
+	_shader = nullptr;
 }
 
 bool ShaderAsset::Load(std::string path)

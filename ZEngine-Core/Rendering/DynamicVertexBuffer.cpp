@@ -2,7 +2,7 @@
 
 using namespace bgfx;
 
-DynamicVertexBuffer::DynamicVertexBuffer(bgfx::VertexDecl decl) : VertexBuffer(decl)
+DynamicVertexBuffer::DynamicVertexBuffer(bgfx::VertexLayout decl) : VertexBuffer(decl)
 {
 }
 

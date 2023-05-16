@@ -13,7 +13,7 @@
 using namespace std;
 using namespace nlohmann;
 
-ZObject* MeshRendererImporter::ImportImpl(string name, json::object_t& values)
+ZObject* MeshRendererImporter::ImportImpl(string name, json& values)
 {
 	auto meshRenderer = Factory::CreateInstance<MeshRenderer>(name, MESH_RENDERER);
 	auto assetManager = AssetManager::GetInstance();
@@ -52,11 +52,11 @@ ZObject* MeshRendererImporter::ImportImpl(string name, json::object_t& values)
 	{
 		Mesh* testMesh = nullptr;
 
-		auto meshObj = values.at("mesh").get<json::object_t>();
+		auto meshObj = values.at("mesh").get<json>();
 
 		// Required fields
 		auto vertices = ReadDynamicArray<float>("vertices", meshObj);
-		auto subMeshes = ReadDynamicArray<json::object_t>("subMesh", meshObj);
+		auto subMeshes = ReadDynamicArray<json>("subMesh", meshObj);
 
 		// Optional fields
 		auto colors = ReadDynamicArray<float>("colors", meshObj);

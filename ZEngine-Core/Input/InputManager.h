@@ -2,7 +2,7 @@
 
 #include "../Misc/Singleton.h"
 #include "InputTypes.h"
-#include <glm\glm.hpp>
+#include <glm/glm.hpp>
 #include <map>
 #include <vector>
 #include <algorithm>

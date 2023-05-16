@@ -2,7 +2,8 @@
 #include "../Rendering/Graphics.h"
 #include "../Map/Objects/Entity.h"
 #include "Transform.h"
-#include <glm\gtc\matrix_transform.hpp>
+
+#include <glm/gtc/matrix_transform.hpp>
 
 using namespace std;
 
@@ -12,7 +13,7 @@ Camera::Camera() : Component("Camera", ObjectType::CAMERA)
 	_frameBuffer = BGFX_INVALID_HANDLE;
 	_renderTexture = BGFX_INVALID_HANDLE;
 	_clearFlags = BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH;
-	_zNear = 0.1f;
+	_zNear = 0.001f;
 	_zFar = 100.0f;
 	_viewport = { 0, 0, 1024, 600 };
 	_clearColor = { 1, 1, 1, 1 };

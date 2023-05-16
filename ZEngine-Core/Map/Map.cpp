@@ -272,7 +272,8 @@ void Callback_Map_Add(const v8::FunctionCallbackInfo<v8::Value>& info)
 	if (info.Length() == 1 && info[0]->IsObject())
 	{
 		auto sys = ScriptSystem::GetInstance();
-		auto object = info[0]->ToObject(info.GetIsolate());
+		auto context = sys->GetContext()->GetLocal();
+		auto object = info[0]->ToObject(context).ToLocalChecked();
 		auto wrap = v8::Local<v8::External>::Cast(object->GetInternalField(0));
 		auto scriptable = static_cast<IScriptable*>(wrap->Value());
 		auto entity = static_cast<Entity*>(scriptable);
@@ -296,7 +297,8 @@ void Callback_Map_Remove(const v8::FunctionCallbackInfo<v8::Value>& info)
 	if (info.Length() == 1 && info[0]->IsObject())
 	{
 		auto sys = ScriptSystem::GetInstance();
-		auto object = info[0]->ToObject(info.GetIsolate());
+		auto context = sys->GetContext()->GetLocal();
+		auto object = info[0]->ToObject(context).ToLocalChecked();
 		auto wrap = v8::Local<v8::External>::Cast(object->GetInternalField(0));
 		auto scriptable = static_cast<IScriptable*>(wrap->Value());
 		auto entity = static_cast<Entity*>(scriptable);
@@ -327,7 +329,11 @@ void Callback_Map_Find(const v8::FunctionCallbackInfo<v8::Value>& info)
 		return;
 	}
 
-	auto objName = ScriptSystem::GetInstance()->CastString(info[0]->ToString(info.GetIsolate()));
+	auto sys = ScriptSystem::GetInstance();
+	auto context = sys->GetContext()->GetLocal();
+
+	auto objNameJsString = info[0]->ToString(context).ToLocalChecked();
+	auto objName = sys->CastString(objNameJsString);
 	auto obj = map->Find(objName);
 
 	if (obj != nullptr)

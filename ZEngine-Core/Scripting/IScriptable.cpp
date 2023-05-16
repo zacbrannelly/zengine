@@ -14,7 +14,7 @@ IScriptable::IScriptable(ObjectType type)
 		auto objTemplate = ScriptSystem::GetInstance()->GetTemplate(type);
 
 		// Create the JS object for this instance and link to the native pointer
-		auto newObj = objTemplate->GetFunction()->NewInstance(context);
+		auto newObj = objTemplate->GetFunction(context).ToLocalChecked()->NewInstance(context);
 		newObj.ToLocalChecked()->SetInternalField(0, v8::External::New(isolate, this));
 
 		// Put it into the persistent data

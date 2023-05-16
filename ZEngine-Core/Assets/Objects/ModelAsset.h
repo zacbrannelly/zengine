@@ -1,7 +1,7 @@
 #pragma once
 
-#include <assimp\Importer.hpp>
-#include <assimp\material.h>
+#include <assimp/Importer.hpp>
+#include <assimp/material.h>
 #include <vector>
 #include <map>
 #include "../Asset.h"

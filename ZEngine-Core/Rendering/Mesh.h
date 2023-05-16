@@ -7,6 +7,7 @@
 
 class Material;
 class VertexBuffer;
+class DynamicVertexBuffer;
 class IndexBuffer;
 class Graphics;
 struct Pass;
@@ -76,10 +77,10 @@ public:
 	void Draw(int viewId, const std::vector<Material*>& materials, glm::mat4& transform);
 private:
 	template<typename T>
-	void SetBuffer(VertexBuffer*& buffer, bgfx::VertexDecl& decl, std::vector<T>& originalData, const float* data, unsigned int numElements);
+	void SetBuffer(VertexBuffer*& buffer, bgfx::VertexLayout& decl, std::vector<T>& originalData, const float* data, unsigned int numElements);
 
 	template<typename T>
-	void SetBuffer(VertexBuffer*& buffer, bgfx::VertexDecl& decl, const std::vector<T>& data);
+	void SetBuffer(VertexBuffer*& buffer, bgfx::VertexLayout& decl, const std::vector<T>& data);
 
 	std::vector<glm::vec3> _vertices;
 	std::vector<glm::vec4> _colors;
@@ -93,10 +94,10 @@ private:
 	VertexBuffer* _normalBuffer;
 	VertexBuffer* _texCoordBuffer;
 
-	bgfx::VertexDecl _vertexDecl;
-	bgfx::VertexDecl _colorDecl;
-	bgfx::VertexDecl _textureDecl;
-	bgfx::VertexDecl _normalDecl;
+	bgfx::VertexLayout _vertexDecl;
+	bgfx::VertexLayout _colorDecl;
+	bgfx::VertexLayout _textureDecl;
+	bgfx::VertexLayout _normalDecl;
 
 	bool _isDynamic;
 
@@ -104,8 +105,11 @@ public:
 	static ZObject* CreateInstance(std::string name, ObjectType type);
 };
 
+#include "./VertexBuffer.h"
+#include "./DynamicVertexBuffer.h"
+
 template<typename T>
-inline void Mesh::SetBuffer(VertexBuffer*& buffer, bgfx::VertexDecl& decl, std::vector<T>& originalData, const float* data, unsigned int numElements)
+inline void Mesh::SetBuffer(VertexBuffer*& buffer, bgfx::VertexLayout& decl, std::vector<T>& originalData, const float* data, unsigned int numElements)
 {
 	originalData.resize(numElements, T());
 	memcpy(&originalData[0], data, sizeof(T) * numElements);
@@ -114,7 +118,7 @@ inline void Mesh::SetBuffer(VertexBuffer*& buffer, bgfx::VertexDecl& decl, std::
 }
 
 template<typename T>
-inline void Mesh::SetBuffer(VertexBuffer*& buffer, bgfx::VertexDecl& decl, const std::vector<T>& data)
+inline void Mesh::SetBuffer(VertexBuffer*& buffer, bgfx::VertexLayout& decl, const std::vector<T>& data)
 {
 	if (data.size() == 0) return;
 

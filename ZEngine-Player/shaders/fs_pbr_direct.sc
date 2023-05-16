@@ -1,12 +1,15 @@
 $input v_color0, v_texcoord0, v_normal, v_fragPos
 
+#include <bgfx_shader.sh>
+
 // material parameters
 uniform vec4 albedoTint;
-uniform sampler2D albedoTexture;
-uniform sampler2D normalTexture;
-uniform sampler2D metallicTexture;
-uniform sampler2D roughnessTexture;
-uniform sampler2D aoTexture;
+
+SAMPLER2D(albedoTexture, 0);
+SAMPLER2D(normalTexture, 1);
+SAMPLER2D(metallicTexture, 2);
+SAMPLER2D(roughnessTexture, 3);
+SAMPLER2D(aoTexture, 4);
 
 uniform vec4 metallic;
 uniform vec4 roughness;
@@ -20,21 +23,21 @@ uniform vec4 camPos;
 
 const float PI = 3.14159265359;
 
-vec3 getNormalFromMap()
+vec3 getNormalFromMap(vec2 texcoord0, vec3 fragPos, vec3 normal)
 {
-    vec3 tangentNormal = texture2D(normalTexture, v_texcoord0).xyz * 2.0 - 1.0;
+    vec3 tangentNormal = texture2D(normalTexture, texcoord0).xyz * 2.0 - 1.0;
 
-    vec3 Q1  = dFdx(v_fragPos);
-    vec3 Q2  = dFdy(v_fragPos);
-    vec2 st1 = dFdx(v_texcoord0);
-    vec2 st2 = dFdy(v_texcoord0);
+    vec3 Q1  = dFdx(fragPos);
+    vec3 Q2  = dFdy(fragPos);
+    vec2 st1 = dFdx(texcoord0);
+    vec2 st2 = dFdy(texcoord0);
 
-    vec3 N   = normalize(v_normal);
-    vec3 T  = normalize(Q1*st2.t - Q2*st1.t);
+    vec3 N   = normalize(normal);
+    vec3 T  = normalize(Q1 * st2.t - Q2 * st1.t);
     vec3 B  = -normalize(cross(N, T));
     mat3 TBN = mat3(T, B, N);
 
-    return normalize(TBN * tangentNormal);
+    return normalize(mul(TBN, tangentNormal));
 }
 
 // ----------------------------------------------------------------------------
@@ -82,7 +85,7 @@ void main()
 {		
 	vec3 albedo = v_color0.rgb * albedoTint.rgb * texture2D(albedoTexture, v_texcoord0).rgb;
 	
-    vec3 N = getNormalFromMap();
+    vec3 N = getNormalFromMap(v_texcoord0, v_fragPos, v_normal);
     vec3 V = normalize(camPos.xyz - v_fragPos.xyz);
 
     // calculate reflectance at normal incidence; if dia-electric (like plastic) use F0 
@@ -105,7 +108,7 @@ void main()
         float NDF = DistributionGGX(N, H, roughness.x * texture2D(roughnessTexture, v_texcoord0).r);   
         float G   = GeometrySmith(N, V, L, roughness.x * texture2D(roughnessTexture, v_texcoord0).r);      
         vec3 F    = fresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0);
-           
+        
         vec3 nominator    = NDF * G * F; 
         float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0);
         vec3 specular = nominator / max(denominator, 0.001); // prevent divide by zero for NdotV=0.0 or NdotL=0.0

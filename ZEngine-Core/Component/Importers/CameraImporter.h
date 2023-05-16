@@ -5,6 +5,6 @@
 class CameraImporter : public ComponentImporter<CameraImporter>
 {
 public:
-	ZObject* ImportImpl(std::string name, nlohmann::json::object_t& values) override;
+	ZObject* ImportImpl(std::string name, nlohmann::json& values) override;
 };
 

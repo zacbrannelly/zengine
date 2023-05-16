@@ -6,9 +6,10 @@
 #include "DynamicIndexBuffer.h"
 #include "Material.h"
 #include "Shader.h"
+#include "MetalLayerSetup.h"
 
-#include <GLFW\glfw3.h>
-#include <bgfx\platform.h>
+#include <GLFW/glfw3.h>
+#include <bgfx/platform.h>
 
 #include <iostream>
 
@@ -38,7 +39,12 @@ bool Graphics::Init(Display* display)
 	pd.backBufferDS = nullptr;
 	pd.context = nullptr;
 	pd.ndt = nullptr;
-	pd.nwh = display->GetWin32Handle();
+
+#ifdef __APPLE__
+	pd.nwh = setupMetalLayer(display->GetNativeHandle());
+#else
+	pd.nwh = display->GetNativeHandle();
+#endif
 
 	setPlatformData(pd);
 
@@ -48,7 +54,12 @@ bool Graphics::Init(Display* display)
 	i.callback = nullptr;
 	i.debug = false;
 	i.profile = false;
+#ifdef __APPLE__
+	i.type = RendererType::Metal;
+#else
 	i.type = RendererType::OpenGL;
+#endif
+	i.platformData = pd;
 	
 	// Setup resolution to give to BGFX
 	Resolution res;
@@ -146,7 +157,7 @@ void Graphics::SetState(uint64_t state)
 
 void Graphics::SetUniform(const std::string& name, bgfx::UniformType::Enum type, const void * data, uint16_t numElements)
 {
-	auto& uniform = createUniform(name.c_str(), type, numElements);
+	auto uniform = createUniform(name.c_str(), type, numElements);
 	setUniform(uniform, data, numElements);
 }
 
@@ -179,8 +190,8 @@ FrameBufferHandle Graphics::CreateFrameBuffer(int width, int height)
 {
 	// NOTE: The second texture is a depth buffer, this is needed!!!!
 	bgfx::TextureHandle buffers[2];
-	buffers[0] = createTexture2D(width, height, false, 1, bgfx::TextureFormat::BGRA8);
-	buffers[1] = createTexture2D(width, height, false, 1, bgfx::TextureFormat::D24);
+	buffers[0] = createTexture2D(width, height, false, 1, bgfx::TextureFormat::BGRA8, BGFX_TEXTURE_RT);
+	buffers[1] = createTexture2D(width, height, false, 1, bgfx::TextureFormat::D24, BGFX_TEXTURE_RT);
 
 	return createFrameBuffer(2, buffers, true);
 }

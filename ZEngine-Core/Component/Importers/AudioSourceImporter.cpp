@@ -8,7 +8,7 @@
 using namespace std;
 using namespace nlohmann;
 
-ZObject* AudioSourceImporter::ImportImpl(string name, json::object_t& values)
+ZObject* AudioSourceImporter::ImportImpl(string name, json& values)
 {
 	auto instance = Factory::CreateInstance<AudioSource>(name, AUDIO_SOURCE);
 	auto assetManager = AssetManager::GetInstance();

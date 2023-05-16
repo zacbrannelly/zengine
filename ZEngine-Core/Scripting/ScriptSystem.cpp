@@ -84,8 +84,9 @@ void ScriptSystem::SetupTemplates()
 
 void ScriptSystem::SetupGlobalBindings()
 {
-	v8::Context::Scope scope(_context->GetLocal());
-	auto global = _context->GetLocal()->Global();
+	auto localContext = _context->GetLocal();
+	v8::Context::Scope scope(localContext);
+	auto global = localContext->Global();
 
 	// TODO: Setup global bindings (objects that are attached to the global namespace)
 
@@ -98,9 +99,9 @@ void ScriptSystem::SetupGlobalBindings()
 	FactoryWrapper::RegisterEnums();
 
 	// Bind the global objects (managers usually) 
-	global->Set(GetString("Time"), TimeWrapper::NewInstance()->GetObject());
-	global->Set(GetString("MapManager"), MapManagerWrapper::NewInstance()->GetObject());
-	global->Set(GetString("Factory"), FactoryWrapper::NewInstance()->GetObject());
+	global->Set(localContext, GetString("Time"), TimeWrapper::NewInstance()->GetObject());
+	global->Set(localContext, GetString("MapManager"), MapManagerWrapper::NewInstance()->GetObject());
+	global->Set(localContext, GetString("Factory"), FactoryWrapper::NewInstance()->GetObject());
 }
 
 void ScriptSystem::Run(std::string code)
@@ -124,10 +125,10 @@ void ScriptSystem::Run(std::string code)
 
 v8::Local<v8::String> ScriptSystem::GetString(std::string value) const
 {
-	return v8::String::NewFromUtf8(_isolate, value.c_str());
+	return v8::String::NewFromUtf8(_isolate, value.c_str()).ToLocalChecked();
 }
 
-std::string ScriptSystem::CastString(v8::Local<v8::String>& stringObj) const
+std::string ScriptSystem::CastString(v8::Local<v8::String> stringObj) const
 {
 	v8::String::Utf8Value utfString(_isolate, stringObj);
 	return std::string(*utfString);

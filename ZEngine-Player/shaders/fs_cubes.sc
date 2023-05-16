@@ -1,6 +1,9 @@
+
 $input v_color0, v_texcoord0
 
-uniform sampler2D texColor;
+#include <bgfx_shader.sh>
+
+SAMPLER2D(texColor, 0);
 
 void main()
 {

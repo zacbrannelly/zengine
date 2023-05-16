@@ -3,6 +3,7 @@
 #include <string>
 #include <algorithm>
 #include <sstream>
+#include <locale>
 
 using namespace std;
 
@@ -52,5 +53,5 @@ bool StringUtil::Contains(string data, string value)
 
 void StringUtil::ConvertToLower(std::string& input)
 {
-	transform(input.begin(), input.end(), input.begin(), tolower);
+	transform(input.begin(), input.end(), input.begin(), ::tolower);
 }

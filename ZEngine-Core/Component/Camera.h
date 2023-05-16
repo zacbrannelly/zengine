@@ -2,6 +2,13 @@
 
 #include "Component.h"
 
+#ifdef __APPLE__
+/**
+ * @brief Make GLM use the same coordinate system as Metal (depth 0 to 1)
+ */
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
+#endif
+
 #define GLM_FORCE_LEFT_HANDED
 #include <glm/glm.hpp>
 #include <bgfx/bgfx.h>

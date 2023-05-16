@@ -1,8 +1,18 @@
 #include "Display.h"
 #include "../Rendering/Graphics.h"
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+
 #define GLFW_EXPOSE_NATIVE_WIN32
-#include <GLFW\glfw3native.h>
+
+#else
+
+#define GLFW_EXPOSE_NATIVE_COCOA
+
+#endif
+
+#include <GLFW/glfw3native.h>
+
 #include <iostream>
 
 Display::Display(std::string title, int width, int height) : _title(title), _width(width), _height(height), _handle(nullptr)
@@ -29,6 +39,9 @@ bool Display::Init()
 	glfwWindowHint(GLFW_RESIZABLE, _isResizable ? GLFW_TRUE : GLFW_FALSE);
 	glfwWindowHint(GLFW_VISIBLE, _isVisible ? GLFW_TRUE : GLFW_FALSE);
 	glfwWindowHint(GLFW_MAXIMIZED, _maximize ? GLFW_TRUE : GLFW_FALSE);
+
+	// TODO: Figure out if this is doing anything.
+	glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_TRUE);
 
 	GLFWmonitor* monitor = nullptr;
 
@@ -186,10 +199,16 @@ bool Display::WillMaximizeOnCreation() const
 	return _maximize;
 }
 
-void* Display::GetWin32Handle() const
+void* Display::GetNativeHandle() const
 {
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 	return glfwGetWin32Window(_handle);
+#else
+  // TODO: Get native handle for other platforms
+	return glfwGetCocoaWindow(_handle);
+#endif
 }
+
 
 GLFWwindow* Display::GetHandle() const
 {

@@ -7,7 +7,7 @@ MapManagerWrapper* MapManagerWrapper::ConstructorImpl(const v8::FunctionCallback
 	return GetInstance();
 }
 
-void MapManagerWrapper::InstallImpl(v8::Local<v8::ObjectTemplate>& temp)
+void MapManagerWrapper::InstallImpl(v8::Local<v8::ObjectTemplate> temp)
 {
 	auto sys = ScriptSystem::GetInstance();
 

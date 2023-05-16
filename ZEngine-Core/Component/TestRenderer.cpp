@@ -82,12 +82,12 @@ void TestRenderer::Update()
 void TestRenderer::Render(int viewId)
 {
 	auto transform = GetOwner()->GetTransform();
-
 	transform->SetRotation({ 0, g_counter, 0 });
 
 	g_counter += 0.01f;
 
-	_mesh->Draw(viewId, { _material }, GetOwner()->GetTransform()->GetWorldTransformMatrix());
+	auto worldTransform = transform->GetWorldTransformMatrix();
+	_mesh->Draw(viewId, { _material }, worldTransform);
 }
 
 ZObject* TestRenderer::CreateInstance(std::string name, ObjectType type)

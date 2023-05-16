@@ -22,5 +22,4 @@ protected:
 };
 
 template<typename T>
-typename T* Singleton<T>::_instance = nullptr;
-
+T* Singleton<T>::_instance = nullptr;

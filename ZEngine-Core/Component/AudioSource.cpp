@@ -114,7 +114,7 @@ ZObject* AudioSource::Copy(string name, ZObject* object)
 
 void Callback_AudioSource_Play(const v8::FunctionCallbackInfo<v8::Value>& info)
 {
-	auto wrap = v8::Local<v8::External>::Cast(info.Holder()->ToObject(info.GetIsolate())->GetInternalField(0));
+	auto wrap = v8::Local<v8::External>::Cast(info.Holder()->ToObject(info.GetIsolate()->GetCurrentContext()).ToLocalChecked()->GetInternalField(0));
 	auto scriptable = static_cast<IScriptable*>(wrap->Value());
 	auto audioSource = static_cast<AudioSource*>(scriptable);
 
@@ -126,7 +126,7 @@ void Callback_AudioSource_Play(const v8::FunctionCallbackInfo<v8::Value>& info)
 
 void Callback_AudioSource_Pause(const v8::FunctionCallbackInfo<v8::Value>& info)
 {
-	auto wrap = v8::Local<v8::External>::Cast(info.Holder()->ToObject(info.GetIsolate())->GetInternalField(0));
+	auto wrap = v8::Local<v8::External>::Cast(info.Holder()->ToObject(info.GetIsolate()->GetCurrentContext()).ToLocalChecked()->GetInternalField(0));
 	auto scriptable = static_cast<IScriptable*>(wrap->Value());
 	auto audioSource = static_cast<AudioSource*>(scriptable);
 
@@ -138,7 +138,7 @@ void Callback_AudioSource_Pause(const v8::FunctionCallbackInfo<v8::Value>& info)
 
 void Callback_AudioSource_Stop(const v8::FunctionCallbackInfo<v8::Value>& info)
 {
-	auto wrap = v8::Local<v8::External>::Cast(info.Holder()->ToObject(info.GetIsolate())->GetInternalField(0));
+	auto wrap = v8::Local<v8::External>::Cast(info.Holder()->ToObject(info.GetIsolate()->GetCurrentContext()).ToLocalChecked()->GetInternalField(0));
 	auto scriptable = static_cast<IScriptable*>(wrap->Value());
 	auto audioSource = static_cast<AudioSource*>(scriptable);
 

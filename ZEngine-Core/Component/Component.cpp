@@ -35,11 +35,12 @@ v8::Global<v8::FunctionTemplate> Component::GetTemplate(v8::Isolate* isolate, v8
 
 	auto constructor = FunctionTemplate::New(isolate);
 
-	constructor->InstanceTemplate()->SetAccessor(String::NewFromUtf8(isolate, "owner"), Callback_Component_GetOwner, nullptr);
+	constructor->InstanceTemplate()->SetAccessor(String::NewFromUtf8(isolate, "owner").ToLocalChecked(), Callback_Component_GetOwner);
 	constructor->InstanceTemplate()->SetInternalFieldCount(1);
 
 	// Register the constructor into the global namespace
-	global->Set(sys->GetString("Component"), constructor->GetFunction());
+	auto ctx = isolate->GetCurrentContext();
+	global->Set(ctx, sys->GetString("Component"), constructor->GetFunction(ctx).ToLocalChecked());
 
 	return v8::Global<FunctionTemplate>(isolate, constructor);
 }

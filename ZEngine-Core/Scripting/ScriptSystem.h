@@ -41,7 +41,7 @@ public:
 	ScriptSystemContext* GetContext() const;
 
 	void Run(std::string code);
-	std::string CastString(v8::Local<v8::String>& stringObj) const;
+	std::string CastString(v8::Local<v8::String> stringObj) const;
 	v8::Local<v8::String> GetString(std::string value) const;
 
 	v8::Local<v8::FunctionTemplate> GetTemplate(ObjectType type);

@@ -1,5 +1,5 @@
 #pragma once
-#include <GLFW\glfw3.h>
+#include <GLFW/glfw3.h>
 #include <string>
 
 class Display
@@ -15,7 +15,7 @@ public:
 	void GrabMouse() const;
 
 	GLFWwindow* GetHandle() const;
-	void* GetWin32Handle() const;
+	void* GetNativeHandle() const;
 
 	void SetTitle(std::string title);
 	std::string GetTitle() const;

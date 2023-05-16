@@ -1,7 +1,6 @@
 #pragma once
 
-enum ObjectType;
-
+#include "../Map/Objects/ObjectType.h"
 #include <include/v8.h>
 
 class IScriptable

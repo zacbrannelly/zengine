@@ -2,12 +2,14 @@
 #include "../Scripting/ScriptSystem.h"
 
 // Use this macros to register the ButtonCode with the global object
-#define REGISTER(x) global->Set(system->GetString(#x), v8::Int32::New(system->GetIsolate(), x))
+#define REGISTER(x) global->Set(context, system->GetString(#x), v8::Int32::New(isolate, x))
 
 void InstallButtonCodesIntoScripting(ScriptSystem* system)
 {
 	// Get the global namespace obj
-	auto global = system->GetContext()->GetLocal()->Global();
+	auto isolate = system->GetIsolate();
+	auto context = isolate->GetCurrentContext();
+	auto global = context->Global();
 
 	REGISTER(BUTTON_MOUSE_LEFT);
 	REGISTER(BUTTON_MOUSE_MIDDLE);

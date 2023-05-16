@@ -5,7 +5,7 @@
 
 using namespace std;
 
-#define REGISTER(x) global->Set(system->GetString(#x), v8::Int32::New(system->GetIsolate(), x))
+#define REGISTER(x) global->Set(context, system->GetString(#x), v8::Int32::New(system->GetIsolate(), x))
 
 FactoryWrapper* FactoryWrapper::ConstructorImpl(const v8::FunctionCallbackInfo<v8::Value>& info)
 {
@@ -26,8 +26,8 @@ void Callback_Factory_CreateInstance(const v8::FunctionCallbackInfo<v8::Value>& 
 	auto sys = ScriptSystem::GetInstance();
 	auto context = sys->GetContext()->GetLocal();
 
-	auto name = sys->CastString(info[0]->ToString(info.GetIsolate()));
-	auto type = (ObjectType)info[1]->ToInt32(info.GetIsolate())->Int32Value(context).ToChecked();
+	auto name = sys->CastString(info[0]->ToString(context).ToLocalChecked());
+	auto type = (ObjectType)info[1]->ToInt32(context).ToLocalChecked()->Int32Value(context).ToChecked();
 
 	if (sys->HasTemplate(type))
 	{
@@ -44,9 +44,10 @@ void Callback_Factory_Copy(const v8::FunctionCallbackInfo<v8::Value>& info)
 		return;
 
 	auto sys = ScriptSystem::GetInstance();
+	auto context = sys->GetContext()->GetLocal();
 	
-	auto name = sys->CastString(info[0]->ToString(info.GetIsolate()));
-	auto wrap = v8::Local<v8::External>::Cast(info[1]->ToObject(info.GetIsolate())->GetInternalField(0));
+	auto name = sys->CastString(info[0]->ToString(context).ToLocalChecked());
+	auto wrap = v8::Local<v8::External>::Cast(info[1]->ToObject(context).ToLocalChecked()->GetInternalField(0));
 	auto scriptable = static_cast<IScriptable*>(wrap->Value());
 	auto object = static_cast<ZObject*>(scriptable);
 
@@ -60,7 +61,7 @@ void Callback_Factory_Copy(const v8::FunctionCallbackInfo<v8::Value>& info)
 		info.GetReturnValue().SetNull();
 }
 
-void FactoryWrapper::InstallImpl(v8::Local<v8::ObjectTemplate>& temp)
+void FactoryWrapper::InstallImpl(v8::Local<v8::ObjectTemplate> temp)
 {
 	auto sys = ScriptSystem::GetInstance();
 	auto isolate = sys->GetIsolate();
@@ -72,7 +73,8 @@ void FactoryWrapper::InstallImpl(v8::Local<v8::ObjectTemplate>& temp)
 void FactoryWrapper::RegisterEnums()
 {
 	auto system = ScriptSystem::GetInstance();
-	auto global = system->GetContext()->GetLocal()->Global();
+	auto context = system->GetContext()->GetLocal();
+	auto global = context->Global();
 
 	REGISTER(SCRIPT_COMPONENT);
 	REGISTER(MESH_RENDERER);

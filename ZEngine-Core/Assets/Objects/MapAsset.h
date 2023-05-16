@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../Asset.h"
-#include "../../../json/json.hpp"
+#include <nlohmann/json.hpp>
 
 class Map;
 class Entity;
@@ -21,7 +21,7 @@ public:
 	static Asset* CreateInstance(std::string name);
 
 private:
-	Entity* LoadEntity(nlohmann::json::object_t& entity);
+	Entity* LoadEntity(nlohmann::json& entity);
 
 	Map* _map;
 };

@@ -10,9 +10,9 @@ class Wrapper : public OneShotSingleton<T>
 {
 public:
 
-	// Abstract methods to be overidden by the child classes (not actually abstract but they must be overidden!)
+	// Abstract methods to be overriden by the child classes (not actually abstract but they must be overriden!)
 	virtual T* ConstructorImpl(const v8::FunctionCallbackInfo<v8::Value>& info) { return nullptr; }
-	virtual void InstallImpl(v8::Local<v8::ObjectTemplate>& temp) {}
+	virtual void InstallImpl(v8::Local<v8::ObjectTemplate> temp) {}
 	virtual void GetterImpl(std::string name, const v8::PropertyCallbackInfo<v8::Value>& info) { }
 	virtual void SetterImpl(std::string name, v8::Local<v8::Value>& value) {}
 
@@ -49,7 +49,7 @@ T* Wrapper<T>::NewInstance()
 	v8::Context::Scope scope(context);
 
 	// Call the constructor through the JS engine
-	auto newObj = _template.Get(sys->GetIsolate())->GetFunction()->NewInstance(context).ToLocalChecked();
+	auto newObj = _template.Get(sys->GetIsolate())->GetFunction(context).ToLocalChecked()->NewInstance(context).ToLocalChecked();
 
 	// Return the pointer set when the new obj was created
 	return static_cast<T*>(v8::Local<v8::External>::Cast(newObj->GetInternalField(0))->Value());
@@ -62,20 +62,22 @@ void Wrapper<T>::Install(std::string name, v8::Local<v8::Object>& global)
 
 	// Get the ScriptSystem and the global wrapper instance
 	auto sys = ScriptSystem::GetInstance();
-	auto instance = GetInstance();
+	auto instance = Wrapper<T>::GetInstance();
+	auto isolate = sys->GetIsolate();
+	auto context = sys->GetContext()->GetLocal();
 	
 	// Create a template with a constructor
-	auto temp = FunctionTemplate::New(sys->GetIsolate(), Constructor);
+	auto temp = FunctionTemplate::New(isolate, Constructor);
 	temp->InstanceTemplate()->SetInternalFieldCount(1);
 
 	// Install custom properties and functions
 	instance->InstallImpl(temp->InstanceTemplate());
 
 	// Install the constructor in the global namespace
-	global->Set(sys->GetString(name), temp->GetFunction());
+	global->Set(context, sys->GetString(name), temp->GetFunction(context).ToLocalChecked());
 
 	// Save the function template
-	_template.Reset(sys->GetIsolate(), temp);
+	_template.Reset(isolate, temp);
 }
 
 template<typename T>
@@ -92,7 +94,7 @@ void Wrapper<T>::Constructor(const v8::FunctionCallbackInfo<v8::Value>& info)
 
 	// Set a weak reference to the object so we know when it is collected
 	newInstance->_instanceObj.Reset(info.GetIsolate(), jsObject);
-	newInstance->_instanceObj.SetWeak<T>(newInstance, Destructor, v8::WeakCallbackType::kParameter);
+	newInstance->_instanceObj.template SetWeak<T>(newInstance, Destructor, v8::WeakCallbackType::kParameter);
 	
 	// Set the new C++ instance to the internal field of the js object
 	jsObject->SetInternalField(0, v8::External::New(info.GetIsolate(), newInstance));

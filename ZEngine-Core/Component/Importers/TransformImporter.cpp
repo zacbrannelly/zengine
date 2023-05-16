@@ -5,7 +5,7 @@
 using namespace std;
 using namespace nlohmann;
 
-ZObject* TransformImporter::ImportImpl(string name, json::object_t& values)
+ZObject* TransformImporter::ImportImpl(string name, json& values)
 {
 	auto transform = Factory::CreateInstance<Transform>(name, TRANSFORM);
 

@@ -84,8 +84,9 @@ void Entity::AddComponent(Component* component, bool shouldInit)
 			// Update script transform field with new transform (TODO: find a better solution to this, e.g. keep the same script object and just change internal field)
 			auto scriptSystem = ScriptSystem::GetInstance();
 			auto scriptObject = GetScriptObject();
-			v8::Context::Scope scope(scriptSystem->GetContext()->GetLocal());
-			scriptObject->Set(scriptSystem->GetString("transform"), _transform->GetScriptObject());
+			auto context = scriptSystem->GetContext()->GetLocal();
+			v8::Context::Scope scope(context);
+			scriptObject->Set(context, scriptSystem->GetString("transform"), _transform->GetScriptObject());
 		}
 
 		_components.push_back(component);
@@ -169,7 +170,8 @@ void Callback_Entity_AddComponent(const v8::FunctionCallbackInfo<v8::Value>& inf
 	if (entity == nullptr || info.Length() != 1 || !info[0]->IsObject())
 		return;
 
-	auto object = info[0]->ToObject(info.GetIsolate());
+	auto context = info.GetIsolate()->GetCurrentContext();
+	auto object = info[0]->ToObject(context).ToLocalChecked();
 	wrap = v8::Local<v8::External>::Cast(object->GetInternalField(0));
 	scriptable = static_cast<IScriptable*>(wrap->Value());
 	auto component = static_cast<Component*>(scriptable);
@@ -187,7 +189,8 @@ void Callback_Entity_RemoveComponent(const v8::FunctionCallbackInfo<v8::Value>& 
 	if (entity == nullptr || info.Length() != 1 || !info[0]->IsObject())
 		return;
 
-	auto object = info[0]->ToObject(info.GetIsolate());
+	auto context = info.GetIsolate()->GetCurrentContext();
+	auto object = info[0]->ToObject(context).ToLocalChecked();
 	wrap = v8::Local<v8::External>::Cast(object->GetInternalField(0));
 	scriptable = static_cast<IScriptable*>(wrap->Value());
 	auto component = static_cast<Component*>(scriptable);
@@ -205,7 +208,9 @@ void Callback_Entity_GetComponent(const v8::FunctionCallbackInfo<v8::Value>& inf
 	if (entity == nullptr || info.Length() != 1 || !info[0]->IsString())
 		return;
 
-	auto componentName = ScriptSystem::GetInstance()->CastString(info[0]->ToString(info.GetIsolate()));
+	auto context = info.GetIsolate()->GetCurrentContext();
+	auto componentNameLocal = info[0]->ToString(context).ToLocalChecked();
+	auto componentName = ScriptSystem::GetInstance()->CastString(componentNameLocal);
 	auto component = entity->GetComponentByName(componentName);
 	
 	if (component != nullptr)

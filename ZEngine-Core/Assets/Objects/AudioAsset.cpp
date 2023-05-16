@@ -3,7 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include "../../Audio/AudioSystem.h"
-#include "../../../json/json.hpp"
+#include <nlohmann/json.hpp>
 #include <SDL_mixer.h>
 
 using namespace std;

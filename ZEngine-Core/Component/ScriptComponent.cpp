@@ -27,7 +27,7 @@ v8::Local<v8::Object> ScriptComponent::CreateObjectFromScript(v8::Isolate*& isol
 	auto global = context->Global();
 
 	// Try to get the class constructor from the global namespace
-	auto value = global->Get(scriptSys->GetString(_script->GetName()));
+	auto value = global->Get(context, scriptSys->GetString(_script->GetName())).ToLocalChecked();
 
 	if (!value.IsEmpty() && value->IsFunction())
 	{
@@ -53,11 +53,11 @@ v8::Local<v8::Object> ScriptComponent::CreateObjectFromScript(v8::Isolate*& isol
 		derivedTemplate->SetClassName(scriptSys->GetString(_script->GetName()));
 		
 		// Create an instance of the derived template and set the internal field
-		auto instance = derivedTemplate->GetFunction()->NewInstance(context).ToLocalChecked();
+		auto instance = derivedTemplate->GetFunction(context).ToLocalChecked()->NewInstance(context).ToLocalChecked();
 		instance->SetInternalField(0, v8::External::New(isolate, this));
 
 		// Set the prototype of the derived instance to the base instance
-		instance->SetPrototype(context, baseInstance->ToObject(isolate));
+		instance->SetPrototype(context, baseInstance->ToObject(context).ToLocalChecked());
 
 		// Keep the derived instance
 		_scriptObj.Reset(isolate, instance);
@@ -98,18 +98,18 @@ void ScriptComponent::Init()
 	auto updateString = scriptSys->GetString("Update");
 	auto renderString = scriptSys->GetString("Render");
 
-	auto init = obj->Get(initString);
-	auto update = obj->Get(updateString);
-	auto render = obj->Get(renderString);
+	auto init = obj->Get(context, initString);
+	auto update = obj->Get(context, updateString);
+	auto render = obj->Get(context, renderString);
 
-	if (obj->Has(initString))
-		_scriptInit.Reset(isolate, v8::Local<v8::Function>::Cast(init));
+	if (obj->Has(context, initString).FromMaybe(false))
+		_scriptInit.Reset(isolate, v8::Local<v8::Function>::Cast(init.ToLocalChecked()));
 
-	if (obj->Has(updateString))
-		_scriptUpdate.Reset(isolate, v8::Local<v8::Function>::Cast(update));
+	if (obj->Has(context, updateString).FromMaybe(false))
+		_scriptUpdate.Reset(isolate, v8::Local<v8::Function>::Cast(update.ToLocalChecked()));
 
-	if (obj->Has(renderString))
-		_scriptRender.Reset(isolate, v8::Local<v8::Function>::Cast(render));
+	if (obj->Has(context, renderString).FromMaybe(false))
+		_scriptRender.Reset(isolate, v8::Local<v8::Function>::Cast(render.ToLocalChecked()));
 
 }
 
@@ -118,15 +118,17 @@ void ScriptComponent::InitScript()
 	if (_scriptInit.IsEmpty()) return;
 
 	auto scriptSys = ScriptSystem::GetInstance();
+	auto isolate = scriptSys->GetIsolate();
+	auto context = scriptSys->GetContext()->GetLocal();
 
 	// Create a scope
-	v8::HandleScope handleScope(scriptSys->GetIsolate());
-	v8::Context::Scope scope(scriptSys->GetContext()->GetLocal());
+	v8::HandleScope handleScope(isolate);
+	v8::Context::Scope scope(context);
 
-	auto init = _scriptInit.Get(scriptSys->GetIsolate());
-	auto obj = _scriptObj.Get(scriptSys->GetIsolate());
+	auto init = _scriptInit.Get(isolate);
+	auto obj = _scriptObj.Get(isolate);
 
-	init->Call(obj, 0, nullptr);
+	init->Call(context, obj, 0, nullptr);
 }
 
 void ScriptComponent::Update()
@@ -134,15 +136,17 @@ void ScriptComponent::Update()
 	if (_scriptUpdate.IsEmpty()) return;
 
 	auto scriptSys = ScriptSystem::GetInstance();
+	auto isolate = scriptSys->GetIsolate();
+	auto context = scriptSys->GetContext()->GetLocal();
 
 	// Create a scope
-	v8::HandleScope handleScope(scriptSys->GetIsolate());
-	v8::Context::Scope scope(scriptSys->GetContext()->GetLocal());
+	v8::HandleScope handleScope(isolate);
+	v8::Context::Scope scope(context);
 
-	auto update = _scriptUpdate.Get(scriptSys->GetIsolate());
-	auto obj = _scriptObj.Get(scriptSys->GetIsolate());
+	auto update = _scriptUpdate.Get(isolate);
+	auto obj = _scriptObj.Get(isolate);
 
-	update->Call(obj, 0, nullptr);
+	update->Call(context, obj, 0, nullptr);
 }
 
 void ScriptComponent::Render(int viewId)
@@ -150,15 +154,17 @@ void ScriptComponent::Render(int viewId)
 	if (_scriptRender.IsEmpty()) return;
 
 	auto scriptSys = ScriptSystem::GetInstance();
+	auto isolate = scriptSys->GetIsolate();
+	auto context = scriptSys->GetContext()->GetLocal();
 
 	// Create a scope
-	v8::HandleScope handleScope(scriptSys->GetIsolate());
-	v8::Context::Scope scope(scriptSys->GetContext()->GetLocal());
+	v8::HandleScope handleScope(isolate);
+	v8::Context::Scope scope(context);
 
-	auto render = _scriptRender.Get(scriptSys->GetIsolate());
-	auto obj = _scriptObj.Get(scriptSys->GetIsolate());
+	auto render = _scriptRender.Get(isolate);
+	auto obj = _scriptObj.Get(isolate);
 
-	render->Call(obj, 0, nullptr);
+	render->Call(context, obj, 0, nullptr);
 }
 
 ZObject* ScriptComponent::CreateInstance(std::string name, ObjectType type)

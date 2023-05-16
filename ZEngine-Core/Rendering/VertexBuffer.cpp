@@ -2,7 +2,7 @@
 
 using namespace bgfx;
 
-VertexBuffer::VertexBuffer(VertexDecl decl)
+VertexBuffer::VertexBuffer(VertexLayout decl)
 {
 	_decl = decl;
 }
@@ -20,7 +20,7 @@ void VertexBuffer::Upload(const void* data, unsigned int size, bool copy)
 	SetHandleID(handle.idx);
 }
 
-VertexDecl VertexBuffer::GetDecl() const
+VertexLayout VertexBuffer::GetDecl() const
 {
 	return _decl;
 }

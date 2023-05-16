@@ -2,7 +2,7 @@
 
 #include "../Asset.h"
 #include <glm/glm.hpp>
-#include "../../../json/json.hpp"
+#include <nlohmann/json.hpp>
 
 class Material;
 

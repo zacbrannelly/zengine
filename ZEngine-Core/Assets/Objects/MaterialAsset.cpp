@@ -5,7 +5,7 @@
 #include "../AssetManager.h"
 #include "../AssetCatalog.h"
 
-#include "../../json/json.hpp"
+#include <nlohmann/json.hpp>
 #include "../../Rendering/Material.h"
 
 #include <fstream>
@@ -36,7 +36,7 @@ bool MaterialAsset::Load(string path)
 
 	// Import JSON file 
 	json root;
-	root << in;
+	in >> root;
 
 	auto assetManager = AssetManager::GetInstance();
 
@@ -94,7 +94,7 @@ void MaterialAsset::ReadTextures(json::array_t& values, Material* material)
 	{
 		if (!item.is_object()) continue;
 
-		auto textureObj = item.get<json::object_t>();
+		auto textureObj = item.get<json>();
 		auto samplerName = textureObj.at("name");
 		
 		string path;
@@ -103,7 +103,7 @@ void MaterialAsset::ReadTextures(json::array_t& values, Material* material)
 		if (it != textureObj.end())
 		{
 			ObjectType type;
-			if (!assetManager->GetCatalog()->GetAssetPathFromID(it->second.get<int>(), path, type))
+			if (!assetManager->GetCatalog()->GetAssetPathFromID(it.value().get<int>(), path, type))
 			{
 				cout << "MATERIAL_ASSET: Failed to find texture for sampler: " << samplerName.get<string>() << endl;
 				continue;
@@ -114,7 +114,7 @@ void MaterialAsset::ReadTextures(json::array_t& values, Material* material)
 			it = textureObj.find("path");
 
 			if (it != textureObj.end())
-				path = it->second.get<string>();
+				path = it.value().get<string>();
 			else
 			{
 				cout << "MATERIAL_ASSET: Failed to find texture for sampler: " << samplerName.get<string>() << endl;
@@ -148,7 +148,7 @@ void MaterialAsset::ReadUniforms(json::array_t& values, Material* material)
 {
 	for (auto& uniform : values)
 	{
-		auto uniformObj = uniform.get<json::object_t>();
+		auto uniformObj = uniform.get<json>();
 
 		auto name = uniformObj.at("name");
 		auto type = uniformObj.at("type");

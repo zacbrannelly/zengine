@@ -33,7 +33,7 @@ bool MapAsset::Load(string path)
 	}
 
 	json root;
-	root << in;
+	in >> root;
 
 	in.close();
 
@@ -57,8 +57,7 @@ bool MapAsset::Load(string path)
 		{
 			if (value.is_object())
 			{
-				auto entityObj = value.get<json::object_t>();
-				auto entity = LoadEntity(entityObj);
+				auto entity = LoadEntity(value);
 
 				if (entity != nullptr)
 					_map->Add(entity);
@@ -71,7 +70,7 @@ bool MapAsset::Load(string path)
 	return true;
 }
 
-Entity* MapAsset::LoadEntity(json::object_t& object)
+Entity* MapAsset::LoadEntity(json& object)
 {
 	Entity* entity = nullptr;
 	Transform* transform = nullptr;
@@ -92,7 +91,7 @@ Entity* MapAsset::LoadEntity(json::object_t& object)
 		if (value.is_object())
 		{
 			// Use an importer in the factory to load the component from the json object
-			auto newComp = Factory::ImportInstance<Component>(value.get<json::object_t>());
+			auto newComp = Factory::ImportInstance<Component>(value);
 
 			if (newComp != nullptr)
 				entity->AddComponent(newComp);
@@ -101,13 +100,13 @@ Entity* MapAsset::LoadEntity(json::object_t& object)
 
 	// Recursively load all of the children entities
 	auto it = object.find("children");
-	if (it != object.end() && (*it).second.is_array())
+	if (it != object.end() && (*it).is_array())
 	{
-		for (auto& child : (*it).second.get<json::array_t>())
+		for (auto& child : (*it).get<json::array_t>())
 		{
 			if (child.is_object())
 			{
-				auto childEntity = LoadEntity(child.get<json::object_t>());
+				auto childEntity = LoadEntity(child);
 
 				if (childEntity != nullptr)
 				{

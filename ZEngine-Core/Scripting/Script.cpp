@@ -29,7 +29,7 @@ bool Script::Compile(std::string& code)
 
 	v8::Context::Scope scope(context);
 
-	auto source = v8::String::NewFromUtf8(isolate, code.c_str());
+	auto source = v8::String::NewFromUtf8(isolate, code.c_str()).ToLocalChecked();
 	auto script = v8::Script::Compile(context, source).ToLocalChecked();
 
 	if (script.IsEmpty())

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GLFW\glfw3.h>
+#include <GLFW/glfw3.h>
 class ScriptSystem;
 
 void InstallButtonCodesIntoScripting(ScriptSystem* scripting);

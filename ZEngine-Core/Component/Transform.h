@@ -19,8 +19,8 @@ public:
 	void SetRotation(const glm::vec3& rotation);
 	const glm::vec3& GetRotation() const;
 
-	glm::mat4 GetLocalTransformMatrix() const;
-	glm::mat4 GetWorldTransformMatrix() const;
+	const glm::mat4 GetLocalTransformMatrix() const;
+	const glm::mat4 GetWorldTransformMatrix() const;
 
 	void SetParent(Transform* parent);
 	Transform* GetParent() const;

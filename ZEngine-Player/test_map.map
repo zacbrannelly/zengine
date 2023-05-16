@@ -18,7 +18,7 @@
 					"name": "Camera",
 					"type": 4,
 					
-					"clearColor": [1, 0, 0, 1],
+					"clearColor": [1, 1, 0, 1],
 					"viewport": [0, 0, 1366, 768],
 					"projection": 0
 				},
@@ -27,7 +27,7 @@
 					"type": 18,
 					
 					"audio": 13,
-					"autoplay": true
+					"autoplay": false
 				}
 			]
 		},

@@ -17,5 +17,5 @@ protected:
 };
 
 template<typename T>
-typename T* OneShotSingleton<T>::_instance = nullptr;
+T* OneShotSingleton<T>::_instance = nullptr;
 

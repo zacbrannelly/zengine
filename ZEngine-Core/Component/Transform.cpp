@@ -55,7 +55,7 @@ const glm::vec3 & Transform::GetRotation() const
 	return _rotation;
 }
 
-glm::mat4 Transform::GetLocalTransformMatrix() const
+const glm::mat4 Transform::GetLocalTransformMatrix() const
 {
 	auto transform = glm::mat4(1.0f);
 
@@ -68,7 +68,7 @@ glm::mat4 Transform::GetLocalTransformMatrix() const
 	return transform;
 }
 
-glm::mat4 Transform::GetWorldTransformMatrix() const
+const glm::mat4 Transform::GetWorldTransformMatrix() const
 {
 	if (_parent != nullptr)
 	{
@@ -188,6 +188,7 @@ void Transform_GetPositionCallback(const v8::FunctionCallbackInfo<v8::Value>& in
 	auto wrapper = v8::Local<v8::External>::Cast(self->GetInternalField(0));
 	auto scriptableObj = static_cast<IScriptable*>(wrapper->Value());
 	auto transform = static_cast<Transform*>(scriptableObj);
+	auto context = info.GetIsolate()->GetCurrentContext();
 
 	if (info.Length() == 0)
 	{
@@ -199,7 +200,7 @@ void Transform_GetPositionCallback(const v8::FunctionCallbackInfo<v8::Value>& in
 	}
 	else if (info.Length() == 1)
 	{
-		wrapper = v8::Local<v8::External>::Cast(info[0]->ToObject(info.GetIsolate())->GetInternalField(0));
+		wrapper = v8::Local<v8::External>::Cast(info[0]->ToObject(context).ToLocalChecked()->GetInternalField(0));
 		auto wrapVec3 = static_cast<Vec3Wrapper*>(wrapper->Value());
 		wrapVec3->SetData(transform->GetPosition());
 
@@ -213,6 +214,7 @@ void Transform_GetRotationCallback(const v8::FunctionCallbackInfo<v8::Value>& in
 	auto wrapper = v8::Local<v8::External>::Cast(self->GetInternalField(0));
 	auto scriptableObj = static_cast<IScriptable*>(wrapper->Value());
 	auto transform = static_cast<Transform*>(scriptableObj);
+	auto context = info.GetIsolate()->GetCurrentContext();
 
 	if (info.Length() == 0)
 	{
@@ -224,7 +226,7 @@ void Transform_GetRotationCallback(const v8::FunctionCallbackInfo<v8::Value>& in
 	}
 	else if (info.Length() == 1)
 	{
-		wrapper = v8::Local<v8::External>::Cast(info[0]->ToObject(info.GetIsolate())->GetInternalField(0));
+		wrapper = v8::Local<v8::External>::Cast(info[0]->ToObject(context).ToLocalChecked()->GetInternalField(0));
 		auto wrapVec3 = static_cast<Vec3Wrapper*>(wrapper->Value());
 		wrapVec3->SetData(transform->GetPosition());
 
@@ -238,6 +240,7 @@ void Transform_GetScaleCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
 	auto wrapper = v8::Local<v8::External>::Cast(self->GetInternalField(0));
 	auto scriptableObj = static_cast<IScriptable*>(wrapper->Value());
 	auto transform = static_cast<Transform*>(scriptableObj);
+	auto context = info.GetIsolate()->GetCurrentContext();
 
 	if (info.Length() == 0)
 	{
@@ -249,7 +252,7 @@ void Transform_GetScaleCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
 	}
 	else if (info.Length() == 1)
 	{
-		wrapper = v8::Local<v8::External>::Cast(info[0]->ToObject(info.GetIsolate())->GetInternalField(0));
+		wrapper = v8::Local<v8::External>::Cast(info[0]->ToObject(context).ToLocalChecked()->GetInternalField(0));
 		auto wrapVec3 = static_cast<Vec3Wrapper*>(wrapper->Value());
 		wrapVec3->SetData(transform->GetPosition());
 
@@ -307,27 +310,29 @@ void Transform_Setter(v8::Local<v8::String> nameObj, v8::Local<v8::Value> value,
 	auto wrap = v8::Local<v8::External>::Cast(info.Holder()->GetInternalField(0));
 	auto scriptable = static_cast<IScriptable*>(wrap->Value());
 	auto transform = static_cast<Transform*>(scriptable);
+	auto context = info.GetIsolate()->GetCurrentContext();
+
 
 	if (transform == nullptr)
 		return;
 
 	if (name == "position")
 	{
-		wrap = v8::Local<v8::External>::Cast(value->ToObject(sys->GetIsolate())->GetInternalField(0));
+		wrap = v8::Local<v8::External>::Cast(value->ToObject(context).ToLocalChecked()->GetInternalField(0));
 		auto vecWrapper = static_cast<Vec3Wrapper*>(wrap->Value());
 		
 		transform->SetPosition(vecWrapper->GetData());
 	}
 	else if (name == "rotation")
 	{
-		wrap = v8::Local<v8::External>::Cast(value->ToObject(sys->GetIsolate())->GetInternalField(0));
+		wrap = v8::Local<v8::External>::Cast(value->ToObject(context).ToLocalChecked()->GetInternalField(0));
 		auto vecWrapper = static_cast<Vec3Wrapper*>(wrap->Value());
 
 		transform->SetRotation(vecWrapper->GetData());
 	}
 	else if (name == "scale")
 	{
-		wrap = v8::Local<v8::External>::Cast(value->ToObject(sys->GetIsolate())->GetInternalField(0));
+		wrap = v8::Local<v8::External>::Cast(value->ToObject(context).ToLocalChecked()->GetInternalField(0));
 		auto vecWrapper = static_cast<Vec3Wrapper*>(wrap->Value());
 
 		transform->SetScale(vecWrapper->GetData());

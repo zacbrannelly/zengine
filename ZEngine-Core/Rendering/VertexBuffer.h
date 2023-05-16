@@ -6,13 +6,13 @@
 class VertexBuffer : public BufferHandle<bgfx::VertexBufferHandle>
 {
 public:
-	VertexBuffer(bgfx::VertexDecl decl);
+	VertexBuffer(bgfx::VertexLayout decl);
 	virtual ~VertexBuffer();
 
 	virtual void Upload(const void* data, unsigned int size, bool copy);
 
-	bgfx::VertexDecl GetDecl() const;
+	bgfx::VertexLayout GetDecl() const;
 private:
-	bgfx::VertexDecl _decl;
+	bgfx::VertexLayout _decl;
 };
 

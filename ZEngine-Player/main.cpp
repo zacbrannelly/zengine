@@ -14,8 +14,6 @@
 #include "../ZEngine-Core/Map/MapManager.h"
 #include "../ZEngine-Core/Audio/AudioSystem.h"
 
-#include <Windows.h>
-
 int main(int argc, char* argv[])
 {
 	// Initialize the factory (register the types)
@@ -60,7 +58,6 @@ int main(int argc, char* argv[])
 	if (mapAsset == nullptr)
 	{
 		std::cout << "Failed to load the map!" << std::endl;
-		system("pause");
 		return -1;
 	}
 

@@ -3,11 +3,11 @@
 #include <map>
 #include <string>
 #include "../Map/Objects/ZObject.h"
-#include "../../json/json.hpp"
+#include <nlohmann/json.hpp>
 
 typedef ZObject*(*ConstructorFunc)(std::string, ObjectType);
 typedef ZObject*(*CopyFunc)(std::string, ZObject*);
-typedef ZObject*(*ImporterFunc)(std::string, nlohmann::json::object_t&);
+typedef ZObject*(*ImporterFunc)(std::string, nlohmann::json&);
 
 class Factory
 {
@@ -41,7 +41,7 @@ public:
 	}
 
 	template<class T>
-	static T* ImportInstance(nlohmann::json::object_t& values)
+	static T* ImportInstance(nlohmann::json& values)
 	{
 		auto name = values.at("name");
 		auto type = values.at("type");

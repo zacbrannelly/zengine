@@ -5,7 +5,7 @@
 class DynamicVertexBuffer : public VertexBuffer
 {
 public:
-	DynamicVertexBuffer(bgfx::VertexDecl decl);
+	DynamicVertexBuffer(bgfx::VertexLayout decl);
 	~DynamicVertexBuffer();
 
 	void Upload(const void* data, unsigned int size, bool copy) override;

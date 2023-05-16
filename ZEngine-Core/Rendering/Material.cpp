@@ -25,7 +25,7 @@ void Material::RegisterSampler(const std::string& name)
 {
 	_textureSamplers[name] = 
 	{
-		_graphics->CreateUniform(name, bgfx::UniformType::Int1, 1),
+		_graphics->CreateUniform(name, bgfx::UniformType::Sampler, 1),
 		{ bgfx::kInvalidHandle }
 	};
 }
@@ -42,8 +42,7 @@ void Material::SetUniform(const std::string& name, void* data, uint16_t numEleme
 
 		uniform.data = data;
 		uniform.numElements = numElements;
-
-		_uniforms.insert_or_assign(iterator, name, uniform);
+		_uniforms[name] = uniform;
 	}
 }
 
@@ -59,8 +58,7 @@ void Material::SetTexture(const std::string& name, bgfx::TextureHandle texture)
 	{
 		auto sampler = iterator->second;
 		sampler.texture = texture;
-
-		_textureSamplers.insert_or_assign(iterator, name, sampler);
+		_textureSamplers[name] = sampler;
 	}
 }
 

@@ -3,8 +3,8 @@
 	"pass": 
 	[
 		{
-			"vertex": "vs_pbr_direct.bin",
-			"fragment": "fs_pbr_direct.bin",
+			"vertex": "vs_pbr_direct.sc.mac",
+			"fragment": "fs_pbr_direct.sc.mac",
 			
 			"states": 
 			{

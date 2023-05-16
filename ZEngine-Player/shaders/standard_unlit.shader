@@ -3,8 +3,8 @@
 	"pass": 
 	[
 		{
-			"vertex": "vs_texture.bin",
-			"fragment": "fs_texture.bin",
+			"vertex": "vs_cubes.sc.mac",
+			"fragment": "fs_cubes.sc.mac",
 			
 			"states": 
 			{

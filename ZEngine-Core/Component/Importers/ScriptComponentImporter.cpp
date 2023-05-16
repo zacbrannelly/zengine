@@ -9,7 +9,7 @@
 using namespace std;
 using namespace nlohmann;
 
-ZObject* ScriptComponentImporter::ImportImpl(string name, json::object_t& values)
+ZObject* ScriptComponentImporter::ImportImpl(string name, json& values)
 {
 	auto scriptComp = Factory::CreateInstance<ScriptComponent>(name, SCRIPT_COMPONENT);
 	auto assetManager = AssetManager::GetInstance();

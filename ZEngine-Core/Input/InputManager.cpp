@@ -257,9 +257,10 @@ void InputManager_GetButtonDown(const v8::FunctionCallbackInfo<v8::Value>& info)
 
 	auto input = InputManager::GetInstance();
 	auto sys = ScriptSystem::GetInstance();
+	auto context = sys->GetContext()->GetLocal();
 
 	// Extract the code form the args
-	auto code = (ButtonCode)info[0]->ToInt32(info.GetIsolate())->Int32Value(sys->GetContext()->GetLocal()).ToChecked();
+	auto code = (ButtonCode)info[0]->ToInt32(context).ToLocalChecked()->Int32Value(context).ToChecked();
 
 	info.GetReturnValue().Set(input->GetButtonDown(code));
 }
@@ -274,10 +275,11 @@ void InputManager_ButtonHasModifier(const v8::FunctionCallbackInfo<v8::Value>& i
 
 	auto input = InputManager::GetInstance();
 	auto sys = ScriptSystem::GetInstance();
+	auto context = sys->GetContext()->GetLocal();
 
 	// Extract the codes from the args
-	auto button = (ButtonCode)info[0]->ToInt32(info.GetIsolate())->Int32Value(sys->GetContext()->GetLocal()).ToChecked();
-	auto mod = (ButtonCode)info[1]->ToInt32(info.GetIsolate())->Int32Value(sys->GetContext()->GetLocal()).ToChecked();
+	auto button = (ButtonCode)info[0]->ToInt32(context).ToLocalChecked()->Int32Value(context).ToChecked();
+	auto mod = (ButtonCode)info[1]->ToInt32(context).ToLocalChecked()->Int32Value(context).ToChecked();
 
 	info.GetReturnValue().Set(input->ButtonHasModifier(button, mod));
 }
@@ -292,9 +294,10 @@ void InputManager_GetButtonPressed(const v8::FunctionCallbackInfo<v8::Value>& in
 
 	auto input = InputManager::GetInstance();
 	auto sys = ScriptSystem::GetInstance();
+	auto context = sys->GetContext()->GetLocal();
 
 	// Extract the code frpm the args
-	auto code = (ButtonCode)info[0]->ToInt32(info.GetIsolate())->Int32Value(sys->GetContext()->GetLocal()).ToChecked();
+	auto code = (ButtonCode)info[0]->ToInt32(context).ToLocalChecked()->Int32Value(context).ToChecked();
 
 	info.GetReturnValue().Set(input->GetButtonPressed(code));
 }
@@ -309,9 +312,10 @@ void InputManager_GetButtonUp(const v8::FunctionCallbackInfo<v8::Value>& info)
 
 	auto input = InputManager::GetInstance();
 	auto sys = ScriptSystem::GetInstance();
+	auto context = sys->GetContext()->GetLocal();
 
 	// Extract the code frpm the args
-	auto code = (ButtonCode)info[0]->ToInt32(info.GetIsolate())->Int32Value(sys->GetContext()->GetLocal()).ToChecked();
+	auto code = (ButtonCode)info[0]->ToInt32(context).ToLocalChecked()->Int32Value(context).ToChecked();
 
 	info.GetReturnValue().Set(input->GetButtonUp(code));
 }
@@ -325,9 +329,11 @@ void InputManager_GetAxis(const v8::FunctionCallbackInfo<v8::Value>& info)
 	}
 
 	auto input = InputManager::GetInstance();
+	auto isolate = info.GetIsolate();
+	auto context = isolate->GetCurrentContext();
 
 	// Get the provided axis name
-	v8::String::Utf8Value axisNameObj(info.GetIsolate(), info[0]->ToString(info.GetIsolate()));
+	v8::String::Utf8Value axisNameObj(isolate, info[0]->ToString(context).ToLocalChecked());
 
 	info.GetReturnValue().Set(input->GetAxis(*axisNameObj));
 }
@@ -341,9 +347,11 @@ void InputManager_GetAxisRaw(const v8::FunctionCallbackInfo<v8::Value>& info)
 	}
 
 	auto input = InputManager::GetInstance();
+	auto isolate = info.GetIsolate();
+	auto context = isolate->GetCurrentContext();
 
 	// Get the provided axis name
-	v8::String::Utf8Value axisNameObj(info.GetIsolate(), info[0]->ToString(info.GetIsolate()));
+	v8::String::Utf8Value axisNameObj(isolate, info[0]->ToString(context).ToLocalChecked());
 
 	info.GetReturnValue().Set(input->GetAxisRaw(*axisNameObj));
 }
@@ -356,11 +364,12 @@ void InputManager_RegisterAxis(const v8::FunctionCallbackInfo<v8::Value>& info)
 	}
 
 	auto input = InputManager::GetInstance();
-	auto sys = ScriptSystem::GetInstance();
+	auto isolate = info.GetIsolate();
+	auto context = isolate->GetCurrentContext();
 
 	// Get the provided axis name and button code
-	v8::String::Utf8Value axisNameObj(info.GetIsolate(), info[0]->ToString(info.GetIsolate()));
-	ButtonCode code = (ButtonCode)info[1]->Int32Value(sys->GetContext()->GetLocal()).ToChecked();
+	v8::String::Utf8Value axisNameObj(isolate, info[0]->ToString(context).ToLocalChecked());
+	ButtonCode code = (ButtonCode)info[1]->Int32Value(context).ToChecked();
 
 	input->RegisterAxis(*axisNameObj, code);
 }
@@ -369,23 +378,24 @@ void InputManager::SetupScriptBindings(v8::Isolate* isolate, v8::Local<v8::Objec
 {
 	using namespace v8;
 	auto sys = ScriptSystem::GetInstance();
+	auto context = sys->GetContext()->GetLocal();
 
 	auto temp = ObjectTemplate::New(isolate);
 	temp->SetAccessor(sys->GetString("mouseX"), InputManager_Getter, InputManager_Setter);
 	temp->SetAccessor(sys->GetString("mouseY"), InputManager_Getter, InputManager_Setter);
 
-	auto inputObj = temp->NewInstance();
+	auto inputObj = temp->NewInstance(context).ToLocalChecked();
 
-	inputObj->Set(sys->GetString("GetButtonDown"), Function::New(isolate, InputManager_GetButtonDown));
-	inputObj->Set(sys->GetString("GetButtonPressed"), Function::New(isolate, InputManager_GetButtonPressed));
-	inputObj->Set(sys->GetString("GetButtonUp"), Function::New(isolate, InputManager_GetButtonUp));
-	inputObj->Set(sys->GetString("ButtonHasModifier"), Function::New(isolate, InputManager_ButtonHasModifier));
+	inputObj->Set(context, sys->GetString("GetButtonDown"), Function::New(context, InputManager_GetButtonDown).ToLocalChecked());
+	inputObj->Set(context, sys->GetString("GetButtonPressed"), Function::New(context, InputManager_GetButtonPressed).ToLocalChecked());
+	inputObj->Set(context, sys->GetString("GetButtonUp"), Function::New(context, InputManager_GetButtonUp).ToLocalChecked());
+	inputObj->Set(context, sys->GetString("ButtonHasModifier"), Function::New(context, InputManager_ButtonHasModifier).ToLocalChecked());
 
-	inputObj->Set(sys->GetString("RegisterAxis"), Function::New(isolate, InputManager_RegisterAxis));
-	inputObj->Set(sys->GetString("GetAxis"), Function::New(isolate, InputManager_GetAxis));
-	inputObj->Set(sys->GetString("GetAxisRaw"), Function::New(isolate, InputManager_GetAxisRaw));
+	inputObj->Set(context, sys->GetString("RegisterAxis"), Function::New(context, InputManager_RegisterAxis).ToLocalChecked());
+	inputObj->Set(context, sys->GetString("GetAxis"), Function::New(context, InputManager_GetAxis).ToLocalChecked());
+	inputObj->Set(context, sys->GetString("GetAxisRaw"), Function::New(context, InputManager_GetAxisRaw).ToLocalChecked());
 		
-	global->Set(sys->GetString("Input"), inputObj);
+	global->Set(context, sys->GetString("Input"), inputObj);
 }
 
 void InputManager::Shutdown()

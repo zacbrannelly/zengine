@@ -7,9 +7,9 @@
 #include "TextureAsset.h"
 #include <iostream>
 
-#include <glm\glm.hpp>
-#include <assimp\scene.h>
-#include <assimp\postprocess.h>
+#include <glm/glm.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 using namespace Assimp;
 

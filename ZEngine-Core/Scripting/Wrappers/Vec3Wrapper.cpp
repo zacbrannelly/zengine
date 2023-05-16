@@ -36,18 +36,19 @@ void Callback_Vec3_Set(const v8::FunctionCallbackInfo<v8::Value>& info)
 		return;
 
 	auto sys = ScriptSystem::GetInstance();
+	auto context = sys->GetContext()->GetLocal();
 
-	auto wrap = v8::Local<v8::External>::Cast(info.Holder()->ToObject(sys->GetIsolate())->GetInternalField(0));
+	auto wrap = v8::Local<v8::External>::Cast(info.Holder()->ToObject(context).ToLocalChecked()->GetInternalField(0));
 	auto vec2 = static_cast<Vec3Wrapper*>(wrap->Value());
 
-	float x = info[0]->ToNumber(sys->GetIsolate())->Value();
-	float y = info[1]->ToNumber(sys->GetIsolate())->Value();
-	float z = info[2]->ToNumber(sys->GetIsolate())->Value();
+	float x = info[0]->ToNumber(context).ToLocalChecked()->Value();
+	float y = info[1]->ToNumber(context).ToLocalChecked()->Value();
+	float z = info[2]->ToNumber(context).ToLocalChecked()->Value();
 
 	vec2->SetData({ x, y, z });
 }
 
-void Vec3Wrapper::InstallImpl(v8::Local<v8::ObjectTemplate>& temp)
+void Vec3Wrapper::InstallImpl(v8::Local<v8::ObjectTemplate> temp)
 {
 	auto sys = ScriptSystem::GetInstance();
 
