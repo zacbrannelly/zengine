@@ -31,17 +31,17 @@
 #include <ZEngine-Core/Audio/AudioSystem.h>
 #include <glm/glm.hpp>
 
-#include "ComponentExporter.h"
-#include "GUILibrary.h"
-#include "MainMenuBar.h"
-#include "MapView.h"
-#include "InspectorWindow.h"
-#include "SceneGraphWindow.h"
-#include "GUIImage.h"
-#include "GameView.h"
-#include "AssetImporter.h"
-#include "AssetExplorer.h"
-#include "LogWindow.h"
+#include "Exporters/ComponentExporter.h"
+#include "UI/GUILibrary.h"
+#include "UI/GUIImage.h"
+#include "Menus/MainMenuBar.h"
+#include "Windows/MapView.h"
+#include "Windows/InspectorWindow.h"
+#include "Windows/SceneGraphWindow.h"
+#include "Windows/GameView.h"
+#include "Windows/AssetImporter.h"
+#include "Windows/AssetExplorer.h"
+#include "Windows/LogWindow.h"
 
 #include "imgui-includes.h"
 
