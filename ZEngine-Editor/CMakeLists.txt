@@ -73,6 +73,21 @@ source_group("Source Files" FILES ${SOURCE_FILES})
 ################################################################################
 add_executable(ZEngine-Editor ${SOURCE_FILES})
 
+# Copy the Assets folder to the build directory.
+add_custom_target(ZEngine-Editor-Copy-Assets
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Assets ${CMAKE_CURRENT_BINARY_DIR}/Assets
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/catalog.zengine ${CMAKE_CURRENT_BINARY_DIR}/catalog.zengine
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/imgui.ini ${CMAKE_CURRENT_BINARY_DIR}/imgui.ini
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/layout.ini ${CMAKE_CURRENT_BINARY_DIR}/layout.ini
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Assets
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/catalog.zengine
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/imgui.ini
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/layout.ini
+  COMMENT "Copying Assets folder to build directory"
+  VERBATIM
+)
+add_dependencies(ZEngine-Editor ZEngine-Editor-Copy-Assets)
+
 ################################################################################
 # Includes
 ################################################################################
