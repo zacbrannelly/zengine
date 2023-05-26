@@ -93,6 +93,11 @@
 					"type": 9,
 					
 					"script": 7
+				},
+				{
+					"name": "TestComponent",
+					"type": 19,
+					"script": 23
 				}
 			]
 		},

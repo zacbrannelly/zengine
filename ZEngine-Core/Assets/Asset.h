@@ -2,12 +2,6 @@
 
 #include "../Map/Objects/ZObject.h"
 
-//TODO: Unused, just using as reference for which types need corresponding asset implementations
-enum AssetType
-{
-	ASSET_TEXTURE, ASSET_MESH, ASSET_FONT, ASSET_ENTITY, ASSET_MATERIAL, ASSET_SHADER, ASSET_MAP, ASSET_SCRIPT
-};
-
 class Asset : public ZObject
 {
 public:

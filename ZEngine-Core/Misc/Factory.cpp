@@ -10,14 +10,17 @@
 #include "../Component/Transform.h"
 #include "../Component/TestRenderer.h"
 #include "../Component/ScriptComponent.h"
+#include "../Component/CSharpScriptComponent.h"
 #include "../Component/AudioSource.h"
 
 #include "../Scripting/Script.h"
+#include "../Scripting/CSharp/CSharpScript.h"
 
 #include "../Component/Importers/TransformImporter.h"
 #include "../Component/Importers/CameraImporter.h"
 #include "../Component/Importers/MeshRendererImporter.h"
 #include "../Component/Importers/ScriptComponentImporter.h"
+#include "../Component/Importers/CSharpScriptComponentImporter.h"
 #include "../Component/Importers/AudioSourceImporter.h"
 
 std::map<ObjectType, ConstructorFunc> Factory::_typeConstructors;
@@ -26,7 +29,7 @@ std::map<ObjectType, ImporterFunc> Factory::_importers;
 
 void Factory::Init()
 {
-	// Register instantiators (real-time creation)
+	// Register factory methods (real-time creation)
 	RegisterType(ObjectType::ENTITY, &Entity::CreateInstance);
 	RegisterType(ObjectType::MAP, &Map::CreateInstance);
 	RegisterType(ObjectType::MATERIAL, &Material::CreateInstance);
@@ -36,11 +39,13 @@ void Factory::Init()
 	RegisterType(ObjectType::TRANSFORM, &Transform::CreateInstance);
 	RegisterType(ObjectType::MESH_RENDERER, &MeshRenderer::CreateInstance);
 	RegisterType(ObjectType::SCRIPT, &Script::CreateInstance);
+	RegisterType(ObjectType::CSHARP_SCRIPT, &CSharpScript::CreateInstance);
 	RegisterType(ObjectType::SCRIPT_COMPONENT, &ScriptComponent::CreateInstance);
+	RegisterType(ObjectType::CSHARP_SCRIPT_COMPONENT, &CSharpScriptComponent::CreateInstance);
 	RegisterType(ObjectType::AUDIO_SOURCE, &AudioSource::CreateInstance);
 	RegisterType(ObjectType::TEST_RENDERER, &TestRenderer::CreateInstance);
 
-	// Register copy instatiators (real-time copying)
+	// Register copy methods (real-time copying)
 	RegisterCopyType(ObjectType::MAP, &Map::Copy);
 	RegisterCopyType(ObjectType::ENTITY, &Entity::Copy);
 	RegisterCopyType(ObjectType::TRANSFORM, &Transform::Copy);
@@ -61,6 +66,9 @@ void Factory::Init()
 
 	ScriptComponentImporter::Init();
 	RegisterTypeImporter(ObjectType::SCRIPT_COMPONENT, ScriptComponentImporter::Import);
+
+	CSharpScriptComponentImporter::Init();
+	RegisterTypeImporter(ObjectType::CSHARP_SCRIPT_COMPONENT, CSharpScriptComponentImporter::Import);
 
 	AudioSourceImporter::Init();
 	RegisterTypeImporter(ObjectType::AUDIO_SOURCE, AudioSourceImporter::Import);

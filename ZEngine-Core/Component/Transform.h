@@ -12,6 +12,11 @@ public:
 
 	void SetPosition(const glm::vec3& position);
 	const glm::vec3& GetPosition() const;
+
+	void SetPosition(float x, float y, float z);
+	float GetPositionX() const;
+	float GetPositionY() const;
+	float GetPositionZ() const;
 	
 	void SetScale(const glm::vec3& scale);
 	const glm::vec3& GetScale() const;
@@ -42,6 +47,9 @@ public:
 
 	static ZObject* CreateInstance(std::string name, ObjectType type);
 	static ZObject* Copy(std::string name, ZObject* object);
+
+#ifndef SWIGCSHARP
 	static v8::Global<v8::FunctionTemplate> GetTemplate(v8::Isolate* isolate);
+#endif
 };
 

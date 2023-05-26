@@ -1,6 +1,14 @@
 cmake_minimum_required (VERSION 3.0)
 project (ZEngine)
 
+# Find dotnet cli
+find_program(DOTNET_EXECUTABLE NAMES dotnet)
+if(NOT DOTNET_EXECUTABLE)
+  message(FATAL_ERROR "Check for dotnet Program: not found")
+else()
+  message(STATUS "Found dotnet Program: ${DOTNET_EXECUTABLE}")
+endif()
+
 ###
 # 3rd party libraries (that couldn't be installed as easily)
 ###

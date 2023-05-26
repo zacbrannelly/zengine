@@ -72,9 +72,10 @@ source_group("Source Files" FILES ${SOURCE_FILES})
 # Target
 ################################################################################
 add_executable(ZEngine-Editor ${SOURCE_FILES})
+add_dependencies(ZEngine-Editor ZEngine-Core)
 
 # Copy the Assets folder to the build directory.
-add_custom_target(ZEngine-Editor-Copy-Assets
+add_custom_command(TARGET ZEngine-Editor POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Assets ${CMAKE_CURRENT_BINARY_DIR}/Assets
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/catalog.zengine ${CMAKE_CURRENT_BINARY_DIR}/catalog.zengine
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/imgui.ini ${CMAKE_CURRENT_BINARY_DIR}/imgui.ini
@@ -86,7 +87,6 @@ add_custom_target(ZEngine-Editor-Copy-Assets
   COMMENT "Copying Assets folder to build directory"
   VERBATIM
 )
-add_dependencies(ZEngine-Editor ZEngine-Editor-Copy-Assets)
 
 ################################################################################
 # Includes
@@ -119,4 +119,43 @@ target_link_libraries (ZEngine-Editor
   PRIVATE glslang
   PRIVATE spirv-cross
   PRIVATE spirv-tools
+)
+
+################################################################################
+# Build the C# scripts
+# TODO: Move this to its own CMakeLists.txt file
+################################################################################
+
+add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Scripts
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/ZEngine-Scripts ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Scripts
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/ZEngine-Interop.dll ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Scripts/ZEngine-Interop.dll
+    DEPENDS
+        ${CMAKE_CURRENT_SOURCE_DIR}/ZEngine-Scripts
+        ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/ZEngine-Interop.dll
+    COMMENT "Copying ZEngine-Scripts to build directory"
+    VERBATIM
+    BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Scripts
+)
+
+# Build the scripts project using custom target (making sure we have the latest scripts & interop dll)
+add_custom_target(ZEngine-Scripts ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/ZEngine-Scripts ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Scripts
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/ZEngine-Interop.dll ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Scripts/ZEngine-Interop.dll
+    COMMAND ${DOTNET_EXECUTABLE} build ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Scripts/ZEngine-Scripts.csproj
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Scripts
+    DEPENDS
+        ZEngine-Editor
+        ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Scripts
+    COMMENT "Building ZEngine-Scripts"
+)
+
+# Copy the scripts dll to the build directory.
+add_custom_command(TARGET ZEngine-Scripts POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Scripts/bin/Debug/net6.0/ZEngine-Scripts.dll ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Scripts.dll
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Scripts/ZEngine-Interop.dll ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Interop.dll
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/libZEngine-Core-Interop.dylib ${CMAKE_CURRENT_BINARY_DIR}/libZEngine-Core-Interop.dylib
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/ZEngine-Interop.runtimeconfig.json ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Interop.runtimeconfig.json
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/ZEngine-Interop.runtimeconfig.json ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Scripts.runtimeconfig.json
+    COMMENT "Copying interop & script binaries to the build directory"
+    VERBATIM
 )

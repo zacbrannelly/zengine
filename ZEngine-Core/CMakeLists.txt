@@ -1,7 +1,7 @@
 ################################################################################
 # Compiler flags
 ################################################################################
-set (CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 14)
 
 ################################################################################
 # Source files
@@ -18,6 +18,7 @@ set(SOURCE_FILES
     "Assets/Objects/MeshAsset.cpp"
     "Assets/Objects/ModelAsset.cpp"
     "Assets/Objects/ScriptAsset.cpp"
+    "Assets/Objects/CSharpScriptAsset.cpp"
     "Assets/Objects/ShaderAsset.cpp"
     "Assets/Objects/TextureAsset.cpp"
     "Audio/AudioSystem.cpp"
@@ -28,9 +29,11 @@ set(SOURCE_FILES
     "Component/Importers/CameraImporter.cpp"
     "Component/Importers/MeshRendererImporter.cpp"
     "Component/Importers/ScriptComponentImporter.cpp"
+    "Component/Importers/CSharpScriptComponentImporter.cpp"
     "Component/Importers/TransformImporter.cpp"
     "Component/MeshRenderer.cpp"
     "Component/ScriptComponent.cpp"
+    "Component/CSharpScriptComponent.cpp"
     "Component/TestRenderer.cpp"
     "Component/Transform.cpp"
     "Display/Display.cpp"
@@ -65,6 +68,9 @@ set(SOURCE_FILES
     "Scripting/Wrappers/TimeWrapper.cpp"
     "Scripting/Wrappers/Vec2Wrapper.cpp"
     "Scripting/Wrappers/Vec3Wrapper.cpp"
+    "Scripting/CSharp/CSharpScript.cpp"
+    "Scripting/CSharp/CSharpScriptSystem.cpp"
+    "Scripting/CSharp/AssemblyLoader.cpp"
 )
 source_group("Source Files" FILES ${SOURCE_FILES})
 
@@ -89,16 +95,37 @@ add_library(ZEngine-Core ${SOURCE_FILES})
 ################################################################################
 include_directories("./")
 
-target_include_directories (ZEngine-Core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/v8-cmake/v8)
-target_include_directories (ZEngine-Core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/v8-cmake/v8/include)
-target_include_directories (ZEngine-Core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/bgfx.cmake/bgfx/include)
-target_include_directories (ZEngine-Core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/stb)
+target_include_directories(ZEngine-Core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/v8-cmake/v8)
+target_include_directories(ZEngine-Core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/v8-cmake/v8/include)
+target_include_directories(ZEngine-Core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/bgfx.cmake/bgfx/include)
+target_include_directories(ZEngine-Core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/stb)
 
 target_include_directories(ZEngine-Core PRIVATE ${SDL2_INCLUDE_DIRS})
 target_include_directories(ZEngine-Core PRIVATE ${SDL2_MIXER_INCLUDE_DIRS})
 target_include_directories(ZEngine-Core PRIVATE ${SDL2_IMAGE_INCLUDE_DIRS})
 target_include_directories(ZEngine-Core PRIVATE ${GLM_INCLUDE_DIRS})
 target_include_directories(ZEngine-Core PRIVATE ${GLFW_INCLUDE_DIRS})
+
+set(DOTNET_LIBRARY_PATH "/usr/local/share/dotnet/shared/Microsoft.NETCore.App/6.0.14")
+set(DOTNET_HOST_PATH "/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Host.osx-arm64/6.0.14/runtimes/osx-arm64/native")
+
+find_library(
+    DOTNET_CORECLR
+    NAMES coreclr libcoreclr
+    HINTS "${DOTNET_LIBRARY_PATH}"
+    NO_DEFAULT_PATH
+)
+
+find_library(
+    DOTNET_HOST
+    NAMES nethost libnethost
+    HINTS "${DOTNET_HOST_PATH}"
+    NO_DEFAULT_PATH
+)
+
+# Set RPATH (where to look for shared libraries, i.e. the dotnet runtime)
+set(CMAKE_MACOSX_RPATH 1)
+set(CMAKE_INSTALL_RPATH "${DOTNET_LIBRARY_PATH};${DOTNET_HOST_PATH}")
 
 ################################################################################
 # Linking
@@ -118,4 +145,74 @@ target_link_libraries(ZEngine-Core
     PRIVATE nlohmann_json::nlohmann_json
     PRIVATE assimp::assimp
     PRIVATE glfw
+    PRIVATE ${DOTNET_CORECLR}
+    PRIVATE ${DOTNET_HOST}
+)
+
+################################################################################
+# C# Binding Generation using SWIG
+################################################################################
+
+# TODO: Move all of this to its own CMakeLists.txt file
+
+if (POLICY CMP0122)
+    cmake_policy(SET CMP0122 NEW)
+endif()
+
+if (POLICY CMP0078)
+    cmake_policy(SET CMP0078 NEW)
+endif()
+
+if (POLICY CMP0086)
+    cmake_policy(SET CMP0086 NEW)
+endif()
+
+find_package(SWIG REQUIRED)
+include(UseSWIG)
+
+set_property(SOURCE Core.i PROPERTY CPLUSPLUS ON)
+set_property(SOURCE Core.i PROPERTY COMPILE_OPTIONS
+    -namespace ZEngine.Core
+    -dllimport libZEngine-Core-Interop.dylib)
+
+set(ZENGINE_INTEROP_PROJECT_BUILD_PATH ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Interop)
+
+swig_add_library(ZEngine-Core-Interop
+    TYPE SHARED
+    LANGUAGE csharp
+    OUTPUT_DIR ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}
+    SOURCES Core.i
+)
+
+set_target_properties(ZEngine-Core-Interop PROPERTIES
+    SWIG_INCLUDE_DIRECTORIES ${PROJECT_SOURCE_DIR}/dotnet
+    SWIG_USE_TARGET_INCLUDE_DIRECTORIES ON
+    SWIG_DEPENDS ZEngine-Core
+    POSITION_INDEPENDENT_CODE ON
+)
+
+target_include_directories(ZEngine-Core-Interop PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/glm)
+target_link_libraries(ZEngine-Core-Interop PRIVATE ZEngine-Core)
+
+set(ZENGINE_INTEROP_PROJECT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Scripting/CSharp/Lib/ZEngine-Interop)
+
+# Copy the template project to the output directory
+add_custom_command(TARGET ZEngine-Core-Interop POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${ZENGINE_INTEROP_PROJECT_PATH} ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}
+)
+
+# Build the interop project using custom target
+add_custom_target(ZEngine-Interop-Dotnet ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${ZENGINE_INTEROP_PROJECT_PATH} ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}
+    COMMAND ${DOTNET_EXECUTABLE} build ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}/ZEngine-Interop.csproj
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Interop
+    DEPENDS ZEngine-Core-Interop
+)
+
+# Copy the interop dll to the output directory.
+add_custom_command(TARGET ZEngine-Interop-Dotnet POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Interop/bin/Debug/net6.0/ZEngine-Interop.dll ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Interop.dll
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Interop/ZEngine-Interop.runtimeconfig.json ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Interop.runtimeconfig.json
+    COMMENT "Copy the ZEngine-Interop.dll & its runtime config to the output directory"
+    DEPENDS ${ZENGINE_INTEROP_PROJECT_PATH}
 )

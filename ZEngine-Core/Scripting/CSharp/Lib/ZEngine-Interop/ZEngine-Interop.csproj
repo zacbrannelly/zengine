@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CS-Script" Version="4.6.5" />
+  </ItemGroup>
+
+  <Target Name="CopyRuntimeConfigFile" AfterTargets="Build">
+    <ItemGroup>
+      <RuntimeConfigFile Include="$(OutputPath)$(AssemblyName).runtimeconfig.json" />
+    </ItemGroup>
+    <Copy SourceFiles="@(RuntimeConfigFile)" DestinationFolder="$(OutputPath)" SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>

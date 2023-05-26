@@ -15,6 +15,7 @@
 #include <ZEngine-Core/Component/Transform.h>
 #include <ZEngine-Core/Rendering/MeshFactory.h>
 #include <ZEngine-Core/Scripting/ScriptSystem.h>
+#include <ZEngine-Core/Scripting/CSharp/CSharpScriptSystem.h>
 #include <ZEngine-Core/Scripting/Script.h>
 #include <ZEngine-Core/Component/ScriptComponent.h>
 #include <ZEngine-Core/Component/Camera.h>
@@ -105,6 +106,10 @@ int main(int argc, char* argv[])
 	auto scriptSystem = ScriptSystem::GetInstance();
 	scriptSystem->Init(argv[0]);
 
+	// Init CSharp scripting system
+	auto cSharpScriptSystem = CSharpScriptSystem::GetInstance();
+	cSharpScriptSystem->Init();
+
 	// Init window
 	Display display("ZEngine 3.0 | By Zac Brannelly", 1920, 1060);
 	display.Init();
@@ -171,6 +176,7 @@ int main(int argc, char* argv[])
 	inputManager->Shutdown();
 	display.Shutdown();
 	scriptSystem->Shutdown();
+	cSharpScriptSystem->Shutdown();
 	time->Shutdown();
 
 	ComponentExporter::Cleanup();

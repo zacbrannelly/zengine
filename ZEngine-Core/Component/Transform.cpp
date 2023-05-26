@@ -30,9 +30,29 @@ void Transform::SetPosition(const glm::vec3& position)
 	_position = position;
 }
 
+void Transform::SetPosition(float x, float y, float z)
+{
+	_position = glm::vec3(x, y, z);
+}
+
 const glm::vec3& Transform::GetPosition() const
 {
 	return _position;
+}
+
+float Transform::GetPositionX() const
+{
+	return _position.x;
+}
+
+float Transform::GetPositionY() const
+{
+	return _position.y;
+}
+
+float Transform::GetPositionZ() const
+{
+	return _position.z;
 }
 
 void Transform::SetScale(const glm::vec3& scale)

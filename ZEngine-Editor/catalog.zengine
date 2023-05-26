@@ -21,3 +21,4 @@
 20,12=Assets/shaders/test_multi_pass.shader
 21,15=Assets/maps/new_map.map
 22,15=Assets/maps/menu_screen.map
+23,21=Assets/scripts/TestComponent.asset
