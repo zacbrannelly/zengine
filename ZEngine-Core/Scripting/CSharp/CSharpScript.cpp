@@ -1,7 +1,7 @@
 #include "CSharpScript.h"
 #include "CSharpScriptSystem.h"
 
-#include "../../Map/Objects/Entity.h"
+#include "../../Component/CSharpScriptComponent.h"
 
 CSharpScript::CSharpScript(std::string name) : ZObject(name, CSHARP_SCRIPT)
 {
@@ -14,11 +14,11 @@ void CSharpScript::SetClass(std::string classNamespace, std::string className)
   _fullyQualifiedTypeName = _namespace + "." + _className;
 }
 
-void* CSharpScript::CreateManagedObject(Entity* entity) const
+void* CSharpScript::CreateManagedObject(CSharpScriptComponent* owner) const
 {
   const auto scriptSystem = CSharpScriptSystem::GetInstance();
   const auto instance = scriptSystem->CreateManagedObject("ZEngine-Scripts", _fullyQualifiedTypeName);
-  scriptSystem->SetProperty(instance, "_entityPtr", entity);
+  scriptSystem->SetScriptNativeInstance(instance, owner);
 
   return instance;
 }

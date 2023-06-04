@@ -31,17 +31,10 @@ namespace ZEngine.Core.Interop
 
     [UnmanagedCallersOnly]
     public static IntPtr InvokeMethod(IntPtr objectPtr, IntPtr methodNameString) {
-      var handle = GCHandle.FromIntPtr(objectPtr);
-      var instance = handle.Target;
-      if (instance == null) return IntPtr.Zero;
+      var instance = UnmanagedHelpers.UnwrapInstance(objectPtr);
 
       var methodName = Marshal.PtrToStringAnsi(methodNameString);
-      if (methodName == null) return IntPtr.Zero;
-
-      // Unwrap the object handle if it's a proxy
-      if (instance is System.Runtime.Remoting.ObjectHandle) {
-        instance = ((System.Runtime.Remoting.ObjectHandle)instance).Unwrap();
-      }
+      if (methodName == null) throw new Exception("Method name is null");
 
       var type = instance.GetType();
       var methodInfo = type.GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance);
@@ -55,18 +48,22 @@ namespace ZEngine.Core.Interop
     }
 
     [UnmanagedCallersOnly]
-    public static void SetProperty(IntPtr objectPtr, IntPtr propertyNameString, IntPtr value) {
-      var handle = GCHandle.FromIntPtr(objectPtr);
-      var instance = handle.Target;
-      if (instance == null) return;
-
-      // Unwrap the object handle if it's a proxy
-      if (instance is System.Runtime.Remoting.ObjectHandle) {
-        instance = ((System.Runtime.Remoting.ObjectHandle)instance).Unwrap();
+    public static void SetScriptNativeInstance(IntPtr managedInstancePtr, IntPtr unmanagedInstancePtr) {
+      var instance = UnmanagedHelpers.UnwrapInstance(managedInstancePtr);
+      if (!(instance is CSharpScriptComponent)) {
+        throw new Exception("Instance is not a CSharpScriptComponent");
       }
 
+      var scriptComponent = instance as CSharpScriptComponent;
+      scriptComponent.SetCPtr(unmanagedInstancePtr, false);
+    }
+
+    [UnmanagedCallersOnly]
+    public static void SetProperty(IntPtr objectPtr, IntPtr propertyNameString, IntPtr value) {
+      var instance = UnmanagedHelpers.UnwrapInstance(objectPtr);
+
       var propertyName = Marshal.PtrToStringAnsi(propertyNameString);
-      if (propertyName == null) return;
+      if (propertyName == null) throw new Exception("Property name is null");
 
       var propertyInfo = instance.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
       if (propertyInfo == null) return;

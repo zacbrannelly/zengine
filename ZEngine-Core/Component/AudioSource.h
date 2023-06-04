@@ -33,6 +33,9 @@ private:
 public:
 	static ZObject* CreateInstance(std::string name, ObjectType type);
 	static ZObject* Copy(std::string name, ZObject* object);
+
+#ifndef SWIGCSHARP
 	static v8::Global<v8::FunctionTemplate> GetTemplate(v8::Isolate* isolate);
+#endif
 };
 

@@ -7,11 +7,12 @@ namespace ZEngine.Core.Interop
     {
         /**
          * This is the entrypoint for the assembly. It is required to be present in order to load the assembly.
+         * WARNING: Do not remove this method or assembly load will fail.
          */
         [UnmanagedCallersOnly]
         public static void Initialize()
         {
-            // Empty stub, required to load the assembly.
+            System.Runtime.GCSettings.LatencyMode = System.Runtime.GCLatencyMode.SustainedLowLatency;
         }
     }
 }

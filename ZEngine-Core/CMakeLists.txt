@@ -88,7 +88,7 @@ find_package(assimp REQUIRED)
 ################################################################################
 # Target
 ################################################################################
-add_library(ZEngine-Core ${SOURCE_FILES})
+add_library(ZEngine-Core SHARED ${SOURCE_FILES})
 
 ################################################################################
 # Includes
@@ -153,8 +153,6 @@ target_link_libraries(ZEngine-Core
 # C# Binding Generation using SWIG
 ################################################################################
 
-# TODO: Move all of this to its own CMakeLists.txt file
-
 if (POLICY CMP0122)
     cmake_policy(SET CMP0122 NEW)
 endif()
@@ -185,13 +183,16 @@ swig_add_library(ZEngine-Core-Interop
 )
 
 set_target_properties(ZEngine-Core-Interop PROPERTIES
-    SWIG_INCLUDE_DIRECTORIES ${PROJECT_SOURCE_DIR}/dotnet
     SWIG_USE_TARGET_INCLUDE_DIRECTORIES ON
     SWIG_DEPENDS ZEngine-Core
     POSITION_INDEPENDENT_CODE ON
 )
 
-target_include_directories(ZEngine-Core-Interop PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/glm)
+# Include the ZEngine-Core include directories
+target_include_directories(ZEngine-Core-Interop
+    PRIVATE
+    "$<TARGET_PROPERTY:ZEngine-Core,INCLUDE_DIRECTORIES>"
+)
 target_link_libraries(ZEngine-Core-Interop PRIVATE ZEngine-Core)
 
 set(ZENGINE_INTEROP_PROJECT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Scripting/CSharp/Lib/ZEngine-Interop)
@@ -214,5 +215,5 @@ add_custom_command(TARGET ZEngine-Interop-Dotnet POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Interop/bin/Debug/net6.0/ZEngine-Interop.dll ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Interop.dll
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Interop/ZEngine-Interop.runtimeconfig.json ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Interop.runtimeconfig.json
     COMMENT "Copy the ZEngine-Interop.dll & its runtime config to the output directory"
-    DEPENDS ${ZENGINE_INTEROP_PROJECT_PATH}
+    DEPENDS ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}
 )

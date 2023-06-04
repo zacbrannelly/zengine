@@ -14,30 +14,19 @@ class Factory
 public:
 	static void Init();
 
+	static ZObject* CreateInstance(std::string name, ObjectType type);
+	static ZObject* Copy(std::string name, ZObject* object);
+
 	template<class T> 
 	static T* CreateInstance(std::string name, ObjectType type)
 	{
-		auto constructor = _typeConstructors.find(type);
-
-		if (constructor != _typeConstructors.end())
-		{
-			return static_cast<T*>(constructor->second(name, type));
-		}
-
-		return nullptr;
+		return static_cast<T*>(CreateInstance(name, type));
 	}
 
 	template<class T>
 	static T* Copy(std::string name, ZObject* object)
 	{
-		auto copyFunc = _copyFunctions.find(object->GetType());
-
-		if (copyFunc != _copyFunctions.end())
-		{
-			return static_cast<T*>(copyFunc->second(name, object));
-		}
-
-		return nullptr;
+		return static_cast<T*>(Copy(name, object));
 	}
 
 	template<class T>

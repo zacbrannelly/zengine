@@ -4,7 +4,7 @@
 #include <string>
 #include "../../Map/Objects/ZObject.h"
 
-class Entity;
+class CSharpScriptComponent;
 
 class CSharpScript : public ZObject
 {
@@ -14,7 +14,7 @@ public:
 
 	void SetClass(std::string classNamespace, std::string className);
 
-  void* CreateManagedObject(Entity* owner) const;
+  void* CreateManagedObject(CSharpScriptComponent* owner) const;
   void InvokeMethod(void* managedInstance, std::string methodName);
 
 private:

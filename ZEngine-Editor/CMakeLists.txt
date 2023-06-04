@@ -149,13 +149,13 @@ add_custom_target(ZEngine-Scripts ALL
     COMMENT "Building ZEngine-Scripts"
 )
 
-# Copy the scripts dll to the build directory.
+# Copy script DLLs, interop DLLs, and core DLLs to the build directory.
 add_custom_command(TARGET ZEngine-Scripts POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Scripts/bin/Debug/net6.0/ZEngine-Scripts.dll ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Scripts.dll
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Scripts/ZEngine-Interop.dll ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Interop.dll
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/libZEngine-Core.dylib ${CMAKE_CURRENT_BINARY_DIR}/libZEngine-Core.dylib
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/libZEngine-Core-Interop.dylib ${CMAKE_CURRENT_BINARY_DIR}/libZEngine-Core-Interop.dylib
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/ZEngine-Interop.runtimeconfig.json ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Interop.runtimeconfig.json
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/ZEngine-Interop.runtimeconfig.json ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Scripts.runtimeconfig.json
-    COMMENT "Copying interop & script binaries to the build directory"
+    COMMENT "Copying dependencies to build directory"
     VERBATIM
 )

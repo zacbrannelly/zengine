@@ -6,7 +6,10 @@
 #include <map>
 #include <vector>
 #include <algorithm>
+
+#ifndef SWIGCSHARP
 #include <v8.h>
+#endif
 
 class Display;
 
@@ -37,7 +40,9 @@ public:
 	void RemoveMousePosCallback(GLFWcursorposfun cb);
 	void RemoveMouseButtonCallback(GLFWmousebuttonfun cb);
 
+#ifndef SWIGCSHARP
 	void SetupScriptBindings(v8::Isolate* isolate, v8::Local<v8::Object>& global);
+#endif
 
 private:
 	void UpdateButton(ButtonCode code, int action, int mods);

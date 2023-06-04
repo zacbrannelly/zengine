@@ -22,3 +22,7 @@
 21,15=Assets/maps/new_map.map
 22,15=Assets/maps/menu_screen.map
 23,21=Assets/scripts/TestComponent.asset
+24,21=Assets/scripts/RotateComponent.asset
+25,21=Assets/scripts/HeadComponent.asset
+26,21=Assets/scripts/BodyComponent.asset
+27,21=Assets/scripts/FoodComponent.asset

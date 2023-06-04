@@ -10,14 +10,13 @@
 
 #define SCRIPTS_ASSEMBLY_PATH "ZEngine-Scripts.dll"
 #define SCRIPTS_ASSEMBLY_NAME "ZEngine-Scripts"
-// TODO: We only need one runtime config file, can we use the same one for both assemblies?
-#define SCRIPTS_RUNTIME_CONFIG_PATH "ZEngine-Scripts.runtimeconfig.json"
 #define SCRIPTS_ENTRYPOINT_NAMESPACE "ZEngine.Core.Scripts"
 
 #define UNMANAGED_METHODS_TYPE_NAME "UnmanagedMethods"
 #define CREATE_MANAGED_OBJECT_METHOD_NAME "CreateManagedObject"
 #define INVOKE_METHOD_NAME "InvokeMethod"
 #define SET_PROPERTY_METHOD_NAME "SetProperty"
+#define SET_SCRIPT_NATIVE_INSTANCE_METHOD_NAME "SetScriptNativeInstance"
 
 bool CSharpScriptSystem::Init()
 {
@@ -54,16 +53,34 @@ bool CSharpScriptSystem::Init()
         INTEROP_ASSEMBLY_NAME
       )
     );
+    _setScriptNativeInstanceFunction = reinterpret_cast<SetScriptNativeInstanceFunction>(
+      _interopAssembly.GetFunction(
+        UNMANAGED_METHODS_TYPE_NAME,
+        INTEROP_ENTRYPOINT_NAMESPACE,
+        SET_SCRIPT_NATIVE_INSTANCE_METHOD_NAME,
+        INTEROP_ASSEMBLY_NAME
+      )
+    );
   }
 
   bool scriptsLoaded = _scriptsAssembly.Load(
     SCRIPTS_ASSEMBLY_PATH,
-    SCRIPTS_RUNTIME_CONFIG_PATH,
+    INTEROP_RUNTIME_CONFIG_PATH,
     SCRIPTS_ENTRYPOINT_NAMESPACE,
     SCRIPTS_ASSEMBLY_NAME
   );
 
   return interopLoaded && scriptsLoaded;
+}
+
+void* CSharpScriptSystem::CreateManagedObject(std::string assemblyName, std::string typeName)
+{
+  if (!_createManagedObjectFunction) {
+    std::cerr << "CSharpScriptSystem::CreateManagedObject called before interop assembly was loaded." << std::endl;
+    throw std::runtime_error("Failed to create managed object");
+  }
+
+  return _createManagedObjectFunction(assemblyName.c_str(), typeName.c_str());
 }
 
 void* CSharpScriptSystem::InvokeMethod(void* object, std::string methodName)
@@ -86,14 +103,14 @@ void CSharpScriptSystem::SetProperty(void* object, std::string propertyName, voi
   _setPropertyFunction(object, propertyName.c_str(), value);
 }
 
-void* CSharpScriptSystem::CreateManagedObject(std::string assemblyName, std::string typeName)
+void CSharpScriptSystem::SetScriptNativeInstance(void* object, void* nativeInstance)
 {
-  if (!_createManagedObjectFunction) {
-    std::cerr << "CSharpScriptSystem::CreateManagedObject called before interop assembly was loaded." << std::endl;
-    throw std::runtime_error("Failed to create managed object");
+  if (!_setScriptNativeInstanceFunction) {
+    std::cerr << "CSharpScriptSystem::SetScriptNativeInstance called before interop assembly was loaded." << std::endl;
+    throw std::runtime_error("Failed to set script native instance");
   }
 
-  return _createManagedObjectFunction(assemblyName.c_str(), typeName.c_str());
+  _setScriptNativeInstanceFunction(object, nativeInstance);
 }
 
 void CSharpScriptSystem::Shutdown() 

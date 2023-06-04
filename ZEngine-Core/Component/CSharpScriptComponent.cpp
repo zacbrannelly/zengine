@@ -12,9 +12,6 @@ CSharpScriptComponent::CSharpScriptComponent(std::string name) : Component(name,
 }
 
 void CSharpScriptComponent::Init() {
-  if (!_managedInstance) {
-    _managedInstance = _script->CreateManagedObject(GetOwner());
-  }
   _script->InvokeMethod(_managedInstance, INIT_METHOD_NAME);
 }
 
@@ -28,10 +25,19 @@ void CSharpScriptComponent::Render(int viewId) {
 
 void CSharpScriptComponent::SetScript(CSharpScript* script) {
   _script = script;
+  SetManagedInstance(_script->CreateManagedObject(this));
 }
 
 CSharpScript* CSharpScriptComponent::GetScript() const {
   return _script;
+}
+
+void CSharpScriptComponent::SetManagedInstance(void* instance) {
+  _managedInstance = instance;
+}
+
+void* CSharpScriptComponent::GetManagedInstance() const {
+  return _managedInstance;
 }
 
 ZObject* CSharpScriptComponent::CreateInstance(std::string name, ObjectType type)

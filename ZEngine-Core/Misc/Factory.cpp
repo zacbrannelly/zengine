@@ -23,6 +23,8 @@
 #include "../Component/Importers/CSharpScriptComponentImporter.h"
 #include "../Component/Importers/AudioSourceImporter.h"
 
+#include <iostream>
+
 std::map<ObjectType, ConstructorFunc> Factory::_typeConstructors;
 std::map<ObjectType, CopyFunc> Factory::_copyFunctions;
 std::map<ObjectType, ImporterFunc> Factory::_importers;
@@ -52,6 +54,7 @@ void Factory::Init()
 	RegisterCopyType(ObjectType::MESH_RENDERER, &MeshRenderer::Copy);
 	RegisterCopyType(ObjectType::CAMERA, &Camera::Copy);
 	RegisterCopyType(ObjectType::SCRIPT_COMPONENT, &ScriptComponent::Copy);
+	RegisterCopyType(ObjectType::CSHARP_SCRIPT_COMPONENT, &CSharpScriptComponent::Copy);
 	RegisterCopyType(ObjectType::AUDIO_SOURCE, &AudioSource::Copy);
 
 	// Register importers (from JSON objects)
@@ -72,6 +75,30 @@ void Factory::Init()
 
 	AudioSourceImporter::Init();
 	RegisterTypeImporter(ObjectType::AUDIO_SOURCE, AudioSourceImporter::Import);
+}
+
+ZObject* Factory::CreateInstance(std::string name, ObjectType type)
+{
+	auto constructor = _typeConstructors.find(type);
+	if (constructor != _typeConstructors.end())
+	{
+		return constructor->second(name, type);
+	}
+
+	return nullptr;
+}
+
+ZObject* Factory::Copy(std::string name, ZObject* object)
+{
+	auto copyFunc = _copyFunctions.find(object->GetType());
+
+	if (copyFunc != _copyFunctions.end())
+	{
+		return copyFunc->second(name, object);
+	}
+
+	std::cout << "Factory::Copy: No copy function found for type " << object->GetType() << std::endl;
+	return nullptr;
 }
 
 void Factory::RegisterType(ObjectType type, ConstructorFunc constructor)

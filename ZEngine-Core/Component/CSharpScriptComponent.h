@@ -17,6 +17,9 @@ public:
 	void SetScript(CSharpScript* script);
 	CSharpScript* GetScript() const;
 
+	void SetManagedInstance(void* instance);
+	void* GetManagedInstance() const;
+
 private:
 	CSharpScript* _script;
   void* _managedInstance;

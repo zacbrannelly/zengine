@@ -6,10 +6,6 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CS-Script" Version="4.6.5" />
-  </ItemGroup>
-
   <Target Name="CopyRuntimeConfigFile" AfterTargets="Build">
     <ItemGroup>
       <RuntimeConfigFile Include="$(OutputPath)$(AssemblyName).runtimeconfig.json" />

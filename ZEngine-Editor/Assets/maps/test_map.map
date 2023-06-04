@@ -72,27 +72,18 @@
 				},
 				{
 					"name": "RotateComponent",
-					"type": 9,
-					
-					"script": 3
-				},
-				{
-					"name": "BoxCollider2D",
-					"type": 9,
-					
-					"script": 5
+					"type": 19,
+					"script": 24
 				},
 				{
 					"name": "HeadComponent",
-					"type": 9,
-					
-					"script": 4
+					"type": 19,
+					"script": 25
 				},
 				{
 					"name": "BodyComponent",
-					"type": 9,
-					
-					"script": 7
+					"type": 19,
+					"script": 26
 				},
 				{
 					"name": "TestComponent",
@@ -122,26 +113,18 @@
 				},
 				{
 					"name": "FoodComponent",
-					"type": 9,
+					"type": 19,
 					
-					"script": 6
+					"script": 27
 				},
 				{
 					"name": "RotateComponent",
-					"type": 9,
-					
-					"script": 3
-				},
-				{
-					"name": "BoxCollider2D",
-					"type": 9,
-					
-					"script": 5
+					"type": 19,
+					"script": 24
 				},
 				{
 					"name": "AudioSource",
 					"type": 18,
-					
 					"audio": 12 
 				}
 			]
