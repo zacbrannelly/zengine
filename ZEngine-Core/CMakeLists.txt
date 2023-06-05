@@ -17,7 +17,6 @@ set(SOURCE_FILES
     "Assets/Objects/MaterialAsset.cpp"
     "Assets/Objects/MeshAsset.cpp"
     "Assets/Objects/ModelAsset.cpp"
-    "Assets/Objects/ScriptAsset.cpp"
     "Assets/Objects/CSharpScriptAsset.cpp"
     "Assets/Objects/ShaderAsset.cpp"
     "Assets/Objects/TextureAsset.cpp"
@@ -28,18 +27,15 @@ set(SOURCE_FILES
     "Component/Importers/AudioSourceImporter.cpp"
     "Component/Importers/CameraImporter.cpp"
     "Component/Importers/MeshRendererImporter.cpp"
-    "Component/Importers/ScriptComponentImporter.cpp"
     "Component/Importers/CSharpScriptComponentImporter.cpp"
     "Component/Importers/TransformImporter.cpp"
     "Component/MeshRenderer.cpp"
-    "Component/ScriptComponent.cpp"
     "Component/CSharpScriptComponent.cpp"
     "Component/TestRenderer.cpp"
     "Component/Transform.cpp"
     "Display/Display.cpp"
     "Engine.cpp"
     "Input/InputManager.cpp"
-    "Input/InputTypes.cpp"
     "Map/Map.cpp"
     "Map/MapManager.cpp"
     "Map/Objects/Entity.cpp"
@@ -59,15 +55,6 @@ set(SOURCE_FILES
     "Rendering/Shader.cpp"
     "Rendering/Texture2D.cpp"
     "Rendering/VertexBuffer.cpp"
-    "Scripting/IScriptable.cpp"
-    "Scripting/Script.cpp"
-    "Scripting/ScriptDemo.cpp"
-    "Scripting/ScriptSystem.cpp"
-    "Scripting/Wrappers/FactoryWrapper.cpp"
-    "Scripting/Wrappers/MapManagerWrapper.cpp"
-    "Scripting/Wrappers/TimeWrapper.cpp"
-    "Scripting/Wrappers/Vec2Wrapper.cpp"
-    "Scripting/Wrappers/Vec3Wrapper.cpp"
     "Scripting/CSharp/CSharpScript.cpp"
     "Scripting/CSharp/CSharpScriptSystem.cpp"
     "Scripting/CSharp/AssemblyLoader.cpp"
@@ -95,8 +82,6 @@ add_library(ZEngine-Core SHARED ${SOURCE_FILES})
 ################################################################################
 include_directories("./")
 
-target_include_directories(ZEngine-Core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/v8-cmake/v8)
-target_include_directories(ZEngine-Core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/v8-cmake/v8/include)
 target_include_directories(ZEngine-Core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/bgfx.cmake/bgfx/include)
 target_include_directories(ZEngine-Core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/stb)
 
@@ -131,11 +116,6 @@ set(CMAKE_INSTALL_RPATH "${DOTNET_LIBRARY_PATH};${DOTNET_HOST_PATH}")
 # Linking
 ################################################################################
 target_link_libraries(ZEngine-Core
-    PRIVATE v8_base_without_compiler
-    PRIVATE v8_compiler
-    PRIVATE v8_snapshot
-    PRIVATE v8_inspector
-    PRIVATE v8_libplatform
     PRIVATE bgfx
     PRIVATE bx
     PRIVATE bimg

@@ -1,7 +1,6 @@
 #include "ComponentExporter.h"
 #include "AudioSourceExporter.h"
 #include "MeshRendererExporter.h"
-#include "ScriptComponentExporter.h"
 #include "TransformExporter.h"
 #include "CameraExporter.h"
 
@@ -14,7 +13,6 @@ void ComponentExporter::RegisterAllTypes()
 	RegisterExporter(new TransformExporter(), TRANSFORM);
 	RegisterExporter(new CameraExporter(), CAMERA);
 	RegisterExporter(new MeshRendererExporter(), MESH_RENDERER);
-	RegisterExporter(new ScriptComponentExporter(), SCRIPT_COMPONENT);
 	RegisterExporter(new AudioSourceExporter(), AUDIO_SOURCE);
 }
 

@@ -14,10 +14,7 @@
 #include <ZEngine-Core/Rendering/Mesh.h>
 #include <ZEngine-Core/Component/Transform.h>
 #include <ZEngine-Core/Rendering/MeshFactory.h>
-#include <ZEngine-Core/Scripting/ScriptSystem.h>
 #include <ZEngine-Core/Scripting/CSharp/CSharpScriptSystem.h>
-#include <ZEngine-Core/Scripting/Script.h>
-#include <ZEngine-Core/Component/ScriptComponent.h>
 #include <ZEngine-Core/Component/Camera.h>
 #include <ZEngine-Core/Assets/Objects/TextureAsset.h>
 #include <ZEngine-Core/Rendering/Texture2D.h>
@@ -102,10 +99,6 @@ int main(int argc, char* argv[])
 	//TODO: Register any editor specific ZObject's here
 	ComponentExporter::RegisterAllTypes();
 
-	// Init scripting system
-	auto scriptSystem = ScriptSystem::GetInstance();
-	scriptSystem->Init(argv[0]);
-
 	// Init CSharp scripting system
 	auto cSharpScriptSystem = CSharpScriptSystem::GetInstance();
 	cSharpScriptSystem->Init();
@@ -175,7 +168,6 @@ int main(int argc, char* argv[])
 	audioSystem->Shutdown();
 	inputManager->Shutdown();
 	display.Shutdown();
-	scriptSystem->Shutdown();
 	cSharpScriptSystem->Shutdown();
 	time->Shutdown();
 

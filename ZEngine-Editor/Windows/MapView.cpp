@@ -7,8 +7,6 @@
 #include <ZEngine-Core/Audio/AudioSystem.h>
 #include <ZEngine-Core/Map/MapManager.h>
 #include <ZEngine-Core/Assets/AssetManager.h>
-#include <ZEngine-Core/Assets/Objects/ScriptAsset.h>
-#include <ZEngine-Core/Scripting/Script.h>
 
 #include "../Editor.h"
 #include "../Inspectors/TransformInspector.h"
@@ -88,7 +86,6 @@ void MapView::Play()
 	// Set the copy as the "selected" map (so both the editor and scripting engine know)
 	mapManager->SetCurrentMap(_previewMap);
 	_editor->SetSelectedMap(_previewMap);
-
 }
 
 void MapView::Pause()

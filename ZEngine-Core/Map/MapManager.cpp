@@ -16,7 +16,6 @@ void MapManager::SetCurrentMap(Map* currentMap)
 	if (_currentMap != nullptr)
 	{
 		_currentMap->Init();
-		_currentMap->InitScripts();
 	}
 }
 

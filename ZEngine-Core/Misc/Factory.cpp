@@ -9,17 +9,14 @@
 #include "../Component/Camera.h"
 #include "../Component/Transform.h"
 #include "../Component/TestRenderer.h"
-#include "../Component/ScriptComponent.h"
 #include "../Component/CSharpScriptComponent.h"
 #include "../Component/AudioSource.h"
 
-#include "../Scripting/Script.h"
 #include "../Scripting/CSharp/CSharpScript.h"
 
 #include "../Component/Importers/TransformImporter.h"
 #include "../Component/Importers/CameraImporter.h"
 #include "../Component/Importers/MeshRendererImporter.h"
-#include "../Component/Importers/ScriptComponentImporter.h"
 #include "../Component/Importers/CSharpScriptComponentImporter.h"
 #include "../Component/Importers/AudioSourceImporter.h"
 
@@ -40,9 +37,7 @@ void Factory::Init()
 	RegisterType(ObjectType::CAMERA, &Camera::CreateInstance);
 	RegisterType(ObjectType::TRANSFORM, &Transform::CreateInstance);
 	RegisterType(ObjectType::MESH_RENDERER, &MeshRenderer::CreateInstance);
-	RegisterType(ObjectType::SCRIPT, &Script::CreateInstance);
 	RegisterType(ObjectType::CSHARP_SCRIPT, &CSharpScript::CreateInstance);
-	RegisterType(ObjectType::SCRIPT_COMPONENT, &ScriptComponent::CreateInstance);
 	RegisterType(ObjectType::CSHARP_SCRIPT_COMPONENT, &CSharpScriptComponent::CreateInstance);
 	RegisterType(ObjectType::AUDIO_SOURCE, &AudioSource::CreateInstance);
 	RegisterType(ObjectType::TEST_RENDERER, &TestRenderer::CreateInstance);
@@ -53,7 +48,6 @@ void Factory::Init()
 	RegisterCopyType(ObjectType::TRANSFORM, &Transform::Copy);
 	RegisterCopyType(ObjectType::MESH_RENDERER, &MeshRenderer::Copy);
 	RegisterCopyType(ObjectType::CAMERA, &Camera::Copy);
-	RegisterCopyType(ObjectType::SCRIPT_COMPONENT, &ScriptComponent::Copy);
 	RegisterCopyType(ObjectType::CSHARP_SCRIPT_COMPONENT, &CSharpScriptComponent::Copy);
 	RegisterCopyType(ObjectType::AUDIO_SOURCE, &AudioSource::Copy);
 
@@ -66,9 +60,6 @@ void Factory::Init()
 
 	MeshRendererImporter::Init();
 	RegisterTypeImporter(ObjectType::MESH_RENDERER, MeshRendererImporter::Import);
-
-	ScriptComponentImporter::Init();
-	RegisterTypeImporter(ObjectType::SCRIPT_COMPONENT, ScriptComponentImporter::Import);
 
 	CSharpScriptComponentImporter::Init();
 	RegisterTypeImporter(ObjectType::CSHARP_SCRIPT_COMPONENT, CSharpScriptComponentImporter::Import);

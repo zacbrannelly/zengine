@@ -2,9 +2,6 @@
 #include "../../Component/Component.h"
 #include "../../Misc/Factory.h"
 #include "../../Component/Transform.h"
-#include "../../Scripting/ScriptSystem.h"
-#include "../../Scripting/IScriptable.h"
-#include "../../Component/ScriptComponent.h"
 
 using namespace std;
 
@@ -56,15 +53,6 @@ void Entity::InitComponents()
 	}
 }
 
-void Entity::InitScripts()
-{
-	for (int i = 0; i < _components.size(); i++)
-	{
-		if (_components[i]->GetType() == SCRIPT_COMPONENT)
-			static_cast<ScriptComponent*>(_components[i])->InitScript();
-	}
-}
-
 void Entity::AddComponent(Component* component, bool shouldInit)
 {
 	// Allow valid components and ONLY one transform component 
@@ -80,13 +68,6 @@ void Entity::AddComponent(Component* component, bool shouldInit)
 
 			// Keep direct ref to transform (most common access)
 			_transform = static_cast<Transform*>(component);
-
-			// Update script transform field with new transform (TODO: find a better solution to this, e.g. keep the same script object and just change internal field)
-			auto scriptSystem = ScriptSystem::GetInstance();
-			auto scriptObject = GetScriptObject();
-			auto context = scriptSystem->GetContext()->GetLocal();
-			v8::Context::Scope scope(context);
-			scriptObject->Set(context, scriptSystem->GetString("transform"), _transform->GetScriptObject());
 		}
 
 		_components.push_back(component);
@@ -96,9 +77,6 @@ void Entity::AddComponent(Component* component, bool shouldInit)
 		if (shouldInit)
 		{
 			component->Init();
-			
-			if (component->GetType() == SCRIPT_COMPONENT)
-				static_cast<ScriptComponent*>(component)->InitScript();
 		}
 	}
 }
@@ -159,120 +137,4 @@ Entity::~Entity()
 {
 	for (auto component : _components)
 		delete component;
-}
-
-void Callback_Entity_AddComponent(const v8::FunctionCallbackInfo<v8::Value>& info)
-{
-	auto wrap = v8::Local<v8::External>::Cast(info.Holder()->GetInternalField(0));
-	auto scriptable = static_cast<IScriptable*>(wrap->Value());
-	auto entity = static_cast<Entity*>(scriptable);
-
-	if (entity == nullptr || info.Length() != 1 || !info[0]->IsObject())
-		return;
-
-	auto context = info.GetIsolate()->GetCurrentContext();
-	auto object = info[0]->ToObject(context).ToLocalChecked();
-	wrap = v8::Local<v8::External>::Cast(object->GetInternalField(0));
-	scriptable = static_cast<IScriptable*>(wrap->Value());
-	auto component = static_cast<Component*>(scriptable);
-
-	if (component != nullptr)
-		entity->AddComponent(component, true);
-}
-
-void Callback_Entity_RemoveComponent(const v8::FunctionCallbackInfo<v8::Value>& info)
-{
-	auto wrap = v8::Local<v8::External>::Cast(info.Holder()->GetInternalField(0));
-	auto scriptable = static_cast<IScriptable*>(wrap->Value());
-	auto entity = static_cast<Entity*>(scriptable);
-
-	if (entity == nullptr || info.Length() != 1 || !info[0]->IsObject())
-		return;
-
-	auto context = info.GetIsolate()->GetCurrentContext();
-	auto object = info[0]->ToObject(context).ToLocalChecked();
-	wrap = v8::Local<v8::External>::Cast(object->GetInternalField(0));
-	scriptable = static_cast<IScriptable*>(wrap->Value());
-	auto component = static_cast<Component*>(scriptable);
-
-	if (component != nullptr)
-		entity->RemoveComponent(component);
-}
-
-void Callback_Entity_GetComponent(const v8::FunctionCallbackInfo<v8::Value>& info)
-{
-	auto wrap = v8::Local<v8::External>::Cast(info.Holder()->GetInternalField(0));
-	auto scriptable = static_cast<IScriptable*>(wrap->Value());
-	auto entity = static_cast<Entity*>(scriptable);
-
-	if (entity == nullptr || info.Length() != 1 || !info[0]->IsString())
-		return;
-
-	auto context = info.GetIsolate()->GetCurrentContext();
-	auto componentNameLocal = info[0]->ToString(context).ToLocalChecked();
-	auto componentName = ScriptSystem::GetInstance()->CastString(componentNameLocal);
-	auto component = entity->GetComponentByName(componentName);
-	
-	if (component != nullptr)
-	{
-		info.GetReturnValue().Set(component->GetScriptObject());
-	}
-	else
-	{
-		info.GetReturnValue().SetNull();
-	}
-}
-
-void Callback_Entity_Getter(v8::Local<v8::String> nameObj, const v8::PropertyCallbackInfo<v8::Value>& info)
-{
-	auto sys = ScriptSystem::GetInstance();
-	auto name = sys->CastString(nameObj);
-
-	auto wrap = v8::Local<v8::External>::Cast(info.Holder()->GetInternalField(0));
-	auto scriptable = static_cast<IScriptable*>(wrap->Value());
-	auto entity = static_cast<Entity*>(scriptable);
-
-	if (entity == nullptr)
-		return;
-
-	if (name == "name")
-	{
-		info.GetReturnValue().Set(sys->GetString(entity->GetName()));
-	}
-	else if (name == "transform")
-	{
-		info.GetReturnValue().Set(entity->GetTransform()->GetScriptObject());
-	}
-}
-
-void Callback_Entity_Setter(v8::Local<v8::String> nameObj, v8::Local<v8::Value> value, const v8::PropertyCallbackInfo<void>& info)
-{
-	auto sys = ScriptSystem::GetInstance();
-	auto name = sys->CastString(nameObj);
-
-	auto wrap = v8::Local<v8::External>::Cast(info.Holder()->GetInternalField(0));
-	auto scriptable = static_cast<IScriptable*>(wrap->Value());
-	auto entity = static_cast<Entity*>(scriptable);
-
-	if (entity == nullptr)
-		return;
-}
-
-v8::Global<v8::FunctionTemplate> Entity::GetTemplate(v8::Isolate* isolate)
-{
-	using namespace v8;
-
-	auto sys = ScriptSystem::GetInstance();
-
-	auto constructor = FunctionTemplate::New(isolate);
-	constructor->SetClassName(sys->GetString("Entity"));
-
-	constructor->InstanceTemplate()->SetInternalFieldCount(1);
-	constructor->InstanceTemplate()->SetAccessor(sys->GetString("name"), Callback_Entity_Getter, Callback_Entity_Setter);
-	constructor->InstanceTemplate()->SetAccessor(sys->GetString("transform"), Callback_Entity_Getter, Callback_Entity_Setter);
-	constructor->InstanceTemplate()->Set(isolate, "AddComponent", FunctionTemplate::New(isolate, Callback_Entity_AddComponent));
-	constructor->InstanceTemplate()->Set(isolate, "RemoveComponent", FunctionTemplate::New(isolate, Callback_Entity_RemoveComponent));
-	constructor->InstanceTemplate()->Set(isolate, "GetComponent", FunctionTemplate::New(isolate, Callback_Entity_GetComponent));
-
-	return v8::Global<FunctionTemplate>(isolate, constructor);
 }

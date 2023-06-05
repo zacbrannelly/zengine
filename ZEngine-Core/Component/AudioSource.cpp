@@ -1,6 +1,5 @@
 #include "AudioSource.h"
 #include "../Assets/Objects/AudioAsset.h"
-#include "../Scripting/ScriptSystem.h"
 
 using namespace std;
 
@@ -110,56 +109,4 @@ ZObject* AudioSource::Copy(string name, ZObject* object)
 	copy->SetAudio(source->GetAudio());
 
 	return copy;
-}
-
-void Callback_AudioSource_Play(const v8::FunctionCallbackInfo<v8::Value>& info)
-{
-	auto wrap = v8::Local<v8::External>::Cast(info.Holder()->ToObject(info.GetIsolate()->GetCurrentContext()).ToLocalChecked()->GetInternalField(0));
-	auto scriptable = static_cast<IScriptable*>(wrap->Value());
-	auto audioSource = static_cast<AudioSource*>(scriptable);
-
-	if (audioSource == nullptr)
-		return;
-
-	audioSource->Play();
-}
-
-void Callback_AudioSource_Pause(const v8::FunctionCallbackInfo<v8::Value>& info)
-{
-	auto wrap = v8::Local<v8::External>::Cast(info.Holder()->ToObject(info.GetIsolate()->GetCurrentContext()).ToLocalChecked()->GetInternalField(0));
-	auto scriptable = static_cast<IScriptable*>(wrap->Value());
-	auto audioSource = static_cast<AudioSource*>(scriptable);
-
-	if (audioSource == nullptr)
-		return;
-
-	audioSource->Pause();
-}
-
-void Callback_AudioSource_Stop(const v8::FunctionCallbackInfo<v8::Value>& info)
-{
-	auto wrap = v8::Local<v8::External>::Cast(info.Holder()->ToObject(info.GetIsolate()->GetCurrentContext()).ToLocalChecked()->GetInternalField(0));
-	auto scriptable = static_cast<IScriptable*>(wrap->Value());
-	auto audioSource = static_cast<AudioSource*>(scriptable);
-
-	if (audioSource == nullptr)
-		return;
-
-	audioSource->Stop();
-}
-
-v8::Global<v8::FunctionTemplate> AudioSource::GetTemplate(v8::Isolate* isolate)
-{
-	using namespace v8;
-
-	auto sys = ScriptSystem::GetInstance();
-
-	auto temp = FunctionTemplate::New(sys->GetIsolate());
-
-	temp->InstanceTemplate()->SetInternalFieldCount(1);
-	temp->InstanceTemplate()->Set(sys->GetIsolate(), "Play", FunctionTemplate::New(sys->GetIsolate(), Callback_AudioSource_Play));
-	temp->InstanceTemplate()->Set(sys->GetIsolate(), "Pause", FunctionTemplate::New(sys->GetIsolate(), Callback_AudioSource_Pause));
-	temp->InstanceTemplate()->Set(sys->GetIsolate(), "Stop", FunctionTemplate::New(sys->GetIsolate(), Callback_AudioSource_Stop));
-
-	return Global<FunctionTemplate>(sys->GetIsolate(), temp);
 }

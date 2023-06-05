@@ -1,6 +1,6 @@
 #include "ZObject.h"
 
-ZObject::ZObject(std::string name, ObjectType type): _name(name), _type(type), IScriptable(type)
+ZObject::ZObject(std::string name, ObjectType type): _name(name), _type(type)
 {
 }
 

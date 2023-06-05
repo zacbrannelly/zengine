@@ -7,7 +7,6 @@
 #include "Objects/MaterialAsset.h"
 #include "Objects/MapAsset.h"
 #include "Objects/ModelAsset.h"
-#include "Objects/ScriptAsset.h"
 #include "Objects/CSharpScriptAsset.h"
 #include "Objects/AudioAsset.h"
 
@@ -19,7 +18,6 @@ void AssetManager::Init()
 	_assetConstructors[ObjectType::MATERIAL_ASSET] = MaterialAsset::CreateInstance;
 	_assetConstructors[ObjectType::MAP_ASSET] = MapAsset::CreateInstance;
 	_assetConstructors[ObjectType::MODEL_ASSET] = ModelAsset::CreateInstance;
-	_assetConstructors[ObjectType::SCRIPT_ASSET] = ScriptAsset::CreateInstance;
 	_assetConstructors[ObjectType::CSHARP_SCRIPT_ASSET] = CSharpScriptAsset::CreateInstance;
 	_assetConstructors[ObjectType::AUDIO_ASSET] = AudioAsset::CreateInstance;
 }

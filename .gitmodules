@@ -13,9 +13,6 @@
 [submodule "3rdparty/stb"]
 	path = 3rdparty/stb
 	url = https://github.com/nothings/stb
-[submodule "3rdparty/v8-cmake"]
-	path = 3rdparty/v8-cmake
-	url = https://github.com/bnoordhuis/v8-cmake
 [submodule "3rdparty/imgui.cmake/imgui"]
 	path = 3rdparty/imgui.cmake/imgui
 	url = https://github.com/ocornut/imgui

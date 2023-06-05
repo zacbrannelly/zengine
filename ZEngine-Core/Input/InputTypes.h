@@ -1,10 +1,5 @@
 #pragma once
 
-#include <GLFW/glfw3.h>
-class ScriptSystem;
-
-void InstallButtonCodesIntoScripting(ScriptSystem* scripting);
-
 enum ButtonCode
 {
 	BUTTON_MOUSE_LEFT = 0, // GLFW_MOUSE_BUTTON_LEFT

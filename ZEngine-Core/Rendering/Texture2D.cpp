@@ -1,6 +1,6 @@
 #include "Texture2D.h"
 
-#include "../../stb/stb_image.h"
+#include "stb_image.h"
 
 Texture2D::Texture2D(uint16_t width, uint16_t height, bool hasMips, uint16_t numLayers, bgfx::TextureFormat::Enum format, uint64_t flags, void* data, uint32_t size)
 {

@@ -3,7 +3,6 @@
 
 #include "../ZEngine-Core/Display/Display.h"
 #include "../ZEngine-Core/Misc/Factory.h"
-#include "../ZEngine-Core/Scripting/ScriptSystem.h"
 #include "../ZEngine-Core/Input/InputManager.h"
 #include "../ZEngine-Core/Rendering/Graphics.h"
 #include "../ZEngine-Core/Assets/AssetManager.h"
@@ -13,19 +12,20 @@
 #include "../ZEngine-Core/Map/Map.h"
 #include "../ZEngine-Core/Map/MapManager.h"
 #include "../ZEngine-Core/Audio/AudioSystem.h"
+#include "../ZEngine-Core/Scripting/CSharp/CSharpScriptSystem.h"
 
 int main(int argc, char* argv[])
 {
 	// Initialize the factory (register the types)
 	Factory::Init();
 
-	// Init scripting system
-	auto scriptSystem = ScriptSystem::GetInstance();
-	scriptSystem->Init(argv[0]);
-
 	// Init window
 	Display display("ZEngine 3.0 - Player | By Zac Brannelly", 1366, 768);
 	display.Init();
+
+	// Init scripting
+	auto scriptSystem = CSharpScriptSystem::GetInstance();
+	scriptSystem->Init();
 
 	auto inputManager = InputManager::GetInstance();
 	inputManager->Init(&display);

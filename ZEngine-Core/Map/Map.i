@@ -10,7 +10,6 @@
 %template(EntityList) std::vector<Entity*>;
 
 %ignore Map::Init;
-%ignore Map::InitScripts;
 %ignore Map::Update;
 %ignore Map::Render;
 %ignore Map::RenderWorld;

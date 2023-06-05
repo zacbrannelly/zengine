@@ -4,8 +4,6 @@
 #include "../Utilities/File.h"
 
 #include <ZEngine-Core/Assets/AssetManager.h>
-#include <ZEngine-Core/Assets/Objects/ScriptAsset.h>
-#include <ZEngine-Core/Scripting/Script.h>
 #include <ZEngine-Core/Input/InputManager.h>
 #include <iostream>
 
@@ -52,13 +50,7 @@ void CodeEditor::Save()
 
 void CodeEditor::HotReload()
 {
-	auto asset = AssetManager::GetInstance()->FindAssetFromPath(_file->GetPath());
-
-	if (asset != nullptr)
-	{
-		if (asset->Load(_file->GetPath()))
-			asset->Cast<ScriptAsset>()->GetScript()->Execute();
-	}
+	// TODO: Implement C# hot reload.
 }
 
 bool CodeEditor::AllowClose()

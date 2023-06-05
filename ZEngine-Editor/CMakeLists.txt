@@ -32,7 +32,6 @@ set (SOURCE_FILES
   "Exporters/CameraExporter.cpp"
   "Exporters/ComponentExporter.cpp"
   "Exporters/MeshRendererExporter.cpp"
-  "Exporters/ScriptComponentExporter.cpp"
   "Exporters/TransformExporter.cpp"
   "Exporters/MapBuilder.cpp"
   "Exporters/MaterialBuilder.cpp"
@@ -91,8 +90,6 @@ add_custom_command(TARGET ZEngine-Editor POST_BUILD
 ################################################################################
 # Includes
 ################################################################################
-target_include_directories(ZEngine-Editor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/v8-cmake/v8)
-target_include_directories(ZEngine-Editor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/v8-cmake/v8/include)
 target_include_directories(ZEngine-Editor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/bgfx.cmake/bgfx/include)
 target_include_directories(ZEngine-Editor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/bgfx.cmake/bx/include)
 target_include_directories(ZEngine-Editor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/bgfx.cmake/bgfx/tools)

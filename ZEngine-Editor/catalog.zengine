@@ -1,11 +1,5 @@
 0,13=Assets/materials/test_material.asset
 1,14=Assets/models/suit/nanosuit.obj
-2,16=Assets/scripts/test.js
-3,16=Assets/scripts/rotate.js
-4,16=Assets/scripts/head.js
-5,16=Assets/scripts/collider.js
-6,16=Assets/scripts/food.js
-7,16=Assets/scripts/body.js
 8,13=Assets/materials/metal_grid/metal_grid.asset
 9,14=Assets/models/coke/coke2.obj
 10,13=Assets/models/coke/coke_mat.asset

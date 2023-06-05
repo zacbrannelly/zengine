@@ -1,10 +1,9 @@
 #pragma once
 
 #include <string>
-#include "../../Scripting/IScriptable.h"
 #include "ObjectType.h"
 
-class ZObject : public IScriptable
+class ZObject
 {
 public:
 	ZObject(std::string name, ObjectType type);

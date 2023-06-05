@@ -22,10 +22,8 @@ add_executable (ZEngine-Player main.cpp)
 ################################################################################
 # Includes
 ################################################################################
-target_include_directories (ZEngine-Player PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/v8-cmake/v8)
-target_include_directories (ZEngine-Player PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/v8-cmake/v8/include)
-target_include_directories (ZEngine-Player PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/bgfx.cmake/bgfx/include)
-target_include_directories (ZEngine-Player PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/stb)
+target_include_directories(ZEngine-Player PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/bgfx.cmake/bgfx/include)
+target_include_directories(ZEngine-Player PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/stb)
 target_include_directories(ZEngine-Player PRIVATE ${SDL2_INCLUDE_DIRS})
 target_include_directories(ZEngine-Player PRIVATE ${SDL2_MIXER_INCLUDE_DIRS})
 target_include_directories(ZEngine-Player PRIVATE ${SDL2_IMAGE_INCLUDE_DIRS})
