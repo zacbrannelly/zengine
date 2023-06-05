@@ -10,8 +10,9 @@ ZEngine is a hobby Game Engine. Initially undertaken as a university assignment 
 
 ZEngine utilizes a variety of libraries, each serving specific purposes to ensure efficient and seamless functionality. These include:
 
-* `v8`: Google V8 JavaScript Engine.
-  * Intend on looking into .NET Core for scripting.
+* .NET 6.0: Scripting.
+  * `coreclr`: .NET runtime.
+  * `nethost`: Setup and launch .NET runtime.
 * `assimp`: Model loading.
 * `bgfx`: Platform agnostic rendering.
 * `imgui`: UI rendering.
