@@ -35,7 +35,7 @@ bool AssetCatalog::LoadCatalog(string path)
 			try
 			{
 				auto id = stoi(line.substr(0, commaPos));
-				auto type = stoi(line.substr(commaPos + 1, equalPos - commaPos));
+				auto type = StringToObjectType(line.substr(commaPos + 1, equalPos - commaPos - 1));
 				auto path = line.substr(equalPos + 1, line.length() - equalPos - 1);
 
 				_catalog.push_back({ id, path, type });

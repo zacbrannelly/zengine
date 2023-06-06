@@ -123,7 +123,7 @@ bool CreateScriptDialog::Create(bool import)
 
 			if (catalog != nullptr)
 			{
-				catalog->RegisterAsset(path, SCRIPT_ASSET);
+				catalog->RegisterAsset(path, CSHARP_SCRIPT_ASSET);
 				catalog->SaveCatalog(catalog->GetLastCatalogPath());
 			}
 		}

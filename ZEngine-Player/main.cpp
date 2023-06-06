@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
 
 	assetManager->SetCatalog(catalog);
 
-	auto mapAsset = assetManager->LoadAsset("test map", "test_map.map", MAP_ASSET)->Cast<MapAsset>();
+	auto mapAsset = assetManager->LoadAsset("test map", "Assets/maps/test_map.map", MAP_ASSET)->Cast<MapAsset>();
 
 	if (mapAsset == nullptr)
 	{

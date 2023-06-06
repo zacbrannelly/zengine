@@ -1,0 +1,129 @@
+{
+    "name": "test_material",
+    "shader": 18,
+    "textures": [
+        {
+            "name": "albedoTexture",
+            "path": "Assets/textures/blank_ao.png"
+        },
+        {
+            "name": "aoTexture",
+            "path": "Assets/textures/blank_ao.png"
+        },
+        {
+            "name": "metallicTexture",
+            "path": "Assets/textures/blank_ao.png"
+        },
+        {
+            "name": "normalTexture",
+            "path": "Assets/textures/blank_normal.png"
+        },
+        {
+            "name": "roughnessTexture",
+            "path": "Assets/textures/blank_ao.png"
+        }
+    ],
+    "uniforms": [
+        {
+            "name": "albedoTint",
+            "numElements": 1,
+            "type": 2,
+            "values": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        {
+            "name": "ao",
+            "numElements": 1,
+            "type": 2,
+            "values": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        {
+            "name": "camPos",
+            "numElements": 1,
+            "type": 2,
+            "values": [
+                0.0,
+                0.0,
+                -10.0,
+                1.0
+            ]
+        },
+        {
+            "name": "lightColors",
+            "numElements": 4,
+            "type": 2,
+            "values": [
+                300.0,
+                300.0,
+                300.0,
+                1.0,
+                300.0,
+                300.0,
+                300.0,
+                1.0,
+                300.0,
+                300.0,
+                300.0,
+                1.0,
+                300.0,
+                300.0,
+                300.0,
+                300.0
+            ]
+        },
+        {
+            "name": "lightPositions",
+            "numElements": 4,
+            "type": 2,
+            "values": [
+                -10.0,
+                -10.0,
+                -10.0,
+                1.0,
+                10.0,
+                10.0,
+                -10.0,
+                1.0,
+                -10.0,
+                10.0,
+                -10.0,
+                1.0,
+                10.0,
+                -10.0,
+                -10.0,
+                1.0
+            ]
+        },
+        {
+            "name": "metallic",
+            "numElements": 1,
+            "type": 2,
+            "values": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+            ]
+        },
+        {
+            "name": "roughness",
+            "numElements": 1,
+            "type": 2,
+            "values": [
+                0.109999999403954,
+                0.109999999403954,
+                0.109999999403954,
+                0.109999999403954
+            ]
+        }
+    ]
+}

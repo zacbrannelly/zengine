@@ -44,7 +44,7 @@ void AssetExplorer::RenderAssetButtons(const std::vector<CatalogEntry>& items)
 
 void AssetExplorer::OpenAsset(std::string path, ObjectType type)
 {
-	if (type == SCRIPT_ASSET)
+	if (type == CSHARP_SCRIPT_ASSET)
 	{
 		for (auto element : _editor->GetElements())
 		{
@@ -126,7 +126,7 @@ void AssetExplorer::RenderInWindow()
 	auto mapAssets = _manager->GetCatalog()->GetAssetsByType(MAP_ASSET);
 	auto materialAssets = _manager->GetCatalog()->GetAssetsByType(MATERIAL_ASSET);
 	auto modelAssets = _manager->GetCatalog()->GetAssetsByType(MODEL_ASSET);
-	auto scriptAssets = _manager->GetCatalog()->GetAssetsByType(SCRIPT_ASSET);
+	auto scriptAssets = _manager->GetCatalog()->GetAssetsByType(CSHARP_SCRIPT_ASSET);
 	auto shaderAssets = _manager->GetCatalog()->GetAssetsByType(SHADER_ASSET);
 	auto textureAssets = _manager->GetCatalog()->GetAssetsByType(TEXTURE_ASSET);
 

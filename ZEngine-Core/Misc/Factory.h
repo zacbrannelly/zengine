@@ -35,11 +35,11 @@ public:
 		auto name = values.at("name");
 		auto type = values.at("type");
 	
-		if (name.is_string() && type.is_number_unsigned())
+		if (name.is_string() && type.is_string())
 		{
 			auto nameValue = name.get<std::string>();
-			auto typeValue = type.get<unsigned int>();
-			auto importer = _importers.find((ObjectType)typeValue);
+			auto typeValue = type.get<std::string>();
+			auto importer = _importers.find(StringToObjectType(typeValue));
 
 			if (importer != _importers.end())
 			{

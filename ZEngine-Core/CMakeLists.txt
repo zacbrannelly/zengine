@@ -41,6 +41,7 @@ set(SOURCE_FILES
     "Map/Objects/Entity.cpp"
     "Map/Objects/Primitives/Cube.cpp"
     "Map/Objects/ZObject.cpp"
+    "Map/Objects/ObjectType.cpp"
     "Misc/Factory.cpp"
     "Misc/StringUtil.cpp"
     "Physics/Time.cpp"

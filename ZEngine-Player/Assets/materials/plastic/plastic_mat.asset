@@ -1,0 +1,140 @@
+{
+    "name": "plastic_mat",
+    "shader": 18,
+    "textures": [
+        {
+            "name": "albedoTexture",
+            "path": "Assets/materials/plastic/scuffed-plastic6-alb.png"
+        },
+        {
+            "name": "aoTexture",
+            "path": "Assets/materials/plastic/scuffed-plastic-ao.png"
+        },
+        {
+            "name": "metallicTexture",
+            "path": "Assets/materials/plastic/scuffed-plastic-metal.png"
+        },
+        {
+            "name": "normalTexture",
+            "path": "Assets/materials/plastic/scuffed-plastic-normal.png"
+        },
+        {
+            "name": "roughnessTexture",
+            "path": "Assets/materials/plastic/scuffed-plastic-rough.png"
+        }
+    ],
+    "uniforms": [
+        {
+            "name": "albedoTint",
+            "numElements": 1,
+            "type": 2,
+            "values": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        {
+            "name": "ao",
+            "numElements": 1,
+            "type": 2,
+            "values": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        {
+            "name": "camPos",
+            "numElements": 1,
+            "type": 2,
+            "values": [
+                0.0,
+                0.0,
+                -10.0,
+                1.0
+            ]
+        },
+        {
+            "name": "lightColors",
+            "numElements": 4,
+            "type": 2,
+            "values": [
+                300.0,
+                300.0,
+                300.0,
+                1.0,
+                300.0,
+                300.0,
+                300.0,
+                1.0,
+                300.0,
+                300.0,
+                300.0,
+                1.0,
+                300.0,
+                300.0,
+                300.0,
+                1.0
+            ]
+        },
+        {
+            "name": "lightPositions",
+            "numElements": 4,
+            "type": 2,
+            "values": [
+                -10.0,
+                -10.0,
+                -10.0,
+                1.0,
+                10.0,
+                10.0,
+                -10.0,
+                1.0,
+                -10.0,
+                10.0,
+                -10.0,
+                1.0,
+                10.0,
+                -10.0,
+                -10.0,
+                1.0
+            ]
+        },
+        {
+            "name": "metallic",
+            "numElements": 1,
+            "type": 2,
+            "values": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        {
+            "name": "overrideColor",
+            "numElements": 1,
+            "type": 2,
+            "values": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        {
+            "name": "roughness",
+            "numElements": 1,
+            "type": 2,
+            "values": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ]
+        }
+    ]
+}

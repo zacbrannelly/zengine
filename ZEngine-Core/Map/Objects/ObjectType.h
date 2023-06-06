@@ -1,9 +1,10 @@
 #pragma once
 
+#include <string>
+
 enum ObjectType
 {
-	// WARNING: THE ORDER OF THESE MUST NOT BE CHANGED! FOR MAP LOADING!
-	// TODO: Stop relying on the order of this enum for loading objects, thats stupid.
+	// NOTE: Make sure to update ObjectType.cpp when adding new types!
 	SHADER,
 	MATERIAL,
 	ENTITY,
@@ -12,18 +13,18 @@ enum ObjectType
 	TRANSFORM,
 	MESH,
 	MESH_RENDERER,
-	SCRIPT,
-	SCRIPT_COMPONENT,
 	TEST_RENDERER,
 	TEXTURE_ASSET,
 	SHADER_ASSET,
 	MATERIAL_ASSET,
 	MODEL_ASSET,
 	MAP_ASSET,
-	SCRIPT_ASSET,
 	AUDIO_ASSET,
 	AUDIO_SOURCE,
 	CSHARP_SCRIPT_COMPONENT,
 	CSHARP_SCRIPT,
 	CSHARP_SCRIPT_ASSET,
 };
+
+std::string ObjectTypeToString(ObjectType type);
+ObjectType StringToObjectType(std::string type);

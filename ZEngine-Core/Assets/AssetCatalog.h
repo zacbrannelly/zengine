@@ -9,7 +9,7 @@ struct CatalogEntry
 {
 	int id;
 	std::string path;
-	int type;
+	ObjectType type;
 };
 
 class AssetCatalog
