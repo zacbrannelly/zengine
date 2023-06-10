@@ -4,6 +4,8 @@
 #include <nlohmann/json.hpp>
 #include "../../Map/Objects/ZObject.h"
 #include <glm/glm.hpp>
+#include <uuid.h>
+#include <stdexcept>
 
 template<typename T>
 class ComponentImporter : public Singleton<T>
@@ -24,6 +26,7 @@ protected:
 
 	// Read helper functions
 	std::string ReadString(std::string key, nlohmann::json& values) const;
+	uuids::uuid ReadUUID(std::string key, nlohmann::json& values) const;
 	int ReadInt(std::string key, nlohmann::json& values) const;
 	unsigned int ReadUnsignedInt(std::string key, nlohmann::json& values) const;
 	float ReadFloat(std::string key, nlohmann::json& values) const;
@@ -63,6 +66,17 @@ std::string ComponentImporter<T>::ReadString(std::string key, nlohmann::json& va
 	}
 
 	return "";
+}
+
+template<typename T>
+uuids::uuid ComponentImporter<T>::ReadUUID(std::string key, nlohmann::json& values) const
+{
+	auto it = values.find(key);
+	if (it != values.end() && it.value().is_string())
+	{
+		return uuids::uuid::from_string(values.at(key).get<std::string>()).value();
+	}
+	throw std::runtime_error("UUID not found");
 }
 
 template<typename T>

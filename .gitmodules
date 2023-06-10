@@ -16,3 +16,6 @@
 [submodule "3rdparty/imgui.cmake/imgui"]
 	path = 3rdparty/imgui.cmake/imgui
 	url = https://github.com/ocornut/imgui
+[submodule "3rdparty/stduuid"]
+	path = 3rdparty/stduuid
+	url = https://github.com/mariusbancila/stduuid

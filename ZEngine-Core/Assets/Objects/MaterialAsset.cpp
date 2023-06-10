@@ -6,10 +6,12 @@
 #include "../AssetCatalog.h"
 
 #include <nlohmann/json.hpp>
+#include <uuid.h>
 #include "../../Rendering/Material.h"
 
 #include <fstream>
 #include <iostream>
+#include <string>
 
 using namespace std;
 using namespace nlohmann;
@@ -103,7 +105,8 @@ void MaterialAsset::ReadTextures(json::array_t& values, Material* material)
 		if (it != textureObj.end())
 		{
 			ObjectType type;
-			if (!assetManager->GetCatalog()->GetAssetPathFromID(it.value().get<int>(), path, type))
+			uuids::uuid id = uuids::uuid::from_string(it.value().get<string>()).value();
+			if (!assetManager->GetCatalog()->GetAssetPathFromID(id, path, type))
 			{
 				cout << "MATERIAL_ASSET: Failed to find texture for sampler: " << samplerName.get<string>() << endl;
 				continue;
@@ -198,11 +201,12 @@ void MaterialAsset::ReadShader(json& identifier, Material* material)
 	string path = "";
 	ObjectType type;
 
-	if (identifier.is_string())
+	const auto maybeId = uuids::uuid::from_string(identifier.get<string>());
+	if (!maybeId.has_value())
 		path = identifier.get<string>();
 	else if (catalog != nullptr)
 	{
-		if (!catalog->GetAssetPathFromID(identifier.get<int>(), path, type))
+		if (!catalog->GetAssetPathFromID(maybeId.value(), path, type))
 		{
 			cout << "Failed to find the shader for material: " << _material->GetName() << endl;
 			return;

@@ -4,6 +4,7 @@
 #include "../../Assets/Objects/AudioAsset.h"
 #include "../../Assets/AssetManager.h"
 #include "../../Assets/AssetCatalog.h"
+#include <uuid.h>
 
 using namespace std;
 using namespace nlohmann;
@@ -15,7 +16,7 @@ ZObject* AudioSourceImporter::ImportImpl(string name, json& values)
 
 	if (HasKey("audio", values))
 	{
-		auto audioId = ReadInt("audio", values);
+		auto audioId = ReadUUID("audio", values);
 
 		string path;
 		ObjectType type;

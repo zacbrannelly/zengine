@@ -6,14 +6,13 @@
 
 using namespace std;
 
-AssetCatalog::AssetCatalog() : _count(0)
+AssetCatalog::AssetCatalog()
 {
 }
 
 void AssetCatalog::ClearCatalog()
 {
 	_catalog.clear();
-	_count = 0;
 }
 
 bool AssetCatalog::LoadCatalog(string path)
@@ -34,15 +33,11 @@ bool AssetCatalog::LoadCatalog(string path)
 			// FORMAT: id,type=path
 			try
 			{
-				auto id = stoi(line.substr(0, commaPos));
+				auto id = uuids::uuid::from_string(line.substr(0, commaPos)).value();
 				auto type = StringToObjectType(line.substr(commaPos + 1, equalPos - commaPos - 1));
 				auto path = line.substr(equalPos + 1, line.length() - equalPos - 1);
 
 				_catalog.push_back({ id, path, type });
-
-				// Get highest count (for adding new items to the catelog)
-				if (id + 1 > _count)
-					_count = id + 1;
 			}
 			catch (std::exception) {}
 		}
@@ -83,8 +78,19 @@ void AssetCatalog::RegisterAsset(Asset* asset)
 
 void AssetCatalog::RegisterAsset(std::string path, ObjectType type)
 {
-	_catalog.push_back({ _count, path, type });
-	_count++;
+	std::random_device rd;
+	auto seed_data = std::array<int, std::mt19937::state_size> {};
+	std::generate(std::begin(seed_data), std::end(seed_data), std::ref(rd));
+	std::seed_seq seq(std::begin(seed_data), std::end(seed_data));
+	std::mt19937 generator(seq);
+	uuids::uuid_random_generator gen{generator};
+
+	_catalog.push_back({ gen(), path, type });
+}
+
+void AssetCatalog::PushEntry(CatalogEntry entry)
+{
+	_catalog.push_back(entry);
 }
 
 bool AssetCatalog::HasAsset(std::string assetPath)
@@ -96,7 +102,7 @@ bool AssetCatalog::HasAsset(std::string assetPath)
 	});
 }
 
-bool AssetCatalog::GetAssetPathFromID(int id, std::string& path, ObjectType& type)
+bool AssetCatalog::GetAssetPathFromID(uuids::uuid id, std::string& path, ObjectType& type)
 {
 	auto it = find_if(_catalog.begin(), _catalog.end(), [&id](auto item) { return item.id == id; });
 
@@ -111,7 +117,7 @@ bool AssetCatalog::GetAssetPathFromID(int id, std::string& path, ObjectType& typ
 	return false;
 }
 
-int AssetCatalog::GetAssetIDFromPath(std::string path)
+uuids::uuid AssetCatalog::GetAssetIDFromPath(std::string path)
 {
 	auto it = find_if(_catalog.begin(), _catalog.end(), [&path](auto item) { return item.path == path; });
 
@@ -120,7 +126,7 @@ int AssetCatalog::GetAssetIDFromPath(std::string path)
 		return it->id;
 	}
 
-	return -1;
+	return uuids::uuid();
 }
 
 std::vector<CatalogEntry> AssetCatalog::GetAssetsByType(ObjectType type)

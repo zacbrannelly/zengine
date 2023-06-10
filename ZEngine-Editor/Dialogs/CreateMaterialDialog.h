@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../UI/GUIDialog.h"
+#include <uuid.h>
 
 class GUITextField;
 class BrowserDialog;
@@ -23,5 +24,5 @@ private:
 	GUITextField* _pathField;
 	BrowserDialog* _browser;
 	std::string _basePath;
-	int _shaderID;
+	uuids::uuid _shaderID;
 };

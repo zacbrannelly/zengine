@@ -12,7 +12,6 @@
 CreateMaterialDialog::CreateMaterialDialog(std::string basePath) : GUIDialog("Create Material", 500, 155, true)
 {
 	_basePath = basePath;
-	_shaderID = -1;
 
 	_nameField = new GUITextField("Name");
 	_pathField = new GUITextField("Path");
@@ -31,7 +30,7 @@ bool CreateMaterialDialog::Validate()
 	if (std::all_of(name.begin(), name.end(), [](const auto& c) { return c == ' '; }))
 		return false;
 
-	if (_shaderID < 0)
+	if (_shaderID.is_nil())
 		return false;
 
 	return true;
@@ -44,7 +43,7 @@ std::string CreateMaterialDialog::GenerateJSON()
 	json root;
 
 	root["name"] = _nameField->GetText();
-	root["shader"] = _shaderID;
+	root["shader"] = uuids::to_string(_shaderID);
 
 	return root.dump(4);
 }
@@ -118,7 +117,7 @@ void CreateMaterialDialog::RenderInWindow()
 	auto catalog = AssetManager::GetInstance()->GetCatalog();
 	std::string shaderName = "None";
 
-	if (_shaderID >= 0 && catalog != nullptr)
+	if (!_shaderID.is_nil() && catalog != nullptr)
 	{
 		ObjectType type;
 		catalog->GetAssetPathFromID(_shaderID, shaderName, type);

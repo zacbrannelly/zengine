@@ -1,6 +1,6 @@
 {
     "name": "background_mat",
-    "shader": 17,
+    "shader": "00000000-0000-0000-0000-000000000017",
     "textures": [
         {
             "name": "texColor",

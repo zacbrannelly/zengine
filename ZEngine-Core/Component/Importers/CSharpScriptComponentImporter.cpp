@@ -16,7 +16,7 @@ ZObject* CSharpScriptComponentImporter::ImportImpl(string name, json& values)
 
 	if (HasKey("script", values))
 	{
-		int scriptId = ReadInt("script", values);
+		uuids::uuid scriptId = ReadUUID("script", values);
 
 		string path;
 		ObjectType type;

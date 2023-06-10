@@ -11,7 +11,7 @@ bool MaterialBuilder::BuildToFile(const std::string& path, const MaterialEditorD
 	json root;
 
 	root["name"] = data.name;
-	root["shader"] = data.shaderID;
+	root["shader"] = uuids::to_string(data.shaderID);
 	
 	auto& textures = root["textures"] = json::array_t();
 	auto& uniforms = root["uniforms"] = json::array_t();
@@ -21,10 +21,10 @@ bool MaterialBuilder::BuildToFile(const std::string& path, const MaterialEditorD
 		json::object_t samplerObj;
 		samplerObj["name"] = samplerPair.first;
 
-		if (samplerPair.second.assetID < 0 && samplerPair.second.assetPath != "None")
+		if (samplerPair.second.assetID.is_nil() && samplerPair.second.assetPath != "None")
 			samplerObj["path"] = samplerPair.second.assetPath;
-		else if (samplerPair.second.assetID >= 0)
-			samplerObj["id"] = samplerPair.second.assetID;
+		else if (!samplerPair.second.assetID.is_nil())
+			samplerObj["id"] = uuids::to_string(samplerPair.second.assetID);
 		else
 			return false;
 

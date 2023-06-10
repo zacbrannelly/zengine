@@ -4,6 +4,8 @@
 #include <ZEngine-Core/Assets/AssetCatalog.h>
 #include <ZEngine-Core/Assets/Objects/AudioAsset.h>
 
+#include <uuid.h>
+
 using namespace nlohmann;
 
 json AudioSourceExporter::ExportImpl(ZObject* obj)
@@ -16,12 +18,12 @@ json AudioSourceExporter::ExportImpl(ZObject* obj)
 	result["name"] = audioSource->GetName();
 	result["type"] = audioSource->GetType();
 	
-	int audioId = catalog != nullptr ? catalog->GetAssetIDFromPath(audioSource->GetAudio()->GetPath()) : -1;
+	uuids::uuid audioId = catalog != nullptr ? catalog->GetAssetIDFromPath(audioSource->GetAudio()->GetPath()) : uuids::uuid();
 
-	if (audioId < 0)
+	if (audioId.is_nil())
 		return json();
 
-	result["audio"] = audioId;
+	result["audio"] = uuids::to_string(audioId);
 	result["autoplay"] = audioSource->IsAutoPlay();
 
 	return result;

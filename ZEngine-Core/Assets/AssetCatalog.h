@@ -1,13 +1,14 @@
 #pragma once
 
 #include <vector>
+#include <uuid.h>
 #include "../Map/Objects/ZObject.h"
 
 class Asset;
 
 struct CatalogEntry
 {
-	int id;
+	uuids::uuid id;
 	std::string path;
 	ObjectType type;
 };
@@ -25,9 +26,11 @@ public:
 	void RegisterAsset(Asset* asset);
 	void RegisterAsset(std::string path, ObjectType type);
 
+	void PushEntry(CatalogEntry entry);
+
 	bool HasAsset(std::string assetPath);
-	bool GetAssetPathFromID(int id, std::string& path, ObjectType& type);
-	int GetAssetIDFromPath(std::string path);
+	bool GetAssetPathFromID(uuids::uuid id, std::string& path, ObjectType& type);
+	uuids::uuid GetAssetIDFromPath(std::string path);
 	std::vector<CatalogEntry> GetAssetsByType(ObjectType type);
 
 	const std::vector<CatalogEntry>& GetCatalogList() const;
@@ -35,6 +38,5 @@ public:
 private:
 	std::string _lastCatalogPath;
 	std::vector<CatalogEntry> _catalog;
-	int _count;
 };
 

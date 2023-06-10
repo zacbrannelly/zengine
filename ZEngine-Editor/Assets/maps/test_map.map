@@ -26,7 +26,7 @@
 					"name": "AudioSource",
 					"type": "AUDIO_SOURCE",
 					
-					"audio": 13,
+					"audio": "00000000-0000-0000-0000-000000000013",
 					"autoplay": true
 				}
 			]
@@ -47,7 +47,7 @@
 					"name": "MeshRenderer 5",
 					"type": "MESH_RENDERER",
 					"primitive": "rectangle",
-					"materials": [ 14 ]
+					"materials": [ "00000000-0000-0000-0000-000000000014" ]
 				}
 			]
 		},
@@ -68,27 +68,27 @@
 					"type": "MESH_RENDERER",
 					
 					"primitive": "sphere",
-					"materials": [ 15 ]
+					"materials": [ "00000000-0000-0000-0000-000000000015" ]
 				},
 				{
 					"name": "RotateComponent",
 					"type": "CSHARP_SCRIPT_COMPONENT",
-					"script": 24
+					"script": "00000000-0000-0000-0000-000000000024"
 				},
 				{
 					"name": "HeadComponent",
 					"type": "CSHARP_SCRIPT_COMPONENT",
-					"script": 25
+					"script": "00000000-0000-0000-0000-000000000025"
 				},
 				{
 					"name": "BodyComponent",
 					"type": "CSHARP_SCRIPT_COMPONENT",
-					"script": 26
+					"script": "00000000-0000-0000-0000-000000000026"
 				},
 				{
 					"name": "TestComponent",
 					"type": "CSHARP_SCRIPT_COMPONENT",
-					"script": 23
+					"script": "00000000-0000-0000-0000-000000000023"
 				}
 			]
 		},
@@ -108,27 +108,26 @@
 					"name": "MeshRender 2",
 					"type": "MESH_RENDERER",
 					
-					"model": 9,
-					"materials": [ 10, 11 ]
+					"model": "00000000-0000-0000-0000-000000000009",
+					"materials": [ "00000000-0000-0000-0000-000000000010", "00000000-0000-0000-0000-000000000011" ]
 				},
 				{
 					"name": "FoodComponent",
 					"type": "CSHARP_SCRIPT_COMPONENT",
 					
-					"script": 27
+					"script": "00000000-0000-0000-0000-000000000027"
 				},
 				{
 					"name": "RotateComponent",
 					"type": "CSHARP_SCRIPT_COMPONENT",
-					"script": 24
+					"script": "00000000-0000-0000-0000-000000000024"
 				},
 				{
 					"name": "AudioSource",
 					"type": "AUDIO_SOURCE",
-					"audio": 12 
+					"audio": "00000000-0000-0000-0000-000000000012" 
 				}
 			]
 		}
-		
 	]
 }

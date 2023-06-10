@@ -1,6 +1,6 @@
 {
     "name": "plastic_mat",
-    "shader": 18,
+    "shader": "00000000-0000-0000-0000-000000000018",
     "textures": [
         {
             "name": "albedoTexture",

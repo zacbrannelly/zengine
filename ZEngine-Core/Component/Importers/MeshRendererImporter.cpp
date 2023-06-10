@@ -24,12 +24,13 @@ ZObject* MeshRendererImporter::ImportImpl(string name, json& values)
 		vector<Material*> materials;
 
 		// JSON should contain material id's that are recorded in the AssetCatalog
-		auto materialIds = ReadDynamicArray<int>("materials", values);
+		auto materialIds = ReadDynamicArray<string>("materials", values);
 		for (auto materialId : materialIds)
 		{
 			string path;
 			ObjectType type;
-			if (assetManager->GetCatalog()->GetAssetPathFromID(materialId, path, type) && type == MATERIAL_ASSET)
+			uuids::uuid materialUuid = uuids::uuid::from_string(materialId).value();
+			if (assetManager->GetCatalog()->GetAssetPathFromID(materialUuid, path, type) && type == MATERIAL_ASSET)
 			{
 				auto matAsset = assetManager->FindAssetFromPath(path);
 
@@ -153,7 +154,7 @@ ZObject* MeshRendererImporter::ImportImpl(string name, json& values)
 
 	if (HasKey("model", values))
 	{
-		int modelId = ReadInt("model", values);
+		uuids::uuid modelId = ReadUUID("model", values);
 
 		string path;
 		ObjectType type;

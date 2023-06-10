@@ -49,7 +49,7 @@ bool MaterialEditor::LoadData()
 		material = asset->Cast<MaterialAsset>()->GetMaterial();
 
 	_data.name = material->GetName();
-	_data.shaderID = -1;
+	_data.shaderID = uuids::uuid();
 	_data.shaderPath = "";
 
 	// Locate the ID of the shader
@@ -345,7 +345,7 @@ void MaterialEditor::RenderInWindow()
 			newSampler.assetPath = "None";
 			newSampler.nameField = new GUITextField("Name###nametfNew_Texture");
 			newSampler.nameField->SetText("New_Texture");
-			newSampler.assetID = -1;
+			newSampler.assetID = uuids::uuid();
 			newSampler.previewImage = nullptr;
 			newSampler.sampler.texture = { bgfx::kInvalidHandle };
 

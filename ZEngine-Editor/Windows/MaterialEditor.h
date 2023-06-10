@@ -2,6 +2,7 @@
 
 #include "../UI/GUIWindow.h"
 #include <ZEngine-Core/Rendering/Material.h>
+#include <uuid.h>
 
 class File;
 class GUITextField;
@@ -11,7 +12,7 @@ class UnsavedDialog;
 struct MaterialEditorSampler
 {
 	Sampler sampler;
-	int assetID;
+	uuids::uuid assetID;
 	std::string assetPath;
 	GUITextField* nameField;
 	GUIImage* previewImage;
@@ -20,7 +21,7 @@ struct MaterialEditorSampler
 struct MaterialEditorData
 {
 	std::string name;
-	int shaderID;
+	uuids::uuid shaderID;
 	std::string shaderPath;
 
 	std::map<std::string, Uniform> uniforms;

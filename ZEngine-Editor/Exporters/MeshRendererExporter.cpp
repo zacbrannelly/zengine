@@ -6,6 +6,7 @@
 #include <ZEngine-Core/Rendering/Material.h>
 #include <ZEngine-Core/Rendering/Mesh.h>
 #include <ZEngine-Core/Component/MeshRenderer.h>
+#include <uuid.h>
 
 using namespace nlohmann;
 
@@ -24,20 +25,20 @@ json MeshRendererExporter::ExportImpl(ZObject* obj)
 	for (const auto& material : meshRenderer->GetMaterials())
 	{
 		auto asset = GetMaterialAsset(material);
-		auto materialId = catalog != nullptr ? catalog->GetAssetIDFromPath(asset->GetPath()) : -1;
+		auto materialId = catalog != nullptr ? catalog->GetAssetIDFromPath(asset->GetPath()) : uuids::uuid();
 
-		if (materialId >= 0)
-			materials.push_back(materialId);
+		if (!materialId.is_nil())
+			materials.push_back(uuids::to_string(materialId));
 	}
 
 	auto modelAsset = GetModelAsset(meshRenderer->GetMesh());
 
 	if (modelAsset != nullptr)
 	{
-		auto modelId = catalog != nullptr ? catalog->GetAssetIDFromPath(modelAsset->GetPath()) : -1;
+		auto modelId = catalog != nullptr ? catalog->GetAssetIDFromPath(modelAsset->GetPath()) : uuids::uuid();
 
-		if (modelId >= 0)
-			result["model"] = modelId;
+		if (!modelId.is_nil())
+			result["model"] = uuids::to_string(modelId);
 	}
 	else
 	{

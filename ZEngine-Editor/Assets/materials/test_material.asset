@@ -1,6 +1,6 @@
 {
     "name": "test_material",
-    "shader": 18,
+    "shader": "00000000-0000-0000-0000-000000000018",
     "textures": [
         {
             "name": "albedoTexture",
