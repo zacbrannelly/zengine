@@ -1,0 +1,82 @@
+{
+	"name": "slate_material",
+	"shader": "00000000-0000-0000-0000-000000000018",
+	
+	"textures": [
+		{
+			"name": "albedoTexture",
+			"path": "Assets/materials/slate/slatecliffrock-albedo.png"
+		},
+		{
+			"name": "normalTexture",
+			"path": "Assets/materials/slate/slatecliffrock_Normal.png"
+		},
+		{
+			"name": "roughnessTexture",
+			"path": "Assets/materials/slate/slatecliffrock_Roughness2.png"
+		},
+		{
+			"name": "metallicTexture",
+			"path": "Assets/materials/slate/slatecliffrock_Metallic.png"
+		},
+		{
+			"name": "aoTexture", 
+			"path": "Assets/materials/slate/slatecliffrock_Ambient_Occlusion.png"
+		}
+	], 
+	
+	"uniforms": [
+		{
+			"name": "albedoTint",
+			"type": 2,
+			"numElements": 1,
+			"values": [ 1, 1, 1, 1 ]
+		},
+		{
+			"name": "roughness",
+			"type": 2,
+			"numElements": 1,
+			"values": [ 1, 1, 1, 1 ]
+		},
+		{
+			"name": "metallic",
+			"type": 2,
+			"numElements": 1,
+			"values": [ 1, 1, 1, 1 ]
+		},
+		{
+			"name": "ao",
+			"type": 2,
+			"numElements": 1,
+			"values": [ 1, 1, 1, 1 ]
+		},
+		{
+			"name": "lightPositions",
+			"type": 2,
+			"numElements": 4,
+			"values": [ 
+						-10, -10, -10, 1, 
+						 10,  10, -10, 1, 
+						-10,  10, -10, 1, 
+						 10, -10, -10, 1 
+					]
+		},
+		{
+			"name": "lightColors",
+			"type": 2,
+			"numElements": 4,
+			"values": [
+						300, 300, 300, 1, 
+						300, 300, 300, 1, 
+						300, 300, 300, 1, 
+						300, 300, 300, 1 
+					]
+		},
+		{
+			"name": "camPos",
+			"type": 2,
+			"numElements": 1,
+			"values": [ 0, 0, -10, 1 ]
+		}
+	]
+}

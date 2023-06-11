@@ -29,6 +29,7 @@
 #include <ZEngine-Core/Audio/AudioSystem.h>
 #include <glm/glm.hpp>
 
+#include "Project/Project.h"
 #include "Exporters/ComponentExporter.h"
 #include "UI/GUILibrary.h"
 #include "UI/GUIImage.h"
@@ -40,16 +41,12 @@
 #include "Windows/AssetImporter.h"
 #include "Windows/AssetExplorer.h"
 #include "Windows/LogWindow.h"
-
+#include "Dialogs/ProjectBrowserDialog.h"
+#include "Utilities/File.h"
 #include "imgui-includes.h"
 
-Editor::Editor() : _selectedMap(nullptr), _selectedObject(nullptr)
+Editor::Editor() : _selectedMap(nullptr), _selectedObject(nullptr), _project(nullptr)
 {
-	// Load a test catalog (replace this with a way for the user to load the catalog)
-	auto testCatalog = new AssetCatalog();
-	testCatalog->LoadCatalog();
-	AssetManager::GetInstance()->SetCatalog(testCatalog);
-
 	Add(new MainMenuBar());
 	Add(new MapView(this));
 	Add(new InspectorWindow(this));
@@ -58,11 +55,47 @@ Editor::Editor() : _selectedMap(nullptr), _selectedObject(nullptr)
 	Add(new AssetImporter());
 	Add(new AssetExplorer(this));
 	Add(new LogWindow());
+	Add(new ProjectBrowserDialog(this));
 }
 
 void Editor::Update()
 {
+}
 
+void Editor::SetProject(Project* project)
+{
+	const auto assetManager = AssetManager::GetInstance();
+
+	if (_project != nullptr)
+	{
+		if (_selectedMap != nullptr)
+		{
+			// TODO: Check if the map is dirty and prompt the user to save
+			_selectedMap = nullptr;
+		}
+
+		if (_selectedObject != nullptr)
+		{
+			_selectedObject = nullptr;
+		}
+
+		// Save the project
+		_project->Save();
+
+		// Unload the project
+		assetManager->ReleaseAll();
+		assetManager->DeleteAll();
+
+		delete _project;
+	}
+
+	_project = project;
+	assetManager->SetCatalog(&project->GetCatalog());
+}
+
+Project* Editor::GetProject() const
+{
+	return _project;
 }
 
 void Editor::SetSelectedMap(Map* map)

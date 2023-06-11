@@ -3,6 +3,8 @@
 #include <ZEngine-Core/Map/Map.h>
 #include <ZEngine-Core/Map/Objects/Entity.h>
 
+class Project;
+
 class Editor : public Container
 {
 public:
@@ -11,6 +13,9 @@ public:
 
 	void Update();
 
+	void SetProject(Project* project);
+	Project* GetProject() const;
+
 	void SetSelectedMap(Map* map);
 	Map* GetSelectedMap() const;
 
@@ -18,6 +23,7 @@ public:
 	Entity* GetSelectedEntity() const;
 
 private:
+	Project* _project;
 	Map* _selectedMap;
 	Entity* _selectedObject;
 };

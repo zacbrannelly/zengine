@@ -89,6 +89,11 @@ bool GUIDialog::IsModal() const
 	return _isModal;
 }
 
+void GUIDialog::SetVisible(bool isVisible)
+{
+	_isVisible = isVisible;
+}
+
 bool GUIDialog::IsVisible() const
 {
 	return _isVisible;

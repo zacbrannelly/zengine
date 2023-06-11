@@ -54,6 +54,7 @@ set (SOURCE_FILES
   "Dialogs/BrowserDialog.cpp"
   "Dialogs/UnsavedDialog.cpp"
   "Dialogs/CreateScriptDialog.cpp"
+  "Dialogs/ProjectBrowserDialog.cpp"
   "Inspectors/TransformInspector.cpp"
   "Inspectors/CameraInspector.cpp"
   "Inspectors/MeshRendererInspector.cpp"
@@ -63,6 +64,7 @@ set (SOURCE_FILES
   "Utilities/DirectoryWin32.cpp"
   "Utilities/DirectoryMacOS.cpp"
   "Utilities/File.cpp"
+  "Project/Project.cpp"
   "Editor.cpp"
 )
 source_group("Source Files" FILES ${SOURCE_FILES})

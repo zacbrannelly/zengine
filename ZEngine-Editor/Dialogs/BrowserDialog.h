@@ -18,7 +18,7 @@ class BrowserDialog : public GUIDialog
 {
 public:
 	BrowserDialog(std::string basePath = "./", BrowserDialogType type = BROWSER_OPEN_FILE);
-	~BrowserDialog();
+	virtual ~BrowserDialog();
 
 	void SetFilter(std::vector<std::string> extensions);
 	const std::vector<std::string>& GetFilter() const;

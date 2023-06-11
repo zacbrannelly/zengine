@@ -153,9 +153,7 @@ std::vector<Directory> Directory::GetAllDirectories() const
     while ((ent = readdir(dir)) != NULL) {
       if (ent->d_type == DT_DIR) {
         string filename = ent->d_name;
-        if (filename != "." && filename != "..") {
-          results.push_back(Directory(_fullpath + "/" + filename));
-        }
+        results.push_back(Directory(_fullpath + "/" + filename));
       }
     }
     closedir(dir);

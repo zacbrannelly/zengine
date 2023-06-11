@@ -14,10 +14,12 @@ class GUIDialog : public GUIWindow
 {
 public:
 	GUIDialog(std::string title, int width, int height, bool modal);
-	~GUIDialog();
+	virtual ~GUIDialog();
 
 	void SetModal(bool isModal);
 	bool IsModal() const;
+
+	void SetVisible(bool isVisible);
 	bool IsVisible() const;
 
 	virtual void Show();

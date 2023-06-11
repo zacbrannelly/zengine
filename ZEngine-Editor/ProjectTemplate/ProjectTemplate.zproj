@@ -1,0 +1,115 @@
+{
+  "name": "ProjectTemplate",
+  "catalog": [
+    {
+      "id": "00000000-0000-0000-0000-000000000000",
+      "type": "MATERIAL_ASSET",
+      "path": "Assets/materials/test_material.asset"
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "type": "MODEL_ASSET",
+      "path": "Assets/models/suit/nanosuit.obj"
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000008",
+      "type": "MATERIAL_ASSET",
+      "path": "Assets/materials/metal_grid/metal_grid.asset"
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000009",
+      "type": "MODEL_ASSET",
+      "path": "Assets/models/coke/coke2.obj"
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000010",
+      "type": "MATERIAL_ASSET",
+      "path": "Assets/models/coke/coke_mat.asset"
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000011",
+      "type": "MATERIAL_ASSET",
+      "path": "Assets/models/coke/coke_top_mat.asset"
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000012",
+      "type": "AUDIO_ASSET",
+      "path": "Assets/sounds/test_sound.asset"
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000013",
+      "type": "AUDIO_ASSET",
+      "path": "Assets/sounds/background_music.asset"
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000014",
+      "type": "MATERIAL_ASSET",
+      "path": "Assets/materials/background/background_mat.asset"
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000015",
+      "type": "MATERIAL_ASSET",
+      "path": "Assets/materials/plastic/plastic_mat.asset"
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000016",
+      "type": "MAP_ASSET",
+      "path": "Assets/maps/test_map.map"
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000017",
+      "type": "SHADER_ASSET",
+      "path": "Assets/shaders/basic_shader.shader"
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000018",
+      "type": "SHADER_ASSET",
+      "path": "Assets/shaders/pbr_shader.shader"
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000019",
+      "type": "TEXTURE_ASSET",
+      "path": "Assets/textures/rustediron2_albedo.png"
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000020",
+      "type": "SHADER_ASSET",
+      "path": "Assets/shaders/test_multi_pass.shader"
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000021",
+      "type": "MAP_ASSET",
+      "path": "Assets/maps/new_map.map"
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000022",
+      "type": "MAP_ASSET",
+      "path": "Assets/maps/menu_screen.map"
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000023",
+      "type": "CSHARP_SCRIPT_ASSET",
+      "path": "Assets/scripts/TestComponent.asset"
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000024",
+      "type": "CSHARP_SCRIPT_ASSET",
+      "path": "Assets/scripts/RotateComponent.asset"
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000025",
+      "type": "CSHARP_SCRIPT_ASSET",
+      "path": "Assets/scripts/HeadComponent.asset"
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000026",
+      "type": "CSHARP_SCRIPT_ASSET",
+      "path": "Assets/scripts/BodyComponent.asset"
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000027",
+      "type": "CSHARP_SCRIPT_ASSET",
+      "path": "Assets/scripts/FoodComponent.asset"
+    }
+  ]
+}
