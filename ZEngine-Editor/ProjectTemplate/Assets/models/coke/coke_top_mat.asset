@@ -1,27 +1,27 @@
 {
 	"name": "coke_material",
-	"shader": "Assets/shaders/pbr_direct.shader",
+	"shader": "00000000-0000-0000-0000-000000000018",
 	
 	"textures": [
 		{
 			"name": "albedoTexture",
-			"path": "Assets/Models/coke/12778277425TGKr6.jpg"
+			"path": "12778277425TGKr6.jpg"
 		},
 		{
 			"name": "normalTexture",
-			"path": "Assets/Textures/blank_normal.png"
+			"id": "00000000-0000-0000-0000-000000000029"
 		},
 		{
 			"name": "roughnessTexture",
-			"path": "Assets/Textures/blank_ao.png"
+			"id": "00000000-0000-0000-0000-000000000028"
 		},
 		{
 			"name": "metallicTexture",
-			"path": "Assets/Textures/blank_ao.png"
+			"id": "00000000-0000-0000-0000-000000000028"
 		},
 		{
 			"name": "aoTexture", 
-			"path": "Assets/Textures/blank_ao.png"
+			"id": "00000000-0000-0000-0000-000000000028"
 		}
 	], 
 	

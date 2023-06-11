@@ -1,5 +1,5 @@
 #include "AssetExplorer.h"
-#include "../Utilities/File.h"
+#include <ZEngine-Core/Utilities/File.h>
 #include "../Editor.h"
 #include "CodeEditor.h"
 #include "ShaderEditor.h"

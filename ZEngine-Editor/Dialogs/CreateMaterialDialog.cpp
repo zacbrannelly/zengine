@@ -1,8 +1,8 @@
 #include "CreateMaterialDialog.h"
 #include "BrowserDialog.h"
 #include "../UI/GUITextField.h"
-#include "../Utilities/Directory.h"
-#include "../Utilities/File.h"
+#include <ZEngine-Core/Utilities/Directory.h>
+#include <ZEngine-Core/Utilities/File.h>
 
 #include <ZEngine-Core/Assets/AssetManager.h>
 #include <ZEngine-Core/Assets/AssetCatalog.h>

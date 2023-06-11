@@ -43,6 +43,16 @@ void GameView::SetupCamera()
 			_viewImage->SetSize(_mainCamera->GetViewportWidth(), _mainCamera->GetViewportHeight());
 		}
 	}
+	else if (_mainCamera != nullptr)
+	{
+		// If we have a camera but no map, remove the camera
+		_mainCamera = nullptr;
+		_currentMap = nullptr;
+
+		// Remove the image from the window
+		Remove(_viewImage);
+		_viewImage = nullptr;
+	}
 }
 
 void GameView::ProcessInput()

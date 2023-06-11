@@ -1,7 +1,7 @@
 #include "AssetImporter.h"
 #include "ShaderImporter.h"
-#include "../Utilities/Directory.h"
-#include "../Utilities/File.h"
+#include <ZEngine-Core/Utilities/Directory.h>
+#include <ZEngine-Core/Utilities/File.h>
 #include "../imgui-includes.h"
 
 #include "../Dialogs/CreateScriptDialog.h"

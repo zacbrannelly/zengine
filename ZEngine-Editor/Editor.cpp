@@ -27,6 +27,7 @@
 #include <ZEngine-Core/Physics/Time.h>
 #include <ZEngine-Core/Map/MapManager.h>
 #include <ZEngine-Core/Audio/AudioSystem.h>
+#include <ZEngine-Core/Utilities/File.h>
 #include <glm/glm.hpp>
 
 #include "Project/Project.h"
@@ -42,12 +43,11 @@
 #include "Windows/AssetExplorer.h"
 #include "Windows/LogWindow.h"
 #include "Dialogs/ProjectBrowserDialog.h"
-#include "Utilities/File.h"
 #include "imgui-includes.h"
 
 Editor::Editor() : _selectedMap(nullptr), _selectedObject(nullptr), _project(nullptr)
 {
-	Add(new MainMenuBar());
+	Add(new MainMenuBar(this));
 	Add(new MapView(this));
 	Add(new InspectorWindow(this));
 	Add(new SceneGraphWindow(this));

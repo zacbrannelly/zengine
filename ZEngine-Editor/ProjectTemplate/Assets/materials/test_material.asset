@@ -4,23 +4,23 @@
     "textures": [
         {
             "name": "albedoTexture",
-            "path": "Assets/textures/blank_ao.png"
+            "id": "00000000-0000-0000-0000-000000000028"
         },
         {
             "name": "aoTexture",
-            "path": "Assets/textures/blank_ao.png"
+            "id": "00000000-0000-0000-0000-000000000028"
         },
         {
             "name": "metallicTexture",
-            "path": "Assets/textures/blank_ao.png"
+            "id": "00000000-0000-0000-0000-000000000028"
         },
         {
             "name": "normalTexture",
-            "path": "Assets/textures/blank_normal.png"
+            "id": "00000000-0000-0000-0000-000000000029"
         },
         {
             "name": "roughnessTexture",
-            "path": "Assets/textures/blank_ao.png"
+            "id": "00000000-0000-0000-0000-000000000028"
         }
     ],
     "uniforms": [

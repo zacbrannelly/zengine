@@ -120,7 +120,10 @@ string File::GetRelativePath(string to) const
 {
 	Directory dir(Directory::GetBasePath(_path));
 	auto relativeBase = dir.GetPathRelativeTo(to);
-
+	
+	if (relativeBase[relativeBase.size() - 1] != '/')
+		relativeBase += '/';
+	
 	return relativeBase + _filename;
 }
 

@@ -2,8 +2,8 @@
 #include <fstream>
 #include <stdexcept>
 #include <uuid.h>
-#include "../Utilities/Directory.h"
-#include "../Utilities/File.h"
+#include <ZEngine-Core/Utilities/Directory.h>
+#include <ZEngine-Core/Utilities/File.h>
 
 using namespace nlohmann;
 

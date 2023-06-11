@@ -78,6 +78,7 @@ string Directory::GetPathRelativeTo(std::string path) const
 {
   string absolutePath = GetAbsolutePath();
   string relativePath = absolutePath.substr(path.length(), absolutePath.length() - path.length());
+
   return relativePath;
 }
 

@@ -60,10 +60,6 @@ set (SOURCE_FILES
   "Inspectors/MeshRendererInspector.cpp"
   "Inspectors/Inspector.cpp"
   "Menus/MainMenuBar.cpp"
-  "Utilities/Directory.cpp"
-  "Utilities/DirectoryWin32.cpp"
-  "Utilities/DirectoryMacOS.cpp"
-  "Utilities/File.cpp"
   "Project/Project.cpp"
   "Editor.cpp"
 )
@@ -75,17 +71,13 @@ source_group("Source Files" FILES ${SOURCE_FILES})
 add_executable(ZEngine-Editor ${SOURCE_FILES})
 add_dependencies(ZEngine-Editor ZEngine-Core)
 
-# Copy the Assets folder to the build directory.
+# Copy the imgui window layout and settings to the build directory
 add_custom_command(TARGET ZEngine-Editor POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Assets ${CMAKE_CURRENT_BINARY_DIR}/Assets
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/catalog.zengine ${CMAKE_CURRENT_BINARY_DIR}/catalog.zengine
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/imgui.ini ${CMAKE_CURRENT_BINARY_DIR}/imgui.ini
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/layout.ini ${CMAKE_CURRENT_BINARY_DIR}/layout.ini
-  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Assets
-  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/catalog.zengine
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/imgui.ini
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/layout.ini
-  COMMENT "Copying Assets folder to build directory"
+  COMMENT "Copying imgui.ini and layout.ini to build directory"
   VERBATIM
 )
 

@@ -5,19 +5,19 @@
 	"textures": [
 		{
 			"name": "albedoTexture",
-			"path": "Assets/materials/greasy/greasy-pan-2-albedo.png"
+			"path": "greasy-pan-2-albedo.png"
 		},
 		{
 			"name": "normalTexture",
-			"path": "Assets/materials/greasy/greasy-pan-2-normal.png"
+			"path": "greasy-pan-2-normal.png"
 		},
 		{
 			"name": "roughnessTexture",
-			"path": "Assets/materials/greasy/greasy-pan-2-roughness.png"
+			"path": "greasy-pan-2-roughness.png"
 		},
 		{
 			"name": "metallicTexture",
-			"path": "Assets/materials/greasy/greasy-pan-2-metal.png"
+			"path": "greasy-pan-2-metal.png"
 		},
 		{
 			"name": "aoTexture", 

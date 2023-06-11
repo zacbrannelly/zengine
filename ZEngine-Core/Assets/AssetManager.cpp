@@ -122,6 +122,8 @@ void AssetManager::DeleteAsset(Asset* asset)
 
 	if (it != _assets.end())
 		_assets.erase(it);
+	
+	delete asset;
 }
 
 void AssetManager::DeleteAsset(std::string name)
@@ -138,8 +140,9 @@ void AssetManager::DeleteAll()
 {
 	for (auto asset : _assets)
 	{
-		DeleteAsset(asset);
+		delete asset;
 	}
+	_assets.clear();
 }
 
 void AssetManager::Shutdown()

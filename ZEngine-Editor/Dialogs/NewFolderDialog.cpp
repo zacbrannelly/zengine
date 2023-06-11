@@ -1,5 +1,5 @@
 #include "NewFolderDialog.h"
-#include "../Utilities/Directory.h"
+#include <ZEngine-Core/Utilities/Directory.h>
 #include "../UI/GUITextField.h"
 
 #include <algorithm>

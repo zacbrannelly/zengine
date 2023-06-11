@@ -1,7 +1,7 @@
 #include "MapBuilder.h"
 #include "ComponentExporter.h"
-#include "../Utilities/Directory.h"
-#include "../Utilities/File.h"
+#include <ZEngine-Core/Utilities/Directory.h>
+#include <ZEngine-Core/Utilities/File.h>
 #include <ZEngine-Core/Misc/Factory.h>
 #include <ZEngine-Core/Component/Transform.h>
 #include <ZEngine-Core/Component/Camera.h>

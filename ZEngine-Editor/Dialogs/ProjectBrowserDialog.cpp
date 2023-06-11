@@ -1,6 +1,6 @@
 #include "ProjectBrowserDialog.h"
 #include "../Project/Project.h"
-#include "../Utilities/File.h"
+#include <ZEngine-Core/Utilities/File.h>
 #include "../Editor.h"
 
 ProjectBrowserDialog::ProjectBrowserDialog(Editor* editor) : BrowserDialog(), _editor(editor)

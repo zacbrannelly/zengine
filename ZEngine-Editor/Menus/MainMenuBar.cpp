@@ -1,7 +1,9 @@
 #include "MainMenuBar.h"
+#include "../Editor.h"
+#include "../Dialogs/ProjectBrowserDialog.h"
 #include "../imgui-includes.h"
 
-MainMenuBar::MainMenuBar()
+MainMenuBar::MainMenuBar(Editor* editor) : _editor(editor)
 {
 }
 
@@ -11,6 +13,10 @@ void MainMenuBar::RenderElement()
 
 	if (ImGui::BeginMenu("File"))
 	{
+		if (ImGui::MenuItem("Open Project", NULL, (bool*)NULL))
+		{
+			_editor->Add(new ProjectBrowserDialog(_editor));
+		}
 		ImGui::MenuItem("New Map", NULL, (bool*)NULL);
 		ImGui::MenuItem("Open Map", NULL, (bool*)NULL);
 		ImGui::MenuItem("Save Map", NULL, (bool*)NULL);

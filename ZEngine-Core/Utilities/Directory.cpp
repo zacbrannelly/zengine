@@ -1,7 +1,7 @@
 #include "Directory.h"
 #include "File.h"
 
-#include <ZEngine-Core/Misc/StringUtil.h>
+#include "../Misc/StringUtil.h"
 #include <string>
 #include <algorithm>
 

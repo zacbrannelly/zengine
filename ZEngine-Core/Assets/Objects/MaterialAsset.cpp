@@ -8,6 +8,7 @@
 #include <nlohmann/json.hpp>
 #include <uuid.h>
 #include "../../Rendering/Material.h"
+#include "../../Utilities/Directory.h"
 
 #include <fstream>
 #include <iostream>
@@ -28,6 +29,7 @@ Asset* MaterialAsset::CreateInstance(string name)
 
 bool MaterialAsset::Load(string path)
 {
+	SetPath(path);
 	ifstream in(path, ios::in);
 
 	if (!in.is_open())
@@ -82,8 +84,6 @@ bool MaterialAsset::Load(string path)
 		ReadShader(*it, _material);
 	}
 
-	SetPath(path);
-
 	return true;
 }
 
@@ -116,8 +116,12 @@ void MaterialAsset::ReadTextures(json::array_t& values, Material* material)
 		{
 			it = textureObj.find("path");
 
+			auto assetDir = Directory::GetBasePath(GetPath());
+			if (assetDir[assetDir.length() - 1] != '/')
+				assetDir += '/';
+			
 			if (it != textureObj.end())
-				path = it.value().get<string>();
+				path = assetDir + it.value().get<string>();
 			else
 			{
 				cout << "MATERIAL_ASSET: Failed to find texture for sampler: " << samplerName.get<string>() << endl;

@@ -1,7 +1,7 @@
 #include "CodeEditor.h"
 #include "../Dialogs/UnsavedDialog.h"
 #include "../imgui-includes.h"
-#include "../Utilities/File.h"
+#include <ZEngine-Core/Utilities/File.h>
 
 #include <ZEngine-Core/Assets/AssetManager.h>
 #include <ZEngine-Core/Input/InputManager.h>

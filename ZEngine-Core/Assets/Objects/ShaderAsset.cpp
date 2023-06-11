@@ -2,6 +2,8 @@
 #include <nlohmann/json.hpp>
 #include <fstream>
 #include <iostream>
+#include "../../Utilities/Directory.h"
+
 
 using namespace std;
 using namespace nlohmann;
@@ -22,6 +24,10 @@ bool ShaderAsset::Load(std::string path)
 	root << in;
 
 	in.close();
+
+	auto assetDir = Directory::GetBasePath(path);
+	if (assetDir[assetDir.size() - 1] != '/')
+		assetDir += '/';
 
 	string name;
 
@@ -58,8 +64,8 @@ bool ShaderAsset::Load(std::string path)
 			{
 				auto passObject = passes[i];
 
-				auto vertexPath = passObject.at("vertex").get<std::string>();
-				auto fragPath = passObject.at("fragment").get<std::string>();
+				auto vertexPath = assetDir + passObject.at("vertex").get<std::string>();
+				auto fragPath = assetDir + passObject.at("fragment").get<std::string>();
 
 				// TODO: Get the fkn states from the 
 				if (passObject.find("states") != passObject.end())

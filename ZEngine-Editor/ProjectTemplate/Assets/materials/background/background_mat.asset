@@ -4,7 +4,7 @@
     "textures": [
         {
             "name": "texColor",
-            "path": "Assets/materials/background/background.png"
+            "path": "background.png"
         }
     ],
     "uniforms": []

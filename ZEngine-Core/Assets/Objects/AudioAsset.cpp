@@ -5,6 +5,7 @@
 #include "../../Audio/AudioSystem.h"
 #include <nlohmann/json.hpp>
 #include <SDL_mixer.h>
+#include "../../Utilities/Directory.h"
 
 using namespace std;
 using namespace nlohmann;
@@ -33,11 +34,15 @@ bool AudioAsset::Load(string path)
 
 	auto audioSys = AudioSystem::GetInstance();
 
+	auto assetDir = Directory::GetBasePath(path);
+	if (assetDir[assetDir.size() - 1] != '/')
+		assetDir += '/';
+
 	// Load music data
 	auto it = root.find("music");
 	if (it != root.end())
 	{
-		auto soundPath = it->get<string>();
+		auto soundPath = assetDir + it->get<string>();
 		_sound = audioSys->LoadMusicData(soundPath);
 	}
 
@@ -45,7 +50,7 @@ bool AudioAsset::Load(string path)
 	it = root.find("sound");
 	if (it != root.end())
 	{
-		auto soundPath = it->get<string>();
+		auto soundPath = assetDir + it->get<string>();
 		_sound = audioSys->LoadSoundData(soundPath);
 	}
 

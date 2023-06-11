@@ -59,6 +59,10 @@ set(SOURCE_FILES
     "Scripting/CSharp/CSharpScript.cpp"
     "Scripting/CSharp/CSharpScriptSystem.cpp"
     "Scripting/CSharp/AssemblyLoader.cpp"
+    "Utilities/Directory.cpp"
+    "Utilities/DirectoryMacOS.cpp"
+    "Utilities/DirectoryWin32.cpp"
+    "Utilities/File.cpp"
 )
 source_group("Source Files" FILES ${SOURCE_FILES})
 

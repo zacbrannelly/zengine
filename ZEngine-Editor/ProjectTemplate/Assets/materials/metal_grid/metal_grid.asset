@@ -5,23 +5,23 @@
 	"textures": [
 		{
 			"name": "albedoTexture",
-			"path": "Assets/materials/metal_grid/metalgrid2_basecolor.png"
+			"path": "metalgrid2_basecolor.png"
 		},
 		{
 			"name": "normalTexture",
-			"path": "Assets/materials/metal_grid/metalgrid2_normal-dx.png"
+			"path": "metalgrid2_normal-dx.png"
 		},
 		{
 			"name": "roughnessTexture",
-			"path": "Assets/materials/metal_grid/metalgrid2_roughness.png"
+			"path": "metalgrid2_roughness.png"
 		},
 		{
 			"name": "metallicTexture",
-			"path": "Assets/materials/metal_grid/metalgrid2_metallic.png"
+			"path": "metalgrid2_metallic.png"
 		},
 		{
 			"name": "aoTexture", 
-			"path": "Assets/materials/metal_grid/metalgrid2_AO.png"
+			"path": "metalgrid2_AO.png"
 		}
 	], 
 	
