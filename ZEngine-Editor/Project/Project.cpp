@@ -4,25 +4,24 @@
 #include <uuid.h>
 #include <ZEngine-Core/Utilities/Directory.h>
 #include <ZEngine-Core/Utilities/File.h>
+#include <ZEngine-Core/Scripting/CSharp/CSharpScriptSystem.h>
 
 using namespace nlohmann;
 
-Project::Project() 
+Project::Project() : _projectFile(nullptr)
 {
 }
 
-void Project::Load(std::string path)
+void Project::Load(std::string projectFilePath)
 {
-  if (_path != "") {
+  if (_projectFile != nullptr) {
     throw std::runtime_error("Project already loaded!");
   }
 
-  _path = path;
+  _projectFile = new File(projectFilePath);
 
-  // Parse the project file (JSON)
-  json projectJson;
-  std::ifstream projectFile(path);
-  projectFile >> projectJson;
+  // Parse the JSON from the project file.
+  json projectJson = _projectFile->ReadJson();
 
   // Load the name of the project.
   _name = projectJson["name"].get<std::string>();
@@ -33,6 +32,62 @@ void Project::Load(std::string path)
     auto entry = DeserializeCatalogEntry(entryJson);
     _catalog.PushEntry(entry);
   }
+}
+
+void Project::Build()
+{
+  // Make sure the project has been loaded
+  if (_projectFile == nullptr)
+  {
+    throw std::runtime_error("Cannot build project that has not been loaded!");
+  }
+
+  // TODO: Make sure there isn't already a build in progress
+
+  // Locate the project file (e.g. /path/to/project/ProjectName.Scripts.csproj)
+  File csharpProjectFile(GetScriptProjectPath());
+  if (!csharpProjectFile.Exists())
+  {
+    throw std::runtime_error("Failed to locate C# project file!");
+  }
+
+  // Build the C# project and output the DLL to the bin directory of the project folder.
+  auto scriptSystem = CSharpScriptSystem::GetInstance();
+  auto dllOutputPath = GetAssemblyPath();
+  scriptSystem->BuildProject(csharpProjectFile.GetPath(), dllOutputPath);
+}
+
+std::string Project::GetAssemblyPath() const
+{
+  // Make sure the project has been loaded
+  if (_projectFile == nullptr)
+  {
+    throw std::runtime_error("Cannot get assembly path for project that has not been loaded!");
+  }
+
+  return _projectFile->GetDirectory() + "/bin/" + _name + ".Scripts.dll";
+}
+
+std::string Project::GetAssemblyName() const
+{
+  // Make sure the project has been loaded
+  if (_projectFile == nullptr)
+  {
+    throw std::runtime_error("Cannot get assembly name for project that has not been loaded!");
+  }
+
+  return _name + ".Scripts";
+}
+
+std::string Project::GetScriptProjectPath() const
+{
+  // Make sure the project has been loaded
+  if (_projectFile == nullptr)
+  {
+    throw std::runtime_error("Cannot get script project path for project that has not been loaded!");
+  }
+
+  return _projectFile->GetDirectory() + "/" + _name + ".Scripts.csproj";
 }
 
 void Project::SetName(std::string name)
@@ -47,7 +102,7 @@ std::string Project::GetName() const
 
 void Project::Save()
 {
-  if (_path == "") {
+  if (_projectFile == nullptr) {
     throw std::runtime_error("Cannot save project that has not been loaded!");
   }
 
@@ -60,8 +115,7 @@ void Project::Save()
   }
   projectJson["catalog"] = catalogJson;
 
-  std::ofstream projectFile(_path);
-  projectFile << projectJson.dump(2);
+  _projectFile->WriteJson(projectJson);
 }
 
 CatalogEntry Project::DeserializeCatalogEntry(const json& entryJson)
@@ -72,7 +126,7 @@ CatalogEntry Project::DeserializeCatalogEntry(const json& entryJson)
   entry.path = entryJson["path"].get<std::string>();
 
   // Convert the path to an absolute path.
-  Directory workingDir(Directory::GetBasePath(_path));
+  Directory workingDir(_projectFile->GetDirectory());
   entry.path = workingDir.GetAbsolutePath() + "/" + entry.path;
 
   return entry;
@@ -85,7 +139,7 @@ json Project::SerializeCatalogEntry(const CatalogEntry& entry)
   entryJson["type"] = ObjectTypeToString(entry.type);
 
   // Convert the path back to a relative path.
-  Directory workingDir(Directory::GetBasePath(_path));
+  Directory workingDir(_projectFile->GetDirectory());
   File entryFile(entry.path);
   entryJson["path"] = entryFile.GetRelativePath(workingDir.GetAbsolutePath());
 
@@ -99,4 +153,5 @@ AssetCatalog& Project::GetCatalog()
 
 Project::~Project()
 {
+  delete _projectFile;
 }

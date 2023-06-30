@@ -1,6 +1,7 @@
 #include "File.h"
 #include "Directory.h"
 
+#include <stdexcept>
 #include <fstream>
 
 using namespace std;
@@ -27,6 +28,14 @@ bool File::Create()
 	out.close();
 
 	return true;
+}
+
+bool File::Copy(std::string newPath)
+{
+	ifstream in(_path, ios::binary);
+	ofstream out(newPath, ios::binary);
+
+	out << in.rdbuf();
 }
 
 bool File::Move(std::string newPath)
@@ -93,6 +102,34 @@ bool File::WriteContent(const char* buffer, int bufferLen, bool isBinary) const
 	return true;
 }
 
+nlohmann::json File::ReadJson() const
+{
+	ifstream in(_path);
+	nlohmann::json json;
+
+	if (!in.is_open())
+		throw runtime_error("Failed to read json, file not found");
+
+	in >> json;
+	in.close();
+
+	return json;
+}
+
+bool File::WriteJson(const nlohmann::json& json) const
+{
+	ofstream out(_path);
+
+	if (!out.is_open())
+		return false;
+
+	out << json.dump(2);
+
+	out.close();
+
+	return true;
+}
+
 bool File::Exists() const
 {
 	ifstream in(_path);
@@ -136,6 +173,11 @@ std::string File::GetName() const
 string File::GetExtension() const
 {
 	return Directory::GetExtension(_path);
+}
+
+string File::GetDirectory() const 
+{
+	return Directory::GetBasePath(_path);
 }
 
 File::~File()

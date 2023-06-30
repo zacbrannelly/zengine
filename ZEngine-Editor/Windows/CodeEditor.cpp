@@ -17,6 +17,7 @@ CodeEditor::CodeEditor(string path) : GUIWindow("Code Editor", 600, 500, false)
 	SetTitle(_file->GetFilename() + " - Code Editor");
 
 	// Create a buffer for the working copy of the file
+	// TODO: Make this dynamic
 	_buffer = new char[1000000];
 	_bufferSize = 1000000;
 	memset(_buffer, '\0', _bufferSize);

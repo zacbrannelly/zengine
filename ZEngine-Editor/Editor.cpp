@@ -91,6 +91,13 @@ void Editor::SetProject(Project* project)
 
 	_project = project;
 	assetManager->SetCatalog(&project->GetCatalog());
+
+	// TODO: Do this in another thread to avoid blocking the UI
+	_project->Build();
+	
+	// Load the built assembly into the scripting system
+	auto scriptSystem = CSharpScriptSystem::GetInstance();
+	scriptSystem->LoadProjectAssembly(project->GetAssemblyPath());
 }
 
 Project* Editor::GetProject() const

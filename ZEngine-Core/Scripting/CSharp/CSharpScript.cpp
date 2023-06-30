@@ -17,7 +17,7 @@ void CSharpScript::SetClass(std::string classNamespace, std::string className)
 void* CSharpScript::CreateManagedObject(CSharpScriptComponent* owner) const
 {
   const auto scriptSystem = CSharpScriptSystem::GetInstance();
-  const auto instance = scriptSystem->CreateManagedObject("ZEngine-Scripts", _fullyQualifiedTypeName);
+  const auto instance = scriptSystem->CreateManagedObject(_fullyQualifiedTypeName);
   scriptSystem->SetScriptNativeInstance(instance, owner);
 
   return instance;
