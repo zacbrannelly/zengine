@@ -6,7 +6,6 @@
 
 #define RUNTIME_CONFIG_PATH "ZEngine-Core.runtimeconfig.json"
 
-#define INTEROP_ASSEMBLY_DIR "lib/ZEngine.Interop"
 #define INTEROP_ASSEMBLY_PATH "lib/ZEngine.Interop/ZEngine.Interop.dll"
 #define INTEROP_ASSEMBLY_NAME "ZEngine.Interop"
 #define INTEROP_ENTRYPOINT_NAMESPACE "ZEngine.Core.Interop"
