@@ -32,7 +32,11 @@ bool Graphics::Init(Display* display)
 		std::cout << "GRAPHICS: Display was null or not created, it is needed to create a rendering context!" << std::endl;
 		return false;
 	}
+	return Init(display->GetNativeHandle(), display->GetWidth(), display->GetHeight());
+}
 
+bool Graphics::Init(void* windowHandle, int width, int height)
+{
 	// Hook the window up to BGFX rendering API
 	PlatformData pd;
 	pd.backBuffer = nullptr;
@@ -40,11 +44,14 @@ bool Graphics::Init(Display* display)
 	pd.context = nullptr;
 	pd.ndt = nullptr;
 
+	if (windowHandle != nullptr)
+	{
 #ifdef __APPLE__
-	pd.nwh = setupMetalLayer(display->GetNativeHandle());
+		pd.nwh = setupMetalLayer(windowHandle);
 #else
-	pd.nwh = display->GetNativeHandle();
+		pd.nwh = windowHandle;
 #endif
+	}
 
 	setPlatformData(pd);
 
@@ -63,8 +70,8 @@ bool Graphics::Init(Display* display)
 	
 	// Setup resolution to give to BGFX
 	Resolution res;
-	res.width = display->GetWidth();
-	res.height = display->GetHeight();
+	res.width = width;
+	res.height = height;
 	i.resolution = res;
 
 	if (!init(i))

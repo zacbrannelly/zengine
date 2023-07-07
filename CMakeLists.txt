@@ -25,4 +25,5 @@ add_subdirectory (3rdparty/imgui.cmake)
 ###
 add_subdirectory (ZEngine-Core)
 add_subdirectory (ZEngine-Editor)
+add_subdirectory (ZEngine-Editor-Web/native)
 add_subdirectory (ZEngine-Player)
