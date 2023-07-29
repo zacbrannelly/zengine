@@ -13,6 +13,7 @@
 #include "../ZEngine-Core/Map/MapManager.h"
 #include "../ZEngine-Core/Audio/AudioSystem.h"
 #include "../ZEngine-Core/Scripting/CSharp/CSharpScriptSystem.h"
+#include "../ZEngine-Core/GameLoop/GameLoop.h"
 
 int main(int argc, char* argv[])
 {
@@ -63,42 +64,30 @@ int main(int argc, char* argv[])
 
 	mapManager->SetCurrentMap(mapAsset->GetMap());
 
-	double t = 0.0;
-	const double dt = 1.0 / 60.0;
-
-	double currentTime = time->GetTime();
-	double accumulator = 0.0;
-
-	while (!display.CloseRequested())
+	std::function<void()> updateCallback = [&]()
 	{
-		double newTime = time->GetTime();
-		double frameTime = newTime - currentTime;
-		currentTime = newTime;
-
-		accumulator += frameTime;
-
-		while (accumulator >= dt)
+		if (mapManager->GetCurrentMap() != nullptr)
 		{
-			inputManager->Reset();
-			display.Update();
-
-			if (mapManager->GetCurrentMap() != nullptr)
-			{
-				mapManager->GetCurrentMap()->Update();
-			}
-
-			time->Tick();
-
-			accumulator -= dt;
+			mapManager->GetCurrentMap()->Update();
 		}
-		
-		mapManager->GetCurrentMap()->Render();
+	};
+
+	std::function<void()> renderCallback = [&]()
+	{
+		if (mapManager->GetCurrentMap() != nullptr)
+		{
+			mapManager->GetCurrentMap()->Render();
+		}
+
 		graphics->Render();
 
 		std::stringstream fps;
 		fps << "ZEngine 3.0 - Player | By Zac Brannelly | " << "FPS: " << time->GetFPS();
 		display.SetTitle(fps.str());
-	}
+	};
+
+	GameLoop gameLoop(&display, 1.0 / 60.0, updateCallback, renderCallback);
+	gameLoop.StartLoop();
 
 	assetManager->Shutdown();
 	graphics->Shutdown();

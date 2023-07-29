@@ -17,6 +17,7 @@ enum GUIElementType
 class GUIElement
 {
 public:
+	virtual void Update() {}
 	virtual void RenderElement() = 0;
 	virtual GUIElementType GetType() = 0;
 };

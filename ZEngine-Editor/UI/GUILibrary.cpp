@@ -24,7 +24,6 @@ void GUILibrary::Init(Display* display)
 
 	ImGui::StyleColorsDark();
 	ImGui::LoadIniSettingsFromDisk("layout.ini");
-
 }
 
 void GUILibrary::NewFrame()

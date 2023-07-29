@@ -24,6 +24,18 @@ void Container::Remove(GUIElement* element)
 	}
 }
 
+void Container::Update()
+{
+	for (int i = 0; i < _elements.size(); ++i)
+	{
+		if (_elements[i] != nullptr)
+		{
+			auto element = _elements[i];
+			element->Update();
+		}
+	}
+}
+
 void Container::RenderElement()
 {
 	std::vector<GUIElement*> killList;

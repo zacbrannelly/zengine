@@ -24,6 +24,7 @@ public:
 	void Continue();
 	void Stop();
 
+	void Update() override;
 	void ProcessInput() override;
 	void RenderInWindow() override;
 	void RenderElement() override;

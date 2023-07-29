@@ -4,7 +4,7 @@ namespace MyGame
 {
   public class TestComponent : CSharpScriptComponent
   {
-    private const float SPEED = 5.0f;
+    private const float SPEED = 6.0f;
 
     private InputManager _inputManager;
     private Time _time;

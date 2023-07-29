@@ -13,7 +13,7 @@ namespace MyGame
       var position = Transform.GetPosition();
       _past.Enqueue((position.x, position.y));
 
-      if (_past.Count > 10) 
+      if (_past.Count > 5) 
       {
         var pos = _past.Dequeue();
         if (Child != null) 

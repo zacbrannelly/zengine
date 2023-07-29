@@ -12,7 +12,7 @@ public:
 	Editor();
 	~Editor();
 
-	void Update();
+	void Update() override;
 
 	void SetProject(Project* project);
 	Project* GetProject() const;

@@ -242,6 +242,16 @@ void MapView::RenderInWindow()
 	}
 }
 
+void MapView::Update()
+{
+	// Update the map's game state if we're playing and we're not in the process of changing the map.
+	if (_isPlaying && _updateMapLock.try_lock())
+	{
+		_editor->GetSelectedMap()->Update();
+		_updateMapLock.unlock();
+	}
+}
+
 void MapView::RenderElement()
 {
 	// Ensure the render texture is current, as it changes when viewport is changed
@@ -253,13 +263,6 @@ void MapView::RenderElement()
 	// Render the world without the internal cameras
 	if (_editor->GetSelectedMap() != nullptr)
 	{
-		// Update the map's game state if we're playing and we're not in the process of changing the map.
-		if (_isPlaying && _updateMapLock.try_lock())
-		{
-			_editor->GetSelectedMap()->Update();
-			_updateMapLock.unlock();
-		}
-
 		_editor->GetSelectedMap()->RenderWorld(_viewCamera->GetViewId());
 	}
 

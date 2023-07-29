@@ -13,6 +13,7 @@ public:
 
 	const std::vector<GUIElement*>& GetElements() const;
 
+	virtual void Update() override;
 	virtual void RenderElement() override;
 	virtual GUIElementType GetType() override;
 

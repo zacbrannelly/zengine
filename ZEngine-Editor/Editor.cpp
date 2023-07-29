@@ -29,6 +29,7 @@
 #include <ZEngine-Core/Map/MapManager.h>
 #include <ZEngine-Core/Audio/AudioSystem.h>
 #include <ZEngine-Core/Utilities/File.h>
+#include <ZEngine-Core/GameLoop/GameLoop.h>
 #include <glm/glm.hpp>
 
 #include "Project/Project.h"
@@ -63,6 +64,9 @@ Editor::Editor() : _selectedMap(nullptr), _selectedObject(nullptr), _project(nul
 
 void Editor::Update()
 {
+	Container::Update();
+
+	// TODO: Add any logic that should be part of the update loop here
 }
 
 void Editor::SetProject(Project* project)
@@ -170,20 +174,16 @@ int main(int argc, char* argv[])
 	// This container will hold all of the GUI elements
 	Editor* editorContainer = new Editor();
 
-	while (!display.CloseRequested())
+	std::function<void()> updateCallback = [&]()
 	{
-		// Reset the input manager (so the release function works)
-		inputManager->Reset();
+		editorContainer->Update();
+	};
 
-		// Poll for input 
-		display.Update();
-
+	std::function<void()> renderCallback = [&]()
+	{
 		// Render the GUI
 		gui->NewFrame();
-
-		editorContainer->Update();
 		editorContainer->RenderElement();
-
 		gui->EndFrame();
 
 		// Render the grey background
@@ -193,9 +193,10 @@ int main(int argc, char* argv[])
 
 		// Head to the next frame (no draw calls beyond this point)
 		graphics->Render();
+	};
 
-		time->Tick();
-	}
+	GameLoop gameLoop(&display, 1 / 60.0, updateCallback, renderCallback);
+	gameLoop.StartLoop();
 
 	// Clean up the GUI
 	delete editorContainer;
