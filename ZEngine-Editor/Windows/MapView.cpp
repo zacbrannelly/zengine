@@ -7,8 +7,10 @@
 #include <ZEngine-Core/Audio/AudioSystem.h>
 #include <ZEngine-Core/Map/MapManager.h>
 #include <ZEngine-Core/Assets/AssetManager.h>
+#include <ZEngine-Core/Utilities/FutureHelpers.h>
 
 #include "../Editor.h"
+#include "../Project/Project.h"
 #include "../Inspectors/TransformInspector.h"
 #include "../Inspectors/CameraInspector.h"
 #include "../imgui-includes.h"
@@ -62,19 +64,32 @@ void MapView::Play()
 	if (_isPlaying || _editor->GetSelectedMap() == nullptr)
 		return;
 
+	if (_isPaused) {
+		Continue();
+		return;
+	}
+
+	// Build the project scripts and then start playing.
+	_buildFuture = _editor->GetProject()->BuildAndLoadAsync();
+	_buildFuture = then(_buildFuture, [this](bool result) {
+		if (result) {
+			StartPlaying();
+		}
+		// TODO: Handle build failure in the UI.
+		return result;
+	});
+}
+
+void MapView::StartPlaying()
+{
+	// Make sure we don't update the map while we're changing the map.
+	_updateMapLock.lock();
+
 	// Ensure sound will work
 	auto audioSys = AudioSystem::GetInstance();
 	audioSys->Resume(-1);
 	audioSys->ResumeMusic();
 	
-	// If paused, resume the game
-	if (_isPaused)
-	{
-		_isPaused = false;
-		_isPlaying = true;
-		return;
-	}
-
 	_isPlaying = true;
 
 	// Copy the original map (so we don't break the original during play)
@@ -86,6 +101,8 @@ void MapView::Play()
 	// Set the copy as the "selected" map (so both the editor and scripting engine know)
 	mapManager->SetCurrentMap(_previewMap);
 	_editor->SetSelectedMap(_previewMap);
+
+	_updateMapLock.unlock();
 }
 
 void MapView::Pause()
@@ -95,7 +112,7 @@ void MapView::Pause()
 
 	if (_isPaused)
 	{
-		Play();
+		Continue();
 		return;
 	}
 
@@ -108,20 +125,37 @@ void MapView::Pause()
 	audioSys->PauseMusic();
 }
 
+void MapView::Continue()
+{
+	if (!_isPaused || _editor->GetSelectedMap() == nullptr)
+		return;
+
+	_isPaused = false;
+	_isPlaying = true;
+
+	// Resume all sound
+	auto audioSys = AudioSystem::GetInstance();
+	audioSys->Resume(-1);
+	audioSys->ResumeMusic();
+}
+
 void MapView::Stop()
 {
 	if ((!_isPlaying && !_isPaused) || _editor->GetSelectedMap() == nullptr)
 		return;
 
+	// Make sure we don't update the map while we're changing the map.
+	_updateMapLock.lock();
+
 	_isPlaying = false;
 	_isPaused = false;
+
+	// Set selected entity to null so the inspector doesn't try to inspect it
+	_editor->SetSelectedEntity(nullptr);
 
 	// Delete the copy map
 	delete _previewMap;
 	_previewMap = nullptr;
-
-	// Set selected entity to null so the inspector doesnt freak ouot
-	_editor->SetSelectedEntity(nullptr);
 
 	// Put the original map back as "selected"
 	auto mapManager = MapManager::GetInstance();
@@ -132,6 +166,8 @@ void MapView::Stop()
 	auto audioSys = AudioSystem::GetInstance();
 	audioSys->Stop();
 	audioSys->StopMusic();
+
+	_updateMapLock.unlock();
 }
 
 void MapView::ProcessInput()
@@ -217,9 +253,11 @@ void MapView::RenderElement()
 	// Render the world without the internal cameras
 	if (_editor->GetSelectedMap() != nullptr)
 	{
-		if (_isPlaying)
+		// Update the map's game state if we're playing and we're not in the process of changing the map.
+		if (_isPlaying && _updateMapLock.try_lock())
 		{
 			_editor->GetSelectedMap()->Update();
+			_updateMapLock.unlock();
 		}
 
 		_editor->GetSelectedMap()->RenderWorld(_viewCamera->GetViewId());

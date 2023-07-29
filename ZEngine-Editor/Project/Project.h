@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+#include <future>
 #include <nlohmann/json.hpp>
 #include <ZEngine-Core/Assets/AssetCatalog.h>
 
@@ -14,7 +15,11 @@ public:
   void Load(std::string projectFilePath);
   void Save();
 
-  void Build();
+  bool Build(bool loadIntoScriptSystem = false);
+  std::future<bool> BuildAsync(bool loadIntoScriptSystem = false);
+  std::future<bool> BuildAndLoadAsync();
+  bool IsBuildInProgress() const;
+
   std::string GetAssemblyPath() const;
   std::string GetAssemblyName() const;
   std::string GetScriptProjectPath() const;
@@ -30,4 +35,5 @@ private:
   std::string _name;
   File* _projectFile;
   AssetCatalog _catalog;
+  bool _buildInProgress;
 };

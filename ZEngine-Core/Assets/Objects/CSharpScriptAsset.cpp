@@ -1,5 +1,6 @@
 #include "CSharpScriptAsset.h"
 #include "../../Scripting/CSharp/CSharpScript.h"
+#include "../../Utilities/File.h"
 #include <iostream>
 #include <fstream>
 #include <nlohmann/json.hpp>
@@ -54,8 +55,16 @@ bool CSharpScriptAsset::Load(std::string path)
   }
 
   _script->SetClass(classNamespace, className);
+  SetPath(path);
 
   return true;
+}
+
+std::string CSharpScriptAsset::GetScriptPath() const
+{
+  File assetFile(GetPath());
+  auto basePath = assetFile.GetDirectory();
+  return basePath + _script->GetClassName() + ".cs";
 }
 
 CSharpScript* CSharpScriptAsset::GetScript() const

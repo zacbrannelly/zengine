@@ -9,10 +9,11 @@ class CSharpScriptComponent;
 class CSharpScript : public ZObject
 {
 public:
-	CSharpScript(std::string name);
-	~CSharpScript();
+  CSharpScript(std::string name);
+  ~CSharpScript();
 
-	void SetClass(std::string classNamespace, std::string className);
+  void SetClass(std::string classNamespace, std::string className);
+  std::string GetClassName() const;
 
   void* CreateManagedObject(CSharpScriptComponent* owner) const;
   void InvokeMethod(void* managedInstance, std::string methodName);
@@ -24,5 +25,5 @@ private:
   std::map<std::string, void*> _methodsCache;
 
 public:
-	static ZObject* CreateInstance(std::string name, ObjectType type);
+  static ZObject* CreateInstance(std::string name, ObjectType type);
 };

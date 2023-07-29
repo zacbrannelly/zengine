@@ -22,7 +22,7 @@ public:
   void* CreateManagedObject(std::string typeName);
   void SetProperty(void* managedInstance, std::string propertyName, void* value);
   void SetScriptNativeInstance(void* managedInstance, void* nativeInstance);
-  void BuildProject(std::string projectPath, std::string dllOutputPath);
+  bool BuildProject(std::string projectPath, std::string dllOutputPath);
   void LoadProjectAssembly(std::string assemblyPath);
   void RegisterAdditionalDependencyPath(std::string path);
 

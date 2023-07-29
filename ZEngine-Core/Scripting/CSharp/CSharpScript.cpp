@@ -33,6 +33,11 @@ ZObject* CSharpScript::CreateInstance(std::string name, ObjectType type)
   return new CSharpScript(name);
 }
 
+std::string CSharpScript::GetClassName() const
+{
+  return _className;
+}
+
 CSharpScript::~CSharpScript()
 {
 }

@@ -9,6 +9,7 @@
 #include <ZEngine-Core/Assets/AssetManager.h>
 #include <ZEngine-Core/Assets/AssetCatalog.h>
 #include <ZEngine-Core/Assets/Objects/MapAsset.h>
+#include <ZEngine-Core/Assets/Objects/CSharpScriptAsset.h>
 
 AssetExplorer::AssetExplorer(Editor* editor) : GUIWindow("Asset Explorer", 300, 150, false)
 {
@@ -60,7 +61,11 @@ void AssetExplorer::OpenAsset(std::string path, ObjectType type)
 			}
 		}
 
-		_editor->Add(new CodeEditor(path));
+		auto scriptAsset = _manager->FindAssetFromPath(path);
+		if (scriptAsset != nullptr) {
+			auto scriptPath = scriptAsset->Cast<CSharpScriptAsset>()->GetScriptPath();
+			_editor->Add(new CodeEditor(scriptPath));
+		}
 	}
 	else if (type == MAP_ASSET)
 	{

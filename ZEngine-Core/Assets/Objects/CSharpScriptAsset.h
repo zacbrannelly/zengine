@@ -14,6 +14,7 @@ public:
   void Release() override;
 	
 	CSharpScript* GetScript() const;
+	std::string GetScriptPath() const;
 
 	static Asset* CreateInstance(std::string name);
 

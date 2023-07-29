@@ -22,6 +22,9 @@ public:
 	void SetVisible(bool isVisible);
 	bool IsVisible() const;
 
+	void SetDisableClose(bool disableClose);
+	bool IsCloseDisabled() const;
+
 	virtual void Show();
 	virtual void Hide();
 	virtual void Close();
@@ -34,5 +37,6 @@ public:
 private:
 	bool _isModal;
 	bool _isVisible;
+	bool _disableClose;
 	GUIDialogResult _result;
 };

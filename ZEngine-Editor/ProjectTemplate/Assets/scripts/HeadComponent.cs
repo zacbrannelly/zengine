@@ -41,8 +41,6 @@ namespace MyGame
       var source = _body.Last();
       var copy = Factory.Copy<Entity>($"Body {_body.Count}", source);
 
-      Console.WriteLine(copy.GetName());
-
       var headComp = copy.GetComponentByName("HeadComponent");
       if (headComp != null) 
       {

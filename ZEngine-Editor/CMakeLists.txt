@@ -55,6 +55,7 @@ set (SOURCE_FILES
   "Dialogs/UnsavedDialog.cpp"
   "Dialogs/CreateScriptDialog.cpp"
   "Dialogs/ProjectBrowserDialog.cpp"
+  "Dialogs/BuildStatusDialog.cpp"
   "Inspectors/TransformInspector.cpp"
   "Inspectors/CameraInspector.cpp"
   "Inspectors/MeshRendererInspector.cpp"

@@ -1,4 +1,5 @@
 #pragma once
+#include <future>
 #include "UI/Container.h"
 #include <ZEngine-Core/Map/Map.h>
 #include <ZEngine-Core/Map/Objects/Entity.h>
@@ -26,4 +27,6 @@ private:
 	Project* _project;
 	Map* _selectedMap;
 	Entity* _selectedObject;
+
+	std::future<bool> _buildFuture;
 };

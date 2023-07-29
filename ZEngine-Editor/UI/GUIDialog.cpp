@@ -38,6 +38,12 @@ void GUIDialog::Close()
 
 void GUIDialog::RenderElement()
 {
+	ImGui::SetNextWindowSize(ImVec2(GetWidth(), GetHeight()), ImGuiCond_Appearing);
+
+	bool open = true;
+	bool* pOpen = IsCloseDisabled() ? nullptr : &open;
+	bool begin = !_isModal ? ImGui::BeginPopup(GetTitle().c_str(), GetFlags()) : ImGui::BeginPopupModal(GetTitle().c_str(), pOpen, GetFlags());
+
 	auto visible = ImGui::IsPopupOpen(GetTitle().c_str());
 
 	if (visible && !_isVisible)
@@ -48,11 +54,6 @@ void GUIDialog::RenderElement()
 	{
 		Show();
 	}
-
-	ImGui::SetNextWindowSize(ImVec2(GetWidth(), GetHeight()), ImGuiCond_Appearing);
-
-	bool open = true;
-	bool begin = !_isModal ? ImGui::BeginPopup(GetTitle().c_str(), GetFlags()) : ImGui::BeginPopupModal(GetTitle().c_str(), &open, GetFlags());
 
 	if (begin)
 	{
@@ -97,6 +98,16 @@ void GUIDialog::SetVisible(bool isVisible)
 bool GUIDialog::IsVisible() const
 {
 	return _isVisible;
+}
+
+void GUIDialog::SetDisableClose(bool disableClose)
+{
+	_disableClose = disableClose;
+}
+
+bool GUIDialog::IsCloseDisabled() const
+{
+	return _disableClose;
 }
 
 GUIDialog::~GUIDialog()

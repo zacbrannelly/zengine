@@ -58,6 +58,13 @@ namespace ZEngine.Core
       }
 
       try {
+        // Make sure the output directory exists
+        var outputDirectory = Path.GetDirectoryName(dllOutputPath);
+        if (!Directory.Exists(outputDirectory))
+        {
+          Directory.CreateDirectory(outputDirectory);
+        }
+
         // Save the assembly to a file
         using (var fileStream = new FileStream(dllOutputPath, FileMode.Create))
         {

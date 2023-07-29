@@ -1,6 +1,8 @@
 #include "Project.h"
 #include <fstream>
 #include <stdexcept>
+#include <thread>
+#include <cstdlib>
 #include <uuid.h>
 #include <ZEngine-Core/Utilities/Directory.h>
 #include <ZEngine-Core/Utilities/File.h>
@@ -8,7 +10,7 @@
 
 using namespace nlohmann;
 
-Project::Project() : _projectFile(nullptr)
+Project::Project() : _projectFile(nullptr), _buildInProgress(false)
 {
 }
 
@@ -34,7 +36,19 @@ void Project::Load(std::string projectFilePath)
   }
 }
 
-void Project::Build()
+std::future<bool> Project::BuildAsync(bool loadIntoScriptSystem)
+{
+  return std::async(std::launch::async, [this, loadIntoScriptSystem]() {
+    return Build(loadIntoScriptSystem);
+  });
+}
+
+std::future<bool> Project::BuildAndLoadAsync()
+{
+  return BuildAsync(true);
+}
+
+bool Project::Build(bool loadIntoScriptSystem)
 {
   // Make sure the project has been loaded
   if (_projectFile == nullptr)
@@ -51,10 +65,26 @@ void Project::Build()
     throw std::runtime_error("Failed to locate C# project file!");
   }
 
+  _buildInProgress = true;
+
   // Build the C# project and output the DLL to the bin directory of the project folder.
   auto scriptSystem = CSharpScriptSystem::GetInstance();
   auto dllOutputPath = GetAssemblyPath();
-  scriptSystem->BuildProject(csharpProjectFile.GetPath(), dllOutputPath);
+  auto success = scriptSystem->BuildProject(csharpProjectFile.GetPath(), dllOutputPath);
+
+  // Optionally load the built assembly into the scripting system.
+  if (loadIntoScriptSystem && success) {
+    scriptSystem->LoadProjectAssembly(dllOutputPath); 
+  }
+
+  _buildInProgress = false;
+
+  return success;
+}
+
+bool Project::IsBuildInProgress() const
+{
+  return _buildInProgress;
 }
 
 std::string Project::GetAssemblyPath() const

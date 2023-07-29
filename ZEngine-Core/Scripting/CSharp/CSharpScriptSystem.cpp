@@ -150,14 +150,14 @@ void CSharpScriptSystem::SetScriptNativeInstance(void* object, void* nativeInsta
   _setScriptNativeInstanceFunction(object, nativeInstance);
 }
 
-void CSharpScriptSystem::BuildProject(std::string projectPath, std::string dllOutputPath)
+bool CSharpScriptSystem::BuildProject(std::string projectPath, std::string dllOutputPath)
 {
   if (!_buildProjectFunction) {
     std::cerr << "CSharpScriptSystem::BuildProject called before plugin assembly was loaded." << std::endl;
     throw std::runtime_error("Failed to build project");
   }
 
-  _buildProjectFunction(projectPath.c_str(), dllOutputPath.c_str());
+  return _buildProjectFunction(projectPath.c_str(), dllOutputPath.c_str());
 }
 
 void CSharpScriptSystem::LoadProjectAssembly(std::string assemblyPath)

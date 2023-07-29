@@ -1,6 +1,7 @@
 #include "Editor.h"
 
 #include <iostream>
+#include <future>
 
 #include <ZEngine-Core/Display/Display.h>
 #include <ZEngine-Core/Input/InputManager.h>
@@ -43,6 +44,7 @@
 #include "Windows/AssetExplorer.h"
 #include "Windows/LogWindow.h"
 #include "Dialogs/ProjectBrowserDialog.h"
+#include "Dialogs/BuildStatusDialog.h"
 #include "imgui-includes.h"
 
 Editor::Editor() : _selectedMap(nullptr), _selectedObject(nullptr), _project(nullptr)
@@ -56,6 +58,7 @@ Editor::Editor() : _selectedMap(nullptr), _selectedObject(nullptr), _project(nul
 	Add(new AssetExplorer(this));
 	Add(new LogWindow());
 	Add(new ProjectBrowserDialog(this));
+	Add(new BuildStatusDialog(this));
 }
 
 void Editor::Update()
@@ -92,12 +95,8 @@ void Editor::SetProject(Project* project)
 	_project = project;
 	assetManager->SetCatalog(&project->GetCatalog());
 
-	// TODO: Do this in another thread to avoid blocking the UI
-	_project->Build();
-	
-	// Load the built assembly into the scripting system
-	auto scriptSystem = CSharpScriptSystem::GetInstance();
-	scriptSystem->LoadProjectAssembly(project->GetAssemblyPath());
+	// Build the project in the background
+	_buildFuture = _project->BuildAndLoadAsync();
 }
 
 Project* Editor::GetProject() const
