@@ -238,6 +238,7 @@ void MapView::RenderInWindow()
 	if (ImGui::CollapsingHeader("Camera Settings"))
 	{
 		_transformInspector->RenderElement();
+		ImGui::Spacing();
 		_cameraInspector->RenderElement();
 	}
 }

@@ -5,6 +5,7 @@
 
 ProjectBrowserDialog::ProjectBrowserDialog(Editor* editor) : BrowserDialog(), _editor(editor)
 {
+  SetTitle("Open Project");
   SetModal(true);
   SetFilter({ "zproj" });
   SetVisible(true);
@@ -15,24 +16,24 @@ void ProjectBrowserDialog::RenderInWindow()
   BrowserDialog::RenderInWindow();
 
   if (IsVisible())
-	{
-		auto result = GetResult();
-		if (result == DIALOG_RESULT_CLOSE)
-		{
-			Close();
-		}
-		else if (result == DIALOG_RESULT_OK)
-		{
-			const auto file = GetFile();
-			const auto path = file.GetPath();
+  {
+    auto result = GetResult();
+    if (result == DIALOG_RESULT_CLOSE)
+    {
+      Close();
+    }
+    else if (result == DIALOG_RESULT_OK)
+    {
+      const auto file = GetFile();
+      const auto path = file.GetPath();
 
-			const auto project = new Project();
-			project->Load(path);
-			_editor->SetProject(project);
+      const auto project = new Project();
+      project->Load(path);
+      _editor->SetProject(project);
 
-			Close();
-		}
-	}
+      Close();
+    }
+  }
 }
 
 ProjectBrowserDialog::~ProjectBrowserDialog()

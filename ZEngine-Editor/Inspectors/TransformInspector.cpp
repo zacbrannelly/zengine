@@ -13,7 +13,7 @@ void TransformInspector::RenderElement()
 
 	auto transform = static_cast<Transform*>(GetValue());
 
-	ImGui::BeginChild("Transform", ImVec2(0, 100));
+	ImGui::BeginChild("Transform", ImVec2(0, 120));
 	{
 		float pos[3] = { transform->GetPosition().x, transform->GetPosition().y, transform->GetPosition().z };
 		float rot[3] = { transform->GetRotation().x, transform->GetRotation().y, transform->GetRotation().z };
@@ -33,8 +33,6 @@ void TransformInspector::RenderElement()
 		{
 			transform->SetScale({ scale[0], scale[1], scale[2] });
 		}
-
-		ImGui::Spacing();
 	}
 	ImGui::EndChild();
 }

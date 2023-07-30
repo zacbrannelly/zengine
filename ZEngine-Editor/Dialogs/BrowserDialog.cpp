@@ -7,7 +7,7 @@
 
 #include <algorithm>
 
-BrowserDialog::BrowserDialog(std::string basePath, BrowserDialogType type) : GUIDialog(type == BROWSER_OPEN_FILE || type == BROWSER_OPEN_FOLDER ? "Open.." : "Save..", 800, 430, true)
+BrowserDialog::BrowserDialog(std::string basePath, BrowserDialogType type) : GUIDialog(type == BROWSER_OPEN_FILE || type == BROWSER_OPEN_FOLDER ? "Open.." : "Save..", 800, 505, true)
 {
 	_rootDir = new Directory(basePath);
 	_selectedDir = new Directory(basePath);

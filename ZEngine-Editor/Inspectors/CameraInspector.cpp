@@ -15,7 +15,7 @@ void CameraInspector::RenderElement()
 
 	auto camera = static_cast<Camera*>(GetValue());
 
-	ImGui::BeginChild("Map View Camera Settings", ImVec2(0, 195));
+	ImGui::BeginChild("Map View Camera Settings", ImVec2(0, 288));
 	{
 		std::string clearString = "";
 		switch (camera->GetClearFlags())
