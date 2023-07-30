@@ -3,6 +3,7 @@
 
 GUIDialog::GUIDialog(std::string name, int width, int height, bool isModal) : GUIWindow(GUINameGenerator::GetUniqueName(name), width, height, false)
 {
+	_isVisible = false;
 	_isModal = isModal;
 	_result = DIALOG_RESULT_NONE;
 }
