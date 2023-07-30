@@ -160,10 +160,19 @@ void BrowserDialog::RenderInWindow()
 		{
 			bool selected = _selectedFile->GetFilename() == file.GetFilename();
 
-			if (ImGui::Selectable(file.GetFilename().c_str(), selected))
+			if (ImGui::Selectable(file.GetFilename().c_str(), selected, ImGuiSelectableFlags_AllowDoubleClick))
 			{
 				_selectedFile->Set(file.GetPath());
 				_nameField->SetText(file.GetFilename());
+
+				if (ImGui::IsMouseDoubleClicked(0))
+				{
+					if (_type == BROWSER_OPEN_FILE)
+					{
+						if (ValidateOpenFile())
+							SetResult(DIALOG_RESULT_OK);
+					}
+				}
 			}
 
 			ImGui::NextColumn();
