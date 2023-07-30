@@ -39,7 +39,7 @@ void InspectorWindow::RenderInWindow()
 		{
 			auto inspectorElement = GetInspector(component->GetType());
 
-			ImGui::TextColored(ImVec4(0, 1, 0, 1), component->GetName().c_str());
+			ImGui::TextColored(ImVec4(1, 1, 1, 1), component->GetName().c_str());
 
 			if (inspectorElement != nullptr)
 			{
