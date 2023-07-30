@@ -94,6 +94,8 @@ void AssetImporter::RenderInWindow()
 
 	for (const auto& folder : _cachedFolders)
 	{
+		if (folder.GetName() == ".") continue;
+
 		selected = folder.GetName() == _selectedName;
 		if (ImGui::Selectable(folder.GetName().c_str(), &selected, ImGuiSelectableFlags_AllowDoubleClick))
 		{
