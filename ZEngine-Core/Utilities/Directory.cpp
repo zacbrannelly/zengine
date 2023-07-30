@@ -4,6 +4,7 @@
 #include "../Misc/StringUtil.h"
 #include <string>
 #include <algorithm>
+#include <filesystem>
 
 using namespace std;
 
@@ -127,6 +128,16 @@ string Directory::ConvertPathDelimiter(std::string path, char delim)
 	});
 
 	return path;
+}
+
+string Directory::GetCurrentWorkingDirectory()
+{
+	return filesystem::current_path().string();	
+}
+
+string Directory::GetAbsolutePath(std::string path)
+{
+	return Directory(path).GetAbsolutePath();
 }
 
 Directory::~Directory()

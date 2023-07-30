@@ -19,3 +19,6 @@
 [submodule "3rdparty/stduuid"]
 	path = 3rdparty/stduuid
 	url = https://github.com/mariusbancila/stduuid
+[submodule "3rdparty/inja"]
+	path = 3rdparty/inja
+	url = https://github.com/pantor/inja

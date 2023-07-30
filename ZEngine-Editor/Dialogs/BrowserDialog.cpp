@@ -127,17 +127,25 @@ void BrowserDialog::RenderInWindow()
 
 		if (ImGui::Selectable((folder.GetName() + "/").c_str(), selected, ImGuiSelectableFlags_AllowDoubleClick))
 		{
-			_selectedDir->Set(folder.GetPath());
+			// Don't allow selecting a folder that doesn't exist.
+			if (folder.GetName() != "..")
+			{
+				_selectedDir->Set(folder.GetPath());
 
-			if (_type == BROWSER_OPEN_FOLDER)
-				_nameField->SetText(folder.GetName());
+				if (_type == BROWSER_OPEN_FOLDER)
+					_nameField->SetText(folder.GetName());
+			}
 
 			if (ImGui::IsMouseDoubleClicked(0))
 			{
-				_rootDir->Set(folder.GetPath());
-				_selectedDir->Set(_rootDir->GetPath());
+				_rootDir->Set(folder.GetAbsolutePath());
+				_selectedDir->Set(_rootDir->GetAbsolutePath());
 				_selectedFile->Set("");
 				_pathField->SetText(folder.GetAbsolutePath());
+
+				if (_type == BROWSER_OPEN_FOLDER)
+					_nameField->SetText(Directory(folder.GetAbsolutePath()).GetName());
+
 				Refresh();
 				break;
 			}
@@ -146,17 +154,20 @@ void BrowserDialog::RenderInWindow()
 		ImGui::NextColumn();
 	}
 
-	for (const auto& file : _cachedFiles)
-	{
-		bool selected = _selectedFile->GetFilename() == file.GetFilename();
-
-		if (ImGui::Selectable(file.GetFilename().c_str(), selected))
+	// Only render files if selecting or saving files.
+	if (_type != BROWSER_OPEN_FOLDER) {
+		for (const auto& file : _cachedFiles)
 		{
-			_selectedFile->Set(file.GetPath());
-			_nameField->SetText(file.GetFilename());
-		}
+			bool selected = _selectedFile->GetFilename() == file.GetFilename();
 
-		ImGui::NextColumn();
+			if (ImGui::Selectable(file.GetFilename().c_str(), selected))
+			{
+				_selectedFile->Set(file.GetPath());
+				_nameField->SetText(file.GetFilename());
+			}
+
+			ImGui::NextColumn();
+		}
 	}
 
 	ImGui::EndChild();

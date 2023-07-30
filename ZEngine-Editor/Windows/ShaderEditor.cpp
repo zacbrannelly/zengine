@@ -2,7 +2,7 @@
 #include <ZEngine-Core/Utilities/Directory.h>
 #include <ZEngine-Core/Utilities/File.h>
 #include "../UI/GUITextField.h"
-#include "../Exporters/ShaderBuilder.h"
+#include "../Builders/ShaderBuilder.h"
 #include "../Dialogs/UnsavedDialog.h"
 
 #include <fstream>

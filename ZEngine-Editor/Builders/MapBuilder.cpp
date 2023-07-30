@@ -1,5 +1,5 @@
 #include "MapBuilder.h"
-#include "ComponentExporter.h"
+#include "../Exporters/ComponentExporter.h"
 #include <ZEngine-Core/Utilities/Directory.h>
 #include <ZEngine-Core/Utilities/File.h>
 #include <ZEngine-Core/Misc/Factory.h>

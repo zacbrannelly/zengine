@@ -174,11 +174,13 @@ int main(int argc, char* argv[])
 	// This container will hold all of the GUI elements
 	Editor* editorContainer = new Editor();
 
+	// Called at a fixed rate
 	std::function<void()> updateCallback = [&]()
 	{
 		editorContainer->Update();
 	};
 
+	// Called as fast as possible
 	std::function<void()> renderCallback = [&]()
 	{
 		// Render the GUI

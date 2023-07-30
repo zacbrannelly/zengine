@@ -1,5 +1,5 @@
 #include "MaterialEditor.h"
-#include "../Exporters/MaterialBuilder.h"
+#include "../Builders/MaterialBuilder.h"
 #include <ZEngine-Core/Utilities/File.h>
 #include "../UI/GUITextField.h"
 #include "../UI/GUIImage.h"

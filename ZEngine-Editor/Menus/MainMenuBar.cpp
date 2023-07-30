@@ -1,5 +1,6 @@
 #include "MainMenuBar.h"
 #include "../Editor.h"
+#include "../Dialogs/CreateProjectDialog.h"
 #include "../Dialogs/ProjectBrowserDialog.h"
 #include "../imgui-includes.h"
 
@@ -13,6 +14,10 @@ void MainMenuBar::RenderElement()
 
 	if (ImGui::BeginMenu("File"))
 	{
+		if (ImGui::MenuItem("New Project", NULL, (bool*)NULL))
+		{
+			_editor->Add(new CreateProjectDialog(_editor));
+		}
 		if (ImGui::MenuItem("Open Project", NULL, (bool*)NULL))
 		{
 			_editor->Add(new ProjectBrowserDialog(_editor));

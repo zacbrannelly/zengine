@@ -20,6 +20,10 @@ find_package(assimp REQUIRED)
 # Source files
 ################################################################################
 set (SOURCE_FILES
+  "Builders/MapBuilder.cpp"
+  "Builders/MaterialBuilder.cpp"
+  "Builders/ShaderBuilder.cpp"
+  "Builders/ProjectBuilder.cpp"
   "UI/imgui/imgui.cpp"
   "UI/GUIImage.cpp"
   "UI/GUIDialog.cpp"
@@ -33,9 +37,6 @@ set (SOURCE_FILES
   "Exporters/ComponentExporter.cpp"
   "Exporters/MeshRendererExporter.cpp"
   "Exporters/TransformExporter.cpp"
-  "Exporters/MapBuilder.cpp"
-  "Exporters/MaterialBuilder.cpp"
-  "Exporters/ShaderBuilder.cpp"
   "Windows/ShaderImporter.cpp"
   "Windows/CodeEditor.cpp"
   "Windows/AssetImporter.cpp"
@@ -56,6 +57,7 @@ set (SOURCE_FILES
   "Dialogs/CreateScriptDialog.cpp"
   "Dialogs/ProjectBrowserDialog.cpp"
   "Dialogs/BuildStatusDialog.cpp"
+  "Dialogs/CreateProjectDialog.cpp"
   "Inspectors/TransformInspector.cpp"
   "Inspectors/CameraInspector.cpp"
   "Inspectors/MeshRendererInspector.cpp"
@@ -82,6 +84,14 @@ add_custom_command(TARGET ZEngine-Editor POST_BUILD
   VERBATIM
 )
 
+# Copy the project templates to the build directory
+add_custom_command(TARGET ZEngine-Editor POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Builders/templates ${CMAKE_CURRENT_BINARY_DIR}/templates
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Project/BaseProject
+  COMMENT "Copying BaseProject template to build directory"
+  VERBATIM
+)
+
 ################################################################################
 # Includes
 ################################################################################
@@ -92,7 +102,7 @@ target_include_directories(ZEngine-Editor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/..
 target_include_directories(ZEngine-Editor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/imgui.cmake/imgui)
 target_include_directories(ZEngine-Editor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/iconfontheaders)
 target_include_directories(ZEngine-Editor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/stduuid/include)
-
+target_include_directories(ZEngine-Editor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/inja/single_include/inja)
 
 target_include_directories(ZEngine-Editor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/..)
 target_include_directories(ZEngine-Editor PRIVATE ${SDL2_INCLUDE_DIRS})

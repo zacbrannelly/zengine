@@ -19,10 +19,7 @@ void GUIDialog::Show()
 
 void GUIDialog::Hide()
 {
-	if (ImGui::IsPopupOpen(GetTitle().c_str()))
-	{
-		ImGui::CloseCurrentPopup();
-	}
+	ImGui::CloseCurrentPopup();
 
 	_result = DIALOG_RESULT_NONE;
 	_isVisible = false;
@@ -38,25 +35,25 @@ void GUIDialog::Close()
 
 void GUIDialog::RenderElement()
 {
+	// Show if requested
+	if (_isVisible)
+	{
+		Show();
+	}
+
 	ImGui::SetNextWindowSize(ImVec2(GetWidth(), GetHeight()), ImGuiCond_Appearing);
 
 	bool open = true;
 	bool* pOpen = IsCloseDisabled() ? nullptr : &open;
 	bool begin = !_isModal ? ImGui::BeginPopup(GetTitle().c_str(), GetFlags()) : ImGui::BeginPopupModal(GetTitle().c_str(), pOpen, GetFlags());
 
-	auto visible = ImGui::IsPopupOpen(GetTitle().c_str());
-
-	if (visible && !_isVisible)
-	{
-		Hide();
-	}
-	else if (_isVisible && !visible)
-	{
-		Show();
-	}
-
 	if (begin)
 	{
+		// Hide if requested
+		if (!_isVisible) {
+			Hide();
+		}
+
 		Container::RenderElement();
 		RenderInWindow();
 		ProcessInput();

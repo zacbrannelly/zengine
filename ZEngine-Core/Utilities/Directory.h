@@ -46,5 +46,7 @@ public:
 	static char GetPathDelimiter(std::string path);
 	static std::string ConvertPathDelimiter(std::string path, char delim);
 	static std::string ConvertPath(std::string path);
+	static std::string GetCurrentWorkingDirectory();
+	static std::string GetAbsolutePath(std::string path);
 };
 

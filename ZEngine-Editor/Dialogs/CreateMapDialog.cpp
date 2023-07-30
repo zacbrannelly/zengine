@@ -3,7 +3,7 @@
 #include "../UI/GUITextField.h"
 #include <ZEngine-Core/Utilities/File.h>
 #include <ZEngine-Core/Utilities/Directory.h>
-#include "../Exporters/MapBuilder.h"
+#include "../Builders/MapBuilder.h"
 
 #include <ZEngine-Core/Assets/AssetCatalog.h>
 #include <ZEngine-Core/Assets/AssetManager.h>
