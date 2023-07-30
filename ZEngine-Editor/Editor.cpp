@@ -48,7 +48,7 @@
 #include "Dialogs/BuildStatusDialog.h"
 #include "imgui-includes.h"
 
-Editor::Editor() : _selectedMap(nullptr), _selectedObject(nullptr), _project(nullptr)
+Editor::Editor(Display* display) : _display(display), _selectedMap(nullptr), _selectedObject(nullptr), _project(nullptr)
 {
 	Add(new MainMenuBar(this));
 	Add(new MapView(this));
@@ -130,6 +130,11 @@ Entity* Editor::GetSelectedEntity() const
 	return _selectedObject;
 }
 
+void Editor::RequestClose() const
+{
+	_display->RequestClose();
+}
+
 Editor::~Editor()
 {
 }
@@ -172,7 +177,7 @@ int main(int argc, char* argv[])
 	time->Init();
 
 	// This container will hold all of the GUI elements
-	Editor* editorContainer = new Editor();
+	Editor* editorContainer = new Editor(&display);
 
 	// Called at a fixed rate
 	std::function<void()> updateCallback = [&]()

@@ -22,10 +22,10 @@ void MainMenuBar::RenderElement()
 		{
 			_editor->Add(new ProjectBrowserDialog(_editor));
 		}
-		ImGui::MenuItem("New Map", NULL, (bool*)NULL);
-		ImGui::MenuItem("Open Map", NULL, (bool*)NULL);
-		ImGui::MenuItem("Save Map", NULL, (bool*)NULL);
-		ImGui::MenuItem("Close", NULL, (bool*)NULL);
+		if (ImGui::MenuItem("Close", NULL, (bool*)NULL))
+		{
+			_editor->RequestClose();
+		}
 
 		ImGui::EndMenu();
 	}

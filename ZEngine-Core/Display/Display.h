@@ -43,6 +43,7 @@ public:
 	void SetMaximizeOnCreation(bool willMaximize);
 	bool WillMaximizeOnCreation() const;
 
+	void RequestClose() const;
 	bool CloseRequested() const;
 	bool IsInitialized() const;
 private:

@@ -71,6 +71,12 @@ void Display::Update()
 	glfwPollEvents();
 }
 
+void Display::RequestClose() const
+{
+	if (_handle == nullptr) return;
+	glfwSetWindowShouldClose(_handle, GLFW_TRUE);
+}
+
 bool Display::CloseRequested() const
 {
 	return _handle != nullptr ? glfwWindowShouldClose(_handle) : false;

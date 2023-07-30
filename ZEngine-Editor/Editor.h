@@ -5,14 +5,16 @@
 #include <ZEngine-Core/Map/Objects/Entity.h>
 
 class Project;
+class Display;
 
 class Editor : public Container
 {
 public:
-	Editor();
+	Editor(Display* display);
 	~Editor();
 
 	void Update() override;
+	void RequestClose() const;
 
 	void SetProject(Project* project);
 	Project* GetProject() const;
@@ -24,6 +26,7 @@ public:
 	Entity* GetSelectedEntity() const;
 
 private:
+	Display* _display;
 	Project* _project;
 	Map* _selectedMap;
 	Entity* _selectedObject;
