@@ -6,6 +6,7 @@
 
 class Project;
 class Display;
+class MapController;
 
 class Editor : public Container
 {
@@ -25,11 +26,15 @@ public:
 	void SetSelectedEntity(Entity* entity);
 	Entity* GetSelectedEntity() const;
 
+	MapController* GetMapController() const;
+
 private:
 	Display* _display;
 	Project* _project;
 	Map* _selectedMap;
 	Entity* _selectedObject;
+
+	MapController* _mapController;
 
 	std::future<bool> _buildFuture;
 };

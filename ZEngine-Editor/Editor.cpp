@@ -32,11 +32,12 @@
 #include <ZEngine-Core/GameLoop/GameLoop.h>
 #include <glm/glm.hpp>
 
+#include "Controllers/MapController.h"
 #include "Project/Project.h"
 #include "Exporters/ComponentExporter.h"
 #include "UI/GUILibrary.h"
 #include "UI/GUIImage.h"
-#include "Menus/MainMenuBar.h"
+#include "Windows/EditorToolbar.h"
 #include "Windows/MapView.h"
 #include "Windows/InspectorWindow.h"
 #include "Windows/SceneGraphWindow.h"
@@ -50,7 +51,11 @@
 
 Editor::Editor(Display* display) : _display(display), _selectedMap(nullptr), _selectedObject(nullptr), _project(nullptr)
 {
-	Add(new MainMenuBar(this));
+	// Add Controllers
+	_mapController = new MapController(this);
+	Add(_mapController);
+
+	// Add Views
 	Add(new MapView(this));
 	Add(new InspectorWindow(this));
 	Add(new SceneGraphWindow(this));
@@ -135,6 +140,11 @@ void Editor::RequestClose() const
 	_display->RequestClose();
 }
 
+MapController* Editor::GetMapController() const
+{
+	return _mapController;
+}
+
 Editor::~Editor()
 {
 }
@@ -152,7 +162,7 @@ int main(int argc, char* argv[])
 	cSharpScriptSystem->Init();
 
 	// Init window
-	Display display("ZEngine 3.0 | By Zac Brannelly", 1920, 1060);
+	Display display("ZEngine", 1920, 1060);
 	display.Init();
 
 	auto inputManager = InputManager::GetInstance();
@@ -172,16 +182,19 @@ int main(int argc, char* argv[])
 	// Init GUI sub-system
 	auto gui = GUILibrary::GetInstance();
 	gui->Init(&display);
+	gui->SetToolbarWindowHeight(85);
 
 	auto time = Time::GetInstance();
 	time->Init();
 
 	// This container will hold all of the GUI elements
 	Editor* editorContainer = new Editor(&display);
+	EditorToolbar* toolbar = new EditorToolbar(editorContainer);
 
 	// Called at a fixed rate
 	std::function<void()> updateCallback = [&]()
 	{
+		toolbar->Update();
 		editorContainer->Update();
 	};
 
@@ -190,11 +203,19 @@ int main(int argc, char* argv[])
 	{
 		// Render the GUI
 		gui->NewFrame();
+
+		gui->BeginToolbarWindow();
+		toolbar->RenderElement();
+		gui->EndToolbarWindow();
+
+		gui->BeginMainWindow();
 		editorContainer->RenderElement();
+		gui->EndMainWindow();
+
 		gui->EndFrame();
 
-		// Render the grey background
-		graphics->Clear(0, 150, 150, 150, 255);
+		// Render the dark background
+		graphics->Clear(0, (int)(0.11f / 255.0f + 0.5f), (int)(0.11f + 0.5f), (int)(0.11f + 0.5f), 255);
 		graphics->Viewport(0, 0, 0, display.GetWidth(), display.GetHeight());
 		graphics->Touch(0);
 
@@ -206,6 +227,7 @@ int main(int argc, char* argv[])
 	gameLoop.StartLoop();
 
 	// Clean up the GUI
+	delete toolbar;
 	delete editorContainer;
 
 	// Clean up

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <future>
-#include <mutex>
 #include "../UI/GUIWindow.h"
 #include "../UI/GUIImage.h"
 #include <ZEngine-Core/Rendering/Graphics.h>
@@ -19,33 +17,20 @@ public:
 	MapView(Editor* map);
 	~MapView();
 
-	void Play();
-	void Pause();
-	void Continue();
-	void Stop();
-
 	void Update() override;
 	void ProcessInput() override;
 	void RenderInWindow() override;
 	void RenderElement() override;
 
 private:
-	void StartPlaying();
-
 	GUIImage* _viewImage;
 	Entity* _viewEntity;
 	Camera* _viewCamera;
 	Editor* _editor;
-	Map* _previewMap;
-	Map* _originalMap;
 
 	TransformInspector* _transformInspector;
 	CameraInspector* _cameraInspector;
 
-	bool _isPlaying;
-	bool _isPaused;
 	float _aspectRatioW, _aspectRatioH;
-	std::future<bool> _buildFuture;
-	std::mutex _updateMapLock;
 };
 

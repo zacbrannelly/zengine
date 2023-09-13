@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 	Factory::Init();
 
 	// Init window
-	Display display("ZEngine 3.0 - Player | By Zac Brannelly", 1366, 768);
+	Display display("ZEngine - Player", 1366, 768);
 	display.Init();
 
 	// Init scripting
@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
 		graphics->Render();
 
 		std::stringstream fps;
-		fps << "ZEngine 3.0 - Player | By Zac Brannelly | " << "FPS: " << time->GetFPS();
+		fps << "ZEngine - Player (" << "FPS: " << time->GetFPS() << ")";
 		display.SetTitle(fps.str());
 	};
 

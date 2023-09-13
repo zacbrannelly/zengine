@@ -7,6 +7,9 @@
 
 void GUILibrary::Init(Display* display)
 {
+	// Default toolbar height to 100px.
+	_toolbarHeight = 100;
+
 	imguiCreate();
 	ImGui_ImplGlfw_InitForOpenGL(display->GetHandle(), false);
 	
@@ -28,9 +31,9 @@ void GUILibrary::Init(Display* display)
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8, 8));
 	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(8, 8));
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 8));
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 1);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 8);
-	ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0);
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1);
 	ImGui::PushStyleVar(ImGuiStyleVar_TabRounding, 8);
 	ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 0);
 	ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 8);
@@ -98,26 +101,64 @@ void GUILibrary::NewFrame()
 {
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
-
-	// Get the display size from ImGui
-	auto displaySize = ImGui::GetIO().DisplaySize;
-
-	// Create a dockspace window that is the size of the display always 
-	ImGui::SetNextWindowPos(ImVec2(0, 0));
-	ImGui::SetNextWindowSize(displaySize);
-	ImGui::Begin("MainWindow", (bool*)0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoDecoration);
-	ImGui::DockSpace(ImGui::GetID("MyDockSpace"), ImVec2(0, 0), ImGuiDockNodeFlags_PassthruCentralNode);
-
-	ImGui::ShowDemoWindow();
 }
 
 void GUILibrary::EndFrame()
 {
 	ImGui::GetIO().DisplayFramebufferScale = ImVec2(1, 1);
 
-	ImGui::End();
 	ImGui::EndFrame();
 	imguiEndFrame();
+}
+
+void GUILibrary::BeginMainWindow()
+{
+	// Get the display size from ImGui
+	auto displaySize = ImGui::GetIO().DisplaySize;
+
+	// Create a dockspace window that is the size of the display always 
+	ImGui::SetNextWindowPos(ImVec2(0, _toolbarHeight));
+	ImGui::SetNextWindowSize(ImVec2(displaySize.x, displaySize.y - _toolbarHeight));
+
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
+	ImGui::Begin("MainWindow", (bool*)0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoDecoration);
+	ImGui::DockSpace(ImGui::GetID("MyDockSpace"), ImVec2(0, 0), ImGuiDockNodeFlags_PassthruCentralNode);
+	ImGui::PopStyleVar();
+
+	ImGui::ShowDemoWindow();
+}
+
+void GUILibrary::EndMainWindow()
+{
+	ImGui::End();
+}
+
+void GUILibrary::BeginToolbarWindow()
+{
+ 	// Get the display size from ImGui
+	auto displaySize = ImGui::GetIO().DisplaySize;
+
+	ImGui::SetNextWindowPos(ImVec2(0, 0));
+	ImGui::SetNextWindowSize(ImVec2(displaySize.x, _toolbarHeight));
+
+	// Disable window rounding + border
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0);
+
+	ImGui::Begin("Toolbar", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNav);
+
+	// Enable previously disabled styles.
+	ImGui::PopStyleVar(2);
+}
+
+void GUILibrary::SetToolbarWindowHeight(float toolbarHeight)
+{
+	_toolbarHeight = toolbarHeight;
+}
+
+void GUILibrary::EndToolbarWindow()
+{
+	ImGui::End();
 }
 
 void GUILibrary::Shutdown()

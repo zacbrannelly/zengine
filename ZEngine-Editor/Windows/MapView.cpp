@@ -4,13 +4,8 @@
 #include <ZEngine-Core/Map/Map.h>
 #include <ZEngine-Core/Map/Objects/Entity.h>
 #include <ZEngine-Core/Component/Transform.h>
-#include <ZEngine-Core/Audio/AudioSystem.h>
-#include <ZEngine-Core/Map/MapManager.h>
-#include <ZEngine-Core/Assets/AssetManager.h>
-#include <ZEngine-Core/Utilities/FutureHelpers.h>
 
 #include "../Editor.h"
-#include "../Project/Project.h"
 #include "../Inspectors/TransformInspector.h"
 #include "../Inspectors/CameraInspector.h"
 #include "../imgui-includes.h"
@@ -19,9 +14,6 @@
 MapView::MapView(Editor* editor) : GUIWindow("Map View", 1024, 850, false)
 {
 	_editor = editor;
-	_isPlaying = false;
-	_isPaused = false;
-	_previewMap = nullptr;
 
 	// We must create an entity (so we can transform the camera) and translate it back 10 units
 	_viewEntity = Factory::CreateInstance<Entity>("View Object", ObjectType::ENTITY);
@@ -59,117 +51,6 @@ MapView::MapView(Editor* editor) : GUIWindow("Map View", 1024, 850, false)
 	SetFlags(ImGuiWindowFlags_AlwaysAutoResize);
 }
 
-void MapView::Play()
-{
-	if (_isPlaying || _editor->GetSelectedMap() == nullptr)
-		return;
-
-	if (_isPaused) {
-		Continue();
-		return;
-	}
-
-	// Build the project scripts and then start playing.
-	_buildFuture = _editor->GetProject()->BuildAndLoadAsync();
-	_buildFuture = then(_buildFuture, [this](bool result) {
-		if (result) {
-			StartPlaying();
-		}
-		// TODO: Handle build failure in the UI.
-		return result;
-	});
-}
-
-void MapView::StartPlaying()
-{
-	// Make sure we don't update the map while we're changing the map.
-	_updateMapLock.lock();
-
-	// Ensure sound will work
-	auto audioSys = AudioSystem::GetInstance();
-	audioSys->Resume(-1);
-	audioSys->ResumeMusic();
-	
-	_isPlaying = true;
-
-	// Copy the original map (so we don't break the original during play)
-	_originalMap = _editor->GetSelectedMap();
-	_previewMap = Factory::Copy<Map>(_originalMap->GetName(), _originalMap);
-
-	auto mapManager = MapManager::GetInstance();
-
-	// Set the copy as the "selected" map (so both the editor and scripting engine know)
-	mapManager->SetCurrentMap(_previewMap);
-	_editor->SetSelectedMap(_previewMap);
-
-	_updateMapLock.unlock();
-}
-
-void MapView::Pause()
-{
-	if (_editor->GetSelectedMap() == nullptr)
-		return;
-
-	if (_isPaused)
-	{
-		Continue();
-		return;
-	}
-
-	_isPlaying = false;
-	_isPaused = true;
-
-	// Pause all sound
-	auto audioSys = AudioSystem::GetInstance();
-	audioSys->Pause(-1);
-	audioSys->PauseMusic();
-}
-
-void MapView::Continue()
-{
-	if (!_isPaused || _editor->GetSelectedMap() == nullptr)
-		return;
-
-	_isPaused = false;
-	_isPlaying = true;
-
-	// Resume all sound
-	auto audioSys = AudioSystem::GetInstance();
-	audioSys->Resume(-1);
-	audioSys->ResumeMusic();
-}
-
-void MapView::Stop()
-{
-	if ((!_isPlaying && !_isPaused) || _editor->GetSelectedMap() == nullptr)
-		return;
-
-	// Make sure we don't update the map while we're changing the map.
-	_updateMapLock.lock();
-
-	_isPlaying = false;
-	_isPaused = false;
-
-	// Set selected entity to null so the inspector doesn't try to inspect it
-	_editor->SetSelectedEntity(nullptr);
-
-	// Delete the copy map
-	delete _previewMap;
-	_previewMap = nullptr;
-
-	// Put the original map back as "selected"
-	auto mapManager = MapManager::GetInstance();
-	mapManager->SetCurrentMap(_originalMap);
-	_editor->SetSelectedMap(_originalMap);
-
-	// Stop all audio
-	auto audioSys = AudioSystem::GetInstance();
-	audioSys->Stop();
-	audioSys->StopMusic();
-
-	_updateMapLock.unlock();
-}
-
 void MapView::ProcessInput()
 {
 }
@@ -177,49 +58,6 @@ void MapView::ProcessInput()
 void MapView::RenderInWindow()
 {
 	_viewImage->SetSize(GetContentWidth(), GetContentWidth() * (_aspectRatioH / _aspectRatioW));
-
-	// Playback buttons
-	{
-		bool startPlaying = false;
-		if (_isPlaying)
-		{
-			ImGui::PushStyleColor(0, ImVec4(1, 0, 0, 1));
-			startPlaying = ImGui::Button("Play", ImVec2(80, 0));
-			ImGui::PopStyleColor();
-		}
-		else
-		{
-			startPlaying = ImGui::Button("Play", ImVec2(80, 0));
-		}
-
-		if (startPlaying)
-		{
-			Play();
-		}
-		
-		ImGui::SameLine();
-
-		bool startPause = false;
-		if (_isPaused)
-		{
-			ImGui::PushStyleColor(0, ImVec4(1, 0, 0, 1));
-			startPause = ImGui::Button("Pause", ImVec2(80, 0));
-			ImGui::PopStyleColor();
-		}
-		else
-		{
-			startPause = ImGui::Button("Pause", ImVec2(80, 0));
-		}
-
-		if (startPause)
-			Pause();
-
-		ImGui::SameLine();
-		if (ImGui::Button("Stop", ImVec2(80, 0)))
-		{
-			Stop();
-		}
-	}
 
 	// Allow the user to change the size of the texture being rendered in the window
 	if (ImGui::CollapsingHeader("View Settings"))
@@ -245,12 +83,6 @@ void MapView::RenderInWindow()
 
 void MapView::Update()
 {
-	// Update the map's game state if we're playing and we're not in the process of changing the map.
-	if (_isPlaying && _updateMapLock.try_lock())
-	{
-		_editor->GetSelectedMap()->Update();
-		_updateMapLock.unlock();
-	}
 }
 
 void MapView::RenderElement()
