@@ -178,7 +178,7 @@ void Camera::SetFieldOfView(float fov)
 
 float Camera::GetFieldOfView() const
 {
-	return _fov;
+	return glm::degrees(_fov);
 }
 
 void Camera::SetOrthoSize(float size)

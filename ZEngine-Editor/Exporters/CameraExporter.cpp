@@ -22,7 +22,7 @@ json CameraExporter::ExportImpl(ZObject* obj)
 	};
 
 	result["projection"] = (uint32_t)camera->GetProjectionMode();
-	result["fieldOfView"] = glm::degrees(camera->GetFieldOfView());
+	result["fieldOfView"] = camera->GetFieldOfView();
 	result["zNear"] = camera->GetNear();
 	result["zFar"] = camera->GetFar();
 	result["orthoSize"] = camera->GetOrthoSize();

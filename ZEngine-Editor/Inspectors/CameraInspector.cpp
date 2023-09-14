@@ -91,7 +91,7 @@ void CameraInspector::RenderElement()
 
 			if (ImGui::SliderAngle("Field of View", &fov))
 			{
-				camera->SetFieldOfView(glm::degrees(fov));
+				camera->SetFieldOfView(fov);
 			}
 		}
 		else
