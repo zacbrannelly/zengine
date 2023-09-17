@@ -135,47 +135,53 @@ void AssetExplorer::RenderInWindow()
 	auto shaderAssets = _manager->GetCatalog()->GetAssetsByType(SHADER_ASSET);
 	auto textureAssets = _manager->GetCatalog()->GetAssetsByType(TEXTURE_ASSET);
 
-	if (ImGui::TreeNode("Sounds"))
+	auto flags = ImGuiTreeNodeFlags_FramePadding;
+
+	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(8, 5));
+
+	if (ImGui::TreeNodeEx("Sounds", flags))
 	{
 		RenderAssetButtons(audioAssets);
 		ImGui::TreePop();
 	}
 
-	if (ImGui::TreeNode("Maps"))
+	if (ImGui::TreeNodeEx("Maps", flags))
 	{
 		RenderAssetButtons(mapAssets);
 		ImGui::TreePop();
 	}
 
-	if (ImGui::TreeNode("Materials"))
+	if (ImGui::TreeNodeEx("Materials", flags))
 	{
 		RenderAssetButtons(materialAssets);
 		ImGui::TreePop();
 	}
 
-	if (ImGui::TreeNode("Models"))
+	if (ImGui::TreeNodeEx("Models", flags))
 	{
 		RenderAssetButtons(modelAssets);
 		ImGui::TreePop();
 	}
 
-	if (ImGui::TreeNode("Scripts"))
+	if (ImGui::TreeNodeEx("Scripts", flags))
 	{
 		RenderAssetButtons(scriptAssets);
 		ImGui::TreePop();
 	}
 
-	if (ImGui::TreeNode("Shaders"))
+	if (ImGui::TreeNodeEx("Shaders", flags))
 	{
 		RenderAssetButtons(shaderAssets);
 		ImGui::TreePop();
 	}
 
-	if (ImGui::TreeNode("Textures"))
+	if (ImGui::TreeNodeEx("Textures", flags))
 	{
 		RenderAssetButtons(textureAssets);
 		ImGui::TreePop();
 	}
+
+	ImGui::PopStyleVar();
 }
 
 AssetExplorer::~AssetExplorer()

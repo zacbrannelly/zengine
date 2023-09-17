@@ -26,7 +26,7 @@ void SceneGraphWindow::RenderNode(Entity* node)
 	bool hasChildren = node->GetTransform()->GetChildren().size() > 0;
 
 	// Only open a node if it is double clicked or the arrow is clicked
-	ImGuiTreeNodeFlags flags = (hasChildren ? 0 : ImGuiTreeNodeFlags_Leaf) | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+	ImGuiTreeNodeFlags flags = (hasChildren ? 0 : ImGuiTreeNodeFlags_Leaf) | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_FramePadding;
 
 	// If the node is the selected entity, render it as selected
 	if (_context->GetSelectedEntity() == node)
@@ -131,6 +131,7 @@ void SceneGraphWindow::RenderInWindow()
 
 		ImGui::EndMenuBar();
 
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(8, 5));
 		if (ImGui::CollapsingHeader(map->GetName().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			for (auto entity : map->GetEntities())
@@ -142,6 +143,7 @@ void SceneGraphWindow::RenderInWindow()
 				}
 			}
 		}
+		ImGui::PopStyleVar();
 	}
 }
 
