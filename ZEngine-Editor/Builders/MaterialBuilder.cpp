@@ -1,6 +1,7 @@
 #include "MaterialBuilder.h"
 #include "../Windows/MaterialEditor.h"
 #include <ZEngine-Core/Utilities/File.h>
+#include <ZEngine-Core/Utilities/Directory.h>
 
 #include <nlohmann/json.hpp>
 
@@ -16,13 +17,15 @@ bool MaterialBuilder::BuildToFile(const std::string& path, const MaterialEditorD
 	auto& textures = root["textures"] = json::array_t();
 	auto& uniforms = root["uniforms"] = json::array_t();
 
+	auto assetDir = Directory::GetBasePath(path);
+
 	for (const auto& samplerPair : data.samplers)
 	{
 		json::object_t samplerObj;
 		samplerObj["name"] = samplerPair.first;
 
 		if (samplerPair.second.assetID.is_nil() && samplerPair.second.assetPath != "None")
-			samplerObj["path"] = samplerPair.second.assetPath;
+			samplerObj["path"] = samplerPair.second.assetPath.substr(assetDir.size());
 		else if (!samplerPair.second.assetID.is_nil())
 			samplerObj["id"] = uuids::to_string(samplerPair.second.assetID);
 		else
