@@ -66,6 +66,10 @@ void MapController::StartPlaying()
 	mapManager->SetCurrentMap(_previewMap);
 	_editor->SetSelectedMap(_previewMap);
 
+  // Remove selection as it might reference the original map.
+  // TODO: Select the copy of the selected entity instead.
+  _editor->SetSelectedEntity(nullptr);
+
 	_updateMapLock.unlock();
 }
 
