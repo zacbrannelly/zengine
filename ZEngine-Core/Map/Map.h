@@ -31,6 +31,11 @@ public:
 
 	static ZObject* CreateInstance(std::string name, ObjectType type);
 	static ZObject* Copy(std::string name, ZObject* object);
+
+	static ObjectType GetStaticType()
+	{
+		return MAP;
+	}
 private:
 	std::vector<Entity*> _entities;
 	std::vector<Camera*> _cameras;

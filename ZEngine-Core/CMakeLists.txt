@@ -29,10 +29,15 @@ set(SOURCE_FILES
     "Component/Importers/MeshRendererImporter.cpp"
     "Component/Importers/CSharpScriptComponentImporter.cpp"
     "Component/Importers/TransformImporter.cpp"
+    "Component/Importers/RigidBody3DImporter.cpp"
+    "Component/Importers/BoxCollider3DImporter.cpp"
     "Component/MeshRenderer.cpp"
     "Component/CSharpScriptComponent.cpp"
     "Component/TestRenderer.cpp"
     "Component/Transform.cpp"
+    "Component/RigidBody3D.cpp"
+    "Component/Collider3D.cpp"
+    "Component/BoxCollider3D.cpp"
     "Display/Display.cpp"
     "Engine.cpp"
     "Input/InputManager.cpp"
@@ -45,6 +50,7 @@ set(SOURCE_FILES
     "Misc/Factory.cpp"
     "Misc/StringUtil.cpp"
     "Physics/Time.cpp"
+    "Physics/Physics3DSystem.cpp"
     "Rendering/DynamicIndexBuffer.cpp"
     "Rendering/DynamicVertexBuffer.cpp"
     "Rendering/MetalLayerSetup.mm"
@@ -93,6 +99,7 @@ include_directories("./")
 target_include_directories(ZEngine-Core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/bgfx.cmake/bgfx/include)
 target_include_directories(ZEngine-Core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/stb)
 target_include_directories(ZEngine-Core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/stduuid/include)
+target_include_directories(ZEngine-Core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/PhysX/physx/include)
 
 target_include_directories(ZEngine-Core PRIVATE ${SDL2_INCLUDE_DIRS})
 target_include_directories(ZEngine-Core PRIVATE ${SDL2_MIXER_INCLUDE_DIRS})
@@ -117,6 +124,52 @@ find_library(
     NO_DEFAULT_PATH
 )
 
+# Find PhysX libraries
+# TODO: Support other platforms.
+set(PHYSX_BIN_PATH "${CMAKE_SOURCE_DIR}/3rdparty/PhysX/physx/bin/mac.x86_64/checked")
+
+find_library(
+    PHYSX_COMMON
+    NAMES libPhysXCommon_static_64.a
+    HINTS "${PHYSX_BIN_PATH}"
+)
+
+find_library(
+    PHYSX_CORE
+    NAMES libPhysX_static_64.a
+    HINTS "${PHYSX_BIN_PATH}"
+)
+
+find_library(
+    PHYSX_FOUNDATION
+    NAMES libPhysXFoundation_static_64.a
+    HINTS "${PHYSX_BIN_PATH}"
+)
+
+find_library(
+    PHYSX_CHARACTER_KINEMATIC
+    NAMES libPhysXCharacterKinematic_static_64.a
+    HINTS "${PHYSX_BIN_PATH}"
+)
+
+find_library(
+    PHYSX_COOKING
+    NAMES libPhysXCooking_static_64.a
+    HINTS "${PHYSX_BIN_PATH}"
+)
+
+find_library(
+    PHYSX_PVD
+    NAMES libPhysXPvdSDK_static_64.a
+    HINTS "${PHYSX_BIN_PATH}"
+)
+
+find_library(
+    PHYSX_EXTENSIONS
+    NAMES libPhysXExtensions_static_64.a
+    HINTS "${PHYSX_BIN_PATH}"
+)
+
 # Set RPATH (where to look for shared libraries, i.e. the dotnet runtime)
 set(CMAKE_MACOSX_RPATH 1)
 set(CMAKE_INSTALL_RPATH "${DOTNET_LIBRARY_PATH};${DOTNET_HOST_PATH}")
@@ -136,6 +189,13 @@ target_link_libraries(ZEngine-Core
     PRIVATE glfw
     PRIVATE ${DOTNET_CORECLR}
     PRIVATE ${DOTNET_HOST}
+    PRIVATE ${PHYSX_COMMON}
+    PRIVATE ${PHYSX_CORE}
+    PRIVATE ${PHYSX_FOUNDATION}
+    PRIVATE ${PHYSX_CHARACTER_KINEMATIC}
+    PRIVATE ${PHYSX_COOKING}
+    PRIVATE ${PHYSX_PVD}
+    PRIVATE ${PHYSX_EXTENSIONS}
 )
 
 ################################################################################

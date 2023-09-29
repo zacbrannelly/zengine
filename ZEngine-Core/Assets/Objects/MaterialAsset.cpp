@@ -19,6 +19,7 @@ using namespace nlohmann;
 
 MaterialAsset::MaterialAsset(string name) : Asset(name, ObjectType::MATERIAL_ASSET)
 {
+	RegisterDerivedType(MATERIAL_ASSET);
 	_material = nullptr;
 }
 

@@ -20,5 +20,10 @@ private:
 
 public:
 	static Asset* CreateInstance(std::string name);
+
+	static ObjectType GetStaticType()
+	{
+		return AUDIO_ASSET;
+	}
 };
 

@@ -51,5 +51,10 @@ private:
 
 public:
 	static ZObject* CreateInstance(std::string name, ObjectType type);
+
+	static ObjectType GetStaticType()
+	{
+		return MATERIAL;
+	}
 };
 

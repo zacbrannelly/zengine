@@ -5,6 +5,7 @@ using namespace std;
 
 Component::Component(string name, ObjectType type) : ZObject(name, type), _owner(nullptr)
 {
+	RegisterDerivedType(COMPONENT);
 }
 
 void Component::SetOwner(Entity* owner)

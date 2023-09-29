@@ -4,7 +4,7 @@ namespace MyGame
 {
   public class TestComponent : CSharpScriptComponent
   {
-    private const float SPEED = 6.0f;
+    private const float SPEED = 5.0f;
 
     private InputManager _inputManager;
     private Time _time;
@@ -41,10 +41,10 @@ namespace MyGame
         _velocity.y = -SPEED;
       }
 
-      var position = Transform.GetPosition();
-      position.x += _velocity.x * (float)_time.GetDeltaTime();
-      position.y += _velocity.y * (float)_time.GetDeltaTime();
-      position.z += _velocity.z * (float)_time.GetDeltaTime();
+      // var position = Transform.GetPosition();
+      // position.x += _velocity.x * (float)_time.GetDeltaTime();
+      // position.y += _velocity.y * (float)_time.GetDeltaTime();
+      // position.z += _velocity.z * (float)_time.GetDeltaTime();
     }
   }
 }

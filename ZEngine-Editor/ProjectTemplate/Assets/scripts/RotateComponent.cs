@@ -15,9 +15,8 @@ namespace MyGame
 
     public void Update()
     {
-      var rotation = Transform.GetRotation();
-      rotation.x += SPEED * (float)_time.GetDeltaTime();
-      rotation.y += SPEED * (float)_time.GetDeltaTime();
+      float rotate = SPEED * (float)_time.GetDeltaTime();
+      Transform.Rotate(new vec3(0, rotate, rotate));
     }
   }
 }

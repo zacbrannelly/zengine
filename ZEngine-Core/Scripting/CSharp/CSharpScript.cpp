@@ -5,6 +5,7 @@
 
 CSharpScript::CSharpScript(std::string name) : ZObject(name, CSHARP_SCRIPT)
 {
+  RegisterDerivedType(CSHARP_SCRIPT);
 }
 
 void CSharpScript::SetClass(std::string classNamespace, std::string className)

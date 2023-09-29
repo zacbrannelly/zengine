@@ -9,6 +9,7 @@ using namespace std;
 
 Camera::Camera() : Component("Camera", ObjectType::CAMERA)
 {
+	RegisterDerivedType(CAMERA);
 	_projMode = ORTHOGRAPHIC;
 	_frameBuffer = BGFX_INVALID_HANDLE;
 	_renderTexture = BGFX_INVALID_HANDLE;

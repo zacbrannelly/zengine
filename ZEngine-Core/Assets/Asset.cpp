@@ -6,6 +6,7 @@ using namespace std;
 
 Asset::Asset(string name, ObjectType type) : ZObject(name, type)
 {
+	RegisterDerivedType(ASSET);
 	_isLoaded = false;
 }
 

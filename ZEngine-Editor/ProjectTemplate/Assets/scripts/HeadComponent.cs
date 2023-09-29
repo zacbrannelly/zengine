@@ -6,6 +6,7 @@ namespace MyGame
   public class HeadComponent : CSharpScriptComponent
   {
     private Time _time;
+    private InputManager _inputManager;
 
     private FoodComponent _food;
     private List<Entity> _body;
@@ -14,6 +15,7 @@ namespace MyGame
     public void Init()
     {
       _time = Time.GetInstance();
+      _inputManager = InputManager.GetInstance();
 
       var scale = Transform.GetScale();
       _collider = new BoxCollider2D(Transform, scale.x * 2, scale.y * 2);
@@ -29,6 +31,11 @@ namespace MyGame
 
     public void Update()
     {
+      if (_inputManager.GetButtonDown(ButtonCode.BUTTON_KEY_A))
+      {
+        SpawnBody();
+      }
+
       if (_food.Collider.Intersects(_collider)) 
       {
         _food.Eat();

@@ -10,6 +10,7 @@ using namespace nlohmann;
 
 ShaderAsset::ShaderAsset(std::string name) : Asset(name, ObjectType::SHADER_ASSET)
 {
+	RegisterDerivedType(SHADER_ASSET);
 	_shader = nullptr;
 }
 

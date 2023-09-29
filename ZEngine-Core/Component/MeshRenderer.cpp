@@ -7,6 +7,7 @@ using namespace std;
 
 MeshRenderer::MeshRenderer() : Component("Mesh Renderer", ObjectType::MESH_RENDERER)
 {
+	RegisterDerivedType(MESH_RENDERER);
 	_mesh = nullptr;
 }
 

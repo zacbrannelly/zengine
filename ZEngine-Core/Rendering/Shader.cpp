@@ -4,8 +4,9 @@
 
 using namespace std;
 
-Shader::Shader(string name) : ZObject(name, ObjectType::SHADER)
+Shader::Shader(string name) : ZObject(name, SHADER)
 {
+	RegisterDerivedType(SHADER);
 }
 
 ZObject* Shader::CreateInstance(string name, ObjectType type)

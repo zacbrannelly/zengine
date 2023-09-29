@@ -4,6 +4,7 @@
 
 Material::Material(std::string name) : ZObject(name, ObjectType::MATERIAL)
 {
+	RegisterDerivedType(MATERIAL);
 	_shader = nullptr;
 	_graphics = Graphics::GetInstance();
 }

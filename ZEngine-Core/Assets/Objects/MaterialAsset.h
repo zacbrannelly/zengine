@@ -18,6 +18,11 @@ public:
 
 	static Asset* CreateInstance(std::string name);
 
+	static ObjectType GetStaticType()
+	{
+		return MATERIAL_ASSET;
+	}
+
 private:
 	void ReadTextures(nlohmann::json::array_t& values, Material* material);
 	void ReadUniforms(nlohmann::json::array_t& values, Material* material);

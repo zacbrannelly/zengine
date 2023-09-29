@@ -13,8 +13,11 @@ json TransformExporter::ExportImpl(ZObject* object)
 	result["type"] = (int)transform->GetType();
 
 	result["position"] = GetVec3(transform->GetPosition());
-	result["rotation"] = GetVec3(transform->GetRotation());
 	result["scale"] = GetVec3(transform->GetScale());
+
+	// Store in xyzw order.
+	auto rotationQuat = transform->GetRotationQuaternion();
+	result["rotation"] = GetVec4(glm::vec4(rotationQuat.x, rotationQuat.y, rotationQuat.z, rotationQuat.w));
 
 	return result;
 }

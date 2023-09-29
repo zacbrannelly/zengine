@@ -11,6 +11,8 @@
 #include "../Component/TestRenderer.h"
 #include "../Component/CSharpScriptComponent.h"
 #include "../Component/AudioSource.h"
+#include "../Component/RigidBody3D.h"
+#include "../Component/BoxCollider3D.h"
 
 #include "../Scripting/CSharp/CSharpScript.h"
 
@@ -19,6 +21,8 @@
 #include "../Component/Importers/MeshRendererImporter.h"
 #include "../Component/Importers/CSharpScriptComponentImporter.h"
 #include "../Component/Importers/AudioSourceImporter.h"
+#include "../Component/Importers/RigidBody3DImporter.h"
+#include "../Component/Importers/BoxCollider3DImporter.h"
 
 #include <iostream>
 
@@ -41,6 +45,8 @@ void Factory::Init()
 	RegisterType(ObjectType::CSHARP_SCRIPT_COMPONENT, &CSharpScriptComponent::CreateInstance);
 	RegisterType(ObjectType::AUDIO_SOURCE, &AudioSource::CreateInstance);
 	RegisterType(ObjectType::TEST_RENDERER, &TestRenderer::CreateInstance);
+	RegisterType(ObjectType::RIGID_BODY_3D, &RigidBody3D::CreateInstance);
+	RegisterType(ObjectType::BOX_COLLIDER_3D, &BoxCollider3D::CreateInstance);
 
 	// Register copy methods (real-time copying)
 	RegisterCopyType(ObjectType::MAP, &Map::Copy);
@@ -50,6 +56,8 @@ void Factory::Init()
 	RegisterCopyType(ObjectType::CAMERA, &Camera::Copy);
 	RegisterCopyType(ObjectType::CSHARP_SCRIPT_COMPONENT, &CSharpScriptComponent::Copy);
 	RegisterCopyType(ObjectType::AUDIO_SOURCE, &AudioSource::Copy);
+	RegisterCopyType(ObjectType::RIGID_BODY_3D, &RigidBody3D::Copy);
+	RegisterCopyType(ObjectType::BOX_COLLIDER_3D, &BoxCollider3D::Copy);
 
 	// Register importers (from JSON objects)
 	TransformImporter::Init();
@@ -66,6 +74,12 @@ void Factory::Init()
 
 	AudioSourceImporter::Init();
 	RegisterTypeImporter(ObjectType::AUDIO_SOURCE, AudioSourceImporter::Import);
+
+	RigidBody3DImporter::Init();
+	RegisterTypeImporter(ObjectType::RIGID_BODY_3D, RigidBody3DImporter::Import);
+
+	BoxCollider3DImporter::Init();
+	RegisterTypeImporter(ObjectType::BOX_COLLIDER_3D, BoxCollider3DImporter::Import);
 }
 
 ZObject* Factory::CreateInstance(std::string name, ObjectType type)

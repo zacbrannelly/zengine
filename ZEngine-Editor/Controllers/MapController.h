@@ -7,6 +7,7 @@
 
 class Map;
 class Editor;
+class Physics3DSystem;
 
 enum PlayState {
   PLAYING,
@@ -38,4 +39,5 @@ private:
   PlayState _playState;
   std::future<bool> _buildFuture;
 	std::mutex _updateMapLock;
+  Physics3DSystem* _physics;
 };

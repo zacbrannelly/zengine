@@ -18,6 +18,7 @@ using namespace std;
 
 TestRenderer::TestRenderer() : Component("Test Renderer", ObjectType::TEST_RENDERER)
 {
+	RegisterDerivedType(TEST_RENDERER);
 }
 
 void TestRenderer::Init()

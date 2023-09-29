@@ -3,6 +3,8 @@
 #include <vector>
 #include "Component.h"
 #include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 class Transform : public Component
 {
@@ -21,8 +23,13 @@ public:
 	void SetScale(const glm::vec3& scale);
 	const glm::vec3& GetScale() const;
 
+	void Rotate(const glm::vec3& rotation);
+
 	void SetRotation(const glm::vec3& rotation);
-	const glm::vec3& GetRotation() const;
+	glm::vec3 GetRotation() const;
+
+	void SetRotationQuaternion(const glm::quat& rotation);
+	const glm::quat& GetRotationQuaternion() const;
 
 	const glm::mat4 GetLocalTransformMatrix() const;
 	const glm::mat4 GetWorldTransformMatrix() const;
@@ -35,7 +42,7 @@ public:
 private:
 	glm::vec3 _position;
 	glm::vec3 _scale;
-	glm::vec3 _rotation;
+	glm::quat _rotation;
 
 	Transform* _parent;
 	std::vector<Transform*> _children;
@@ -47,5 +54,10 @@ public:
 
 	static ZObject* CreateInstance(std::string name, ObjectType type);
 	static ZObject* Copy(std::string name, ZObject* object);
+
+	static ObjectType GetStaticType()
+	{
+		return TRANSFORM;
+	}
 };
 

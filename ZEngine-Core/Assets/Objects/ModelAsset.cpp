@@ -15,6 +15,7 @@ using namespace Assimp;
 
 ModelAsset::ModelAsset(std::string name) : Asset(name, ObjectType::MODEL_ASSET)
 {
+	RegisterDerivedType(MODEL_ASSET);
 }
 
 Asset* ModelAsset::CreateInstance(std::string name)

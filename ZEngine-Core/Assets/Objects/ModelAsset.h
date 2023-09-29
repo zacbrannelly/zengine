@@ -23,6 +23,11 @@ public:
 	const std::vector<Material*> GetMaterials();
 
 	static Asset* CreateInstance(std::string name);
+	
+	static ObjectType GetStaticType()
+	{
+		return MODEL_ASSET;
+	}
 private:
 
 	Mesh* LoadMesh(const aiScene* scene);

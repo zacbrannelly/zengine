@@ -30,6 +30,7 @@
 #include <ZEngine-Core/Audio/AudioSystem.h>
 #include <ZEngine-Core/Utilities/File.h>
 #include <ZEngine-Core/GameLoop/GameLoop.h>
+#include <ZEngine-Core/Physics/Physics3DSystem.h>
 #include <glm/glm.hpp>
 
 #include "Controllers/MapController.h"
@@ -161,6 +162,9 @@ int main(int argc, char* argv[])
 	auto cSharpScriptSystem = CSharpScriptSystem::GetInstance();
 	cSharpScriptSystem->Init();
 
+	auto physics3DSystem = Physics3DSystem::GetInstance();
+	physics3DSystem->Init();
+
 	// Init window
 	Display display("ZEngine", 1920, 1060);
 	display.Init();
@@ -239,6 +243,7 @@ int main(int argc, char* argv[])
 	display.Shutdown();
 	cSharpScriptSystem->Shutdown();
 	time->Shutdown();
+	physics3DSystem->Shutdown();
 
 	ComponentExporter::Cleanup();
 

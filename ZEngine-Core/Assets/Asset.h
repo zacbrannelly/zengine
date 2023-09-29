@@ -15,10 +15,14 @@ public:
 
 	bool IsLoaded() const;
 
-	template<typename T>
-	T* Cast()
+	template<typename T> T* Cast()
 	{
 		return static_cast<T*>(this);
+	}
+
+	static ObjectType GetStaticType()
+	{
+		return ASSET;
 	}
 
 protected:

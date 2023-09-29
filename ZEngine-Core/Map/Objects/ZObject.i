@@ -8,6 +8,7 @@
 %include "std_vector.i"
 
 %ignore ZObject::CreateInstance;
+%ignore ZObject::GetStaticType;
 
 %typemap(cscode) ZObject %{
   // Empty constructor to allow for creation without a pointer.

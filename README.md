@@ -30,7 +30,16 @@ Otherwise you need to install the libraries using `brew` or `apt-get` or whateve
 
 ## Building the Project
 
-To build the project, you will need to execute the following commands:
+First you need to build PhysX. To do this run the following commands:
+
+```shell
+cd 3rdparty/PhysX/physx
+./generate_projects.sh
+
+cmake --build . --config checked
+```
+
+Then to build the project, you will need to execute the following commands:
 
 ```shell
 mkdir build
@@ -41,4 +50,5 @@ make -j12
 
 ## Platform Compatibility
 
-ZEngine has primarily been developed and tested on MacOS. It contains Visual Studio files however these are not maintained and may not work as expected. The project is not currently compatible with Linux, however this is a planned feature.
+ZEngine has primarily been developed and tested on MacOS.
+Currently other platforms are not supported. However, the engine is designed to be platform agnostic and should be able to run on other platforms with some effort.

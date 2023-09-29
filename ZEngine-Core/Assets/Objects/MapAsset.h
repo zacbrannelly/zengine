@@ -19,6 +19,11 @@ public:
 	Map* GetMap() const;
 
 	static Asset* CreateInstance(std::string name);
+	
+	static ObjectType GetStaticType()
+	{
+		return MAP_ASSET;
+	}
 
 private:
 	Entity* LoadEntity(nlohmann::json& entity);

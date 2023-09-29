@@ -12,6 +12,7 @@ using namespace nlohmann;
 
 AudioAsset::AudioAsset(string name) : Asset(name, AUDIO_ASSET)
 {
+	RegisterDerivedType(AUDIO_ASSET);
 }
 
 Asset* AudioAsset::CreateInstance(string name)

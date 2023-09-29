@@ -7,9 +7,11 @@ using namespace std;
 
 Entity::Entity(string name) : ZObject(name, ObjectType::ENTITY)
 {	
+	RegisterDerivedType(ENTITY);
+
 	// Add transform component by default
 	auto transform = Factory::CreateInstance<Transform>("Transform", ObjectType::TRANSFORM);
-	AddComponent(transform);
+	AddComponent(transform, false);
 }
 
 ZObject* Entity::CreateInstance(string name, ObjectType type)
@@ -30,8 +32,11 @@ ZObject* Entity::Copy(string name, ZObject* object)
 		auto copy = Factory::Copy<Component>(comp->GetName(), comp);
 
 		if (copy != nullptr)
-			result->AddComponent(copy, true);
+			result->AddComponent(copy, false);
 	}
+
+	// Init components after all of them have been added.
+	result->InitComponents();
 
 	// Recursively copy children of the entity 
 	for (auto child : source->GetTransform()->GetChildren())
@@ -87,9 +92,11 @@ void Entity::RemoveComponent(Component* component)
 
 	if (it != _components.end())
 	{
-		_components.erase(it);
+		auto component = *it;
+		component->OnDestroy();
 
-		//TODO: Send message to component that it has been removed
+		_components.erase(it);
+		delete component;
 	}
 }
 
@@ -97,7 +104,7 @@ Component* Entity::GetComponent(ObjectType type) const
 {
 	for (auto c : _components)
 	{
-		if (c->GetType() == type)
+		if (c->IsDerivedType(type))
 			return c;
 	}
 
@@ -106,14 +113,8 @@ Component* Entity::GetComponent(ObjectType type) const
 
 vector<Component*> Entity::GetComponents(ObjectType type) const
 {
-	vector<Component*> results;
-
-	for (auto c : _components)
-	{
-		if (c->GetType() == type)
-			results.push_back(c);
-	}
-
+	std::vector<Component*> results;
+	GetComponentsByType(results, type);
 	return results;
 }
 
@@ -135,6 +136,8 @@ Transform* Entity::GetTransform() const
 
 Entity::~Entity()
 {
-	for (auto component : _components)
+	for (auto component : _components) {
+		component->OnDestroy();
 		delete component;
+	}
 }

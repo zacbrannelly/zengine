@@ -18,6 +18,11 @@ public:
 
 	static Asset* CreateInstance(std::string name);
 
+	static ObjectType GetStaticType()
+	{
+		return SHADER_ASSET;
+	}
+
 private:
 	Shader* _shader;
 };

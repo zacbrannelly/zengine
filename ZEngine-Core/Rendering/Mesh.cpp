@@ -7,6 +7,7 @@
 
 Mesh::Mesh(std::string name) : ZObject(name, ObjectType::MESH)
 {
+	RegisterDerivedType(MESH);
 	_vertexBuffer = nullptr;
 	_colorBuffer = nullptr;
 	_texCoordBuffer = nullptr;

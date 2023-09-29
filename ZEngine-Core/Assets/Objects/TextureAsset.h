@@ -18,6 +18,11 @@ public:
 	Texture2D* GetTexture() const;
 
 	static Asset* CreateInstance(std::string name);
+
+	static ObjectType GetStaticType()
+	{
+		return TEXTURE_ASSET;
+	}
 private:
 	Texture2D* _texture;
 	unsigned char* _imageData;

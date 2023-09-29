@@ -22,6 +22,11 @@ public:
 
 	static ZObject* CreateInstance(std::string name, ObjectType type);
 
+	static ObjectType GetStaticType()
+	{
+		return TEST_RENDERER;	
+	}
+
 private:
 	VertexBuffer* _vertexBuffer;
 	IndexBuffer* _indexBuffer;

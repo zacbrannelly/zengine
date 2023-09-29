@@ -63,6 +63,7 @@ set (SOURCE_FILES
   "Inspectors/TransformInspector.cpp"
   "Inspectors/CameraInspector.cpp"
   "Inspectors/MeshRendererInspector.cpp"
+  "Inspectors/RigidBody3DInspector.cpp"
   "Inspectors/Inspector.cpp"
   "Menus/MainMenuBar.cpp"
   "Project/Project.cpp"

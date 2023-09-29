@@ -6,6 +6,7 @@ using namespace std;
 
 TextureAsset::TextureAsset(std::string name) : Asset(name, ObjectType::TEXTURE_ASSET)
 {
+	RegisterDerivedType(TEXTURE_ASSET);
 	_imageData = nullptr;
 }
 

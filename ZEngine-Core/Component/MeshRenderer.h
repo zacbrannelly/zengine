@@ -29,6 +29,11 @@ public:
 	static ZObject* CreateInstance(std::string name, ObjectType type);
 	static ZObject* Copy(std::string name, ZObject* object);
 
+	static ObjectType GetStaticType()
+	{
+		return MESH_RENDERER;
+	}
+
 private:
 	Mesh* _mesh;
 	std::vector<Material*> _materials;

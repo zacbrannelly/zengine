@@ -5,6 +5,7 @@ using namespace std;
 
 AudioSource::AudioSource() : Component("AudioSource", AUDIO_SOURCE)
 {
+	RegisterDerivedType(AUDIO_SOURCE);
 	_audioAsset = nullptr;
 	_playingChannel = -1;
 	_autoPlay = false;

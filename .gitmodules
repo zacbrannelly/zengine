@@ -22,3 +22,6 @@
 [submodule "3rdparty/inja"]
 	path = 3rdparty/inja
 	url = https://github.com/pantor/inja
+[submodule "3rdparty/PhysX"]
+	path = 3rdparty/PhysX
+	url = https://github.com/o3de/PhysX

@@ -5,12 +5,14 @@
 #include <ZEngine-Core/Utilities/FutureHelpers.h>
 #include <ZEngine-Core/Map/Map.h>
 #include <ZEngine-Core/Map/MapManager.h>
+#include <ZEngine-Core/Physics/Physics3DSystem.h>
 
 #include "../Editor.h"
 #include "../Project/Project.h"
 
 MapController::MapController(Editor* editor) : _editor(editor), _originalMap(nullptr), _previewMap(nullptr), _playState(STOPPED)
 {
+  _physics = Physics3DSystem::GetInstance();
 }
 
 void MapController::Update()
@@ -18,6 +20,7 @@ void MapController::Update()
 	// Update the map's game state if we're playing and we're not in the process of changing the map.
 	if (_playState == PLAYING && _updateMapLock.try_lock())
 	{
+    _physics->Update();
 		_editor->GetSelectedMap()->Update();
 		_updateMapLock.unlock();
 	}
@@ -53,6 +56,9 @@ void MapController::StartPlaying()
 	auto audioSys = AudioSystem::GetInstance();
 	audioSys->Resume(-1);
 	audioSys->ResumeMusic();
+
+  // Create a new Physics scene
+  _physics->PushScene();
 	
 	_playState = PLAYING;
 
@@ -121,6 +127,9 @@ void MapController::Stop()
 	// Delete the copy map
 	delete _previewMap;
 	_previewMap = nullptr;
+
+  // Restore the original physics scene.
+  _physics->PopScene();
 
 	// Put the original map back as "selected"
 	auto mapManager = MapManager::GetInstance();

@@ -54,7 +54,7 @@ bool MapBuilder::BuildDefault(const std::string& path, const std::string& name)
 	// Create empty entity with camera attached
 	auto cameraObj = Factory::CreateInstance<Entity>("Main Camera", ENTITY);
 	auto cameraComp = Factory::CreateInstance<Camera>("Camera", CAMERA);
-	cameraObj->AddComponent(cameraComp);
+	cameraObj->AddComponent(cameraComp, false);
 	defaultMap->Add(cameraObj);
 
 	// Save map to file 

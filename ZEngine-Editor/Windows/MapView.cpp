@@ -21,7 +21,7 @@ MapView::MapView(Editor* editor) : GUIWindow("Map View", 1024, 850, false)
 
 	// Create camera on view 1, this will be used to view/render the scene
 	_viewCamera = Factory::CreateInstance<Camera>("Camera", ObjectType::CAMERA);	
-	_viewEntity->AddComponent(_viewCamera);
+	_viewEntity->AddComponent(_viewCamera, false);
 
 	// Set default values for the camera
 	_viewCamera->SetProjectionMode(Camera::ProjectionMode::ORTHOGRAPHIC);

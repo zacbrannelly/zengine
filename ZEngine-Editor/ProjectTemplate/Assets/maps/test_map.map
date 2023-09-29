@@ -11,7 +11,7 @@
 					"type": "TRANSFORM",
 					
 					"position": [0, 0, -10],
-					"rotation": [0, 0, 0],
+					"rotation": [0, 0, 0, 1],
 					"scale": [1, 1, 1]
 				},
 				{
@@ -40,7 +40,7 @@
 					"type": "TRANSFORM",
 					
 					"position": [0, 0, 10],
-					"rotation": [0, 0, 0],
+					"rotation": [0, 0, 0, 1],
 					"scale": [20, 20, 1]
 				},
 				{
@@ -60,20 +60,15 @@
 					"type": "TRANSFORM", 
 					
 					"position": [-2, 0, 0],
-					"rotation": [0, 0, 0],
+					"rotation": [0, 0, 0, 1],
 					"scale": [0.3, 0.3, 0.3]
 				},
 				{
 					"name": "MeshRender 2",
 					"type": "MESH_RENDERER",
 					
-					"primitive": "sphere",
+					"primitive": "cube",
 					"materials": [ "00000000-0000-0000-0000-000000000015" ]
-				},
-				{
-					"name": "RotateComponent",
-					"type": "CSHARP_SCRIPT_COMPONENT",
-					"script": "00000000-0000-0000-0000-000000000024"
 				},
 				{
 					"name": "HeadComponent",
@@ -89,6 +84,15 @@
 					"name": "TestComponent",
 					"type": "CSHARP_SCRIPT_COMPONENT",
 					"script": "00000000-0000-0000-0000-000000000023"
+				},
+				{
+					"name": "RigidBody3D",
+					"type": "RIGID_BODY_3D"
+				},
+				{
+					"name": "BoxCollider3D",
+					"type": "BOX_COLLIDER_3D",
+					"size": [0.3, 0.3, 0.3]
 				}
 			]
 		},
@@ -101,7 +105,7 @@
 					"type": "TRANSFORM", 
 					
 					"position": [0, 0, 0],
-					"rotation": [0, 0, 0],
+					"rotation": [0, 0, 0, 1],
 					"scale": [0.5, 0.5, 0.5]
 				},
 				{

@@ -10,6 +10,7 @@ using namespace std;
 
 Map::Map(std::string name) : ZObject(name, ObjectType::MAP)
 {
+	RegisterDerivedType(MAP);
 }
 
 ZObject* Map::CreateInstance(std::string name, ObjectType type)
@@ -183,10 +184,11 @@ void Map::Update()
 	for (int i = 0; i < _entities.size(); i++)
 	{
 		auto entity = _entities[i];
+		auto components = entity->GetAllComponents();
 		
-		for (int j = 0; j < entity->GetAllComponents().size(); j++)
+		for (int j = 0; j < components.size(); j++)
 		{
-			entity->GetAllComponents()[j]->Update();
+			components[j]->Update();
 		}
 	}
 }

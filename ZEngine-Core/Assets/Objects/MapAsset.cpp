@@ -15,6 +15,7 @@ using namespace nlohmann;
 
 MapAsset::MapAsset(string name) : Asset(name, ObjectType::MAP_ASSET)
 {
+	RegisterDerivedType(MAP_ASSET);
 }
 
 Asset* MapAsset::CreateInstance(string name)
@@ -94,7 +95,7 @@ Entity* MapAsset::LoadEntity(json& object)
 			auto newComp = Factory::ImportInstance<Component>(value);
 
 			if (newComp != nullptr)
-				entity->AddComponent(newComp);
+				entity->AddComponent(newComp, false);
 		}
 	}
 

@@ -17,6 +17,11 @@ public:
 	std::string GetScriptPath() const;
 
 	static Asset* CreateInstance(std::string name);
+	
+	static ObjectType GetStaticType()
+	{
+		return CSHARP_SCRIPT_ASSET;
+	}
 
 private:
 	CSharpScript* _script;

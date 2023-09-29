@@ -10,6 +10,7 @@ using namespace nlohmann;
 
 CSharpScriptAsset::CSharpScriptAsset(std::string name) : Asset(name, CSHARP_SCRIPT_ASSET) 
 {
+  RegisterDerivedType(CSHARP_SCRIPT_ASSET);
   _script = nullptr;
 }
 

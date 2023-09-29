@@ -7,6 +7,7 @@
 
 CSharpScriptComponent::CSharpScriptComponent(std::string name) : Component(name, CSHARP_SCRIPT_COMPONENT)
 {
+  RegisterDerivedType(CSHARP_SCRIPT_COMPONENT);
   _script = nullptr;
   _managedInstance = nullptr;
 }

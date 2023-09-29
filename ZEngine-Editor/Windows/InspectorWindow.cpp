@@ -6,6 +6,7 @@
 #include "../Inspectors/TransformInspector.h"
 #include "../Inspectors/CameraInspector.h"
 #include "../Inspectors/MeshRendererInspector.h"
+#include "../Inspectors/RigidBody3DInspector.h"
 
 InspectorWindow::InspectorWindow(Editor* context) : GUIWindow("Inspector Window", 400, 1000, false)
 {
@@ -15,6 +16,7 @@ InspectorWindow::InspectorWindow(Editor* context) : GUIWindow("Inspector Window"
 	_inspectors[ObjectType::TRANSFORM] = new TransformInspector();
 	_inspectors[ObjectType::CAMERA] = new CameraInspector();
 	_inspectors[ObjectType::MESH_RENDERER] = new MeshRendererInspector();
+	_inspectors[ObjectType::RIGID_BODY_3D] = new RigidBody3DInspector();
 }
 
 Inspector* InspectorWindow::GetInspector(ObjectType type)

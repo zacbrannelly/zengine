@@ -5,7 +5,9 @@ using namespace std;
 
 Transform::Transform() : Component("Transform", ObjectType::TRANSFORM)
 {
+	RegisterDerivedType(TRANSFORM);
 	_position = glm::vec3(0);
+	_rotation = glm::quat(1.0f, 0, 0, 0);
 	_scale = glm::vec3(1.0f);
 	_rotation = glm::vec3(0);
 	_parent = nullptr;
@@ -63,12 +65,27 @@ const glm::vec3& Transform::GetScale() const
 	return _scale;
 }
 
+void Transform::Rotate(const glm::vec3& rotation)
+{
+	_rotation = glm::quat(glm::radians(rotation)) * _rotation;
+}
+
 void Transform::SetRotation(const glm::vec3& rotation)
+{
+	_rotation = glm::quat(glm::radians(rotation));
+}
+
+glm::vec3 Transform::GetRotation() const
+{
+	return glm::degrees(glm::eulerAngles(_rotation));
+}
+
+void Transform::SetRotationQuaternion(const glm::quat& rotation)
 {
 	_rotation = rotation;
 }
 
-const glm::vec3 & Transform::GetRotation() const
+const glm::quat& Transform::GetRotationQuaternion() const
 {
 	return _rotation;
 }
@@ -78,9 +95,7 @@ const glm::mat4 Transform::GetLocalTransformMatrix() const
 	auto transform = glm::mat4(1.0f);
 
 	transform = glm::translate(transform, _position);
-	transform = glm::rotate(transform, glm::radians(_rotation.x), glm::vec3(1, 0, 0));
-	transform = glm::rotate(transform, glm::radians(_rotation.y), glm::vec3(0, 1, 0));
-	transform = glm::rotate(transform, glm::radians(_rotation.z), glm::vec3(0, 0, 1));
+	transform = transform * glm::toMat4(_rotation);
 	transform = glm::scale(transform, _scale);
 
 	return transform;

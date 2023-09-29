@@ -11,7 +11,7 @@
 					"type": "TRANSFORM",
 					
 					"position": [0, 0, -10],
-					"rotation": [0, 0, 0],
+					"rotation": [0, 0, 0, 1],
 					"scale": [1, 1, 1]
 				},
 				{
@@ -40,7 +40,7 @@
 					"type": "TRANSFORM",
 					
 					"position": [0, 0, 10],
-					"rotation": [0, 0, 0],
+					"rotation": [0, 0, 0, 1],
 					"scale": [20, 20, 1]
 				},
 				{
@@ -60,7 +60,7 @@
 					"type": "TRANSFORM", 
 					
 					"position": [-5, 0, 0],
-					"rotation": [0, 0, 0],
+					"rotation": [0, 0, 0, 1],
 					"scale": [0.3, 0.3, 0.3]
 				},
 				{
@@ -101,7 +101,7 @@
 					"type": "TRANSFORM", 
 					
 					"position": [0, 0, 0],
-					"rotation": [0, 0, 0],
+					"rotation": [0, 0, 0, 1],
 					"scale": [0.5, 0.5, 0.5]
 				},
 				{
