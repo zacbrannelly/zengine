@@ -23,6 +23,7 @@ ZEngine utilizes a variety of libraries, each serving specific purposes to ensur
 * `glm`: Math operations.
 * `stb-image`: Image loading.
 * `nlohmann-json`: For serializing and deserializing JSON data.
+* `Nvidia PhysX 5`: 3D Physics engine.
 
 The project incorporates git submodules for managing some of these libraries. Therefore, initialization of these submodules is necessary.
 
