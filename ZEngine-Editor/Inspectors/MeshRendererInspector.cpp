@@ -36,7 +36,8 @@ void MeshRendererInspector::RenderElement()
 	auto assetManager = AssetManager::GetInstance();
 	auto catalog = assetManager->GetCatalog();
 
-	ImGui::BeginChild("Mesh Renderer", ImVec2(0, 100));
+	auto inspectorHeight = 40 * (_neededMaterials + 2);
+	ImGui::BeginChild("Mesh Renderer", ImVec2(0, inspectorHeight));
 
 	if (ImGui::BeginCombo("Mesh", comp->GetMesh()->GetName().c_str()))
 	{

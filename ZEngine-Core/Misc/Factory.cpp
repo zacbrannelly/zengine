@@ -13,6 +13,8 @@
 #include "../Component/AudioSource.h"
 #include "../Component/RigidBody3D.h"
 #include "../Component/BoxCollider3D.h"
+#include "../Component/SphereCollider3D.h"
+#include "../Component/CapsuleCollider3D.h"
 
 #include "../Scripting/CSharp/CSharpScript.h"
 
@@ -23,6 +25,8 @@
 #include "../Component/Importers/AudioSourceImporter.h"
 #include "../Component/Importers/RigidBody3DImporter.h"
 #include "../Component/Importers/BoxCollider3DImporter.h"
+#include "../Component/Importers/SphereCollider3DImporter.h"
+#include "../Component/Importers/CapsuleCollider3DImporter.h"
 
 #include <iostream>
 
@@ -47,6 +51,8 @@ void Factory::Init()
 	RegisterType(ObjectType::TEST_RENDERER, &TestRenderer::CreateInstance);
 	RegisterType(ObjectType::RIGID_BODY_3D, &RigidBody3D::CreateInstance);
 	RegisterType(ObjectType::BOX_COLLIDER_3D, &BoxCollider3D::CreateInstance);
+	RegisterType(ObjectType::SPHERE_COLLIDER_3D, &SphereCollider3D::CreateInstance);
+	RegisterType(ObjectType::CAPSULE_COLLIDER_3D, &CapsuleCollider3D::CreateInstance);
 
 	// Register copy methods (real-time copying)
 	RegisterCopyType(ObjectType::MAP, &Map::Copy);
@@ -58,6 +64,8 @@ void Factory::Init()
 	RegisterCopyType(ObjectType::AUDIO_SOURCE, &AudioSource::Copy);
 	RegisterCopyType(ObjectType::RIGID_BODY_3D, &RigidBody3D::Copy);
 	RegisterCopyType(ObjectType::BOX_COLLIDER_3D, &BoxCollider3D::Copy);
+	RegisterCopyType(ObjectType::SPHERE_COLLIDER_3D, &SphereCollider3D::Copy);
+	RegisterCopyType(ObjectType::CAPSULE_COLLIDER_3D, &CapsuleCollider3D::Copy);
 
 	// Register importers (from JSON objects)
 	TransformImporter::Init();
@@ -80,6 +88,12 @@ void Factory::Init()
 
 	BoxCollider3DImporter::Init();
 	RegisterTypeImporter(ObjectType::BOX_COLLIDER_3D, BoxCollider3DImporter::Import);
+
+	SphereCollider3DImporter::Init();
+	RegisterTypeImporter(ObjectType::SPHERE_COLLIDER_3D, SphereCollider3DImporter::Import);
+
+	CapsuleCollider3DImporter::Init();
+	RegisterTypeImporter(ObjectType::CAPSULE_COLLIDER_3D, CapsuleCollider3DImporter::Import);
 }
 
 ZObject* Factory::CreateInstance(std::string name, ObjectType type)

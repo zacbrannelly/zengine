@@ -1,0 +1,32 @@
+#include "SphereCollider3DInspector.h"
+#include "../imgui-includes.h"
+
+#include <ZEngine-Core/Component/SphereCollider3D.h>
+
+SphereCollider3DInspector::SphereCollider3DInspector()
+{
+}
+
+void SphereCollider3DInspector::RenderElement()
+{
+	if (GetValue() == nullptr) return;
+	auto collider = static_cast<SphereCollider3D*>(GetValue());
+
+	ImGui::BeginChild("Sphere Collider 3D", ImVec2(0, 40));
+	{
+		auto radius = collider->GetRadius();
+
+		if (ImGui::DragFloat("Radius", &radius))
+		{
+			if (radius != 0)
+			{
+				collider->SetRadius(radius);
+			}
+		}
+	}
+	ImGui::EndChild();
+}
+
+SphereCollider3DInspector::~SphereCollider3DInspector()
+{
+}

@@ -15,23 +15,8 @@ void BoxCollider3D::SetSize(glm::vec3 size)
 {
   _size = size;
 
-  if (GetGeometry() != nullptr) {
-    auto geometry = GetGeometry();
-    delete geometry;
-  }
-
   auto geometry = new physx::PxBoxGeometry(size.x, size.y, size.z);
   SetGeometry(geometry);
-
-  // Try get the parent object.
-  auto parent = GetOwner();
-  if (parent == nullptr) return;
-
-  // Notify the rigid body that the collider has been modified.
-  auto rigidBody = parent->GetComponentByType<RigidBody3D>();
-  if (rigidBody != nullptr) {
-    rigidBody->OnColliderModified();
-  }
 }
 
 glm::vec3 BoxCollider3D::GetSize() const

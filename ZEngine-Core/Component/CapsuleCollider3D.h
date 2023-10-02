@@ -3,14 +3,15 @@
 #include "Collider3D.h"
 #include <glm/glm.hpp>
 
-class BoxCollider3D : public Collider3D
+class CapsuleCollider3D : public Collider3D
 {
 public:
-	BoxCollider3D();
-	~BoxCollider3D();
+	CapsuleCollider3D();
+	~CapsuleCollider3D();
 
-	void SetSize(glm::vec3 size);
-	glm::vec3 GetSize() const;
+  void SetSize(float radius, float height);
+  float GetRadius() const;
+  float GetHeight() const;
 
 	static ZObject* CreateInstance(std::string name, ObjectType type);
 	static ZObject* Copy(std::string name, ZObject* object);
@@ -21,5 +22,6 @@ public:
 	}
 
 private:
-	glm::vec3 _size;
+	float _radius;
+  float _height;
 };
