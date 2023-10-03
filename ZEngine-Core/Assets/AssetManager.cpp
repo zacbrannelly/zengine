@@ -9,6 +9,7 @@
 #include "Objects/ModelAsset.h"
 #include "Objects/CSharpScriptAsset.h"
 #include "Objects/AudioAsset.h"
+#include "../Utilities/Directory.h"
 
 void AssetManager::Init()
 {
@@ -30,6 +31,15 @@ void AssetManager::SetCatalog(AssetCatalog* catalog)
 AssetCatalog* AssetManager::GetCatalog() const
 {
 	return _catalog;
+}
+
+Asset* AssetManager::LoadAsset(std::string path, ObjectType type)
+{
+	// Derive name from the filename without extension
+	auto name = Directory::GetFilename(path);
+	name = name.substr(0, name.find_last_of('.'));
+
+	return LoadAsset(name, path, type);
 }
 
 Asset* AssetManager::LoadAsset(std::string name, std::string path, ObjectType type)

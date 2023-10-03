@@ -60,6 +60,7 @@ set (SOURCE_FILES
   "Dialogs/ProjectBrowserDialog.cpp"
   "Dialogs/BuildStatusDialog.cpp"
   "Dialogs/CreateProjectDialog.cpp"
+  "Popups/AddComponentPopup.cpp"
   "Inspectors/TransformInspector.cpp"
   "Inspectors/CameraInspector.cpp"
   "Inspectors/MeshRendererInspector.cpp"

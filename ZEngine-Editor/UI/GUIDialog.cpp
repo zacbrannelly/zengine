@@ -37,7 +37,7 @@ void GUIDialog::Close()
 void GUIDialog::RenderElement()
 {
 	// Show if requested
-	if (_isVisible)
+	if (_isVisible && _isModal)
 	{
 		Show();
 	}
@@ -46,7 +46,9 @@ void GUIDialog::RenderElement()
 
 	bool open = true;
 	bool* pOpen = IsCloseDisabled() ? nullptr : &open;
-	bool begin = !_isModal ? ImGui::BeginPopup(GetTitle().c_str(), GetFlags()) : ImGui::BeginPopupModal(GetTitle().c_str(), pOpen, GetFlags());
+	bool begin = !_isModal
+		? ImGui::BeginPopup(GetTitle().c_str(), GetFlags()) 
+		: ImGui::BeginPopupModal(GetTitle().c_str(), pOpen, GetFlags());
 
 	if (begin)
 	{
@@ -64,6 +66,7 @@ void GUIDialog::RenderElement()
 
 	if (!open && AllowClose())
 	{
+		_isVisible = false;
 		SetResult(DIALOG_RESULT_CLOSE);
 	}
 }

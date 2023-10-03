@@ -3,6 +3,8 @@
 #include <ZEngine-Core/Component/Transform.h>
 #include "../imgui-includes.h"
 
+#include "../Popups/AddComponentPopup.h"
+
 #include "../Inspectors/TransformInspector.h"
 #include "../Inspectors/CameraInspector.h"
 #include "../Inspectors/MeshRendererInspector.h"
@@ -16,6 +18,7 @@
 InspectorWindow::InspectorWindow(Editor* context) : GUIWindow("Inspector Window", 400, 1000, false)
 {
 	_context = context;
+	_addComponentPopup = new AddComponentPopup(context);
 	
 	// Register the inspectors for components here
 	_inspectors[TRANSFORM] = new TransformInspector();
@@ -46,38 +49,53 @@ void InspectorWindow::RenderInWindow()
 		ImGui::Separator();
 		
 		auto deleteButtonIdx = 0;
+		auto windowWidth = ImGui::GetWindowContentRegionWidth();
 		for (auto component : entity->GetAllComponents())
 		{
 			auto inspectorElement = GetInspector(component->GetType());
 
+			// Component label
 			ImGui::TextColored(ImVec4(1, 1, 1, 1), component->GetName().c_str());
-			ImGui::SameLine();
 
-			auto windowWidth = ImGui::GetWindowContentRegionWidth();
-			auto removed = false;
-			ImGui::SetCursorPosX(windowWidth - 28);
-			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2, 2));
-			std::string deleteButtonName = std::string(ICON_FA_TRASH) + "###" + std::to_string(deleteButtonIdx++);
-			if (ImGui::Button(deleteButtonName.c_str(), ImVec2(28, 28))) 
+			// Delete component Icon Button
+			if (!component->IsType<Transform>())
 			{
-				entity->RemoveComponent(component);
-				inspectorElement = nullptr;
-				removed = true;
+				ImGui::SameLine();
+
+				ImGui::SetCursorPosX(windowWidth - 28);
+				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2, 2));
+				std::string deleteButtonName = std::string(ICON_FA_TRASH) + "###" + std::to_string(deleteButtonIdx++);
+				if (ImGui::Button(deleteButtonName.c_str(), ImVec2(28, 28))) 
+				{
+					entity->RemoveComponent(component);
+					inspectorElement = nullptr;
+				}
+				ImGui::PopStyleVar();
 			}
-			ImGui::PopStyleVar();
 
 			if (inspectorElement != nullptr)
 			{
 				inspectorElement->Inspect(component);
 				inspectorElement->RenderElement();
 			}
-			else if (!removed)
+			else
 			{
 				ImGui::Text("Can't inspect this component yet!");
 			}
 
 			ImGui::Separator();
 		}
+
+		// Add Component Button
+		auto addButtonText = ICON_FA_PLUS "  Add Component";
+		auto addButtonWidth = ImGui::CalcTextSize(addButtonText).x;
+		ImGui::SetCursorPosX(windowWidth / 2 - addButtonWidth / 2);
+		if(ImGui::Button(addButtonText))
+		{
+			_addComponentPopup->Show();
+		}
+
+		_addComponentPopup->RenderElement();
 	}
 }
 

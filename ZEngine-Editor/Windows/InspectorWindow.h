@@ -6,6 +6,7 @@
 #include <map>
 
 class Editor;
+class AddComponentPopup;
 
 class InspectorWindow : public GUIWindow
 {
@@ -20,6 +21,7 @@ private:
 	Inspector* GetInspector(ObjectType type);
 
 	Editor* _context;
+	AddComponentPopup* _addComponentPopup;
 	std::map<ObjectType, Inspector*> _inspectors;
 };
 

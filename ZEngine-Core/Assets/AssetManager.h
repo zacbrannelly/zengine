@@ -15,6 +15,7 @@ public:
 	void SetCatalog(AssetCatalog* catalog);
 	AssetCatalog* GetCatalog() const;
 
+	Asset* LoadAsset(std::string path, ObjectType type);
 	Asset* LoadAsset(std::string name, std::string path, ObjectType type);
 
 	Asset* FindAsset(std::string name);
