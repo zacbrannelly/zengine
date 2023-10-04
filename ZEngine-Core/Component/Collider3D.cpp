@@ -34,15 +34,16 @@ void Collider3D::OnGeometryChanged()
   if (parent == nullptr) return;
 
   // Try find a dynamic rigid body on the parent object.
+  auto isDynamicCollider = IsDerivedType(DYNAMIC_COLLIDER_3D);
   auto dynamicRigidBody = parent->GetComponentByType<RigidBody3D>();
-  if (dynamicRigidBody != nullptr) 
+  if (dynamicRigidBody != nullptr && isDynamicCollider) 
   {
     // Notify the rigid body that the collider has been modified.
     dynamicRigidBody->OnColliderModified();
   }
   else
   {
-    // If the parent object doesn't have a rigid body, create a static body.
+    // If the parent object doesn't have a rigid body or the collider is static, create a static body.
     auto physics = Physics3DSystem::GetInstance();
 
     // Release any previously created bodies from the scene.
@@ -86,7 +87,8 @@ void Collider3D::OnDestroy()
 {
   // Notify the rigid body that the collider has been removed.
   auto rigidBody = GetDynamicRigidBody();
-  if (rigidBody != nullptr)
+  auto isDynamicCollider = IsDerivedType(DYNAMIC_COLLIDER_3D);
+  if (rigidBody != nullptr && isDynamicCollider)
   {
     rigidBody->OnColliderModified();
   }

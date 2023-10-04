@@ -39,6 +39,7 @@ set(SOURCE_FILES
     "Component/Transform.cpp"
     "Component/RigidBody3D.cpp"
     "Component/Collider3D.cpp"
+    "Component/DynamicCollider3D.cpp"
     "Component/BoxCollider3D.cpp"
     "Component/SphereCollider3D.cpp"
     "Component/CapsuleCollider3D.cpp"

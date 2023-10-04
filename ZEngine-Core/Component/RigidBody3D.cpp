@@ -2,7 +2,7 @@
 #include "../Physics/Physics3DSystem.h"
 #include "../Map/Objects/Entity.h"
 #include "Transform.h"
-#include "Collider3D.h"
+#include "DynamicCollider3D.h"
 
 #define NDEBUG
 #include <PxPhysicsAPI.h>
@@ -41,7 +41,7 @@ void RigidBody3D::Init()
 
   // Fetch collider from the parent object.
   auto entity = GetOwner();
-  auto collider = entity->GetComponentByType<Collider3D>();
+  auto collider = entity->GetComponentByType<DynamicCollider3D>();
 
   if (collider == nullptr) {
     cout << "RigidBody3D::Init() - No collider found on parent object." << endl;
@@ -86,7 +86,7 @@ void RigidBody3D::OnColliderModified()
   PxShape* shapes[1];
   _rigidBody->getShapes(shapes, 1);
 
-  auto collider = GetOwner()->GetComponentByType<Collider3D>();
+  auto collider = GetOwner()->GetComponentByType<DynamicCollider3D>();
   if (collider != nullptr)
   {
     auto geometry = collider->GetGeometry();
@@ -99,7 +99,7 @@ void RigidBody3D::OnColliderModified()
   else
   {
     cout << "RigidBody3D::OnColliderModified() - No collider found on parent object." << endl;
-    
+
     // Remove the rigid body from the scene.
     OnDestroy();
   }

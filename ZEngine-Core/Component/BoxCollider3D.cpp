@@ -5,7 +5,7 @@
 #define NDEBUG
 #include <PxPhysicsAPI.h>
 
-BoxCollider3D::BoxCollider3D() : Collider3D("Box Collider 3D", ObjectType::BOX_COLLIDER_3D), _size(1.0f)
+BoxCollider3D::BoxCollider3D() : DynamicCollider3D("Box Collider 3D", ObjectType::BOX_COLLIDER_3D), _size(1.0f)
 {
   RegisterDerivedType(BOX_COLLIDER_3D);
   SetSize(_size);

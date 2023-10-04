@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Collider3D.h"
+#include "DynamicCollider3D.h"
 #include <glm/glm.hpp>
 
-class SphereCollider3D : public Collider3D
+class SphereCollider3D : public DynamicCollider3D
 {
 public:
 	SphereCollider3D();
