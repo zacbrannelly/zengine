@@ -40,6 +40,7 @@ void AddComponentPopup::RenderInWindow()
 
   if (ImGui::BeginListBox("###Components", ImVec2(-FLT_MIN, 0)))
   {
+    // Render C++ Components
     for (auto component : _components)
     {
       if (_searchField->GetText().empty() || component.name.find(_searchField->GetText()) != std::string::npos)
@@ -58,6 +59,7 @@ void AddComponentPopup::RenderInWindow()
       }
     }
 
+    // Render C# Script Components
     auto assetManager = AssetManager::GetInstance();
     auto scriptCatalogEntries = assetManager->GetCatalog()->GetAssetsByType(CSHARP_SCRIPT_ASSET);
 

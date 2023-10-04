@@ -41,26 +41,13 @@ namespace ZEngine.Core.PluginManager
       var instance = UnmanagedHelpers.UnwrapInstance(managedInstancePtr);
       if (instance == null) throw new Exception("Instance is null");
 
-      ThrowIfNotSubclassOf("CSharpScriptComponent", instance.GetType());
+      UnmanagedHelpers.ThrowIfNotSubclassOf("CSharpScriptComponent", instance.GetType());
 
       var type = instance.GetType();
       var methodInfo = type.GetMethod("SetCPtr", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
       if (methodInfo == null) throw new Exception("SetCPtr method not found");
       methodInfo.Invoke(instance, new object[] { unmanagedInstancePtr, false });
-    }
-
-    public static bool ThrowIfNotSubclassOf(string baseTypeName, Type derivedType)
-    {
-        // If the derivedType is null, then it cannot be a subclass of anything
-        if (derivedType == null) throw new Exception("Instance is not a CSharpScriptComponent");
-        
-        // Check if the derivedType is a subclass of the baseType
-        if (derivedType.Name == baseTypeName) return true;
-
-        // If not, recursively check if any of the base types of the derivedType
-        // is a subclass of the baseType
-        return ThrowIfNotSubclassOf(baseTypeName, derivedType.BaseType);
     }
 
     [UnmanagedCallersOnly]
