@@ -87,13 +87,22 @@ void RigidBody3D::OnColliderModified()
   _rigidBody->getShapes(shapes, 1);
 
   auto collider = GetOwner()->GetComponentByType<Collider3D>();
-  auto geometry = collider->GetGeometry();
+  if (collider != nullptr)
+  {
+    auto geometry = collider->GetGeometry();
+    shapes[0]->setGeometry(*geometry);
 
-  shapes[0]->setGeometry(*geometry);
-
-  // Calculate mass and inertia based on the shape and density.
-  // TODO: Make this optional & configurable.
-  PxRigidBodyExt::updateMassAndInertia(*_rigidBody, 10.0f);
+    // Calculate mass and inertia based on the shape and density.
+    // TODO: Make this optional & configurable.
+    PxRigidBodyExt::updateMassAndInertia(*_rigidBody, 10.0f);
+  }
+  else
+  {
+    cout << "RigidBody3D::OnColliderModified() - No collider found on parent object." << endl;
+    
+    // Remove the rigid body from the scene.
+    OnDestroy();
+  }
 }
 
 void RigidBody3D::SetMass(float mass)

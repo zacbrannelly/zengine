@@ -5,10 +5,10 @@
 #define NDEBUG
 #include <PxPhysicsAPI.h>
 
-CapsuleCollider3D::CapsuleCollider3D() : Collider3D("Capsule Collider 3D", ObjectType::CAPSULE_COLLIDER_3D)
+CapsuleCollider3D::CapsuleCollider3D() : Collider3D("Capsule Collider 3D", ObjectType::CAPSULE_COLLIDER_3D), _radius(1), _height(1)
 {
 	RegisterDerivedType(CAPSULE_COLLIDER_3D);
-	SetSize(1, 1);
+	SetSize(_radius, _height);
 }
 
 void CapsuleCollider3D::SetSize(float radius, float height)

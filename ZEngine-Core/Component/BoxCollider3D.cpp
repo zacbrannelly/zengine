@@ -5,10 +5,10 @@
 #define NDEBUG
 #include <PxPhysicsAPI.h>
 
-BoxCollider3D::BoxCollider3D() : Collider3D("Box Collider 3D", ObjectType::BOX_COLLIDER_3D)
+BoxCollider3D::BoxCollider3D() : Collider3D("Box Collider 3D", ObjectType::BOX_COLLIDER_3D), _size(1.0f)
 {
   RegisterDerivedType(BOX_COLLIDER_3D);
-  SetSize(glm::vec3(1.0f));
+  SetSize(_size);
 }
 
 void BoxCollider3D::SetSize(glm::vec3 size)

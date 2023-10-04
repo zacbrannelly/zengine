@@ -136,8 +136,12 @@ Transform* Entity::GetTransform() const
 
 Entity::~Entity()
 {
-	for (auto component : _components) {
+	for (auto component : _components)
+	{
 		component->OnDestroy();
+	}
+	for (auto component : _components)
+	{
 		delete component;
 	}
 }

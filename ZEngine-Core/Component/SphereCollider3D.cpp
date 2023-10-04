@@ -5,10 +5,10 @@
 #define NDEBUG
 #include <PxPhysicsAPI.h>
 
-SphereCollider3D::SphereCollider3D() : Collider3D("Sphere Collider 3D", ObjectType::SPHERE_COLLIDER_3D)
+SphereCollider3D::SphereCollider3D() : Collider3D("Sphere Collider 3D", ObjectType::SPHERE_COLLIDER_3D), _radius(1.0f)
 {
 	RegisterDerivedType(SPHERE_COLLIDER_3D);
-	SetRadius(1.0f);
+	SetRadius(_radius);
 }
 
 void SphereCollider3D::SetRadius(float radius)

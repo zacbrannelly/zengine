@@ -1,13 +1,20 @@
 #include "Collider3D.h"
 #include "RigidBody3D.h"
+#include "Transform.h"
 #include "../Map/Objects/Entity.h"
+#include "../Physics/Physics3DSystem.h"
 
 #define NDEBUG
 #include <PxPhysicsAPI.h>
 
-Collider3D::Collider3D(std::string name, ObjectType objectType) : Component(name, objectType), _geometry(nullptr)
+Collider3D::Collider3D(std::string name, ObjectType objectType) : Component(name, objectType), _geometry(nullptr), _staticBody(nullptr)
 {
   RegisterDerivedType(COLLIDER_3D);
+}
+
+void Collider3D::Init()
+{
+  OnGeometryChanged();
 }
 
 void Collider3D::SetGeometry(physx::PxGeometry* geometry)
@@ -17,16 +24,57 @@ void Collider3D::SetGeometry(physx::PxGeometry* geometry)
     delete geometry;
   }
   _geometry = geometry;
+  OnGeometryChanged();
+}
 
+void Collider3D::OnGeometryChanged()
+{
   // Try get the parent object.
   auto parent = GetOwner();
   if (parent == nullptr) return;
 
-  // Notify the rigid body that the collider has been modified.
-  auto rigidBody = parent->GetComponentByType<RigidBody3D>();
-  if (rigidBody != nullptr) {
-    rigidBody->OnColliderModified();
+  // Try find a dynamic rigid body on the parent object.
+  auto dynamicRigidBody = parent->GetComponentByType<RigidBody3D>();
+  if (dynamicRigidBody != nullptr) 
+  {
+    // Notify the rigid body that the collider has been modified.
+    dynamicRigidBody->OnColliderModified();
   }
+  else
+  {
+    // If the parent object doesn't have a rigid body, create a static body.
+    auto physics = Physics3DSystem::GetInstance();
+
+    // Release any previously created bodies from the scene.
+    if (_staticBody != nullptr) {
+      physics->GetScene()->removeActor(*_staticBody);
+      PX_RELEASE(_staticBody);
+    }
+
+    // Create PxTransform from existing transform.
+    auto transform = parent->GetTransform();
+    auto position = transform->GetPosition();
+    physx::PxTransform physxTransform(physx::PxVec3(position.x, position.y, position.z));
+    _staticBody = physics->GetPhysics()->createRigidStatic(physxTransform);
+
+    // Create shape and attach to actor.
+    auto shape = physics->GetPhysics()->createShape(*_geometry, *physics->GetMaterial(), true);
+    _staticBody->attachShape(*shape);
+    shape->release();
+
+    // Add to scene.
+    physics->GetScene()->addActor(*_staticBody);
+  }
+}
+
+RigidBody3D* Collider3D::GetDynamicRigidBody() const
+{
+  // Try get the parent object.
+  auto parent = GetOwner();
+  if (parent == nullptr) return nullptr;
+
+  // Try find a dynamic rigid body on the parent object.
+  return parent->GetComponentByType<RigidBody3D>();
 }
 
 physx::PxGeometry* Collider3D::GetGeometry() const
@@ -34,7 +82,29 @@ physx::PxGeometry* Collider3D::GetGeometry() const
   return _geometry;
 }
 
+void Collider3D::OnDestroy()
+{
+  // Notify the rigid body that the collider has been removed.
+  auto rigidBody = GetDynamicRigidBody();
+  if (rigidBody != nullptr)
+  {
+    rigidBody->OnColliderModified();
+  }
+
+  // Release any previously created static bodies from the scene.
+  if (_staticBody != nullptr)
+  {
+    auto physics = Physics3DSystem::GetInstance();
+    physics->GetScene()->removeActor(*_staticBody);
+    PX_RELEASE(_staticBody);
+  }
+}
+
 Collider3D::~Collider3D()
 {
-  if (_geometry != nullptr) delete _geometry;
+  if (_geometry != nullptr)
+  {
+    delete _geometry;
+    _geometry = nullptr;
+  }
 }
