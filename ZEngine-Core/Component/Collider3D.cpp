@@ -55,7 +55,11 @@ void Collider3D::OnGeometryChanged()
     // Create PxTransform from existing transform.
     auto transform = parent->GetTransform();
     auto position = transform->GetPosition();
-    physx::PxTransform physxTransform(physx::PxVec3(position.x, position.y, position.z));
+    auto quat = transform->GetRotationQuaternion();
+    physx::PxTransform physxTransform(
+      physx::PxVec3(position.x, position.y, position.z),
+      physx::PxQuat(quat.x, quat.y, quat.z, quat.w)
+    );
     _staticBody = physics->GetPhysics()->createRigidStatic(physxTransform);
 
     // Create shape and attach to actor.
