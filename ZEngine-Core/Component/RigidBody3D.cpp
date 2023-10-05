@@ -86,11 +86,19 @@ void RigidBody3D::OnColliderModified()
   PxShape* shapes[1];
   _rigidBody->getShapes(shapes, 1);
 
+  auto physics = Physics3DSystem::GetInstance();
+  auto sdk = physics->GetPhysics();
+
   auto collider = GetOwner()->GetComponentByType<DynamicCollider3D>();
   if (collider != nullptr)
   {
+    // Detach the previous shape from the actor.
+    _rigidBody->detachShape(*shapes[0]);
+    
+    // Create new shape and attach to actor.
     auto geometry = collider->GetGeometry();
-    shapes[0]->setGeometry(*geometry);
+    auto shape = sdk->createShape(*geometry, *physics->GetMaterial(), true);
+    _rigidBody->attachShape(*shape);
 
     // Calculate mass and inertia based on the shape and density.
     // TODO: Make this optional & configurable.
