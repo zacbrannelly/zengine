@@ -83,7 +83,6 @@ void SceneGraphWindow::RenderInWindow()
 				if (ImGui::MenuItem("Plane"))
 				{
 					// TODO: Create pop-up dialog for setting width and height
-					// TODO: Gnerate plane and create object for plane
 				}
 
 				ImGui::EndMenu();
@@ -118,7 +117,8 @@ void SceneGraphWindow::RenderInWindow()
 
 			if (ImGui::MenuItem("Empty Entity"))
 			{
-				// TODO: Create empty entity 
+				auto newEntity = Factory::CreateInstance<Entity>("New Entity", ENTITY);
+				map->Add(newEntity);
 			}
 
 			if (ImGui::MenuItem("Camera"))
