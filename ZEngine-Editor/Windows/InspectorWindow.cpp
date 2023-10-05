@@ -44,8 +44,7 @@ void InspectorWindow::RenderInWindow()
 	if (_context->GetSelectedEntity() != nullptr)
 	{
 		auto entity = _context->GetSelectedEntity();
-
-		ImGui::Text(("Selected Entity: " + entity->GetName()).c_str());
+		ImGui::Text(entity->GetName().c_str());
 		ImGui::Separator();
 		
 		auto deleteButtonIdx = 0;
@@ -77,10 +76,6 @@ void InspectorWindow::RenderInWindow()
 			{
 				inspectorElement->Inspect(component);
 				inspectorElement->RenderElement();
-			}
-			else
-			{
-				ImGui::Text("Can't inspect this component yet!");
 			}
 
 			ImGui::Separator();

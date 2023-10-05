@@ -16,13 +16,14 @@ AddComponentPopup::AddComponentPopup(Editor* editor) : GUIDialog("Add Component"
 {
   _editor = editor;
   _searchField = new GUITextField("Search");
-  RegisterComponent({ "Audio Source",        "Audio Source component",        AUDIO_SOURCE });
-  RegisterComponent({ "Camera",              "Camera component",              CAMERA });
-  RegisterComponent({ "Mesh Renderer",       "Mesh Renderer component",       MESH_RENDERER });
-  RegisterComponent({ "Rigid Body 3D",       "Rigid Body 3D component",       RIGID_BODY_3D });
-  RegisterComponent({ "Box Collider 3D",     "Box Collider 3D component",     BOX_COLLIDER_3D });
-  RegisterComponent({ "Sphere Collider 3D",  "Sphere Collider 3D component",  SPHERE_COLLIDER_3D });
-  RegisterComponent({ "Capsule Collider 3D", "Capsule Collider 3D component", CAPSULE_COLLIDER_3D });
+  RegisterComponent({ "Audio Source",        "Audio Source component",                    AUDIO_SOURCE });
+  RegisterComponent({ "Camera",              "Camera component",                          CAMERA });
+  RegisterComponent({ "Mesh Renderer",       "Mesh Renderer component",                   MESH_RENDERER });
+  RegisterComponent({ "Rigid Body 3D",       "Rigid Body 3D component",                   RIGID_BODY_3D });
+  RegisterComponent({ "Box Collider 3D",     "Box Collider 3D component",                 BOX_COLLIDER_3D });
+  RegisterComponent({ "Sphere Collider 3D",  "Sphere Collider 3D component",              SPHERE_COLLIDER_3D });
+  RegisterComponent({ "Capsule Collider 3D", "Capsule Collider 3D component",             CAPSULE_COLLIDER_3D });
+  RegisterComponent({ "Plane Collider 3D",   "Plane Collider 3D (Static-only) component", PLANE_COLLIDER_3D });
 }
 
 void AddComponentPopup::RegisterComponent(ComponentInfo component)

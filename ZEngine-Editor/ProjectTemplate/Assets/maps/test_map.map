@@ -90,9 +90,10 @@
 					"type": "RIGID_BODY_3D"
 				},
 				{
-					"name": "BoxCollider3D",
-					"type": "BOX_COLLIDER_3D",
-					"size": [0.3, 0.3, 0.3]
+					"name": "CapsuleCollider3D",
+					"type": "CAPSULE_COLLIDER_3D",
+					"radius": 0.3,
+					"height": 0.3
 				}
 			]
 		},
@@ -130,6 +131,24 @@
 					"name": "AudioSource",
 					"type": "AUDIO_SOURCE",
 					"audio": "00000000-0000-0000-0000-000000000012" 
+				}
+			]
+		},
+		{
+			"name": "Floor",
+			"components":
+			[
+				{
+					"name": "Transform",
+					"type": "TRANSFORM", 
+					
+					"position": [0, -5, 0],
+					"rotation": [0, 0, 0.7071068, 0.7071068],
+					"scale": [1, 1, 1]
+				},
+				{
+					"name": "PlaneCollider3D",
+					"type": "PLANE_COLLIDER_3D"
 				}
 			]
 		}

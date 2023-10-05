@@ -31,7 +31,8 @@ enum ObjectType
 	DYNAMIC_COLLIDER_3D,
 	BOX_COLLIDER_3D,
 	SPHERE_COLLIDER_3D,
-	CAPSULE_COLLIDER_3D
+	CAPSULE_COLLIDER_3D,
+	PLANE_COLLIDER_3D
 };
 
 std::string ObjectTypeToString(ObjectType type);
