@@ -54,17 +54,6 @@ void Physics3DSystem::PushScene()
 
   auto scene = _physics->createScene(sceneDesc);
   _sceneStack.push(scene);
-
-  // Create basic ground plane.
-  // TODO: Allow attaching a ground plane to objects in the editor.
-  PxRigidStatic* groundPlane = PxCreatePlane(*_physics, PxPlane(0, 1, 0, 4), *_material);
-	scene->addActor(*groundPlane);
-
-  groundPlane = PxCreatePlane(*_physics, PxPlane(1, 0, 0, 4), *_material);
-	scene->addActor(*groundPlane);
-
-  groundPlane = PxCreatePlane(*_physics, PxPlane(-1, 0, 0, 4), *_material);
-	scene->addActor(*groundPlane);
 }
 
 void Physics3DSystem::PopScene()

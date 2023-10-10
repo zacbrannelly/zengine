@@ -90,10 +90,9 @@
 					"type": "RIGID_BODY_3D"
 				},
 				{
-					"name": "CapsuleCollider3D",
-					"type": "CAPSULE_COLLIDER_3D",
-					"radius": 0.3,
-					"height": 0.3
+					"name": "BoxCollider3D",
+					"type": "BOX_COLLIDER_3D",
+					"size": [0.3, 0.3, 0.3]
 				}
 			]
 		},
@@ -144,6 +143,42 @@
 					
 					"position": [0, -5, 0],
 					"rotation": [0, 0, 0.7071068, 0.7071068],
+					"scale": [1, 1, 1]
+				},
+				{
+					"name": "PlaneCollider3D",
+					"type": "PLANE_COLLIDER_3D"
+				}
+			]
+		},
+		{
+			"name": "Left Wall",
+			"components":
+			[
+				{
+					"name": "Transform",
+					"type": "TRANSFORM", 
+					
+					"position": [-8.88, 0, 0],
+					"rotation": [0, 0, 0, 1],
+					"scale": [1, 1, 1]
+				},
+				{
+					"name": "PlaneCollider3D",
+					"type": "PLANE_COLLIDER_3D"
+				}
+			]
+		},
+		{
+			"name": "Right Wall",
+			"components":
+			[
+				{
+					"name": "Transform",
+					"type": "TRANSFORM", 
+					
+					"position": [8.88, 0, 0],
+					"rotation": [0, 0, -1, 0],
 					"scale": [1, 1, 1]
 				},
 				{
