@@ -34,4 +34,8 @@ target_include_directories(ZEngine-Player PRIVATE ${GLFW_INCLUDE_DIRS})
 ################################################################################
 # Linking
 ################################################################################
-target_link_libraries (ZEngine-Player ZEngine-Core)
+target_link_libraries (ZEngine-Player 
+  PRIVATE ZEngine-Core
+  PRIVATE glfw
+  PRIVATE SDL2_mixer::SDL2_mixer
+)

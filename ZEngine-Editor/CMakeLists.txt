@@ -130,6 +130,8 @@ target_link_libraries (ZEngine-Editor
   PRIVATE glslang
   PRIVATE spirv-cross
   PRIVATE spirv-tools
+  PRIVATE glfw
+  PRIVATE SDL2_mixer::SDL2_mixer
 )
 
 ################################################################################
