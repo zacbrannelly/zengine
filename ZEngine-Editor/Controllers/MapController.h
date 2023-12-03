@@ -39,5 +39,6 @@ private:
   PlayState _playState;
   std::future<bool> _buildFuture;
 	std::mutex _updateMapLock;
+  bool _playWhenPossible;
   Physics3DSystem* _physics;
 };

@@ -10,13 +10,20 @@
 #include "../Editor.h"
 #include "../Project/Project.h"
 
-MapController::MapController(Editor* editor) : _editor(editor), _originalMap(nullptr), _previewMap(nullptr), _playState(STOPPED)
+MapController::MapController(Editor* editor) : _editor(editor), _originalMap(nullptr), _previewMap(nullptr), _playState(STOPPED), _playWhenPossible(false)
 {
   _physics = Physics3DSystem::GetInstance();
 }
 
 void MapController::Update()
 {
+	// "StartPlaying" only works on the main thread, so we use a flag to start playing when we can.
+	if (_playWhenPossible)
+	{
+		_playWhenPossible = false;
+		StartPlaying();
+	}
+
 	// Update the map's game state if we're playing and we're not in the process of changing the map.
 	if (_playState == PLAYING && _updateMapLock.try_lock())
 	{
@@ -39,9 +46,12 @@ void MapController::Play()
 	// Build the project scripts and then start playing.
 	_buildFuture = _editor->GetProject()->BuildAndLoadAsync();
 	_buildFuture = then(_buildFuture, [this](bool result) {
-		if (result) {
-			StartPlaying();
+		if (result) 
+		{
+			// Trigger playing when the build is done.
+			this->_playWhenPossible = true;
 		}
+
 		// TODO: Handle build failure in the UI.
 		return result;
 	});
