@@ -264,9 +264,9 @@ add_custom_command(TARGET ZEngine-Core-Interop POST_BUILD
 # Build & publish the interop project using custom target
 add_custom_target(ZEngine-Interop-Dotnet ALL
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${ZENGINE_INTEROP_PROJECT_PATH} ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}
-    COMMAND ${DOTNET_EXECUTABLE} publish ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}/ZEngine.Interop.csproj
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/libZEngine-Core-Interop.dylib ${CMAKE_CURRENT_BINARY_DIR}/lib/ZEngine.Interop/libZEngine-Core-Interop.dylib
-    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_BINARY_DIR}/libZEngine-Core-Interop.dylib
+    COMMAND ${CMAKE_COMMAND} -E env --unset=TARGETNAME ${DOTNET_EXECUTABLE} publish ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}/ZEngine.Interop.csproj
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ZEngine-Core-Interop> ${CMAKE_CURRENT_BINARY_DIR}/lib/ZEngine.Interop/libZEngine-Core-Interop.dylib
+    COMMAND ${CMAKE_COMMAND} -E remove $<TARGET_FILE:ZEngine-Core-Interop>
     DEPENDS ZEngine-Core-Interop
 )
 
@@ -293,7 +293,7 @@ add_custom_command(TARGET ZEngine-Core-Interop POST_BUILD
 # Build & publish the project using custom target
 add_custom_target(ZEngine-PluginManager-Dotnet ALL
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${ZENGINE_PLUGIN_MANAGER_PROJECT_PATH} ${ZENGINE_PLUGIN_MANAGER_PROJECT_BUILD_PATH}
-    COMMAND ${DOTNET_EXECUTABLE} publish ${ZENGINE_PLUGIN_MANAGER_PROJECT_BUILD_PATH}/ZEngine.PluginManager.csproj
+    COMMAND ${CMAKE_COMMAND} -E env --unset=TARGETNAME ${DOTNET_EXECUTABLE} publish ${ZENGINE_PLUGIN_MANAGER_PROJECT_BUILD_PATH}/ZEngine.PluginManager.csproj
     DEPENDS ZEngine-Core-Interop
 )
 

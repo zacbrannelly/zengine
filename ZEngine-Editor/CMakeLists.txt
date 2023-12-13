@@ -83,8 +83,8 @@ add_dependencies(ZEngine-Editor ZEngine-Core)
 
 # Copy the imgui window layout and settings to the build directory
 add_custom_command(TARGET ZEngine-Editor POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/imgui.ini ${CMAKE_CURRENT_BINARY_DIR}/imgui.ini
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/layout.ini ${CMAKE_CURRENT_BINARY_DIR}/layout.ini
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/imgui.ini $<TARGET_FILE_DIR:ZEngine-Editor>/imgui.ini
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/layout.ini $<TARGET_FILE_DIR:ZEngine-Editor>/layout.ini
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/imgui.ini
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/layout.ini
   COMMENT "Copying imgui.ini and layout.ini to build directory"
@@ -93,7 +93,7 @@ add_custom_command(TARGET ZEngine-Editor POST_BUILD
 
 # Copy the project templates to the build directory
 add_custom_command(TARGET ZEngine-Editor POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Builders/templates ${CMAKE_CURRENT_BINARY_DIR}/templates
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Builders/templates $<TARGET_FILE_DIR:ZEngine-Editor>/templates
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Project/BaseProject
   COMMENT "Copying BaseProject template to build directory"
   VERBATIM
@@ -138,9 +138,13 @@ target_link_libraries (ZEngine-Editor
 # Copy dependencies from ZEngine-Core to build directory
 ################################################################################
 
-add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/lib
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/lib/ZEngine.PluginManager ${CMAKE_CURRENT_BINARY_DIR}/lib/ZEngine.PluginManager
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/lib/ZEngine.Interop ${CMAKE_CURRENT_BINARY_DIR}/lib/ZEngine.Interop
+add_dependencies(ZEngine-Editor ZEngine-Core-Interop)
+add_dependencies(ZEngine-Editor ZEngine-PluginManager-Dotnet)
+add_dependencies(ZEngine-Editor ZEngine-Interop-Dotnet)
+
+add_custom_command(TARGET ZEngine-Editor POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/lib/ZEngine.PluginManager $<TARGET_FILE_DIR:ZEngine-Editor>/lib/ZEngine.PluginManager
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/lib/ZEngine.Interop $<TARGET_FILE_DIR:ZEngine-Editor>/lib/ZEngine.Interop
     DEPENDS
       ZEngine-PluginManager-Dotnet
       ZEngine-Interop-Dotnet
@@ -148,27 +152,15 @@ add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/lib
       ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/lib/ZEngine.Interop
     COMMENT "Copying ZEngine.PluginManager and ZEngine.Interop to build directory"
     VERBATIM
-    BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/lib
 )
 
-add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/libZEngine-Core.dylib
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/libZEngine-Core.dylib ${CMAKE_CURRENT_BINARY_DIR}/libZEngine-Core.dylib
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/ZEngine-Core.runtimeconfig.json ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Core.runtimeconfig.json
+add_custom_command(TARGET ZEngine-Editor POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ZEngine-Core> $<TARGET_FILE_DIR:ZEngine-Editor>/libZEngine-Core.dylib
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/ZEngine-Core.runtimeconfig.json $<TARGET_FILE_DIR:ZEngine-Editor>/ZEngine-Core.runtimeconfig.json
     DEPENDS
       ZEngine-Core
       ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/libZEngine-Core.dylib
       ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/ZEngine-Core.runtimeconfig.json
     COMMENT "Copying ZEngine-Core library and C# runtime config to build directory"
     VERBATIM
-    BYPRODUCTS 
-      ${CMAKE_CURRENT_BINARY_DIR}/libZEngine-Core.dylib
-      ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Core.runtimeconfig.json
 )
-
-add_custom_target (ZEngine-Editor-Dependencies ALL
-  DEPENDS
-    ${CMAKE_CURRENT_BINARY_DIR}/lib
-    ${CMAKE_CURRENT_BINARY_DIR}/libZEngine-Core.dylib
-)
-
-add_dependencies(ZEngine-Editor ZEngine-Editor-Dependencies)
