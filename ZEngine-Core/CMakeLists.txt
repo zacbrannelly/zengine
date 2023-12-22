@@ -68,6 +68,8 @@ set(SOURCE_FILES
     "Rendering/Shader.cpp"
     "Rendering/Texture2D.cpp"
     "Rendering/VertexBuffer.cpp"
+    "Rendering/StandardShaders.cpp"
+    "Rendering/MaterialFactory.cpp"
     "Scripting/CSharp/CSharpScript.cpp"
     "Scripting/CSharp/CSharpScriptSystem.cpp"
     "Scripting/CSharp/AssemblyLoader.cpp"

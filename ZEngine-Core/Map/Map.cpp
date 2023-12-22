@@ -220,6 +220,19 @@ void Map::RenderWorld(int viewId)
 	}
 }
 
+void Map::RenderGizmos(int viewId)
+{
+    for (int i = 0; i < _entities.size(); i++)
+    {
+        auto entity = _entities[i];
+
+        for (auto component : entity->GetAllComponents())
+        {
+            component->RenderGizmos(viewId);
+        }
+    }
+}
+
 Map::~Map()
 {
 	for (auto entity : _entities)

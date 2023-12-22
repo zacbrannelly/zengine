@@ -7,6 +7,7 @@
 #include "Material.h"
 #include "Shader.h"
 #include "MetalLayerSetup.h"
+#include "StandardShaders.h"
 
 #include <GLFW/glfw3.h>
 #include <bgfx/platform.h>
@@ -72,6 +73,9 @@ bool Graphics::Init(Display* display)
 		std::cout << "GRAPHICS: Failed to initialize BGFX (Rendering context)" << std::endl;
 		return false;
 	}
+
+	// Build and load the standard shaders.
+	StandardShaders::Init();
 
 	_initialized = true;
 

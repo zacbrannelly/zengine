@@ -64,6 +64,9 @@ public:
 	float GetNear() const;
 	float GetFar() const;
 
+	glm::mat4 GetProjectionMatrix() const;
+	glm::mat4 GetViewMatrix() const;
+
 private:
 	Graphics* _graphics;
 	ProjectionMode _projMode;

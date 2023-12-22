@@ -25,3 +25,6 @@
 [submodule "3rdparty/PhysX"]
 	path = 3rdparty/PhysX
 	url = https://github.com/o3de/PhysX
+[submodule "3rdparty/imgui.cmake/guizmo"]
+	path = 3rdparty/imgui.cmake/guizmo
+	url = https://github.com/CedricGuillemet/ImGuizmo.git

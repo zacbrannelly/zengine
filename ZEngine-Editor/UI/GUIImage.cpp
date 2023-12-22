@@ -24,6 +24,11 @@ float GUIImage::GetHeight() const
 	return _height;
 }
 
+glm::vec2 GUIImage::GetScreenPosition() const
+{
+    return _screenPos;
+}
+
 void GUIImage::SetTexture(bgfx::TextureHandle texture)
 {
 	_texture = texture;
@@ -46,6 +51,10 @@ bool GUIImage::IsFlippedVertically() const
 
 void GUIImage::RenderElement()
 {
+    // Record the position of the image in screen space.
+    auto cursorPos = ImGui::GetCursorScreenPos();
+    _screenPos = glm::vec2(cursorPos.x, cursorPos.y);
+    
 	ImGui::Image(_texture, ImVec2(_width, _height), ImVec2(0, _flippedVertically ? 1 : 0), ImVec2(1, _flippedVertically ? 0 : 1));
 }
 

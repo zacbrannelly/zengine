@@ -16,6 +16,7 @@ class MeshFactory
 public:
 	
 	static Mesh* CreateCube(std::string name);
+    static Mesh* CreateCubeOutline(std::string name);
 	static Mesh* CreateSphere(std::string name, int resolution = 30);
 	static Mesh* CreateRectangle(std::string name);
 	static Mesh* CreatePlane(std::string name, int width, int height, PlaneOrientation facing = PlaneOrientation::FRONT);

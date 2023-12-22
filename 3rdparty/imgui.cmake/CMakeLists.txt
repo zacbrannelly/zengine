@@ -25,6 +25,7 @@ set(SOURCE_FILES
   "${IMGUI_DIR}/imgui_widgets.cpp"
   "${IMGUI_DIR}/imgui.cpp"
   "${IMGUI_DIR}/backends/imgui_impl_glfw.cpp"
+  "guizmo/ImGuizmo.cpp"
 )
 add_library(IMGUI STATIC ${SOURCE_FILES})
 

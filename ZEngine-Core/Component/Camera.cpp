@@ -41,28 +41,36 @@ void Camera::Render(int viewId)
 	_graphics->Clear(_viewId, _clearFlags, (int)(_clearColor.r * 255.0f + 0.5f), (int)(_clearColor.g * 255.0f + 0.5f), (int)(_clearColor.b * 255.0f + 0.5f), (int)(_clearColor.a * 255.0f + 0.5f));
 
 	// Calculate projection matrix based off projection mode
-	glm::mat4 projMatrix(1.0f);
-	auto aspectRatio = GetAspectRatio();
-
-	if (_projMode == Camera::ProjectionMode::ORTHOGRAPHIC)
-	{
-		// Create orthogonal projection with _orthoSize being the half vertical height
-		projMatrix = glm::ortho<float>(-aspectRatio * _orthoSize, aspectRatio * _orthoSize, -_orthoSize, _orthoSize, _zNear, _zFar);
-	}
-	else
-	{
-		// Create perspective projection (3D) with the field of view (zoom)
-		projMatrix = glm::perspective<float>(_fov, aspectRatio, _zNear, _zFar);
-	}
-
-	// View matrix is the inverse of the camera's world transformation matrix
-	auto viewMatrix = glm::inverse(GetOwner()->GetTransform()->GetWorldTransformMatrix());
-
+	auto projMatrix = GetProjectionMatrix();
+	auto viewMatrix = GetViewMatrix();
+	
 	// Upload projection and view matrices to the GPU
 	_graphics->ViewTransform(_viewId, projMatrix, viewMatrix);
 
 	// Ensure the screen is cleared when nothing is being drawn (for testing purposes mostly, can remove later)
 	_graphics->Touch(_viewId);
+}
+
+glm::mat4 Camera::GetProjectionMatrix() const
+{
+	auto aspectRatio = GetAspectRatio();
+
+	if (_projMode == Camera::ProjectionMode::ORTHOGRAPHIC)
+	{
+		// Create orthogonal projection with _orthoSize being the half vertical height
+		return glm::ortho<float>(-aspectRatio * _orthoSize, aspectRatio * _orthoSize, -_orthoSize, _orthoSize, _zNear, _zFar);
+	}
+	else
+	{
+		// Create perspective projection (3D) with the field of view (zoom)
+		return glm::perspective<float>(_fov, aspectRatio, _zNear, _zFar);
+	}
+}
+
+glm::mat4 Camera::GetViewMatrix() const
+{
+	// View matrix is the inverse of the camera's world transformation matrix
+	return glm::inverse(GetOwner()->GetTransform()->GetWorldTransformMatrix());
 }
 
 void Camera::SetClearFlags(uint16_t flags)

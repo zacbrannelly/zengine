@@ -50,7 +50,7 @@
 #include "Dialogs/BuildStatusDialog.h"
 #include "imgui-includes.h"
 
-Editor::Editor(Display* display) : _display(display), _selectedMap(nullptr), _selectedObject(nullptr), _project(nullptr)
+Editor::Editor(Display* display) : Singleton<Editor>(SET_ON_CREATE), _display(display), _selectedMap(nullptr), _selectedObject(nullptr), _project(nullptr)
 {
 	// Add Controllers
 	_mapController = new MapController(this);

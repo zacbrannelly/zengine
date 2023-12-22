@@ -10,6 +10,7 @@ class Entity;
 class TransformInspector;
 class CameraInspector;
 class Map;
+class MapViewToolbar;
 
 class MapView : public GUIWindow
 {
@@ -27,6 +28,7 @@ private:
 	Entity* _viewEntity;
 	Camera* _viewCamera;
 	Editor* _editor;
+    MapViewToolbar* _mapViewToolbar;
 
 	TransformInspector* _transformInspector;
 	CameraInspector* _cameraInspector;

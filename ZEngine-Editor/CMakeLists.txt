@@ -4,6 +4,8 @@
 # Compiler flags
 ################################################################################
 set (CMAKE_CXX_STANDARD 20)
+set(DOTNET_LIBRARY_PATH "/usr/local/share/dotnet/shared/Microsoft.NETCore.App/6.0.14")
+set(DOTNET_HOST_PATH "/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Host.osx-arm64/6.0.14/runtimes/osx-arm64/native")
 
 ################################################################################
 # 3rdparty
@@ -50,6 +52,7 @@ set (SOURCE_FILES
   "Windows/LogWindow.cpp"
   "Windows/MaterialEditor.cpp"
   "Windows/GameView.cpp"
+  "Windows/MapViewToolbar.cpp"
   "Dialogs/CreateMapDialog.cpp"
   "Dialogs/CreateShaderDialog.cpp"
   "Dialogs/NewFolderDialog.cpp"
@@ -107,6 +110,7 @@ target_include_directories(ZEngine-Editor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/..
 target_include_directories(ZEngine-Editor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/bgfx.cmake/bgfx/tools)
 target_include_directories(ZEngine-Editor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/stb)
 target_include_directories(ZEngine-Editor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/imgui.cmake/imgui)
+target_include_directories(ZEngine-Editor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/imgui.cmake/guizmo)
 target_include_directories(ZEngine-Editor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/iconfontheaders)
 target_include_directories(ZEngine-Editor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/stduuid/include)
 target_include_directories(ZEngine-Editor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/inja/single_include/inja)

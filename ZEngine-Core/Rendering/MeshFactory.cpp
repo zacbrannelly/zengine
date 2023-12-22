@@ -171,6 +171,45 @@ Mesh* MeshFactory::CreateCube(std::string name)
 	return newMesh;
 }
 
+Mesh* MeshFactory::CreateCubeOutline(std::string name)
+{
+    std::vector<glm::vec3> verts
+    {
+        // Each pair of vertices defines a line segment
+        // Front face
+        {-1.0f, -1.0f, -1.0f}, {1.0f, -1.0f, -1.0f}, // Bottom edge
+        {1.0f, -1.0f, -1.0f}, {1.0f, 1.0f, -1.0f},   // Right edge
+        {1.0f, 1.0f, -1.0f}, {-1.0f, 1.0f, -1.0f},   // Top edge
+        {-1.0f, 1.0f, -1.0f}, {-1.0f, -1.0f, -1.0f}, // Left edge
+
+        // Back face
+        {-1.0f, -1.0f, 1.0f}, {1.0f, -1.0f, 1.0f},   // Bottom edge
+        {1.0f, -1.0f, 1.0f}, {1.0f, 1.0f, 1.0f},     // Right edge
+        {1.0f, 1.0f, 1.0f}, {-1.0f, 1.0f, 1.0f},     // Top edge
+        {-1.0f, 1.0f, 1.0f}, {-1.0f, -1.0f, 1.0f},   // Left edge
+
+        // Connecting edges
+        {-1.0f, -1.0f, -1.0f}, {-1.0f, -1.0f, 1.0f}, // Bottom-left
+        {1.0f, -1.0f, -1.0f}, {1.0f, -1.0f, 1.0f},   // Bottom-right
+        {1.0f, 1.0f, -1.0f}, {1.0f, 1.0f, 1.0f},     // Top-right
+        {-1.0f, 1.0f, -1.0f}, {-1.0f, 1.0f, 1.0f}    // Top-left
+    };
+    
+    std::vector<glm::vec4> colors(verts.size(), { 1, 1, 1, 1 });
+
+    // The indices can be a simple sequence, as each pair of vertices forms a line
+    std::vector<uint32_t> indices(verts.size());
+    std::iota(indices.begin(), indices.end(), 0); // Fills indices with 0, 1, 2, 3, ...
+
+    auto newMesh = Factory::CreateInstance<Mesh>(name, ObjectType::MESH);
+    newMesh->SetVertices(verts);
+    newMesh->SetIndices(indices);
+    newMesh->SetColors(colors);
+    newMesh->SetMode(LINES);
+
+    return newMesh;
+}
+
 Mesh* MeshFactory::CreateSphere(std::string name, int resolution)
 {
 	auto newMesh = Factory::CreateInstance<Mesh>(name, ObjectType::MESH);

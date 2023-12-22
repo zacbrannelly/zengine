@@ -101,6 +101,7 @@ void GUILibrary::NewFrame()
 {
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
+	ImGuizmo::BeginFrame();
 }
 
 void GUILibrary::EndFrame()

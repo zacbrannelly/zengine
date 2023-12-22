@@ -25,6 +25,13 @@ void Transform::Render(int viewId)
 {
 }
 
+void Transform::Set(Transform* source)
+{
+    _position = source->GetPosition();
+    _rotation = source->GetRotationQuaternion();
+    _scale = source->GetScale();
+}
+
 void Transform::SetPosition(const glm::vec3& position)
 {
 	_position = position;

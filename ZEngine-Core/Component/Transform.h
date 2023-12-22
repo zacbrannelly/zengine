@@ -11,6 +11,8 @@ class Transform : public Component
 public:
 	Transform();
 	~Transform();
+    
+    void Set(Transform* source);
 
 	void SetPosition(const glm::vec3& position);
 	const glm::vec3& GetPosition() const;

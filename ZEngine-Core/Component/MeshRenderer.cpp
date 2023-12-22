@@ -70,11 +70,16 @@ void MeshRenderer::Update()
 
 void MeshRenderer::Render(int viewId)
 {
-	if (_mesh != nullptr)
-	{
-		auto transform = GetOwner()->GetTransform()->GetWorldTransformMatrix();
-		_mesh->Draw(viewId, _materials, transform);
-	}
+    Render(viewId, GetOwner()->GetTransform());
+}
+
+void MeshRenderer::Render(int viewId, Transform* transform)
+{
+    if (_mesh != nullptr)
+    {
+        auto worldTransform = transform->GetWorldTransformMatrix();
+        _mesh->Draw(viewId, _materials, worldTransform);
+    }
 }
 
 MeshRenderer::~MeshRenderer()

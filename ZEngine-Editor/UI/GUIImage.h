@@ -1,6 +1,7 @@
 #pragma once
 
 #include <bgfx/bgfx.h>
+#include <glm/glm.hpp>
 #include "GUIElement.h"
 
 class GUIImage : public GUIElement
@@ -12,6 +13,8 @@ public:
 	void SetSize(float width, float height);
 	float GetWidth() const;
 	float GetHeight() const;
+    
+    glm::vec2 GetScreenPosition() const;
 
 	void FlipVertically();
 	bool IsFlippedVertically() const;
@@ -27,5 +30,6 @@ private:
 	bool _flippedVertically;
 	float _width;
 	float _height;
+    glm::vec2 _screenPos;
 };
 

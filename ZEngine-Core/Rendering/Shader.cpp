@@ -32,6 +32,21 @@ bool Shader::Load(std::string vertPath, std::string fragPath, uint64_t state, in
 		return false;
 	}
 
+	return Load(
+		vertexShaderData->data,
+		vertexShaderData->size,
+		fragShaderData->data,
+		fragShaderData->size,
+		state,
+		pass
+	);
+}
+
+bool Shader::Load(uint8_t* vertData, uint32_t vertSize, uint8_t* fragData, uint32_t fragSize, uint64_t state, int pass)
+{
+	const bgfx::Memory* vertexShaderData = bgfx::makeRef(vertData, vertSize);
+	const bgfx::Memory* fragShaderData = bgfx::makeRef(fragData, fragSize);
+
 	auto vertexShader = bgfx::createShader(vertexShaderData);
 	auto fragmentShader = bgfx::createShader(fragShaderData);
 	auto program = bgfx::createProgram(vertexShader, fragmentShader, true);

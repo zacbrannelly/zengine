@@ -28,6 +28,7 @@ public:
 	void Update();
 	void Render();
 	void RenderWorld(int viewId);
+    void RenderGizmos(int viewId);
 
 	static ZObject* CreateInstance(std::string name, ObjectType type);
 	static ZObject* Copy(std::string name, ZObject* object);
