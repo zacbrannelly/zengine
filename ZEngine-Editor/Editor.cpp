@@ -225,6 +225,8 @@ int main(int argc, char* argv[])
 
 		// Head to the next frame (no draw calls beyond this point)
 		graphics->Render();
+
+		inputManager->ClearMouseDelta();
 	};
 
 	GameLoop gameLoop(&display, 1 / 60.0, updateCallback, renderCallback);

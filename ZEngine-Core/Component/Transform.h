@@ -21,6 +21,11 @@ public:
 	float GetPositionX() const;
 	float GetPositionY() const;
 	float GetPositionZ() const;
+
+	void Translate(const glm::vec3& translation);
+	glm::vec3 GetForward() const;
+	glm::vec3 GetRight() const;
+	glm::vec3 GetUp() const;
 	
 	void SetScale(const glm::vec3& scale);
 	const glm::vec3& GetScale() const;

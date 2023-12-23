@@ -28,6 +28,7 @@ public:
 	float GetAxisRaw(std::string name);
 
 	glm::vec2 GetMousePos() const;
+	glm::vec2 GetMouseDelta() const;
 
 	void RegisterKeyCallback(GLFWkeyfun cb);
 	void RegisterMousePosCallback(GLFWcursorposfun cb);
@@ -36,6 +37,11 @@ public:
 	void RemoveKeyCallback(GLFWkeyfun cb);
 	void RemoveMousePosCallback(GLFWcursorposfun cb);
 	void RemoveMouseButtonCallback(GLFWmousebuttonfun cb);
+    
+	void ClearMouseDelta();
+	void SetMouseGrabbed(bool grabbed);
+	bool IsMouseGrabbed() const;
+
 private:
 	void UpdateButton(ButtonCode code, int action, int mods);
 
@@ -54,5 +60,9 @@ private:
 	std::vector<GLFWkeyfun> _keyCallbacks;
 	std::vector<GLFWcursorposfun> _mousePosCallbacks;
 	std::vector<GLFWmousebuttonfun> _mouseButtonCallbacks;
+    
+	bool _isMouseGrabbed;
+	glm::vec2 _mouseDelta;
+	Display* _display;
 };
 

@@ -93,11 +93,6 @@ void Display::Shutdown()
 	glfwTerminate();
 }
 
-void Display::GrabMouse() const
-{
-	glfwSetInputMode(_handle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-}
-
 void Display::SetTitle(std::string title)
 {
 	_title = title;

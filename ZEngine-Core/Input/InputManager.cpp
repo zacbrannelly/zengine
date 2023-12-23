@@ -5,10 +5,40 @@
 
 void InputManager::Init(Display* display)
 {
+	_display = display;
+	_isMouseGrabbed = false;
+
 	// Setup callbacks
 	glfwSetKeyCallback(display->GetHandle(), &InputManager::KeyCallback);
 	glfwSetCursorPosCallback(display->GetHandle(), &InputManager::MousePositionCallback);
 	glfwSetMouseButtonCallback(display->GetHandle(), &InputManager::MouseButtonCallback);
+}
+
+void InputManager::SetMouseGrabbed(bool grabbed)
+{
+	_isMouseGrabbed = grabbed;
+
+	// Set the mouse position to the center of the screen (to avoid weird jumps)
+	glfwSetCursorPos(_display->GetHandle(), _display->GetWidth() / 2, _display->GetHeight() / 2);
+	_mousePos = glm::vec2(_display->GetWidth() / 2, _display->GetHeight() / 2);
+
+	// Set the cursor mode
+	glfwSetInputMode(_display->GetHandle(), GLFW_CURSOR, _isMouseGrabbed ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+}
+
+bool InputManager::IsMouseGrabbed() const
+{
+	return _isMouseGrabbed;
+}
+
+glm::vec2 InputManager::GetMouseDelta() const
+{
+	return _mouseDelta;
+}
+
+void InputManager::ClearMouseDelta()
+{
+	_mouseDelta = glm::vec2(0.0f, 0.0f);
 }
 
 void InputManager::Reset()
@@ -195,6 +225,9 @@ void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int ac
 void InputManager::MousePositionCallback(GLFWwindow* window, double x, double y)
 {
 	auto instance = InputManager::GetInstance();
+
+	// Update the mouse delta
+	instance->_mouseDelta = glm::vec2(x, y) - instance->_mousePos;
 
 	// Set the internal mouse position
 	instance->_mousePos.x = x;

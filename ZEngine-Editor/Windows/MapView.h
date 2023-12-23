@@ -18,7 +18,6 @@ public:
 	MapView(Editor* map);
 	~MapView();
 
-	void Update() override;
 	void ProcessInput() override;
 	void RenderInWindow() override;
 	void RenderElement() override;
@@ -34,5 +33,6 @@ private:
 	CameraInspector* _cameraInspector;
 
 	float _aspectRatioW, _aspectRatioH;
+    bool _cameraInFlight;
 };
 

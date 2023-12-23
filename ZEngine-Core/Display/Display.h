@@ -12,8 +12,6 @@ public:
 	void Update();
 	void Shutdown();
 
-	void GrabMouse() const;
-
 	GLFWwindow* GetHandle() const;
 	void* GetNativeHandle() const;
 

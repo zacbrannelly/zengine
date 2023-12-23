@@ -23,6 +23,7 @@ set(SOURCE_FILES
     "Audio/AudioSystem.cpp"
     "Component/AudioSource.cpp"
     "Component/Camera.cpp"
+    "Component/FreeCamera.cpp"
     "Component/Component.cpp"
     "Component/Importers/AudioSourceImporter.cpp"
     "Component/Importers/CameraImporter.cpp"

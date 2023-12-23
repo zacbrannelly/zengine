@@ -62,6 +62,26 @@ float Transform::GetPositionZ() const
 	return _position.z;
 }
 
+void Transform::Translate(const glm::vec3& translation)
+{
+	_position += translation;
+}
+
+glm::vec3 Transform::GetForward() const
+{
+	return glm::normalize(_rotation * glm::vec3(0, 0, 1));
+}
+
+glm::vec3 Transform::GetRight() const
+{
+	return glm::normalize(_rotation * glm::vec3(1, 0, 0));
+}
+
+glm::vec3 Transform::GetUp() const
+{
+	return glm::normalize(_rotation * glm::vec3(0, 1, 0));
+}
+
 void Transform::SetScale(const glm::vec3& scale)
 {
 	_scale = scale;
