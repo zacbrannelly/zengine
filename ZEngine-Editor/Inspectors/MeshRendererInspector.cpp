@@ -39,7 +39,8 @@ void MeshRendererInspector::RenderElement()
 	auto inspectorHeight = 40 * (_neededMaterials + 2);
 	ImGui::BeginChild("Mesh Renderer", ImVec2(0, inspectorHeight));
 
-	if (ImGui::BeginCombo("Mesh", comp->GetMesh()->GetName().c_str()))
+	auto meshName = comp->GetMesh() != nullptr ? comp->GetMesh()->GetName() : "None";
+	if (ImGui::BeginCombo("Mesh", meshName.c_str()))
 	{
 		if (catalog != nullptr)
 		{
