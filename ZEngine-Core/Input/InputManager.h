@@ -6,7 +6,12 @@
 #include <map>
 #include <vector>
 #include <algorithm>
+
+#include <TargetConditionals.h>
+
+#if !TARGET_OS_IPHONE
 #include <GLFW/glfw3.h>
+#endif
 
 class Display;
 
@@ -30,6 +35,7 @@ public:
 	glm::vec2 GetMousePos() const;
 	glm::vec2 GetMouseDelta() const;
 
+#if !TARGET_OS_IPHONE
 	void RegisterKeyCallback(GLFWkeyfun cb);
 	void RegisterMousePosCallback(GLFWcursorposfun cb);
 	void RegisterMouseButtonCallback(GLFWmousebuttonfun cb);
@@ -37,6 +43,7 @@ public:
 	void RemoveKeyCallback(GLFWkeyfun cb);
 	void RemoveMousePosCallback(GLFWcursorposfun cb);
 	void RemoveMouseButtonCallback(GLFWmousebuttonfun cb);
+#endif
     
 	void ClearMouseDelta();
 	void SetMouseGrabbed(bool grabbed);
@@ -45,9 +52,11 @@ public:
 private:
 	void UpdateButton(ButtonCode code, int action, int mods);
 
+#if !TARGET_OS_IPHONE
 	static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	static void MousePositionCallback(GLFWwindow* window, double x, double y);
 	static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+#endif
 
 	glm::vec2 _mousePos;
 	std::map<ButtonCode, bool> _buttonDown;
@@ -57,9 +66,11 @@ private:
 	std::map<ButtonCode, float> _buttonAxis;
 	std::map<std::string, ButtonCode> _axisMapping;
 
+#if !TARGET_OS_IPHONE
 	std::vector<GLFWkeyfun> _keyCallbacks;
 	std::vector<GLFWcursorposfun> _mousePosCallbacks;
 	std::vector<GLFWmousebuttonfun> _mouseButtonCallbacks;
+#endif
     
 	bool _isMouseGrabbed;
 	glm::vec2 _mouseDelta;

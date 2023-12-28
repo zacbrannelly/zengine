@@ -1,5 +1,11 @@
 #pragma once
+
+#include <TargetConditionals.h>
+
+#if !TARGET_OS_IPHONE
 #include <GLFW/glfw3.h>
+#endif
+
 #include <string>
 
 class Display
@@ -12,7 +18,11 @@ public:
 	void Update();
 	void Shutdown();
 
+#if !TARGET_OS_IPHONE
 	GLFWwindow* GetHandle() const;
+#endif
+
+	// TODO: Should we strip this out for iOS too?
 	void* GetNativeHandle() const;
 
 	void SetTitle(std::string title);
@@ -46,8 +56,12 @@ public:
 	bool IsInitialized() const;
 private:
 	int _width, _height;
-	GLFWwindow* _handle;
 	std::string _title;
+
+#if !TARGET_OS_IPHONE
+	GLFWwindow* _handle;
+	static void CallbackWindowResize(GLFWwindow* handle, int newWidth, int newHeight);
+#endif
 
 	bool _isInitialized;
 	bool _isDecorated;
@@ -55,7 +69,5 @@ private:
 	bool _isVisible;
 	bool _isFullscreen;
 	bool _maximize;
-
-	static void CallbackWindowResize(GLFWwindow* handle, int newWidth, int newHeight);
 };
 

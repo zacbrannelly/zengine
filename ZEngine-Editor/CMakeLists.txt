@@ -8,17 +8,6 @@ set(DOTNET_LIBRARY_PATH "/usr/local/share/dotnet/shared/Microsoft.NETCore.App/6.
 set(DOTNET_HOST_PATH "/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Host.osx-arm64/6.0.14/runtimes/osx-arm64/native")
 
 ################################################################################
-# 3rdparty
-################################################################################
-find_package(SDL2 REQUIRED COMPONENTS SDL2)
-find_package(SDL2_mixer REQUIRED)
-find_package(SDL2_image REQUIRED)
-find_package(glm REQUIRED)
-find_package(glfw3 3.3 REQUIRED)
-find_package(nlohmann_json 3.2.0 REQUIRED)
-find_package(assimp REQUIRED)
-
-################################################################################
 # Source files
 ################################################################################
 set (SOURCE_FILES

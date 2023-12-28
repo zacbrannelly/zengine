@@ -19,14 +19,14 @@
 					"type": "CAMERA",
 					
 					"clearColor": [1, 0, 0, 1],
-					"viewport": [0, 0, 1366, 768],
+					"viewport": [0, 0, 393, 852],
 					"projection": 0
 				},
 				{
 					"name": "AudioSource",
 					"type": "AUDIO_SOURCE",
 					
-					"audio": 13,
+					"audio": "00000000-0000-0000-0000-000000000013",
 					"autoplay": true
 				}
 			]
@@ -47,7 +47,7 @@
 					"name": "MeshRenderer 5",
 					"type": "MESH_RENDERER",
 					"primitive": "rectangle",
-					"materials": [ 14 ]
+					"materials": [ "00000000-0000-0000-0000-000000000014" ]
 				}
 			]
 		},
@@ -59,7 +59,7 @@
 					"name": "Transform",
 					"type": "TRANSFORM", 
 					
-					"position": [-5, 0, 0],
+					"position": [-2, 0, 0],
 					"rotation": [0, 0, 0, 1],
 					"scale": [0.3, 0.3, 0.3]
 				},
@@ -67,28 +67,17 @@
 					"name": "MeshRender 2",
 					"type": "MESH_RENDERER",
 					
-					"primitive": "sphere",
-					"materials": [ 15 ]
+					"primitive": "cube",
+					"materials": [ "00000000-0000-0000-0000-000000000015" ]
 				},
 				{
-					"name": "RotateComponent",
-					"type": "CSHARP_SCRIPT_COMPONENT",
-					"script": 24
+					"name": "RigidBody3D",
+					"type": "RIGID_BODY_3D"
 				},
 				{
-					"name": "HeadComponent",
-					"type": "CSHARP_SCRIPT_COMPONENT",
-					"script": 25
-				},
-				{
-					"name": "BodyComponent",
-					"type": "CSHARP_SCRIPT_COMPONENT",
-					"script": 26
-				},
-				{
-					"name": "TestComponent",
-					"type": "CSHARP_SCRIPT_COMPONENT",
-					"script": 23
+					"name": "BoxCollider3D",
+					"type": "BOX_COLLIDER_3D",
+					"size": [0.3, 0.3, 0.3]
 				}
 			]
 		},
@@ -108,27 +97,69 @@
 					"name": "MeshRender 2",
 					"type": "MESH_RENDERER",
 					
-					"model": 9,
-					"materials": [ 10, 11 ]
-				},
-				{
-					"name": "FoodComponent",
-					"type": "CSHARP_SCRIPT_COMPONENT",
-					
-					"script": 27
-				},
-				{
-					"name": "RotateComponent",
-					"type": "CSHARP_SCRIPT_COMPONENT",
-					"script": 24
+					"model": "00000000-0000-0000-0000-000000000009",
+					"materials": [ "00000000-0000-0000-0000-000000000010", "00000000-0000-0000-0000-000000000011" ]
 				},
 				{
 					"name": "AudioSource",
 					"type": "AUDIO_SOURCE",
-					"audio": 12 
+					"audio": "00000000-0000-0000-0000-000000000012" 
+				}
+			]
+		},
+		{
+			"name": "Floor",
+			"components":
+			[
+				{
+					"name": "Transform",
+					"type": "TRANSFORM", 
+					
+					"position": [0, -5, 0],
+					"rotation": [0, 0, 0.7071068, 0.7071068],
+					"scale": [1, 1, 1]
+				},
+				{
+					"name": "PlaneCollider3D",
+					"type": "PLANE_COLLIDER_3D"
+				}
+			]
+		},
+		{
+			"name": "Left Wall",
+			"components":
+			[
+				{
+					"name": "Transform",
+					"type": "TRANSFORM", 
+					
+					"position": [-8.88, 0, 0],
+					"rotation": [0, 0, 0, 1],
+					"scale": [1, 1, 1]
+				},
+				{
+					"name": "PlaneCollider3D",
+					"type": "PLANE_COLLIDER_3D"
+				}
+			]
+		},
+		{
+			"name": "Right Wall",
+			"components":
+			[
+				{
+					"name": "Transform",
+					"type": "TRANSFORM", 
+					
+					"position": [8.88, 0, 0],
+					"rotation": [0, 0, -1, 0],
+					"scale": [1, 1, 1]
+				},
+				{
+					"name": "PlaneCollider3D",
+					"type": "PLANE_COLLIDER_3D"
 				}
 			]
 		}
-		
 	]
 }

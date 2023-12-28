@@ -1,26 +1,26 @@
 {
     "name": "test_material",
-    "shader": 18,
+    "shader": "00000000-0000-0000-0000-000000000018",
     "textures": [
         {
-            "name": "albedoTexture",
-            "path": "Assets/textures/blank_ao.png"
+            "id": "00000000-0000-0000-0000-000000000028",
+            "name": "albedoTexture"
         },
         {
-            "name": "aoTexture",
-            "path": "Assets/textures/blank_ao.png"
+            "id": "00000000-0000-0000-0000-000000000028",
+            "name": "aoTexture"
         },
         {
-            "name": "metallicTexture",
-            "path": "Assets/textures/blank_ao.png"
+            "id": "00000000-0000-0000-0000-000000000028",
+            "name": "metallicTexture"
         },
         {
-            "name": "normalTexture",
-            "path": "Assets/textures/blank_normal.png"
+            "id": "00000000-0000-0000-0000-000000000029",
+            "name": "normalTexture"
         },
         {
-            "name": "roughnessTexture",
-            "path": "Assets/textures/blank_ao.png"
+            "id": "00000000-0000-0000-0000-000000000028",
+            "name": "roughnessTexture"
         }
     ],
     "uniforms": [
@@ -63,7 +63,7 @@
             "type": 2,
             "values": [
                 300.0,
-                300.0,
+                0.0,
                 300.0,
                 1.0,
                 300.0,
@@ -119,10 +119,10 @@
             "numElements": 1,
             "type": 2,
             "values": [
-                0.109999999403954,
-                0.109999999403954,
-                0.109999999403954,
-                0.109999999403954
+                0.10999999940395355,
+                0.10999999940395355,
+                0.10999999940395355,
+                0.10999999940395355
             ]
         }
     ]

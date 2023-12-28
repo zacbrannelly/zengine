@@ -1,26 +1,26 @@
 {
     "name": "plastic_mat",
-    "shader": 18,
+    "shader": "00000000-0000-0000-0000-000000000018",
     "textures": [
         {
             "name": "albedoTexture",
-            "path": "Assets/materials/plastic/scuffed-plastic6-alb.png"
+            "path": "scuffed-plastic6-alb.png"
         },
         {
             "name": "aoTexture",
-            "path": "Assets/materials/plastic/scuffed-plastic-ao.png"
+            "path": "scuffed-plastic-ao.png"
         },
         {
             "name": "metallicTexture",
-            "path": "Assets/materials/plastic/scuffed-plastic-metal.png"
+            "path": "scuffed-plastic-metal.png"
         },
         {
             "name": "normalTexture",
-            "path": "Assets/materials/plastic/scuffed-plastic-normal.png"
+            "path": "scuffed-plastic-normal.png"
         },
         {
             "name": "roughnessTexture",
-            "path": "Assets/materials/plastic/scuffed-plastic-rough.png"
+            "path": "scuffed-plastic-rough.png"
         }
     ],
     "uniforms": [

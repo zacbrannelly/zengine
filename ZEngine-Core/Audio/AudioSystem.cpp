@@ -1,12 +1,16 @@
 #include "AudioSystem.h"
 
 #include <iostream>
+
+#define SDL_MAIN_HANDLED
 #include <SDL.h>
 
 using namespace std;
 
 bool AudioSystem::Init()
 {
+	SDL_SetMainReady();
+
 	if (SDL_Init(SDL_INIT_AUDIO) < 0)
 	{
 		cout << "AUDIO_SYSTEM: Failed to initialize SDL because: " << SDL_GetError() << endl;

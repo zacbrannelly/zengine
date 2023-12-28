@@ -9,7 +9,12 @@
 #include "MetalLayerSetup.h"
 #include "StandardShaders.h"
 
+#include <TargetConditionals.h>
+
+#if !TARGET_OS_IPHONE
 #include <GLFW/glfw3.h>
+#endif
+
 #include <bgfx/platform.h>
 
 #include <iostream>
@@ -28,12 +33,25 @@ Graphics::Graphics() : _initialized(false)
 
 bool Graphics::Init(Display* display)
 {
-	if (display == nullptr || display->GetHandle() == nullptr)
+	if (display == nullptr)
 	{
 		std::cout << "GRAPHICS: Display was null or not created, it is needed to create a rendering context!" << std::endl;
 		return false;
 	}
+    
+#if !TARGET_OS_IPHONE
+    if (display->GetHandle() == nullptr)
+    {
+        std::cout << "GRAPHICS: Display was null or not created, it is needed to create a rendering context!" << std::endl;
+        return false;
+    }
+#endif
+    
+	return Init(display->GetNativeHandle(), display->GetWidth(), display->GetHeight());
+}
 
+bool Graphics::Init(void* nativeWindowHandle, int width, int height)
+{
 	// Hook the window up to BGFX rendering API
 	PlatformData pd;
 	pd.backBuffer = nullptr;
@@ -41,10 +59,10 @@ bool Graphics::Init(Display* display)
 	pd.context = nullptr;
 	pd.ndt = nullptr;
 
-#ifdef __APPLE__
-	pd.nwh = setupMetalLayer(display->GetNativeHandle());
+#if defined(__APPLE__) && !TARGET_OS_IPHONE
+	pd.nwh = setupMetalLayer(nativeWindowHandle);
 #else
-	pd.nwh = display->GetNativeHandle();
+	pd.nwh = nativeWindowHandle;
 #endif
 
 	setPlatformData(pd);
@@ -64,8 +82,8 @@ bool Graphics::Init(Display* display)
 	
 	// Setup resolution to give to BGFX
 	Resolution res;
-	res.width = display->GetWidth();
-	res.height = display->GetHeight();
+	res.width = width;
+	res.height = height;
 	i.resolution = res;
 
 	if (!init(i))

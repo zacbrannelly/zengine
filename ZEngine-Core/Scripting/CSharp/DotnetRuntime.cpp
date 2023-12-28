@@ -2,6 +2,7 @@
 #include <iostream>
 #include <dlfcn.h>
 #include <sstream>
+#include <TargetConditionals.h>
 
 DotnetRuntime::DotnetRuntime() : 
   _hostfxrLib(nullptr),
@@ -16,15 +17,21 @@ DotnetRuntime::DotnetRuntime() :
 
 void DotnetRuntime::Initialize(std::string runtimeConfigPath)
 {
+#if !TARGET_OS_IPHONE
   _runtimeConfigPath = runtimeConfigPath;
   _hostfxrLibPath = GetHostFxrPath();
 
   LoadHostFxr(_hostfxrLibPath);
   InitializeRuntime();
+#else
+  std::cerr << "DotnetRuntime::Initialize called on iOS, this is not supported." << std::endl;
+  throw std::runtime_error("Failed to initialize dotnet runtime");
+#endif
 }
 
 void DotnetRuntime::InitializeRuntime()
 {
+#if !TARGET_OS_IPHONE
   // Prepare for hosting in the current process.
   InitializeHostFxrContext(_runtimeConfigPath);
 
@@ -34,6 +41,10 @@ void DotnetRuntime::InitializeRuntime()
   {
     throw std::runtime_error("Failed to get hdt_load_assembly_and_get_function_pointer. Error code: " + getLoadAssemblyAndGetFuncPtrResult);
   }
+#else
+  std::cerr << "DotnetRuntime::InitializeRuntime called on iOS, this is not supported." << std::endl;
+  throw std::runtime_error("Failed to initialize dotnet runtime");
+#endif
 }
 
 void DotnetRuntime::Restart()
@@ -49,12 +60,15 @@ load_assembly_and_get_function_pointer_fn DotnetRuntime::GetLoadAssemblyAndGetFu
 
 void DotnetRuntime::Shutdown()
 {
+#if !TARGET_OS_IPHONE
   CloseHostFxr();
   dlclose(_hostfxrLib);
+#endif
 }
 
 std::string DotnetRuntime::GetHostFxrPath() const
 {
+#if !TARGET_OS_IPHONE
   // Pre-allocate a large buffer for the path to hostfxr
   char buffer[4096];
   size_t buffer_size = sizeof(buffer) / sizeof(char_t);
@@ -67,10 +81,15 @@ std::string DotnetRuntime::GetHostFxrPath() const
   }
 
   return std::string(buffer);
+#else
+  std::cerr << "DotnetRuntime::GetHostFxrPath called on iOS, this is not supported." << std::endl;
+  throw std::runtime_error("Failed to get hostfxr path");
+#endif
 }
 
 bool DotnetRuntime::LoadHostFxr(std::string& hostfxrLibPath) 
 {
+#if !TARGET_OS_IPHONE
   _hostfxrLib = dlopen(hostfxrLibPath.c_str(), RTLD_NOW);
   
   if (!_hostfxrLib)
@@ -103,10 +122,15 @@ bool DotnetRuntime::LoadHostFxr(std::string& hostfxrLibPath)
   }
 
   return true;
+#else
+  std::cerr << "DotnetRuntime::LoadHostFxr called on iOS, this is not supported." << std::endl;
+  throw std::runtime_error("Failed to load hostfxr");
+#endif
 }
 
 bool DotnetRuntime::InitializeHostFxrContext(std::string& runtimeConfigPath)
 {
+#if !TARGET_OS_IPHONE
   // Initialize hostfxr context (prepare for creating the CoreCLR runtime).
   int initRuntimeResult = _hostfxrInitializeForRuntimeConfig(runtimeConfigPath.c_str(), nullptr, &_context);
   if (initRuntimeResult != 0 && initRuntimeResult != 1)
@@ -120,11 +144,17 @@ bool DotnetRuntime::InitializeHostFxrContext(std::string& runtimeConfigPath)
   test(_context, "APP_PATHS",  "/Users/zacbrannelly/GitRepos/zengine/debug/ZEngine-Editor");
 
   return true;
+#else
+  std::cerr << "DotnetRuntime::InitializeHostFxrContext called on iOS, this is not supported." << std::endl;
+  throw std::runtime_error("Failed to initialize hostfxr context");
+#endif
 }
 
 void DotnetRuntime::CloseHostFxr() 
 {
+#if !TARGET_OS_IPHONE
   _hostfxrClose(_context);
   _context = nullptr;
   _loadAssemblyAndGetFunctionPtr = nullptr;
+#endif
 }

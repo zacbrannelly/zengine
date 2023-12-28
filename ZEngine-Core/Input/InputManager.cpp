@@ -9,21 +9,25 @@ void InputManager::Init(Display* display)
 	_isMouseGrabbed = false;
 
 	// Setup callbacks
+#if !TARGET_OS_IPHONE
 	glfwSetKeyCallback(display->GetHandle(), &InputManager::KeyCallback);
 	glfwSetCursorPosCallback(display->GetHandle(), &InputManager::MousePositionCallback);
 	glfwSetMouseButtonCallback(display->GetHandle(), &InputManager::MouseButtonCallback);
+#endif
 }
 
 void InputManager::SetMouseGrabbed(bool grabbed)
 {
 	_isMouseGrabbed = grabbed;
 
+#if !TARGET_OS_IPHONE
 	// Set the mouse position to the center of the screen (to avoid weird jumps)
 	glfwSetCursorPos(_display->GetHandle(), _display->GetWidth() / 2, _display->GetHeight() / 2);
 	_mousePos = glm::vec2(_display->GetWidth() / 2, _display->GetHeight() / 2);
 
 	// Set the cursor mode
 	glfwSetInputMode(_display->GetHandle(), GLFW_CURSOR, _isMouseGrabbed ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+#endif
 }
 
 bool InputManager::IsMouseGrabbed() const
@@ -139,6 +143,7 @@ glm::vec2 InputManager::GetMousePos() const
 	return _mousePos;
 }
 
+#if !TARGET_OS_IPHONE
 void InputManager::RegisterKeyCallback(GLFWkeyfun cb)
 {
 	_keyCallbacks.push_back(cb);
@@ -177,10 +182,11 @@ void InputManager::RemoveMouseButtonCallback(GLFWmousebuttonfun cb)
 	if (it != _mouseButtonCallbacks.end())
 		_mouseButtonCallbacks.erase(it);
 }
+#endif
 
 void InputManager::UpdateButton(ButtonCode code, int action, int mods)
 {
-	if (action == GLFW_PRESS)
+	if (action == BUTTON_ACTION_PRESS)
 	{
 		if (_buttonDown.find(code) != _buttonDown.end())
 		{
@@ -192,7 +198,7 @@ void InputManager::UpdateButton(ButtonCode code, int action, int mods)
 		// TODO: Smooth the values
 		_buttonAxis[code] = 1.0f;
 	}
-	else if (action == GLFW_RELEASE)
+	else if (action == BUTTON_ACTION_RELEASE)
 	{
 		if (_buttonDown.find(code) != _buttonDown.end())
 		{
@@ -209,6 +215,7 @@ void InputManager::UpdateButton(ButtonCode code, int action, int mods)
 	_buttonModifiers[code] = mods;
 }
 
+#if !TARGET_OS_IPHONE
 void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	// Update the internal state
@@ -252,6 +259,7 @@ void InputManager::MouseButtonCallback(GLFWwindow* window, int button, int actio
 		(*callback)(window, button, action, mods);
 	}
 }
+#endif
 
 void InputManager::Shutdown()
 {

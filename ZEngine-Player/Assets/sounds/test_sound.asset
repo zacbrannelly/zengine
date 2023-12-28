@@ -1,4 +1,4 @@
 {
 	"name": "test_sound",
-	"sound": "Assets/sounds/test_sound.wav"
+	"sound": "test_sound.wav"
 }

@@ -24,9 +24,12 @@ int main(int argc, char* argv[])
 	Display display("ZEngine - Player", 1366, 768);
 	display.Init();
 
+// TODO: Support scripting on iOS.
+#if !TARGET_OS_IPHONE
 	// Init scripting
 	auto scriptSystem = CSharpScriptSystem::GetInstance();
 	scriptSystem->Init();
+#endif
 
 	auto inputManager = InputManager::GetInstance();
 	inputManager->Init(&display);
@@ -94,7 +97,12 @@ int main(int argc, char* argv[])
 	inputManager->Shutdown();
 	audioSystem->Shutdown();
 	display.Shutdown();
+
+// TODO: Support scripting on iOS.
+#if !TARGET_OS_IPHONE
 	scriptSystem->Shutdown();
+#endif
+
 	time->Shutdown();
 
 	return 0;

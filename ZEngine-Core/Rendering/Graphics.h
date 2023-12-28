@@ -17,6 +17,7 @@ public:
 	Graphics();
 
 	bool Init(Display* display);
+	bool Init(void* nativeWindowHandle, int width, int height);
 	void Shutdown();
 
 	void Reset(int width, int height, uint32_t resetFlags);

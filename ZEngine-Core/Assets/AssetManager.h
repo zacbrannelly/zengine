@@ -14,6 +14,9 @@ public:
 
 	void SetCatalog(AssetCatalog* catalog);
 	AssetCatalog* GetCatalog() const;
+    
+    void SetBasePath(std::string basePath);
+    std::string GetBasePath() const;
 
 	Asset* LoadAsset(std::string path, ObjectType type);
 	Asset* LoadAsset(std::string name, std::string path, ObjectType type);
@@ -44,6 +47,7 @@ public:
 	const std::vector<Asset*>& GetAssets() const;
 
 private:
+    std::string _basePath;
 	std::map<ObjectType, Asset*(*)(std::string)> _assetConstructors;
 	std::vector<Asset*> _assets;
 	AssetCatalog* _catalog;

@@ -1,5 +1,8 @@
 #pragma once
 
+#define BUTTON_ACTION_RELEASE 0
+#define BUTTON_ACTION_PRESS 1
+
 enum ButtonCode
 {
 	BUTTON_MOUSE_LEFT = 0, // GLFW_MOUSE_BUTTON_LEFT

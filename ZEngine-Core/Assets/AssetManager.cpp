@@ -13,6 +13,8 @@
 
 void AssetManager::Init()
 {
+    _basePath = "";
+    
 	//TODO: Register asset constructors here
 	_assetConstructors[ObjectType::TEXTURE_ASSET] = TextureAsset::CreateInstance;
 	_assetConstructors[ObjectType::SHADER_ASSET] = ShaderAsset::CreateInstance;
@@ -31,6 +33,16 @@ void AssetManager::SetCatalog(AssetCatalog* catalog)
 AssetCatalog* AssetManager::GetCatalog() const
 {
 	return _catalog;
+}
+
+void AssetManager::SetBasePath(std::string basePath)
+{
+    _basePath = basePath;
+}
+
+std::string AssetManager::GetBasePath() const
+{
+    return _basePath;
 }
 
 Asset* AssetManager::LoadAsset(std::string path, ObjectType type)
@@ -58,6 +70,10 @@ Asset* AssetManager::LoadAsset(std::string name, std::string path, ObjectType ty
 	{
 		// Load the new asset
 		auto newAsset = constructor(name);
+        
+        // Prepend base path to the provided path.
+        if (_basePath != "" && path[0] != '/')
+            path = _basePath + "/" + path;
 		
 		if (newAsset->Load(path))
 		{

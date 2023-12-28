@@ -11,12 +11,17 @@
 
 #endif
 
+#if !TARGET_OS_IPHONE
 #include <GLFW/glfw3native.h>
+#endif
 
 #include <iostream>
 
-Display::Display(std::string title, int width, int height) : _title(title), _width(width), _height(height), _handle(nullptr)
+Display::Display(std::string title, int width, int height) : _title(title), _width(width), _height(height)
 {
+#if !TARGET_OS_IPHONE
+	_handle = nullptr;
+#endif
 	_isInitialized = false;
 	_isFullscreen = false;
 	_isDecorated = true;
@@ -27,6 +32,7 @@ Display::Display(std::string title, int width, int height) : _title(title), _wid
 
 bool Display::Init()
 {
+#if !TARGET_OS_IPHONE
 	if (glfwInit() == GLFW_FALSE)
 	{
 		std::cout << "DISPLAY: Failed to initialize GLFW" << std::endl;
@@ -60,6 +66,7 @@ bool Display::Init()
 
 	glfwSetWindowUserPointer(_handle, this);
 	glfwSetWindowSizeCallback(_handle, &Display::CallbackWindowResize);
+#endif
 
 	_isInitialized = true;
 
@@ -68,18 +75,26 @@ bool Display::Init()
 
 void Display::Update()
 {
+#if !TARGET_OS_IPHONE
 	glfwPollEvents();
+#endif
 }
 
 void Display::RequestClose() const
 {
+#if !TARGET_OS_IPHONE
 	if (_handle == nullptr) return;
 	glfwSetWindowShouldClose(_handle, GLFW_TRUE);
+#endif
 }
 
 bool Display::CloseRequested() const
 {
+#if !TARGET_OS_IPHONE
 	return _handle != nullptr ? glfwWindowShouldClose(_handle) : false;
+#else
+	return false;
+#endif
 }
 
 bool Display::IsInitialized() const
@@ -89,16 +104,20 @@ bool Display::IsInitialized() const
 
 void Display::Shutdown()
 {
+#if !TARGET_OS_IPHONE
 	glfwDestroyWindow(_handle);
 	glfwTerminate();
+#endif
 }
 
 void Display::SetTitle(std::string title)
 {
 	_title = title;
 
+#if !TARGET_OS_IPHONE
 	if (_handle != nullptr)
 		glfwSetWindowTitle(_handle, _title.c_str());
+#endif
 }
 
 std::string Display::GetTitle() const
@@ -108,8 +127,13 @@ std::string Display::GetTitle() const
 
 void Display::SetSize(int width, int height)
 {
+	_width = width;
+	_height = height;
+
+#if !TARGET_OS_IPHONE
 	if (_handle != nullptr)
 		glfwSetWindowSize(_handle, _width, _height);
+#endif
 }
 
 void Display::SetWidth(int width)
@@ -136,6 +160,7 @@ int Display::GetHeight() const
 
 void Display::SetFullscreen(bool isFullscreen)
 {
+#if !TARGET_OS_IPHONE
 	if (_isInitialized)
 	{
 		if (isFullscreen && !_isFullscreen)
@@ -143,6 +168,7 @@ void Display::SetFullscreen(bool isFullscreen)
 		else if (!isFullscreen && _isFullscreen)
 			glfwSetWindowMonitor(_handle, nullptr, 0, 0, _width, _height, GLFW_DONT_CARE);
 	}
+#endif
 
 	_isFullscreen = isFullscreen;
 }
@@ -164,6 +190,7 @@ bool Display::IsDecorated() const
 
 void Display::SetVisible(bool isVisible)
 {
+#if !TARGET_OS_IPHONE
 	if (_isInitialized)
 	{
 		if (isVisible && !_isVisible)
@@ -171,6 +198,7 @@ void Display::SetVisible(bool isVisible)
 		else if (!isVisible && _isVisible)
 			glfwHideWindow(_handle);
 	}
+#endif
 
 	_isVisible = isVisible;
 }
@@ -204,13 +232,16 @@ void* Display::GetNativeHandle() const
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 	return glfwGetWin32Window(_handle);
-#else
+#elif !TARGET_OS_IPHONE
   // TODO: Get native handle for other platforms
 	return glfwGetCocoaWindow(_handle);
+#else
+  // TODO: Figure out how to get native handle on iOS (if we need it).
+	return nullptr;
 #endif
 }
 
-
+#if !TARGET_OS_IPHONE
 GLFWwindow* Display::GetHandle() const
 {
 	return _handle;
@@ -233,6 +264,7 @@ void Display::CallbackWindowResize(GLFWwindow* window, int newWidth, int newHeig
 			graphics->Reset(newWidth, newHeight, 0);
 	}
 }
+#endif
 
 Display::~Display()
 {
