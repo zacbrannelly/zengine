@@ -24,7 +24,7 @@ set(CMAKE_MACOSX_RPATH 1)
 set(CMAKE_INSTALL_RPATH "${DOTNET_LIBRARY_PATH};${DOTNET_HOST_PATH}")
 
 # Point to the correct PhysX binaries to statically link against
-set(PHYSX_BIN_PATH "${CMAKE_SOURCE_DIR}/3rdparty/PhysX/physx/bin/ios64/checked")
+set(PHYSX_BIN_PATH "${CMAKE_SOURCE_DIR}/3rdparty/PhysX/physx/bin/mac.x86_64/checked")
 
 target_link_libraries(ZEngine-Core
   PRIVATE glfw
