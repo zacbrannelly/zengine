@@ -470,3 +470,4 @@ FodyWeavers.xsd
 # Custom Entries
 build
 3rdparty/vendor
+iOS-Build
