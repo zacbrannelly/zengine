@@ -3,13 +3,12 @@
 #include "UI/Container.h"
 #include <ZEngine-Core/Map/Map.h>
 #include <ZEngine-Core/Map/Objects/Entity.h>
-#include <ZEngine-Core/Misc/Singleton.h>
 
 class Project;
 class Display;
 class MapController;
 
-class Editor : public Container, public Singleton<Editor>
+class Editor : public Container
 {
 public:
 	Editor(Display* display);
