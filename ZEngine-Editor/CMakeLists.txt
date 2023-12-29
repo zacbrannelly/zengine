@@ -131,7 +131,6 @@ target_link_libraries (ZEngine-Editor
 # Copy dependencies from ZEngine-Core to build directory
 ################################################################################
 
-add_dependencies(ZEngine-Editor ZEngine-Core-Interop)
 add_dependencies(ZEngine-Editor ZEngine-PluginManager-Dotnet)
 add_dependencies(ZEngine-Editor ZEngine-Interop-Dotnet)
 

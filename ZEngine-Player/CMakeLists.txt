@@ -53,7 +53,7 @@ else()
     ${RESOURCES}
   )
 
-  add_dependencies(${APP_NAME} ZEngine-Core)
+  add_dependencies(${APP_NAME} ZEngine-Core ZEngine-Interop-Dotnet ZEngine-Interop)
 
   find_library(UIKIT UIKit REQUIRED)
   find_library(FOUNDATION Foundation REQUIRED)
@@ -75,7 +75,7 @@ else()
 
   # Link the framework to the app (I wonder if we need this part)
   set_target_properties(${APP_NAME} PROPERTIES
-    XCODE_ATTRIBUTE_OTHER_LDFLAGS "${XCODE_ATTRIBUTE_OTHER_LDFLAGS} -framework ZEngine-Core"
+    XCODE_ATTRIBUTE_OTHER_LDFLAGS "${XCODE_ATTRIBUTE_OTHER_LDFLAGS} -framework ZEngine-Core -framework ZEngine-Interop"
   )
 
   # Turn on ARC
@@ -111,6 +111,7 @@ else()
   )
 
   # Set the app's linker search path to the default location on iOS
+  # Plus search the Frameworks directory in the ZEngine-Core framework (we will put the ZEngine-Core-Interop dylib in there)
   set_target_properties(
     ${APP_NAME}
     PROPERTIES
@@ -118,7 +119,7 @@ else()
     "@executable_path/Frameworks"
   )
 
-  # Copy the framework into the app bundle
+  # Copy the ZEngine-Core framework into the app bundle
   add_custom_command(
     TARGET ${APP_NAME}
     POST_BUILD
@@ -127,7 +128,26 @@ else()
     "$<TARGET_FILE_DIR:${APP_NAME}>/Frameworks/ZEngine-Core.framework"
   )
 
-  # Copy the resources into the app bundle
+  # Copy the ZEngine-Interop framework into the app bundle
+  add_custom_command(
+    TARGET ${APP_NAME}
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    "$<TARGET_FILE_DIR:ZEngine-Interop>"
+    "$<TARGET_FILE_DIR:${APP_NAME}>/Frameworks/ZEngine-Interop.framework"
+  )
+
+  # Copy the ZEngine-Interop dat files into the app bundle
+  set(ZENGINE_INTEROP_PROJECT_BUILD_PATH ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/projects/ZEngine.Interop)
+  add_custom_command(
+    TARGET ${APP_NAME}
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+    "${ZENGINE_INTEROP_PROJECT_BUILD_PATH}/bin/Release/net8.0/ios-arm64/icudt.dat"
+    "$<TARGET_FILE_DIR:${APP_NAME}>/icudt.dat"
+  )
+
+  # Copy the game assets into the app bundle
   add_custom_command(
     TARGET ${APP_NAME}
     POST_BUILD

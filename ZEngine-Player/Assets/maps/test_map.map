@@ -104,6 +104,11 @@
 					"name": "AudioSource",
 					"type": "AUDIO_SOURCE",
 					"audio": "00000000-0000-0000-0000-000000000012" 
+				},
+				{
+					"name": "RotateComponent",
+					"type": "CSHARP_SCRIPT_COMPONENT",
+					"script": "00000000-0000-0000-0000-000000000024"
 				}
 			]
 		},

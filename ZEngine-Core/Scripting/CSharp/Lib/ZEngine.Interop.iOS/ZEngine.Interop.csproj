@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>ZEngine.Interop</AssemblyName>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PublishAot>true</PublishAot>
+    <PublishAotUsingRuntimePack>true</PublishAotUsingRuntimePack>
+    <_IsAppleMobileLibraryMode>false</_IsAppleMobileLibraryMode>
+    <NativeLib>Shared</NativeLib>
+    <RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <!-- More info here: https://github.com/royalapplications/beyondnet/issues/34#issuecomment-1632510996 -->
+  <ItemGroup>
+    <LinkerArg Include="-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk" />
+    <LinkerArg Include="-mios-version-min=13.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <RdXmlFile Include="rd.xml" />
+  </ItemGroup>
+
+  <Target Name="NativeLib" BeforeTargets="Build">
+    <PropertyGroup>
+      <RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
+      <NativeLib>Shared</NativeLib>
+      <OutputType>Library</OutputType>
+    </PropertyGroup>
+  </Target>
+
+</Project>

@@ -1,5 +1,14 @@
-# Find depdendencies using CMake's find_package
+find_program(DOTNET_EXECUTABLE NAMES dotnet)
+if(NOT DOTNET_EXECUTABLE)
+  message(FATAL_ERROR "Check for dotnet Program: not found")
+else()
+  message(STATUS "Found dotnet Program: ${DOTNET_EXECUTABLE}")
+endif()
 
+# Find SWIG on the host system
+find_package(SWIG REQUIRED)
+
+# Find depdendencies using CMake's find_package
 find_package(SDL2 REQUIRED COMPONENTS SDL2)
 set(SDL2_LIBRARIES SDL2::SDL2)
 

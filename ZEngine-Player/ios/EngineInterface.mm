@@ -11,6 +11,8 @@
 #include <ZEngine-Core/Map/Map.h>
 #include <ZEngine-Core/Assets/Objects/MapAsset.h>
 #include <ZEngine-Core/Physics/Physics3DSystem.h>
+#include <ZEngine-Core/Physics/Time.h>
+#include <ZEngine-Core/Scripting/CSharp/CSharpScriptSystem.h>
 
 @interface EngineInterface () 
 {
@@ -22,6 +24,8 @@
     Graphics* _graphicsSystem;
     AssetManager* _assetSystem;
     MapManager* _mapManager;
+    CSharpScriptSystem* _scriptSystem;
+    Time* _time;
 }
 @end
 
@@ -48,6 +52,12 @@
     
     _assetSystem = AssetManager::GetInstance();
     _assetSystem->Init();
+
+    _scriptSystem = CSharpScriptSystem::GetInstance();
+    _scriptSystem->Init();
+
+    _time = Time::GetInstance();
+    _time->Init();
     
     NSString* basePath = [[NSBundle mainBundle] bundlePath];
     _assetSystem->SetBasePath([basePath UTF8String]);
@@ -78,6 +88,8 @@
     _graphicsSystem->Touch(0);
     
     _graphicsSystem->Render();
+
+    _time->Tick();
 }
 
 - (void) shutdown
@@ -88,6 +100,8 @@
     _physicsSystem->Shutdown();
     _graphicsSystem->Shutdown();
     _display->Shutdown();
+    _scriptSystem->Shutdown();
+    _time->Shutdown();
     
     delete _display;
 }

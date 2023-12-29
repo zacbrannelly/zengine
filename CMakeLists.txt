@@ -1,16 +1,22 @@
-cmake_minimum_required (VERSION 3.0)
+cmake_minimum_required (VERSION 3.5)
 project (ZEngine)
 
-# Find dotnet CLI tool
-# TODO: Fix this when building for iOS, since this will be required for scripting support.
-if (NOT IOS)
-  find_program(DOTNET_EXECUTABLE NAMES dotnet)
-  if(NOT DOTNET_EXECUTABLE)
-    message(FATAL_ERROR "Check for dotnet Program: not found")
-  else()
-    message(STATUS "Found dotnet Program: ${DOTNET_EXECUTABLE}")
-  endif()
+# Policies for SWIG to work correctly.
+# TODO: Write better documentation for this.
+if (POLICY CMP0122)
+    cmake_policy(SET CMP0122 NEW)
 endif()
+
+if (POLICY CMP0078)
+    cmake_policy(SET CMP0078 NEW)
+endif()
+
+if (POLICY CMP0086)
+    cmake_policy(SET CMP0086 NEW)
+endif()
+
+# Include SWIG module (for generating C# code).
+include(UseSWIG)
 
 # Include platform specific configurations
 if (IOS)
@@ -35,13 +41,8 @@ set_property(TARGET shaderc PROPERTY ENABLE_EXPORTS 1)
 add_subdirectory (ZEngine-Core)
 
 if (NOT IOS)
-  # Editor (mobile not supported)
+  # Editor (mobile not supported for obvious reasons)
   add_subdirectory (ZEngine-Editor)
-else()
-  # Make sure the SDL libraries are built before the editor
-  add_dependencies(ZEngine-Core SDL2_vendorized)
-  add_dependencies(ZEngine-Core SDL2_image_vendorized)
-  add_dependencies(ZEngine-Core SDL2_mixer_vendorized)
 endif()
 
 # Player

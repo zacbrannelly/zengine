@@ -172,3 +172,17 @@ macro (find_host_package)
 	set (CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 	set (CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 endmacro (find_host_package)
+
+macro (find_host_program)
+	set (CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+	set (CMAKE_FIND_ROOT_PATH_MODE_LIBRARY NEVER)
+	set (CMAKE_FIND_ROOT_PATH_MODE_INCLUDE NEVER)
+	set (IOS FALSE)
+
+	find_program(${ARGN})
+
+	set (IOS TRUE)
+	set (CMAKE_FIND_ROOT_PATH_MODE_PROGRAM ONLY)
+	set (CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+	set (CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+endmacro (find_host_program)

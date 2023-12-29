@@ -81,13 +81,46 @@ set(SOURCE_FILES
     "Utilities/File.cpp"
     "Utilities/FutureHelpers.cpp"
     "GameLoop/GameLoop.cpp"
+    "Core.i"
 )
 source_group("Source Files" FILES ${SOURCE_FILES})
 
 ################################################################################
 # Target
 ################################################################################
-add_library(ZEngine-Core SHARED ${SOURCE_FILES})
+
+# Path to the ZEngine-Core shared library, used by the C# interop project.
+if (IOS)
+    set(ZENGINE_INTEROP_DLL_IMPORT_PATH ZEngine-Core.framework/ZEngine-Core)
+else()
+    set(ZENGINE_INTEROP_DLL_IMPORT_PATH libZEngine-Core.dylib)
+endif()
+
+# Path to the C# interop project.
+set(ZENGINE_INTEROP_PROJECT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Scripting/CSharp/Lib/ZEngine.Interop)
+
+# Configure SWIG to use C++, configure the C# namespace to use in the generated code, and set the DllImport path.
+set_property(SOURCE Core.i PROPERTY CPLUSPLUS ON)
+set_property(SOURCE Core.i PROPERTY COMPILE_OPTIONS
+        -namespace ZEngine.Core
+        -dllimport ${ZENGINE_INTEROP_DLL_IMPORT_PATH})
+
+# Path where the C# interop project will be built (this is where the generated C# code will be placed).
+set(ZENGINE_INTEROP_PROJECT_BUILD_PATH ${CMAKE_CURRENT_BINARY_DIR}/projects/ZEngine.Interop)
+
+# Configure the ZEngine-Core target, which will be a shared library used by both the C++ and C# projects.
+swig_add_library(ZEngine-Core 
+    TYPE SHARED
+    SOURCES ${SOURCE_FILES}
+    LANGUAGE csharp
+    OUTPUT_DIR ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}
+)
+
+# Misc target properties - TODO: Are these needed?
+set_target_properties(ZEngine-Core PROPERTIES
+    SWIG_USE_TARGET_INCLUDE_DIRECTORIES ON
+    POSITION_INDEPENDENT_CODE ON
+)
 
 # Include platform specific configurations
 if (IOS)
@@ -153,107 +186,11 @@ target_link_libraries(ZEngine-Core
 )
 
 ################################################################################
-# C# Binding Generation using SWIG
-################################################################################
-
-if (POLICY CMP0122)
-    cmake_policy(SET CMP0122 NEW)
-endif()
-
-if (POLICY CMP0078)
-    cmake_policy(SET CMP0078 NEW)
-endif()
-
-if (POLICY CMP0086)
-    cmake_policy(SET CMP0086 NEW)
-endif()
-
-if (NOT IOS)
-    find_package(SWIG REQUIRED)
-    include(UseSWIG)
-
-    set_property(SOURCE Core.i PROPERTY CPLUSPLUS ON)
-    set_property(SOURCE Core.i PROPERTY COMPILE_OPTIONS
-        -namespace ZEngine.Core
-        -dllimport lib/ZEngine.Interop/libZEngine-Core-Interop.dylib)
-
-    set(ZENGINE_INTEROP_PROJECT_BUILD_PATH ${CMAKE_CURRENT_BINARY_DIR}/projects/ZEngine.Interop)
-
-    swig_add_library(ZEngine-Core-Interop
-        TYPE SHARED
-        LANGUAGE csharp
-        OUTPUT_DIR ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}
-        SOURCES Core.i
-    )
-
-    set_target_properties(ZEngine-Core-Interop PROPERTIES
-        SWIG_USE_TARGET_INCLUDE_DIRECTORIES ON
-        SWIG_DEPENDS ZEngine-Core
-        POSITION_INDEPENDENT_CODE ON
-    )
-
-    # Include the ZEngine-Core include directories
-    target_include_directories(ZEngine-Core-Interop
-        PRIVATE
-        "$<TARGET_PROPERTY:ZEngine-Core,INCLUDE_DIRECTORIES>"
-    )
-    target_link_libraries(ZEngine-Core-Interop PRIVATE ZEngine-Core)
-endif()
-
-################################################################################
 # C# Interop Project
 ################################################################################
 
-if (NOT IOS)
-    set(ZENGINE_INTEROP_PROJECT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Scripting/CSharp/Lib/ZEngine.Interop)
-
-    # Copy the template project to the output directory
-    add_custom_command(TARGET ZEngine-Core-Interop POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${ZENGINE_INTEROP_PROJECT_PATH} ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}
-    )
-
-    # Build & publish the interop project using custom target
-    add_custom_target(ZEngine-Interop-Dotnet ALL
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${ZENGINE_INTEROP_PROJECT_PATH} ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}
-        COMMAND ${CMAKE_COMMAND} -E env --unset=TARGETNAME ${DOTNET_EXECUTABLE} publish ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}/ZEngine.Interop.csproj
-        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ZEngine-Core-Interop> ${CMAKE_CURRENT_BINARY_DIR}/lib/ZEngine.Interop/libZEngine-Core-Interop.dylib
-        COMMAND ${CMAKE_COMMAND} -E remove $<TARGET_FILE:ZEngine-Core-Interop>
-        DEPENDS ZEngine-Core-Interop
-    )
-
-    # Copy the interop dll to the output directory.
-    add_custom_command(TARGET ZEngine-Interop-Dotnet POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}/bin/Debug/net6.0/publish ${CMAKE_CURRENT_BINARY_DIR}/lib/ZEngine.Interop
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/Scripting/CSharp/ZEngine-Core.runtimeconfig.json ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Core.runtimeconfig.json
-        COMMENT "Copy the ZEngine-Interop.dll & its runtime config to the output directory"
-        DEPENDS ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}
-    )
-endif()
-
-################################################################################
-# C# Plugin Manager Project
-################################################################################
-
-if (NOT IOS)
-    set(ZENGINE_PLUGIN_MANAGER_PROJECT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Scripting/CSharp/Lib/ZEngine.PluginManager)
-    set(ZENGINE_PLUGIN_MANAGER_PROJECT_BUILD_PATH ${CMAKE_CURRENT_BINARY_DIR}/projects/ZEngine.PluginManager)
-
-    # Copy the project to the output directory
-    add_custom_command(TARGET ZEngine-Core-Interop POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${ZENGINE_PLUGIN_MANAGER_PROJECT_PATH} ${ZENGINE_PLUGIN_MANAGER_PROJECT_BUILD_PATH}
-    )
-
-    # Build & publish the project using custom target
-    add_custom_target(ZEngine-PluginManager-Dotnet ALL
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${ZENGINE_PLUGIN_MANAGER_PROJECT_PATH} ${ZENGINE_PLUGIN_MANAGER_PROJECT_BUILD_PATH}
-        COMMAND ${CMAKE_COMMAND} -E env --unset=TARGETNAME ${DOTNET_EXECUTABLE} publish ${ZENGINE_PLUGIN_MANAGER_PROJECT_BUILD_PATH}/ZEngine.PluginManager.csproj
-        DEPENDS ZEngine-Core-Interop
-    )
-
-    # Copy the plugin manager dll to the output directory.
-    add_custom_command(TARGET ZEngine-PluginManager-Dotnet POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${ZENGINE_PLUGIN_MANAGER_PROJECT_BUILD_PATH}/bin/Debug/net6.0/publish ${CMAKE_CURRENT_BINARY_DIR}/lib/ZEngine.PluginManager
-        COMMENT "Copy the ZEngine.PluginManager.dll to the output directory"
-        DEPENDS ${ZENGINE_PLUGIN_MANAGER_PROJECT_BUILD_PATH}
-    )
-endif()
+# Copy the template project to the output directory
+# TODO: Is this needed?
+add_custom_command(TARGET ZEngine-Core POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${ZENGINE_INTEROP_PROJECT_PATH} ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}
+)

@@ -1,3 +1,14 @@
+# Find Dotnet CLI tool (using the find_host_program macro provided by the iOS CMake toolchain)
+find_host_program(DOTNET_EXECUTABLE NAMES dotnet)
+if(NOT DOTNET_EXECUTABLE)
+  message(FATAL_ERROR "Check for dotnet Program: not found")
+else()
+  message(STATUS "Found dotnet Program: ${DOTNET_EXECUTABLE}")
+endif()
+
+# Find SWIG on the host system.
+find_host_package(SWIG REQUIRED)
+
 set(DEVELOPMENT_PROJECT_NAME "ZEngine")                     # <== Set to your project name, e.g. project.xcodeproj
 set(DEVELOPMENT_TEAM_ID "RFFZEYZT36")                       # <== Set to your team ID from Apple
 set(CODE_SIGN_IDENTITY "321BE4FC4E46B2522704FAC2B11DC851636BA4B1") # <== Set to your preferred code sign identity, to see list: /usr/bin/env xcrun security find-identity -v -p codesigning

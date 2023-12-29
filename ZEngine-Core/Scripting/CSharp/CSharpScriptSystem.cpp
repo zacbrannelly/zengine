@@ -4,6 +4,10 @@
 #include "DotnetRuntime.h"
 #include "AssemblyLoader.h"
 
+#if TARGET_OS_IPHONE
+#include <dlfcn.h>
+#endif
+
 #define RUNTIME_CONFIG_PATH "ZEngine-Core.runtimeconfig.json"
 
 #define INTEROP_ASSEMBLY_PATH "lib/ZEngine.Interop/ZEngine.Interop.dll"
@@ -25,10 +29,26 @@
 
 bool CSharpScriptSystem::Init()
 {
+#if !TARGET_OS_IPHONE
   DotnetRuntime::GetInstance()->Initialize(RUNTIME_CONFIG_PATH);
   LoadPluginManagerAssembly();
+#else
+  // C# code is natively compiled on iOS, so we need to load it from a shared library instead.
+  const char* interopDllPath = "ZEngine-Interop.framework/ZEngine-Interop";
+  _libraryHandle = dlopen(interopDllPath, RTLD_NOW);
+  if (!_libraryHandle) {
+    std::cerr << "Failed to load interop assembly: " << dlerror() << std::endl;
+    throw std::runtime_error("Failed to load interop assembly");
+  }
+
+  _createManagedObjectFunction = reinterpret_cast<CreateManagedObjectFunction>(dlsym(_libraryHandle, "ZEngine_Core_Interop_UnmanagedMethods_CreateManagedObject"));
+  _invokeMethodFunction = reinterpret_cast<InvokeMethodFunction>(dlsym(_libraryHandle, "ZEngine_Core_Interop_UnmanagedMethods_InvokeMethod"));
+  _setPropertyFunction = reinterpret_cast<SetPropertyFunction>(dlsym(_libraryHandle, "ZEngine_Core_Interop_UnmanagedMethods_SetProperty"));
+  _setScriptNativeInstanceFunction = reinterpret_cast<SetScriptNativeInstanceFunction>(dlsym(_libraryHandle, "ZEngine_Core_Interop_UnmanagedMethods_SetScriptNativeInstance"));
+#endif
 }
 
+#if !TARGET_OS_IPHONE
 void CSharpScriptSystem::HotReload()
 {
   LoadProjectAssembly();
@@ -109,6 +129,7 @@ void CSharpScriptSystem::LoadPluginManagerAssembly()
 
   RegisterAdditionalDependencyPath(INTEROP_ASSEMBLY_PATH);
 }
+#endif
 
 void* CSharpScriptSystem::CreateManagedObject(std::string typeName)
 {
@@ -150,6 +171,7 @@ void CSharpScriptSystem::SetScriptNativeInstance(void* object, void* nativeInsta
   _setScriptNativeInstanceFunction(object, nativeInstance);
 }
 
+#if !TARGET_OS_IPHONE
 bool CSharpScriptSystem::BuildProject(std::string projectPath, std::string dllOutputPath)
 {
   if (!_buildProjectFunction) {
@@ -190,8 +212,13 @@ void CSharpScriptSystem::RegisterAdditionalDependencyPath(std::string path)
 
   _registerAdditionalDependencyPathFunction(path.c_str());
 }
+#endif
 
 void CSharpScriptSystem::Shutdown() 
 {
+#if !TARGET_OS_IPHONE
   DotnetRuntime::GetInstance()->Shutdown();
+#else
+  dlclose(_libraryHandle);
+#endif
 }
