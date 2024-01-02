@@ -60,6 +60,13 @@ target_link_libraries(ZEngine-Core
 )
 
 ################################################################################
+# P/Invoke Shared Library
+################################################################################
+
+# Where the P/Invoke shared library will be located at runtime.
+set(ZENGINE_INTEROP_DLL_IMPORT_PATH ZEngine-PInvoke.framework/ZEngine-PInvoke)
+
+################################################################################
 # C# Interop Project
 ################################################################################
 

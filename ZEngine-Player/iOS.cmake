@@ -64,7 +64,7 @@ target_link_libraries(${APP_NAME} PRIVATE ${QUATZCORE})
 
 # Link the framework to the app (I wonder if we need this part)
 set_target_properties(${APP_NAME} PROPERTIES
-  XCODE_ATTRIBUTE_OTHER_LDFLAGS "${XCODE_ATTRIBUTE_OTHER_LDFLAGS} -framework ZEngine-Core -framework ZEngine-Interop"
+  XCODE_ATTRIBUTE_OTHER_LDFLAGS "${XCODE_ATTRIBUTE_OTHER_LDFLAGS} -framework ZEngine-Core -framework ZEngine-Interop -framework ZEngine-PInvoke"
 )
 
 # Turn on ARC
@@ -124,6 +124,15 @@ add_custom_command(
   COMMAND ${CMAKE_COMMAND} -E copy_directory
   "$<TARGET_FILE_DIR:ZEngine-Interop>"
   "$<TARGET_FILE_DIR:${APP_NAME}>/Frameworks/ZEngine-Interop.framework"
+)
+
+# Copy the ZEngine-PInvoke framework into the app bundle
+add_custom_command(
+  TARGET ${APP_NAME}
+  POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_directory
+  "$<TARGET_FILE_DIR:ZEngine-PInvoke>"
+  "$<TARGET_FILE_DIR:${APP_NAME}>/Frameworks/ZEngine-PInvoke.framework"
 )
 
 # Copy the ZEngine-Interop dat files into the app bundle

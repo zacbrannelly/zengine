@@ -148,11 +148,13 @@ add_custom_command(TARGET ZEngine-Editor POST_BUILD
 
 add_custom_command(TARGET ZEngine-Editor POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ZEngine-Core> $<TARGET_FILE_DIR:ZEngine-Editor>/libZEngine-Core.dylib
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ZEngine-PInvoke> $<TARGET_FILE_DIR:ZEngine-Editor>/lib/libZEngine-PInvoke.dylib
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/ZEngine-Core.runtimeconfig.json $<TARGET_FILE_DIR:ZEngine-Editor>/ZEngine-Core.runtimeconfig.json
     DEPENDS
       ZEngine-Core
+      ZEngine-PInvoke
       ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/libZEngine-Core.dylib
       ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/ZEngine-Core.runtimeconfig.json
-    COMMENT "Copying ZEngine-Core library and C# runtime config to build directory"
+    COMMENT "Copying ZEngine-Core library, ZEngine-P/Invoke library and C# runtime config to binary directory"
     VERBATIM
 )

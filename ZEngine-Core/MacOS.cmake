@@ -28,10 +28,16 @@ set(PHYSX_BIN_PATH "${CMAKE_SOURCE_DIR}/3rdparty/PhysX/physx/bin/mac.x86_64/chec
 
 target_link_libraries(ZEngine-Core
   PRIVATE glfw
-  PRIVATE nlohmann_json::nlohmann_json
   PRIVATE ${DOTNET_CORECLR}
   PRIVATE ${DOTNET_HOST}
 )
+
+################################################################################
+# P/Invoke Shared Library
+################################################################################
+
+# Where the P/Invoke shared library will be located at runtime.
+set(ZENGINE_INTEROP_DLL_IMPORT_PATH lib/libZEngine-PInvoke.dylib)
 
 ################################################################################
 # C# Interop Project
@@ -40,14 +46,14 @@ target_link_libraries(ZEngine-Core
 add_custom_target(ZEngine-Interop-Dotnet ALL
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${ZENGINE_INTEROP_PROJECT_PATH} ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}
   COMMAND ${CMAKE_COMMAND} -E env --unset=TARGETNAME ${DOTNET_EXECUTABLE} publish ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}/ZEngine.Interop.csproj
-  DEPENDS ZEngine-Core
+  DEPENDS ZEngine-PInvoke
 )
 
 # Copy the interop dll to the output directory (where the binaries expect them to be at runtime).
 add_custom_command(TARGET ZEngine-Interop-Dotnet POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}/bin/Debug/net6.0/publish ${CMAKE_CURRENT_BINARY_DIR}/lib/ZEngine.Interop
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/Scripting/CSharp/ZEngine-Core.runtimeconfig.json ${CMAKE_CURRENT_BINARY_DIR}/ZEngine-Core.runtimeconfig.json
-  COMMENT "Copy the ZEngine-Interop.dll & its runtime config to the output directory"
+  COMMENT "Copy the ZEngine-Interop.dll (.NET library) to the output directory"
   DEPENDS ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}
 )
 

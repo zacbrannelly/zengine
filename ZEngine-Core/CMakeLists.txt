@@ -81,7 +81,6 @@ set(SOURCE_FILES
     "Utilities/File.cpp"
     "Utilities/FutureHelpers.cpp"
     "GameLoop/GameLoop.cpp"
-    "Core.i"
 )
 source_group("Source Files" FILES ${SOURCE_FILES})
 
@@ -89,38 +88,15 @@ source_group("Source Files" FILES ${SOURCE_FILES})
 # Target
 ################################################################################
 
-# Path to the ZEngine-Core shared library, used by the C# interop project.
-if (IOS)
-    set(ZENGINE_INTEROP_DLL_IMPORT_PATH ZEngine-Core.framework/ZEngine-Core)
-else()
-    set(ZENGINE_INTEROP_DLL_IMPORT_PATH libZEngine-Core.dylib)
-endif()
+# Configure the ZEngine-Core target, which will be a shared library used by both the C++ and C# projects.
+add_library(ZEngine-Core SHARED ${SOURCE_FILES})
 
 # Path to the C# interop project.
 set(ZENGINE_INTEROP_PROJECT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Scripting/CSharp/Lib/ZEngine.Interop)
 
-# Configure SWIG to use C++, configure the C# namespace to use in the generated code, and set the DllImport path.
-set_property(SOURCE Core.i PROPERTY CPLUSPLUS ON)
-set_property(SOURCE Core.i PROPERTY COMPILE_OPTIONS
-        -namespace ZEngine.Core
-        -dllimport ${ZENGINE_INTEROP_DLL_IMPORT_PATH})
-
 # Path where the C# interop project will be built (this is where the generated C# code will be placed).
 set(ZENGINE_INTEROP_PROJECT_BUILD_PATH ${CMAKE_CURRENT_BINARY_DIR}/projects/ZEngine.Interop)
 
-# Configure the ZEngine-Core target, which will be a shared library used by both the C++ and C# projects.
-swig_add_library(ZEngine-Core 
-    TYPE SHARED
-    SOURCES ${SOURCE_FILES}
-    LANGUAGE csharp
-    OUTPUT_DIR ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}
-)
-
-# Misc target properties - TODO: Are these needed?
-set_target_properties(ZEngine-Core PROPERTIES
-    SWIG_USE_TARGET_INCLUDE_DIRECTORIES ON
-    POSITION_INDEPENDENT_CODE ON
-)
 
 # Include platform specific configurations
 if (IOS)
@@ -194,3 +170,36 @@ target_link_libraries(ZEngine-Core
 add_custom_command(TARGET ZEngine-Core POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${ZENGINE_INTEROP_PROJECT_PATH} ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}
 )
+
+################################################################################
+# P/Invoke Shared Library
+################################################################################
+
+# Configure SWIG to use C++, configure the C# namespace to use in the generated code, and set the DllImport path.
+set_property(SOURCE Core.i PROPERTY CPLUSPLUS ON)
+set_property(SOURCE Core.i PROPERTY COMPILE_OPTIONS
+        -namespace ZEngine.Core
+        -dllimport ${ZENGINE_INTEROP_DLL_IMPORT_PATH})
+
+# Generate C# wrapper code for the C++ code, and generate a native shared library the generated C# code can use called ZEngine-PInvoke.
+swig_add_library(ZEngine-PInvoke 
+    TYPE SHARED
+    SOURCES Core.i
+    LANGUAGE csharp
+    OUTPUT_DIR ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}
+)
+
+target_link_libraries(ZEngine-PInvoke
+    PRIVATE ZEngine-Core
+)
+
+# Include the ZEngine-Core include directories for the P/Invoke project.
+target_include_directories(ZEngine-PInvoke
+    PRIVATE
+    "$<TARGET_PROPERTY:ZEngine-Core,INCLUDE_DIRECTORIES>"
+)
+
+# iOS specific configurations for the P/Invoke project.
+if (IOS)
+    include(iOS.PInvoke.cmake)
+endif()
