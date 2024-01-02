@@ -12,9 +12,7 @@ ZEngine is a hobby Game Engine. Initially undertaken as a university assignment 
 
 ZEngine utilizes a variety of libraries, each serving specific purposes to ensure efficient and seamless functionality. These include:
 
-* .NET 6.0: Scripting.
-  * `coreclr`: .NET runtime.
-  * `nethost`: Setup and launch .NET runtime.
+* `C# (.NET 8)`: Scripting.
 * `assimp`: Model loading.
 * `bgfx`: Platform agnostic rendering.
 * `imgui`: UI rendering.
@@ -51,5 +49,17 @@ make -j12
 
 ## Platform Compatibility
 
-ZEngine has primarily been developed and tested on MacOS.
-Currently other platforms are not supported. However, the engine is designed to be platform agnostic and should be able to run on other platforms with some effort.
+ZEngine has primarily been developed and tested on MacOS. It has some experimental support for iOS, but this is a work in progress. The engine is not currently compatible with Windows or Linux, but the libraries used are cross-platform, so it should be possible to get it working on these platforms with some effort.
+
+## iOS Support (very experimental)
+
+To generate the project for iOS, you will need to execute the following commands:
+
+```shell
+./generate-ios-project.sh
+```
+
+Then open the generated XCode project and build the ZEngine-Player target:
+```shell
+open iOS-Build/ZEngine.xcodeproj
+```
