@@ -70,11 +70,22 @@ set(ZENGINE_INTEROP_DLL_IMPORT_PATH ZEngine-PInvoke.framework/ZEngine-PInvoke)
 # C# Interop Project
 ################################################################################
 
+# TODO: Figure out the build pipeline for user C# projects.
+# For now we just copy the user's scripts into the ZEngine-Interop project.
+set(ZENGINE_GAME_PROJECT_ASSETS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ZEngine-Editor/ProjectTemplate/Assets)
+
+file(GLOB_RECURSE USER_SCRIPTS "${ZENGINE_GAME_PROJECT_ASSETS_DIR}/**/*.cs")
+foreach(SCRIPT ${USER_SCRIPTS})
+  message(STATUS "Found user script: ${SCRIPT}")
+endforeach()
+
 # For iOS we build the Interop project as a static library using NativeAOT.
 set(ZENGINE_INTEROP_IOS_PROJECT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Scripting/CSharp/Lib/ZEngine.Interop.iOS)
 add_custom_target(ZEngine-Interop-Dotnet ALL
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${ZENGINE_INTEROP_PROJECT_PATH} ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${ZENGINE_INTEROP_IOS_PROJECT_PATH} ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}/UserScripts
+  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${USER_SCRIPTS} ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}/UserScripts
   COMMAND ${CMAKE_COMMAND} -E env --unset=TARGETNAME ${DOTNET_EXECUTABLE} publish ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}/ZEngine.Interop.csproj
   DEPENDS ZEngine-Core
 )
