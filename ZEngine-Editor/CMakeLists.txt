@@ -63,6 +63,7 @@ set (SOURCE_FILES
   "Inspectors/Inspector.cpp"
   "Menus/MainMenuBar.cpp"
   "Project/Project.cpp"
+  "MapView/MapViewPicker.cpp"
   "Editor.cpp"
 )
 source_group("Source Files" FILES ${SOURCE_FILES})

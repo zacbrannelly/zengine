@@ -94,6 +94,7 @@ private:
 	VertexBuffer* _normalBuffer;
 	VertexBuffer* _texCoordBuffer;
 
+	// TODO: Stop using bgfx::VertexLayout and use our own VertexLayout class
 	bgfx::VertexLayout _vertexDecl;
 	bgfx::VertexLayout _colorDecl;
 	bgfx::VertexLayout _textureDecl;

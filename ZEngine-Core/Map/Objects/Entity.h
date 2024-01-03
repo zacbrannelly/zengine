@@ -56,7 +56,7 @@ private:
 		for (auto c : _components)
 		{
 			if (c->IsDerivedType(type))
-				results.push_back(c);
+				results.push_back(static_cast<T*>(c));
 		}
 	}
 };

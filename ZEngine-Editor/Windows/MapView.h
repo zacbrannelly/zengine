@@ -11,6 +11,7 @@ class TransformInspector;
 class CameraInspector;
 class Map;
 class MapViewToolbar;
+class MapViewPicker;
 
 class MapView : public GUIWindow
 {
@@ -27,12 +28,13 @@ private:
 	Entity* _viewEntity;
 	Camera* _viewCamera;
 	Editor* _editor;
-    MapViewToolbar* _mapViewToolbar;
+	MapViewToolbar* _mapViewToolbar;
+	MapViewPicker* _mapViewPicker;
 
 	TransformInspector* _transformInspector;
 	CameraInspector* _cameraInspector;
 
 	float _aspectRatioW, _aspectRatioH;
-    bool _cameraInFlight;
+	bool _cameraInFlight;
 };
 

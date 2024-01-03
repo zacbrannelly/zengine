@@ -44,12 +44,17 @@ void MapController::Play()
 	}
 
 	// Build the project scripts and then start playing.
+	_playState = BUILDING;
 	_buildFuture = _editor->GetProject()->BuildAndLoadAsync();
 	_buildFuture = then(_buildFuture, [this](bool result) {
 		if (result) 
 		{
 			// Trigger playing when the build is done.
 			this->_playWhenPossible = true;
+		}
+		else
+		{
+			this->_playState = STOPPED;
 		}
 
 		// TODO: Handle build failure in the UI.

@@ -11,6 +11,7 @@ class Physics3DSystem;
 
 enum PlayState {
   PLAYING,
+  BUILDING,
   PAUSED,
   STOPPED
 };

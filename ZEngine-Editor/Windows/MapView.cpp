@@ -8,6 +8,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "MapViewToolbar.h"
+#include "../MapView/MapViewPicker.h"
 #include "../Editor.h"
 #include "../Inspectors/TransformInspector.h"
 #include "../Inspectors/CameraInspector.h"
@@ -42,6 +43,7 @@ MapView::MapView(Editor* editor) : GUIWindow("Map View", 1024, 850, false), _cam
 #endif
     
 	_mapViewToolbar = new MapViewToolbar(_editor, this);
+	_mapViewPicker = new MapViewPicker(_editor, this);
 
 	// Add elements to the window
 	Add(_mapViewToolbar);
@@ -83,6 +85,21 @@ void MapView::ProcessInput()
 	{
 		_cameraInFlight = false;
 		inputManager->SetMouseGrabbed(false);
+	}
+
+	_mapViewPicker->UpdateAABBs();
+	if (!ImGuizmo::IsUsingAny() && ImGui::IsWindowHovered() && inputManager->GetButtonPressed(BUTTON_MOUSE_LEFT))
+	{
+		auto mouseScreenPos = inputManager->GetMousePos();
+		auto viewImageScreenPos = _viewImage->GetScreenPosition();
+		int mouseX = (int)(mouseScreenPos.x - viewImageScreenPos.x + 0.5f);
+		int mouseY = (int)(mouseScreenPos.y - viewImageScreenPos.y + 0.5f);
+		
+		mouseX = mouseX / _viewImage->GetWidth() * _viewCamera->GetViewportWidth();
+		mouseY = mouseY / _viewImage->GetHeight() * _viewCamera->GetViewportHeight();
+
+		auto entityPicked = _mapViewPicker->Pick(mouseX, mouseY, _viewCamera);
+		_editor->SetSelectedEntity(entityPicked);
 	}
 }
 
@@ -167,4 +184,5 @@ void MapView::RenderElement()
 
 MapView::~MapView()
 {
+	delete _mapViewPicker;
 }
