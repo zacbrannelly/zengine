@@ -87,11 +87,11 @@ void CameraInspector::RenderElement()
 
 		if (camera->GetProjectionMode() == Camera::PERSPECTIVE)
 		{
-			float fov = camera->GetFieldOfView();
+			float fov = glm::radians(camera->GetFieldOfView());
 
 			if (ImGui::SliderAngle("Field of View", &fov))
 			{
-				camera->SetFieldOfView(fov);
+				camera->SetFieldOfView(glm::degrees(fov));
 			}
 		}
 		else

@@ -18,9 +18,9 @@
 					"name": "Camera",
 					"type": "CAMERA",
 					
-					"clearColor": [1, 0, 0, 1],
-					"viewport": [0, 0, 1366, 768],
-					"projection": 0
+					"clearColor": [0, 0, 0, 1],
+					"viewport": [0, 0, 1920, 1080],
+					"projection": 1
 				},
 				{
 					"name": "AudioSource",
@@ -59,15 +59,15 @@
 					"name": "Transform",
 					"type": "TRANSFORM", 
 					
-					"position": [-2, 0, 0],
+					"position": [-2, 0, -5],
 					"rotation": [0, 0, 0, 1],
-					"scale": [0.3, 0.3, 0.3]
+					"scale": [0.1, 0.1, 0.1]
 				},
 				{
 					"name": "MeshRender 2",
 					"type": "MESH_RENDERER",
 					
-					"primitive": "cube",
+					"primitive": "sphere",
 					"materials": [ "00000000-0000-0000-0000-000000000015" ]
 				},
 				{
@@ -90,9 +90,33 @@
 					"type": "RIGID_BODY_3D"
 				},
 				{
-					"name": "BoxCollider3D",
-					"type": "BOX_COLLIDER_3D",
-					"size": [0.3, 0.3, 0.3]
+					"name": "Collider",
+					"type": "SPHERE_COLLIDER_3D",
+					"radius": 0.1
+				}
+			]
+		},
+		{
+			"name": "Pool Table",
+			"components":
+			[
+				{
+					"name": "Transform",
+					"type": "TRANSFORM", 
+					
+					"position": [-8.90, 0.776, 0],
+					"rotation": [ -0.5043442, 0.4956177, -0.4956177, 0.5043442 ],
+					"scale": [0.001, 0.001, 0.001]
+				},
+				{
+					"name": "MeshRender",
+					"type": "MESH_RENDERER",
+					"model": "00000000-0000-0000-0000-000000000030",
+					"materials": ["00000000-0000-0000-0000-000000000031"]
+				},
+				{
+					"name": "MeshCollider3D",
+					"type": "MESH_COLLIDER_3D"
 				}
 			]
 		},

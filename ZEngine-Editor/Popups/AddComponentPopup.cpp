@@ -16,6 +16,8 @@ AddComponentPopup::AddComponentPopup(Editor* editor) : GUIDialog("Add Component"
 {
   _editor = editor;
   _searchField = new GUITextField("Search");
+
+  // TODO: Get the object metadata from the a static method in the class corresponding to the object type.
   RegisterComponent({ "Audio Source",        "Audio Source component",                    AUDIO_SOURCE });
   RegisterComponent({ "Camera",              "Camera component",                          CAMERA });
   RegisterComponent({ "Mesh Renderer",       "Mesh Renderer component",                   MESH_RENDERER });
@@ -24,6 +26,7 @@ AddComponentPopup::AddComponentPopup(Editor* editor) : GUIDialog("Add Component"
   RegisterComponent({ "Sphere Collider 3D",  "Sphere Collider 3D component",              SPHERE_COLLIDER_3D });
   RegisterComponent({ "Capsule Collider 3D", "Capsule Collider 3D component",             CAPSULE_COLLIDER_3D });
   RegisterComponent({ "Plane Collider 3D",   "Plane Collider 3D (Static-only) component", PLANE_COLLIDER_3D });
+  RegisterComponent({ "Mesh Collider 3D",    "Mesh Collider 3D (Static-only) component",  MESH_COLLIDER_3D });
 }
 
 void AddComponentPopup::RegisterComponent(ComponentInfo component)

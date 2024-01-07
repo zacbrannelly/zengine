@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <algorithm>
+#include <nlohmann/json.hpp>
 
 using namespace std;
 
@@ -45,6 +46,33 @@ bool AssetCatalog::LoadCatalog(string path)
 		in.close();
 
 		_lastCatalogPath = path;
+		return true;
+	}
+
+	return false;
+}
+
+bool AssetCatalog::LoadCatalogFromProjectJson(string jsonFilePath)
+{
+	ifstream in(jsonFilePath, ios::in);
+
+	if (in.is_open())
+	{
+		nlohmann::json json;
+		in >> json;
+
+		auto catalog = json["catalog"];
+		for (auto& catalogItem : catalog)
+		{
+			auto id = uuids::uuid::from_string(catalogItem["id"].get<string>()).value();
+			auto type = StringToObjectType(catalogItem["type"].get<string>());
+			auto path = catalogItem["path"].get<string>();
+
+			_catalog.push_back({ id, path, type });
+		}
+
+		in.close();
+
 		return true;
 	}
 

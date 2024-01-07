@@ -150,13 +150,13 @@ add_custom_command(
   TARGET ${APP_NAME}
   POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy_directory
-  "${CMAKE_CURRENT_SOURCE_DIR}/Assets"
+  "${ZENGINE_GAME_PROJECT_DIR}/Assets"
   "$<TARGET_FILE_DIR:${APP_NAME}>/Assets"
 )
 add_custom_command(
   TARGET ${APP_NAME}
   POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy
-  "${CMAKE_CURRENT_SOURCE_DIR}/catalog.zengine"
-  "$<TARGET_FILE_DIR:${APP_NAME}>/catalog.zengine"
+  "${ZENGINE_GAME_PROJECT_DIR}/ProjectTemplate.zproj"
+  "$<TARGET_FILE_DIR:${APP_NAME}>/ProjectTemplate.zproj"
 )

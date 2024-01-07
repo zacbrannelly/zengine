@@ -17,7 +17,7 @@ public:
 	void SetSize(glm::vec3 size);
 	glm::vec3 GetSize() const;
 
-    virtual void RenderGizmos(int viewId) override;
+	virtual void RenderGizmos(int viewId) override;
 
 	static ZObject* CreateInstance(std::string name, ObjectType type);
 	static ZObject* Copy(std::string name, ZObject* object);
@@ -29,6 +29,6 @@ public:
 
 private:
 	glm::vec3 _size;
-    MeshRenderer* _cubeGizmoRenderer;
-    Transform* _cubeGizmoTransform;
+	MeshRenderer* _cubeGizmoRenderer;
+	Transform* _cubeGizmoTransform;
 };

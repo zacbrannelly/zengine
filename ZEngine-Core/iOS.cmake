@@ -72,9 +72,7 @@ set(ZENGINE_INTEROP_DLL_IMPORT_PATH ZEngine-PInvoke.framework/ZEngine-PInvoke)
 
 # TODO: Figure out the build pipeline for user C# projects.
 # For now we just copy the user's scripts into the ZEngine-Interop project.
-set(ZENGINE_GAME_PROJECT_ASSETS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ZEngine-Editor/ProjectTemplate/Assets)
-
-file(GLOB_RECURSE USER_SCRIPTS "${ZENGINE_GAME_PROJECT_ASSETS_DIR}/**/*.cs")
+file(GLOB_RECURSE USER_SCRIPTS "${ZENGINE_GAME_PROJECT_DIR}/Assets/**/*.cs")
 foreach(SCRIPT ${USER_SCRIPTS})
   message(STATUS "Found user script: ${SCRIPT}")
 endforeach()

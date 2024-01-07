@@ -35,6 +35,12 @@ public:
 	glm::vec2 GetMousePos() const;
 	glm::vec2 GetMouseDelta() const;
 
+	bool GetTouchDown(int index);
+	bool GetTouchPressed(int index);
+	bool GetTouchUp(int index);
+	glm::vec2 GetTouchPos(int index) const;
+	static void TouchCallback(int index, int action, float x, float y);
+
 #if !TARGET_OS_IPHONE
 	void RegisterKeyCallback(GLFWkeyfun cb);
 	void RegisterMousePosCallback(GLFWcursorposfun cb);
@@ -71,6 +77,12 @@ private:
 	std::vector<GLFWcursorposfun> _mousePosCallbacks;
 	std::vector<GLFWmousebuttonfun> _mouseButtonCallbacks;
 #endif
+
+	std::map<int, bool> _touchDown;
+	std::map<int, bool> _prevTouchDown;
+	std::map<int, bool> _touchUp;
+	std::map<int, glm::vec2> _touchPos;
+	std::map<int, glm::vec2> _touchDelta;
     
 	bool _isMouseGrabbed;
 	glm::vec2 _mouseDelta;

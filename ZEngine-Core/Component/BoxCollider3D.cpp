@@ -47,10 +47,10 @@ glm::vec3 BoxCollider3D::GetSize() const
 
 void BoxCollider3D::RenderGizmos(int viewId)
 {
-    auto parentTransform = GetOwner()->GetTransform();
-    _cubeGizmoTransform->SetPosition(parentTransform->GetPosition());
-    _cubeGizmoTransform->SetRotationQuaternion(parentTransform->GetRotationQuaternion());
-    _cubeGizmoRenderer->Render(viewId, _cubeGizmoTransform);
+  auto parentTransform = GetOwner()->GetTransform();
+  _cubeGizmoTransform->SetPosition(parentTransform->GetPosition());
+  _cubeGizmoTransform->SetRotationQuaternion(parentTransform->GetRotationQuaternion());
+  _cubeGizmoRenderer->Render(viewId, _cubeGizmoTransform);
 }
 
 ZObject* BoxCollider3D::CreateInstance(std::string name, ObjectType type)

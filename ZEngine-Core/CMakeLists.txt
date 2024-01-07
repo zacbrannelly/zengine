@@ -45,6 +45,7 @@ set(SOURCE_FILES
     "Component/SphereCollider3D.cpp"
     "Component/CapsuleCollider3D.cpp"
     "Component/PlaneCollider3D.cpp"
+    "Component/MeshCollider3D.cpp"
     "Display/Display.cpp"
     "Engine.cpp"
     "Input/InputManager.cpp"

@@ -261,6 +261,72 @@ void InputManager::MouseButtonCallback(GLFWwindow* window, int button, int actio
 }
 #endif
 
+bool InputManager::GetTouchDown(int index)
+{
+	if (_touchDown.find(index) == _touchDown.end())
+		_touchDown[index] = false;
+
+	return _touchDown[index];
+}
+
+bool InputManager::GetTouchPressed(int index)
+{
+	if (_touchDown.find(index) == _touchDown.end())
+	{
+		return false;
+	}
+
+	if (_prevTouchDown.find(index) == _prevTouchDown.end())
+	{
+		return false;
+	}
+
+	return _touchDown[index] && !_prevTouchDown[index];
+}
+
+bool InputManager::GetTouchUp(int index)
+{
+	if (_touchUp.find(index) == _touchUp.end())
+		_touchUp[index] = false;
+
+	return _touchUp[index];
+}
+
+glm::vec2 InputManager::GetTouchPos(int index) const
+{
+	if (_touchPos.find(index) == _touchPos.end())
+		return glm::vec2(0.0f, 0.0f);
+
+	return _touchPos.at(index);
+}
+
+void InputManager::TouchCallback(int index, int action, float x, float y)
+{
+	auto instance = InputManager::GetInstance();
+
+	if (action == BUTTON_ACTION_PRESS)
+	{
+		if (instance->_touchDown.find(index) != instance->_touchDown.end())
+		{
+			instance->_prevTouchDown[index] = instance->_touchDown[index];
+		}
+
+		instance->_touchDown[index] = true;
+	}
+	else if (action == BUTTON_ACTION_RELEASE)
+	{
+		if (instance->_touchDown.find(index) != instance->_touchDown.end())
+		{
+			instance->_prevTouchDown[index] = instance->_touchDown[index];
+		}
+
+		instance->_touchDown[index] = false;
+		instance->_touchUp[index] = true;
+	}
+
+	instance->_touchPos[index] = glm::vec2(x, y);
+}
+
 void InputManager::Shutdown()
 {
 }

@@ -13,12 +13,6 @@ namespace ZEngine.Core.Interop
       var typeName = Marshal.PtrToStringAnsi(typeNameString);
       if (typeName == null) return IntPtr.Zero;
 
-      var derp = Assembly.GetExecutingAssembly().GetTypes();
-      Console.WriteLine("Types:");
-      foreach (var foundType in derp) {
-        Console.WriteLine(foundType.Name);
-      }
-
       var type = Assembly.GetExecutingAssembly().GetType(typeName);
       var instance = Activator.CreateInstance(type);
       var handle = GCHandle.Alloc(instance);

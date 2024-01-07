@@ -16,6 +16,7 @@
 #include "../Component/SphereCollider3D.h"
 #include "../Component/CapsuleCollider3D.h"
 #include "../Component/PlaneCollider3D.h"
+#include "../Component/MeshCollider3D.h"
 
 #include "../Scripting/CSharp/CSharpScript.h"
 
@@ -56,6 +57,7 @@ void Factory::Init()
 	RegisterType(ObjectType::SPHERE_COLLIDER_3D, &SphereCollider3D::CreateInstance);
 	RegisterType(ObjectType::CAPSULE_COLLIDER_3D, &CapsuleCollider3D::CreateInstance);
 	RegisterType(ObjectType::PLANE_COLLIDER_3D, &PlaneCollider3D::CreateInstance);
+	RegisterType(ObjectType::MESH_COLLIDER_3D, &MeshCollider3D::CreateInstance);
 
 	// Register copy methods (real-time copying)
 	RegisterCopyType(ObjectType::MAP, &Map::Copy);
@@ -70,6 +72,7 @@ void Factory::Init()
 	RegisterCopyType(ObjectType::SPHERE_COLLIDER_3D, &SphereCollider3D::Copy);
 	RegisterCopyType(ObjectType::CAPSULE_COLLIDER_3D, &CapsuleCollider3D::Copy);
 	RegisterCopyType(ObjectType::PLANE_COLLIDER_3D, &PlaneCollider3D::Copy);
+	RegisterCopyType(ObjectType::MESH_COLLIDER_3D, &MeshCollider3D::Copy);
 
 	// Register component importers (from JSON objects)
 	TransformImporter::Init();
@@ -101,6 +104,9 @@ void Factory::Init()
 
 	BasicImporter<PlaneCollider3D>::Init();
 	RegisterTypeImporter(ObjectType::PLANE_COLLIDER_3D, BasicImporter<PlaneCollider3D>::Import);
+
+	BasicImporter<MeshCollider3D>::Init();
+	RegisterTypeImporter(ObjectType::MESH_COLLIDER_3D, BasicImporter<MeshCollider3D>::Import);
 }
 
 ZObject* Factory::CreateInstance(std::string name, ObjectType type)

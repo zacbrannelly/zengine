@@ -62,15 +62,20 @@
     NSString* basePath = [[NSBundle mainBundle] bundlePath];
     _assetSystem->SetBasePath([basePath UTF8String]);
     
-    NSString* catalogPath = [[NSBundle mainBundle] pathForResource:@"catalog" ofType:@"zengine"];
+    NSString* catalogPath = [[NSBundle mainBundle] pathForResource:@"ProjectTemplate" ofType:@"zproj"];
     AssetCatalog* catalog = new AssetCatalog();
-    catalog->LoadCatalog([catalogPath UTF8String]);
+    catalog->LoadCatalogFromProjectJson([catalogPath UTF8String]);
     _assetSystem->SetCatalog(catalog);
 
     _mapManager = MapManager::GetInstance();
 
     auto mapAsset = _assetSystem->LoadAsset("test map", "Assets/maps/test_map.map", MAP_ASSET)->Cast<MapAsset>();
     _mapManager->SetCurrentMap(mapAsset->GetMap());
+}
+
+- (void) touchCallback:(int) fingerIndex withAction:(int) action andX:(int) x andY:(int) y
+{
+    InputManager::TouchCallback(fingerIndex, action, x, y);
 }
 
 - (void) updateEngine

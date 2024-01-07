@@ -1,6 +1,10 @@
 cmake_minimum_required (VERSION 3.5)
 project (ZEngine)
 
+# TODO: Figure out the build pipeline for user C# projects.
+# For now we just copy the user's scripts into the ZEngine-Interop project.
+set(ZENGINE_GAME_PROJECT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ZEngine-Editor/ProjectTemplate)
+
 # Policies for SWIG to work correctly.
 # TODO: Write better documentation for this.
 if (POLICY CMP0122)

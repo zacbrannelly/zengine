@@ -20,7 +20,8 @@ public:
 	~AssetCatalog();
 
 	void ClearCatalog();
-	bool LoadCatalog(std::string path = "catalog.zengine"); 
+	bool LoadCatalog(std::string path = "catalog.zengine");
+	bool LoadCatalogFromProjectJson(std::string jsonFilePath);
 	bool SaveCatalog(std::string path = "catalog.zengine");
 
 	void RegisterAsset(Asset* asset);

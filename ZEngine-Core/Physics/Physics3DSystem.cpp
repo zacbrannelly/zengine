@@ -23,10 +23,18 @@ bool Physics3DSystem::Init()
   std::cout << "PhysX version: " << PX_PHYSICS_VERSION_MAJOR << "." << PX_PHYSICS_VERSION_MINOR << std::endl;
 
   // Setup physics.
-  _physics = PxCreatePhysics(PX_PHYSICS_VERSION, *_foundation, PxTolerancesScale());
+  auto scale = PxTolerancesScale();
+  _physics = PxCreatePhysics(PX_PHYSICS_VERSION, *_foundation, scale);
   if (!_physics)
   {
     std::cerr << "PxCreatePhysics failed!" << std::endl;
+    return false;
+  }
+
+  _cooking = PxCreateCooking(PX_PHYSICS_VERSION, *_foundation, PxCookingParams(scale));
+  if (!_cooking)
+  {
+    std::cerr << "PxCreateCooking failed!" << std::endl;
     return false;
   }
 
@@ -48,7 +56,7 @@ void Physics3DSystem::PushScene()
   // Setup basic scene with gravity.
   // TODO: Expose these settings to the editor.
   PxSceneDesc sceneDesc(_physics->getTolerancesScale());
-  sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
+  sceneDesc.gravity = PxVec3(0.0f, 0.0f, 9.81f);
   sceneDesc.cpuDispatcher = _dispatcher;
   sceneDesc.filterShader = PxDefaultSimulationFilterShader;
 
@@ -81,9 +89,10 @@ void Physics3DSystem::Shutdown()
     scene->release();
     _sceneStack.pop();
   }
-	PX_RELEASE(_dispatcher);
-	PX_RELEASE(_physics);
-	PX_RELEASE(_foundation);
+  PX_RELEASE(_dispatcher);
+  PX_RELEASE(_cooking);
+  PX_RELEASE(_physics);
+  PX_RELEASE(_foundation);
 
   delete _errorCallback;
   delete _allocator;

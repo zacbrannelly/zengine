@@ -31,7 +31,7 @@ namespace MyGame
 
     public void Update()
     {
-      if (_inputManager.GetButtonDown(ButtonCode.BUTTON_KEY_A))
+      if (_inputManager.GetButtonDown(ButtonCode.BUTTON_KEY_A) || _inputManager.GetTouchDown(0))
       {
         SpawnBody();
       }
