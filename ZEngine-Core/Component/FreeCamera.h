@@ -13,8 +13,6 @@ public:
   void Init() override;
   void Update() override;
 
-  void SetEnabled(bool enabled);
-
   void SetSpeed(float speed);
   float GetSpeed() const;
 

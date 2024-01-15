@@ -9,7 +9,6 @@ FreeCamera::FreeCamera() : Camera()
 {
   _speed = 0.1f;
   _sensitivity = 0.1f;
-  _enabled = false;
 }
 
 void FreeCamera::Init()
@@ -68,11 +67,6 @@ void FreeCamera::Update()
   {
     transform->Translate(-transform->GetUp() * _speed);
   }
-}
-
-void FreeCamera::SetEnabled(bool enabled)
-{
-  _enabled = enabled;
 }
 
 FreeCamera::~FreeCamera()
