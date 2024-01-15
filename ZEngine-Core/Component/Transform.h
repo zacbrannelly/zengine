@@ -16,6 +16,7 @@ public:
 
 	void SetPosition(const glm::vec3& position);
 	const glm::vec3& GetPosition() const;
+	glm::vec3 GetWorldPosition() const;
 
 	void SetPosition(float x, float y, float z);
 	float GetPositionX() const;
@@ -29,6 +30,7 @@ public:
 	
 	void SetScale(const glm::vec3& scale);
 	const glm::vec3& GetScale() const;
+	const glm::vec3 GetWorldScale() const;
 
 	void Rotate(const glm::vec3& rotation);
 
@@ -37,6 +39,7 @@ public:
 
 	void SetRotationQuaternion(const glm::quat& rotation);
 	const glm::quat& GetRotationQuaternion() const;
+	glm::quat GetWorldRotationQuaternion() const;
 
 	const glm::mat4 GetLocalTransformMatrix() const;
 	const glm::mat4 GetWorldTransformMatrix() const;

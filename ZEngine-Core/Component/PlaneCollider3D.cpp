@@ -8,7 +8,11 @@
 PlaneCollider3D::PlaneCollider3D() : Collider3D("Plane Collider 3D", PLANE_COLLIDER_3D)
 {
   RegisterDerivedType(PLANE_COLLIDER_3D);
-  SetGeometry(new physx::PxPlaneGeometry());
+}
+
+void PlaneCollider3D::BuildGeometry()
+{
+	SetGeometrySilently(new physx::PxPlaneGeometry());
 }
 
 ZObject* PlaneCollider3D::CreateInstance(std::string name, ObjectType type)

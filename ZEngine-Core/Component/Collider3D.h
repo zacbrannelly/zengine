@@ -22,6 +22,7 @@ public:
   virtual void Render(int viewId) override {}
   virtual void OnDestroy() override;
 
+  virtual void BuildGeometry() = 0;
   physx::PxGeometry* GetGeometry() const;
 
   static ObjectType GetStaticType() 
@@ -30,7 +31,9 @@ public:
   }
 
 protected:
-  void SetGeometry(physx::PxGeometry* geometry);
+  void SetGeometry(physx::PxGeometry* geometry, bool notify);
+  void SetGeometryAndNotify(physx::PxGeometry* geometry);
+  void SetGeometrySilently(physx::PxGeometry* geometry);
   void OnGeometryChanged();
   RigidBody3D* GetDynamicRigidBody() const;
 

@@ -3,11 +3,6 @@
 #include "DynamicCollider3D.h"
 #include <glm/glm.hpp>
 
-class Mesh;
-class Material;
-class MeshRenderer;
-class Transform;
-
 class BoxCollider3D : public DynamicCollider3D
 {
 public:
@@ -16,8 +11,9 @@ public:
 
 	void SetSize(glm::vec3 size);
 	glm::vec3 GetSize() const;
+	glm::vec3 GetWorldSize() const;
 
-	virtual void RenderGizmos(int viewId) override;
+	virtual void BuildGeometry() override;
 
 	static ZObject* CreateInstance(std::string name, ObjectType type);
 	static ZObject* Copy(std::string name, ZObject* object);
@@ -29,6 +25,4 @@ public:
 
 private:
 	glm::vec3 _size;
-	MeshRenderer* _cubeGizmoRenderer;
-	Transform* _cubeGizmoTransform;
 };

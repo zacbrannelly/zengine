@@ -9,16 +9,21 @@ public:
 	CapsuleCollider3D();
 	~CapsuleCollider3D();
 
-  void SetSize(float radius, float height);
-  float GetRadius() const;
-  float GetHeight() const;
+	void BuildGeometry() override;
+
+	void SetSize(float radius, float height);
+	float GetRadius() const;
+	float GetHeight() const;
+
+	float GetWorldRadius() const;
+	float GetWorldHeight() const;
 
 	static ZObject* CreateInstance(std::string name, ObjectType type);
 	static ZObject* Copy(std::string name, ZObject* object);
 
 	static ObjectType GetStaticType()
 	{
-		return BOX_COLLIDER_3D;
+		return CAPSULE_COLLIDER_3D;
 	}
 
 private:

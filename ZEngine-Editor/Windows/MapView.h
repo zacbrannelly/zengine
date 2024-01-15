@@ -5,6 +5,7 @@
 #include <ZEngine-Core/Rendering/Graphics.h>
 
 class Editor;
+class GizmoSystem;
 class Camera;
 class Entity;
 class TransformInspector;
@@ -28,6 +29,7 @@ private:
 	Entity* _viewEntity;
 	Camera* _viewCamera;
 	Editor* _editor;
+	GizmoSystem* _gizmoSystem;
 	MapViewToolbar* _mapViewToolbar;
 	MapViewPicker* _mapViewPicker;
 

@@ -24,6 +24,13 @@ public:
 	{
 		return IsDerivedType(T::GetStaticType());
 	}
+
+	template<class T> const T* As() const
+	{
+		if (IsType<T>())
+			return static_cast<const T*>(this);
+		return nullptr;
+	}
 private:
 	std::string _name;
 	ObjectType _type;

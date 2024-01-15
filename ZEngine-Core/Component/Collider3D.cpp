@@ -14,17 +14,36 @@ Collider3D::Collider3D(std::string name, ObjectType objectType) : Component(name
 
 void Collider3D::Init()
 {
+  auto isDynamicCollider = IsDerivedType(DYNAMIC_COLLIDER_3D);
+  auto hasDynamicRigidBody = GetDynamicRigidBody() != nullptr;
+
+  // Rigid Body component will handle injecting the collider into the physics system.
+  if (isDynamicCollider && hasDynamicRigidBody) return;
+
+  // Notify the physics system that a static collider has been added.
   OnGeometryChanged();
 }
 
-void Collider3D::SetGeometry(physx::PxGeometry* geometry)
+void Collider3D::SetGeometry(physx::PxGeometry* geometry, bool notify)
 {
   if (GetGeometry() != nullptr) {
     auto geometry = GetGeometry();
     delete geometry;
   }
   _geometry = geometry;
-  OnGeometryChanged();
+
+  // Optionally notify the physics system that the collider has been modified.
+  if (notify) OnGeometryChanged();
+}
+
+void Collider3D::SetGeometryAndNotify(physx::PxGeometry* geometry)
+{
+  SetGeometry(geometry, true);
+}
+
+void Collider3D::SetGeometrySilently(physx::PxGeometry* geometry)
+{
+  SetGeometry(geometry, false);
 }
 
 void Collider3D::OnGeometryChanged()
@@ -61,6 +80,10 @@ void Collider3D::OnGeometryChanged()
       physx::PxQuat(quat.x, quat.y, quat.z, quat.w)
     );
     _staticBody = physics->GetPhysics()->createRigidStatic(physxTransform);
+
+    // Construct the geometry.
+    BuildGeometry();
+    if (_geometry == nullptr) return;
 
     // Create shape and attach to actor.
     auto shape = physics->GetPhysics()->createShape(*_geometry, *physics->GetMaterial(), true);

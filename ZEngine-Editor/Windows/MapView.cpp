@@ -13,12 +13,14 @@
 #include "../Inspectors/TransformInspector.h"
 #include "../Inspectors/CameraInspector.h"
 #include "../imgui-includes.h"
+#include "../Gizmos/GizmoSystem.h"
 
 #include <iostream>
 
 MapView::MapView(Editor* editor) : GUIWindow("Map View", 1024, 850, false), _cameraInFlight(false)
 {
 	_editor = editor;
+	_gizmoSystem = GizmoSystem::GetInstance();
 
 	// We must create an entity (so we can transform the camera) and translate it back 10 units
 	_viewEntity = Factory::CreateInstance<Entity>("View Object", ObjectType::ENTITY);
@@ -172,10 +174,13 @@ void MapView::RenderElement()
 	// Render the world without the internal cameras
 	if (_editor->GetSelectedMap() != nullptr)
 	{
+		// Render the world to the render texture
 		auto map = _editor->GetSelectedMap();
 		auto viewId = _viewCamera->GetViewId();
 		map->RenderWorld(viewId);
-		map->RenderGizmos(viewId);
+
+		// Render the gizmos (UI elements) to the render texture
+		_gizmoSystem->RenderGizmos(viewId);
 	}
 
 	// Render the actual texture to the screen (more like submit the draw call to bgfx)

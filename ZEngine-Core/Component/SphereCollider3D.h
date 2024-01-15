@@ -9,8 +9,11 @@ public:
 	SphereCollider3D();
 	~SphereCollider3D();
 
+	void BuildGeometry() override;
+
 	void SetRadius(float radius);
 	float GetRadius() const;
+	float GetWorldRadius() const;
 
 	static ZObject* CreateInstance(std::string name, ObjectType type);
 	static ZObject* Copy(std::string name, ZObject* object);

@@ -47,6 +47,16 @@ const glm::vec3& Transform::GetPosition() const
 	return _position;
 }
 
+glm::vec3 Transform::GetWorldPosition() const
+{
+	if (_parent != nullptr)
+	{
+		return _parent->GetWorldPosition() + _position;
+	}
+
+	return _position;
+}
+
 float Transform::GetPositionX() const
 {
 	return _position.x;
@@ -92,6 +102,16 @@ const glm::vec3& Transform::GetScale() const
 	return _scale;
 }
 
+const glm::vec3 Transform::GetWorldScale() const
+{
+	if (_parent != nullptr)
+	{
+		return _parent->GetWorldScale() * _scale;
+	}
+
+	return _scale;
+}
+
 void Transform::Rotate(const glm::vec3& rotation)
 {
 	_rotation = glm::quat(glm::radians(rotation)) * _rotation;
@@ -114,6 +134,16 @@ void Transform::SetRotationQuaternion(const glm::quat& rotation)
 
 const glm::quat& Transform::GetRotationQuaternion() const
 {
+	return _rotation;
+}
+
+glm::quat Transform::GetWorldRotationQuaternion() const
+{
+	if (_parent != nullptr)
+	{
+		return _parent->GetWorldRotationQuaternion() * _rotation;
+	}
+
 	return _rotation;
 }
 

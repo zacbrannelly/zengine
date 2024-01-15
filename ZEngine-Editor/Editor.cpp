@@ -48,6 +48,7 @@
 #include "Windows/LogWindow.h"
 #include "Dialogs/ProjectBrowserDialog.h"
 #include "Dialogs/BuildStatusDialog.h"
+#include "Gizmos/GizmoSystem.h"
 #include "imgui-includes.h"
 
 Editor::Editor(Display* display) : _display(display), _selectedMap(nullptr), _selectedObject(nullptr), _project(nullptr)
@@ -195,6 +196,10 @@ int main(int argc, char* argv[])
 	Editor* editorContainer = new Editor(&display);
 	EditorToolbar* toolbar = new EditorToolbar(editorContainer);
 
+	// Editor specific sub-systems
+	auto gizmoSystem = GizmoSystem::GetInstance();
+	gizmoSystem->Init(editorContainer);
+
 	// Called at a fixed rate
 	std::function<void()> updateCallback = [&]()
 	{
@@ -237,6 +242,7 @@ int main(int argc, char* argv[])
 	delete editorContainer;
 
 	// Clean up
+	gizmoSystem->Shutdown();
 	gui->Shutdown();
 	assetManager->Shutdown();
 	graphics->Shutdown();

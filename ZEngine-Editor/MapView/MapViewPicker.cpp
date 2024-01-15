@@ -28,14 +28,17 @@ void MapViewPicker::UpdateAABBs()
     auto meshRenderers = entity->GetComponentsByType<MeshRenderer>();
     for (MeshRenderer* meshRenderer : meshRenderers)
     {
+      // Track the mesh renderer so we don't remove it later.
       existingMeshes.insert(meshRenderer);
 
       if (_meshBoundingBoxMap.contains(meshRenderer))
       {
+        // Update the transform of the mesh's bounding box.
         _meshBoundingBoxMap[meshRenderer].SetTransform(entity->GetTransform()->GetWorldTransformMatrix());
       } 
       else 
       {
+        // Create a new bounding box for the mesh.
         AABB boundingBox;
         boundingBox.SetFromMesh(meshRenderer->GetMesh(), entity->GetTransform()->GetWorldTransformMatrix());
         boundingBox.userData = entity;
@@ -44,6 +47,7 @@ void MapViewPicker::UpdateAABBs()
     }
   }
 
+  // Mark any bounding boxes that no longer exist for removal.
   std::vector<MeshRenderer*> toRemove;
   for (auto& [meshRenderer, boundingBox] : _meshBoundingBoxMap)
   {
@@ -53,6 +57,7 @@ void MapViewPicker::UpdateAABBs()
     }
   }
 
+  // Remove any bounding boxes that no longer exist on the map.
   for (MeshRenderer* meshRenderer : toRemove)
   {
     _meshBoundingBoxMap.erase(meshRenderer);

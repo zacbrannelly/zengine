@@ -75,11 +75,11 @@ void MeshRenderer::Render(int viewId)
 
 void MeshRenderer::Render(int viewId, Transform* transform)
 {
-    if (_mesh != nullptr)
-    {
-        auto worldTransform = transform->GetWorldTransformMatrix();
-        _mesh->Draw(viewId, _materials, worldTransform);
-    }
+	if (_mesh != nullptr)
+	{
+		auto worldTransform = transform->GetWorldTransformMatrix();
+		_mesh->Draw(viewId, _materials, worldTransform);
+	}
 }
 
 MeshRenderer::~MeshRenderer()

@@ -47,7 +47,13 @@ void RigidBody3D::Init()
     cout << "RigidBody3D::Init() - No collider found on parent object." << endl;
     return;
   }
+
+  collider->BuildGeometry();
   auto geometry = collider->GetGeometry();
+  if (geometry == nullptr) {
+    cout << "RigidBody3D::Init() - No geometry found on collider." << endl;
+    return;
+  }
 
   auto sdk = physics->GetPhysics();
   auto scene = physics->GetScene();
@@ -96,6 +102,7 @@ void RigidBody3D::OnColliderModified()
     _rigidBody->detachShape(*shapes[0]);
     
     // Create new shape and attach to actor.
+    collider->BuildGeometry();
     auto geometry = collider->GetGeometry();
     auto shape = sdk->createShape(*geometry, *physics->GetMaterial(), true);
     _rigidBody->attachShape(*shape);
@@ -212,6 +219,8 @@ void RigidBody3D::Update()
 {
   auto transform = GetOwner()->GetTransform();
   auto pose = _rigidBody->getGlobalPose();
+
+  // TODO: Set position and rotation in world space, not local space.
   transform->SetPosition(glm::vec3(pose.p.x, pose.p.y, pose.p.z));
   transform->SetRotationQuaternion(glm::quat(pose.q.w, pose.q.x, pose.q.y, pose.q.z));
 }

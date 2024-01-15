@@ -64,6 +64,10 @@ set (SOURCE_FILES
   "Menus/MainMenuBar.cpp"
   "Project/Project.cpp"
   "MapView/MapViewPicker.cpp"
+  "Gizmos/GizmoSystem.cpp"
+  "Gizmos/BoxCollider3DGizmoRenderer.cpp"
+  "Gizmos/SphereCollider3DGizmoRenderer.cpp"
+  "Gizmos/CapsuleCollider3DGizmoRenderer.cpp"
   "Editor.cpp"
 )
 source_group("Source Files" FILES ${SOURCE_FILES})

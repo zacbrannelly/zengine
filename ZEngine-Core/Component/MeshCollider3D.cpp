@@ -15,7 +15,7 @@ MeshCollider3D::MeshCollider3D() : Collider3D("Mesh Collider 3D", MESH_COLLIDER_
   RegisterDerivedType(MESH_COLLIDER_3D);
 }
 
-void MeshCollider3D::Init()
+void MeshCollider3D::BuildGeometry()
 {
   const auto owner = GetOwner();
   if (owner == nullptr)
@@ -79,10 +79,7 @@ void MeshCollider3D::Init()
 
   const auto& transformScale = owner->GetTransform()->GetScale();
   const PxVec3 meshScale(transformScale.x, transformScale.y, transformScale.z);
-  SetGeometry(new PxTriangleMeshGeometry(_triangleMesh, PxMeshScale(meshScale)));
-
-  // Inject the mesh into the physics system.
-  Collider3D::Init();
+  SetGeometrySilently(new PxTriangleMeshGeometry(_triangleMesh, PxMeshScale(meshScale)));
 }
 
 ZObject* MeshCollider3D::CreateInstance(std::string name, ObjectType type)

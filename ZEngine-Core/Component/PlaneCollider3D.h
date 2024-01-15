@@ -9,6 +9,8 @@ public:
 	PlaneCollider3D();
 	~PlaneCollider3D();
 
+	virtual void BuildGeometry() override;
+
 	static ZObject* CreateInstance(std::string name, ObjectType type);
 	static ZObject* Copy(std::string name, ZObject* object);
 

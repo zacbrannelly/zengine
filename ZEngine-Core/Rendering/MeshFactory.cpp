@@ -243,6 +243,140 @@ Mesh* MeshFactory::CreateSphere(std::string name, int resolution)
 	return newMesh;
 }
 
+Mesh* MeshFactory::CreateSphereOutline(std::string name, int latitudeBands, int longitudeBands)
+{
+	std::vector<glm::vec3> verts;
+
+	// Generate sphere vertices
+	for (int latNumber = 0; latNumber <= latitudeBands; latNumber++) {
+		float theta = latNumber * M_PI / latitudeBands;
+		float sinTheta = sin(theta);
+		float cosTheta = cos(theta);
+
+		for (int longNumber = 0; longNumber <= longitudeBands; longNumber++) {
+			float phi = longNumber * 2 * M_PI / longitudeBands;
+			float sinPhi = sin(phi);
+			float cosPhi = cos(phi);
+
+			glm::vec3 point;
+			point.x = cosPhi * sinTheta;
+			point.y = cosTheta;
+			point.z = sinPhi * sinTheta;
+			verts.push_back(point);
+		}
+	}
+
+	// Define line segments based on vertices
+	std::vector<uint32_t> indices;
+	for (int latNumber = 0; latNumber < latitudeBands; latNumber++) {
+		for (int longNumber = 0; longNumber < longitudeBands; longNumber++) {
+			int first = (latNumber * (longitudeBands + 1)) + longNumber;
+			int second = first + longitudeBands + 1;
+
+			indices.push_back(first);
+			indices.push_back(second);
+			indices.push_back(first + 1);
+			indices.push_back(second + 1);
+		}
+	}
+
+	std::vector<glm::vec4> colors(verts.size(), {1, 1, 1, 1});
+
+	auto newMesh = Factory::CreateInstance<Mesh>(name, ObjectType::MESH);
+	newMesh->SetVertices(verts);
+	newMesh->SetIndices(indices);
+	newMesh->SetColors(colors);
+	newMesh->SetMode(LINES);
+
+	return newMesh;
+}
+
+Mesh* MeshFactory::CreateHemiSphereOutline(std::string name, int latitudeBands, int longitudeBands) {
+	std::vector<glm::vec3> verts;
+
+	// Generate half-sphere vertices
+	for (int latNumber = 0; latNumber <= latitudeBands / 2; latNumber++) {
+		float theta = latNumber * M_PI / latitudeBands;
+		float sinTheta = sin(theta);
+		float cosTheta = cos(theta);
+
+		for (int longNumber = 0; longNumber <= longitudeBands; longNumber++) {
+			float phi = longNumber * 2 * M_PI / longitudeBands;
+			float sinPhi = sin(phi);
+			float cosPhi = cos(phi);
+
+			glm::vec3 point;
+			point.x = cosPhi * sinTheta;
+			point.y = cosTheta;
+			point.z = sinPhi * sinTheta;
+			verts.push_back(point);
+		}
+	}
+
+	// Define line segments based on vertices
+	std::vector<uint32_t> indices;
+	for (int latNumber = 0; latNumber < latitudeBands / 2; latNumber++) {
+		for (int longNumber = 0; longNumber < longitudeBands; longNumber++) {
+			int first = (latNumber * (longitudeBands + 1)) + longNumber;
+			int second = first + longitudeBands + 1;
+
+			indices.push_back(first);
+			indices.push_back(second);
+			indices.push_back(first + 1);
+			indices.push_back(second + 1);
+		}
+	}
+
+	std::vector<glm::vec4> colors(verts.size(), {1, 1, 1, 1});
+
+	auto newMesh = Factory::CreateInstance<Mesh>(name, ObjectType::MESH);
+	newMesh->SetVertices(verts);
+	newMesh->SetIndices(indices);
+	newMesh->SetColors(colors);
+	newMesh->SetMode(LINES);
+
+	return newMesh;
+}
+
+Mesh* MeshFactory::CreateCylinderOutline(std::string name, int radialSegments, float height) {
+	std::vector<glm::vec3> verts;
+
+	// Top and bottom circle vertices
+	for (int i = 0; i < 2; ++i) {
+		float y = (i == 0) ? -height / 2 : height / 2;
+		for (int j = 0; j <= radialSegments; ++j) {
+			float theta = j * 2 * M_PI / radialSegments;
+			verts.push_back(glm::vec3(cos(theta), y, sin(theta)));
+		}
+	}
+
+	// Define line segments based on vertices
+	std::vector<uint32_t> indices;
+	for (int i = 0; i < radialSegments; ++i) {
+		// Top circle
+		indices.push_back(i);
+		indices.push_back((i + 1) % radialSegments);
+
+		// Bottom circle
+		indices.push_back(i + radialSegments + 1);
+		indices.push_back(((i + 1) % radialSegments) + radialSegments + 1);
+
+		// Side lines
+		indices.push_back(i);
+		indices.push_back(i + radialSegments + 1);
+	}
+
+	std::vector<glm::vec4> colors(verts.size(), {1, 1, 1, 1});
+
+	auto newMesh = Factory::CreateInstance<Mesh>(name, ObjectType::MESH);
+	newMesh->SetVertices(verts);
+	newMesh->SetIndices(indices);
+	newMesh->SetColors(colors);
+	newMesh->SetMode(LINES);
+
+	return newMesh;
+}
+
 Mesh* MeshFactory::CreateRectangle(std::string name)
 {
 	std::vector<glm::vec3> verts
