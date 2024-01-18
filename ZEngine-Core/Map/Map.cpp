@@ -27,6 +27,8 @@ ZObject* Map::Copy(std::string name, ZObject* object)
 
 	auto source = static_cast<Map*>(object);
 	auto newMap = new Map(name);
+	
+	newMap->SetPhysicsSceneDescription(source->GetPhysicsSceneDescription());
 
 	for (auto entity : source->GetEntities())
 	{

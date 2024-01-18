@@ -42,6 +42,7 @@ set (SOURCE_FILES
   "Windows/MaterialEditor.cpp"
   "Windows/GameView.cpp"
   "Windows/MapViewToolbar.cpp"
+  "Windows/PhysicsSettings.cpp"
   "Dialogs/CreateMapDialog.cpp"
   "Dialogs/CreateShaderDialog.cpp"
   "Dialogs/NewFolderDialog.cpp"

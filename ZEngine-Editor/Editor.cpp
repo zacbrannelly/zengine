@@ -46,6 +46,7 @@
 #include "Windows/AssetImporter.h"
 #include "Windows/AssetExplorer.h"
 #include "Windows/LogWindow.h"
+#include "Windows/PhysicsSettings.h"
 #include "Dialogs/ProjectBrowserDialog.h"
 #include "Dialogs/BuildStatusDialog.h"
 #include "Gizmos/GizmoSystem.h"
@@ -65,6 +66,7 @@ Editor::Editor(Display* display) : _display(display), _selectedMap(nullptr), _se
 	Add(new AssetImporter());
 	Add(new AssetExplorer(this));
 	Add(new LogWindow());
+	Add(new PhysicsSettings(this));
 	Add(new ProjectBrowserDialog(this));
 	Add(new BuildStatusDialog(this));
 }
