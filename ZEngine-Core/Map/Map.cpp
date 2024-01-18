@@ -10,6 +10,8 @@ using namespace std;
 
 Map::Map(std::string name) : ZObject(name, ObjectType::MAP)
 {
+	_physicsSceneDescription = PhysicsSceneDescription();
+	_physicsSceneDescription.gravity = glm::vec3(0.0f, 0.0f, 9.81f);
 	RegisterDerivedType(MAP);
 }
 
@@ -177,6 +179,16 @@ void Map::RegisterCameras()
 const vector<Camera*>& Map::GetCameras() const
 {
 	return _cameras;
+}
+
+void Map::SetPhysicsSceneDescription(PhysicsSceneDescription sceneDescription)
+{
+	_physicsSceneDescription = sceneDescription;
+}
+
+const PhysicsSceneDescription& Map::GetPhysicsSceneDescription() const
+{
+	return _physicsSceneDescription;
 }
 
 void Map::Update()

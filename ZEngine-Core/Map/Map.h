@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "Objects/ZObject.h"
+#include "../Physics/Physics3DSystem.h"
 
 class Entity;
 class Camera;
@@ -24,6 +25,9 @@ public:
 	void RegisterCameras();
 	const std::vector<Camera*>& GetCameras() const;
 
+	void SetPhysicsSceneDescription(PhysicsSceneDescription description);
+	const PhysicsSceneDescription& GetPhysicsSceneDescription() const;
+
 	void Init();
 	void Update();
 	void Render();
@@ -39,5 +43,6 @@ public:
 private:
 	std::vector<Entity*> _entities;
 	std::vector<Camera*> _cameras;
+	PhysicsSceneDescription _physicsSceneDescription;
 };
 

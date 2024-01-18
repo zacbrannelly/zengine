@@ -1,5 +1,9 @@
 {
 	"name": "test_map",
+	"physics":
+	{
+		"gravity": [0, 0, 9.81]
+	},
 	"entities": 
 	[
 		{
@@ -19,7 +23,7 @@
 					"type": "CAMERA",
 					
 					"clearColor": [0, 0, 0, 1],
-					"viewport": [0, 0, 1920, 1080],
+					"viewport": [0, 0, 2556, 1179],
 					"projection": 1
 				},
 				{
@@ -92,7 +96,7 @@
 				{
 					"name": "Collider",
 					"type": "SPHERE_COLLIDER_3D",
-					"radius": 0.1
+					"radius": 1.0
 				}
 			]
 		},

@@ -53,10 +53,16 @@ bool Physics3DSystem::Init()
 
 void Physics3DSystem::PushScene()
 {
+  PhysicsSceneDescription sceneDesc;
+  sceneDesc.gravity = glm::vec3(0.0f, -9.81f, 0.0f);
+  PushScene(sceneDesc);
+}
+
+void Physics3DSystem::PushScene(PhysicsSceneDescription description)
+{
   // Setup basic scene with gravity.
-  // TODO: Expose these settings to the editor.
   PxSceneDesc sceneDesc(_physics->getTolerancesScale());
-  sceneDesc.gravity = PxVec3(0.0f, 0.0f, 9.81f);
+  sceneDesc.gravity = PxVec3(description.gravity.x, description.gravity.y, description.gravity.z);
   sceneDesc.cpuDispatcher = _dispatcher;
   sceneDesc.filterShader = PxDefaultSimulationFilterShader;
 

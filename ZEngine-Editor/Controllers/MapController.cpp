@@ -66,19 +66,19 @@ void MapController::StartPlaying()
 {
 	// Make sure we don't update the map while we're changing the map.
 	_updateMapLock.lock();
+	_playState = PLAYING;
+
+	_originalMap = _editor->GetSelectedMap();
 
 	// Ensure sound will work
 	auto audioSys = AudioSystem::GetInstance();
 	audioSys->Resume(-1);
 	audioSys->ResumeMusic();
 
-  // Create a new Physics scene
-  _physics->PushScene();
-	
-	_playState = PLAYING;
+	// Create a new Physics scene (with the settings from the map)
+	_physics->PushScene(_originalMap->GetPhysicsSceneDescription());
 
 	// Copy the original map (so we don't break the original during play)
-	_originalMap = _editor->GetSelectedMap();
 	_previewMap = Factory::Copy<Map>(_originalMap->GetName(), _originalMap);
 
 	auto mapManager = MapManager::GetInstance();
@@ -87,9 +87,9 @@ void MapController::StartPlaying()
 	mapManager->SetCurrentMap(_previewMap);
 	_editor->SetSelectedMap(_previewMap);
 
-  // Remove selection as it might reference the original map.
-  // TODO: Select the copy of the selected entity instead.
-  _editor->SetSelectedEntity(nullptr);
+	// Remove selection as it might reference the original map.
+	// TODO: Select the copy of the selected entity instead.
+	_editor->SetSelectedEntity(nullptr);
 
 	_updateMapLock.unlock();
 }

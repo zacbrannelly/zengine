@@ -70,7 +70,10 @@
     _mapManager = MapManager::GetInstance();
 
     auto mapAsset = _assetSystem->LoadAsset("test map", "Assets/maps/test_map.map", MAP_ASSET)->Cast<MapAsset>();
-    _mapManager->SetCurrentMap(mapAsset->GetMap());
+    auto map = mapAsset->GetMap();
+
+    _physicsSystem->PushScene(map->GetPhysicsSceneDescription());
+    _mapManager->SetCurrentMap(map);
 }
 
 - (void) touchCallback:(int) fingerIndex withAction:(int) action andX:(int) x andY:(int) y

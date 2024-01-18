@@ -49,6 +49,12 @@ bool MapAsset::Load(string path)
 		return false;
 	}
 
+	it = root.find("physics");
+	if (it != root.end() && (*it).is_object())
+	{
+		_map->SetPhysicsSceneDescription(LoadPhysicsSceneDescription(*it));
+	}
+
 	it = root.find("entities");
 	if (it != root.end() && (*it).is_array())
 	{
@@ -69,6 +75,24 @@ bool MapAsset::Load(string path)
 	SetPath(path);
 
 	return true;
+}
+
+PhysicsSceneDescription MapAsset::LoadPhysicsSceneDescription(nlohmann::json& physics)
+{
+	PhysicsSceneDescription sceneDescription;
+
+	auto it = physics.find("gravity");
+	if (it != physics.end() && (*it).is_array())
+	{
+		auto gravity = (*it).get<json::array_t>();
+
+		if (gravity.size() == 3)
+		{
+			sceneDescription.gravity = glm::vec3(gravity[0], gravity[1], gravity[2]);
+		}
+	}
+
+	return sceneDescription;
 }
 
 Entity* MapAsset::LoadEntity(json& object)

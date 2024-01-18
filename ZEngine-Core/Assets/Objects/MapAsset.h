@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Asset.h"
+#include "../../Physics/Physics3DSystem.h"
 #include <nlohmann/json.hpp>
 
 class Map;
@@ -26,6 +27,7 @@ public:
 	}
 
 private:
+	PhysicsSceneDescription LoadPhysicsSceneDescription(nlohmann::json& physics);
 	Entity* LoadEntity(nlohmann::json& entity);
 
 	Map* _map;

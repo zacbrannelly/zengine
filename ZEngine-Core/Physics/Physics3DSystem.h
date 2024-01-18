@@ -3,6 +3,7 @@
 #include "../Misc/Singleton.h"
 #include <string>
 #include <stack>
+#include <glm/glm.hpp>
 
 namespace physx
 {
@@ -15,6 +16,12 @@ namespace physx
   class PxMaterial;
   class PxCooking;
 }
+
+struct PhysicsSceneDescription
+{
+public:
+  glm::vec3 gravity;
+} typedef PhysicsSceneDescription;
 
 class Physics3DSystem : public Singleton<Physics3DSystem>
 {
@@ -29,6 +36,7 @@ public:
   physx::PxMaterial* GetMaterial() const { return _material; }
 
   void PushScene();
+  void PushScene(PhysicsSceneDescription description);
   void PopScene();
 
 private:
