@@ -11,6 +11,12 @@ class Map;
 class TransformInspector;
 class CameraInspector;
 
+enum GameViewSizeMode
+{
+	FIT,
+	SCALED,
+};
+
 class GameView : public GUIWindow
 {
 public:
@@ -20,6 +26,7 @@ public:
 	void SetupCamera();
 
 	void ProcessInput() override;
+	void RenderInWindowBeforeElements() override;
 	void RenderInWindow() override;
 	void RenderElement() override;
 private:
@@ -27,4 +34,6 @@ private:
 	Editor* _editor;
 	Camera* _mainCamera;
 	Map* _currentMap;
+	GameViewSizeMode _sizeMode;
+	float _scale;
 };

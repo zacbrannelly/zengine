@@ -6,7 +6,14 @@
 
 #include "../imgui-includes.h"
 
-GameView::GameView(Editor* editor) : GUIWindow("Game View", 1024, 600, false), _viewImage(nullptr), _editor(editor), _mainCamera(nullptr), _currentMap(nullptr)
+GameView::GameView(Editor* editor) 
+	: GUIWindow("Game View", 1024, 600, false),
+	  _viewImage(nullptr),
+	 	_editor(editor),
+		_mainCamera(nullptr),
+		_currentMap(nullptr),
+		_sizeMode(FIT),
+		_scale(100.0f)
 {
 	SetupCamera();
 	SetFlags(ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_HorizontalScrollbar);
@@ -40,7 +47,6 @@ void GameView::SetupCamera()
 		else
 		{
 			_viewImage->SetTexture(_mainCamera->GetRenderTexture());
-			_viewImage->SetSize(_mainCamera->GetViewportWidth(), _mainCamera->GetViewportHeight());
 		}
 	}
 	else if (_mainCamera != nullptr)
@@ -59,9 +65,46 @@ void GameView::ProcessInput()
 {
 }
 
+void GameView::RenderInWindowBeforeElements()
+{
+	const char* modes[] = { "Fit", "Scaled" };
+	ImGui::Combo("Size Mode", (int*)&_sizeMode, modes, 2);
+
+	if (_sizeMode == SCALED)
+	{
+		ImGui::SameLine();
+		if (ImGui::InputFloat("Scale", &_scale, 0.1, 500.0f, "%.1f"))
+		{
+			_scale = glm::clamp(_scale, 0.1f, 500.0f);
+		}
+
+		auto scaleFactor = _scale / 100.0f;
+		_viewImage->SetSize(
+			_mainCamera->GetViewportWidth() * scaleFactor,
+			_mainCamera->GetViewportHeight() * scaleFactor
+		);
+	}
+
+	if (_sizeMode == FIT && _mainCamera != nullptr)
+	{
+		float width = GetContentWidth();
+		float height = GetContentHeight();
+
+		// Maintain aspect ratio, and adjust width or height to fit
+		if (width / height > _mainCamera->GetAspectRatio())
+		{
+			width = height * _mainCamera->GetAspectRatio();
+		}
+		else
+		{
+			height = width * ((float)_mainCamera->GetViewportHeight() / _mainCamera->GetViewportWidth());
+		}
+		_viewImage->SetSize(width, height);
+	}
+}
+
 void GameView::RenderInWindow()
 {
-
 }
 
 void GameView::RenderElement()
@@ -80,7 +123,6 @@ void GameView::RenderElement()
 
 	// Ensure the render texture is current, as it changes when viewport is changed
 	_viewImage->SetTexture(_mainCamera->GetRenderTexture());
-	_viewImage->SetSize(_mainCamera->GetViewportWidth(), _mainCamera->GetViewportHeight());
 
 	// Set camera settings
 	_mainCamera->Render(-1);

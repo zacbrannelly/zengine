@@ -12,6 +12,7 @@ public:
 	virtual ~GUIWindow();
 
 	virtual void ProcessInput() = 0;
+	virtual void RenderInWindowBeforeElements();
 	virtual void RenderInWindow() = 0;
 	virtual void RenderElement() override;
 	virtual GUIElementType GetType() override;

@@ -102,6 +102,8 @@ bool GUIWindow::AllowClose()
 	return true;
 }
 
+void GUIWindow::RenderInWindowBeforeElements() {}
+
 void GUIWindow::RenderElement()
 {
 	bool shouldRender = false;
@@ -140,6 +142,7 @@ void GUIWindow::RenderElement()
 
 	if (shouldRender)
 	{
+		RenderInWindowBeforeElements();
 		Container::RenderElement();
 		RenderInWindow();
 		ProcessInput();
