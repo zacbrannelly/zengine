@@ -54,10 +54,6 @@
 
 Editor::Editor(Display* display) : _display(display), _selectedMap(nullptr), _selectedObject(nullptr), _project(nullptr)
 {
-	// Add Controllers
-	_mapController = new MapController(this);
-	Add(_mapController);
-
 	// Add Views
 	Add(new MapView(this));
 	Add(new InspectorWindow(this));
@@ -69,6 +65,10 @@ Editor::Editor(Display* display) : _display(display), _selectedMap(nullptr), _se
 	Add(new PhysicsSettings(this));
 	Add(new ProjectBrowserDialog(this));
 	Add(new BuildStatusDialog(this));
+
+	// Add Controllers (make sure update is called after views)
+	_mapController = new MapController(this);
+	Add(_mapController);
 }
 
 void Editor::Update()

@@ -10,8 +10,6 @@
 #include "MapViewToolbar.h"
 #include "../MapView/MapViewPicker.h"
 #include "../Editor.h"
-#include "../Inspectors/TransformInspector.h"
-#include "../Inspectors/CameraInspector.h"
 #include "../imgui-includes.h"
 #include "../Gizmos/GizmoSystem.h"
 
@@ -31,7 +29,7 @@ MapView::MapView(Editor* editor) : GUIWindow("Map View", 1024, 850, false), _cam
 	_viewEntity->AddComponent(_viewCamera, true);
 
 	// Set default values for the camera
-	_viewCamera->SetProjectionMode(Camera::ProjectionMode::ORTHOGRAPHIC);
+	_viewCamera->SetProjectionMode(Camera::ProjectionMode::PERSPECTIVE);
 	_viewCamera->SetFieldOfView(60.0f);
 	_viewCamera->SetViewport(0, 0, 1920, 1080);
 	_viewCamera->SetClearColor(0.5f, 0.5f, 0.5f, 1.0f);
@@ -53,15 +51,6 @@ MapView::MapView(Editor* editor) : GUIWindow("Map View", 1024, 850, false), _cam
 
 	_aspectRatioW = 16;
 	_aspectRatioH = 9;
-
-	_transformInspector = new TransformInspector();
-	_cameraInspector = new CameraInspector();
-
-	_transformInspector->Inspect(_viewEntity->GetTransform());
-	_cameraInspector->Inspect(_viewCamera);
-
-	// The window won't be resizable, it will fit to content
-	SetFlags(ImGuiWindowFlags_AlwaysAutoResize);
 }
 
 void MapView::ProcessInput()
@@ -96,7 +85,7 @@ void MapView::ProcessInput()
 		auto viewImageScreenPos = _viewImage->GetScreenPosition();
 		int mouseX = (int)(mouseScreenPos.x - viewImageScreenPos.x + 0.5f);
 		int mouseY = (int)(mouseScreenPos.y - viewImageScreenPos.y + 0.5f);
-		
+
 		mouseX = mouseX / _viewImage->GetWidth() * _viewCamera->GetViewportWidth();
 		mouseY = mouseY / _viewImage->GetHeight() * _viewCamera->GetViewportHeight();
 
@@ -107,8 +96,18 @@ void MapView::ProcessInput()
 
 void MapView::RenderInWindow()
 {
-	_viewImage->SetSize(GetContentWidth(), GetContentWidth() * (_aspectRatioH / _aspectRatioW));
-    
+	auto viewportWidth = GetContentWidth();
+	auto viewportHeight = GetContentHeight() - 28;
+	auto viewportChanged = (
+		_viewCamera->GetViewportWidth() != viewportWidth ||
+		_viewCamera->GetViewportHeight() != viewportHeight
+	);
+	if (viewportWidth > 0 && viewportHeight > 0 && viewportChanged)
+	{
+		_viewCamera->SetViewport(0, 0, viewportWidth, viewportHeight);
+	}
+	_viewImage->SetSize(viewportWidth, viewportHeight);
+
 	// Render where the view image is positioned in screen space.
 	auto viewImagePos = _viewImage->GetScreenPosition();
 	ImGuizmo::SetRect(viewImagePos.x, viewImagePos.y, _viewImage->GetWidth(), _viewImage->GetHeight());
@@ -137,29 +136,6 @@ void MapView::RenderInWindow()
 			selectedEntity->GetTransform()->SetRotation({ rotation[0], rotation[1], rotation[2] });
 			selectedEntity->GetTransform()->SetScale({ scale[0], scale[1], scale[2] });
 		}
-	}
-
-	// Allow the user to change the size of the texture being rendered in the window
-	// TODO: Move this to its own component.
-	if (ImGui::CollapsingHeader("View Settings"))
-	{
-		float aspectRatio[] = { _aspectRatioW, _aspectRatioH };
-		if (ImGui::InputFloat2("Aspect Ratio", aspectRatio, "%.1f"))
-		{
-			_aspectRatioW = aspectRatio[0];
-			_aspectRatioH = aspectRatio[1];
-
-			_viewImage->SetSize(GetContentWidth(), GetContentWidth() * (_aspectRatioH / _aspectRatioW));
-		}
-	}
-
-	// Draw the inspectors for the camera transform and camera settings
-	// TODO: Move this to its own component.
-	if (ImGui::CollapsingHeader("Camera Settings"))
-	{
-		_transformInspector->RenderElement();
-		ImGui::Spacing();
-		_cameraInspector->RenderElement();
 	}
 }
 

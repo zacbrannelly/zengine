@@ -8,8 +8,6 @@ class Editor;
 class GizmoSystem;
 class Camera;
 class Entity;
-class TransformInspector;
-class CameraInspector;
 class Map;
 class MapViewToolbar;
 class MapViewPicker;
@@ -32,9 +30,6 @@ private:
 	GizmoSystem* _gizmoSystem;
 	MapViewToolbar* _mapViewToolbar;
 	MapViewPicker* _mapViewPicker;
-
-	TransformInspector* _transformInspector;
-	CameraInspector* _cameraInspector;
 
 	float _aspectRatioW, _aspectRatioH;
 	bool _cameraInFlight;
