@@ -30,8 +30,6 @@ private:
 	GizmoSystem* _gizmoSystem;
 	MapViewToolbar* _mapViewToolbar;
 	MapViewPicker* _mapViewPicker;
-
-	float _aspectRatioW, _aspectRatioH;
 	bool _cameraInFlight;
 };
 

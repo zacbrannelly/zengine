@@ -48,9 +48,6 @@ MapView::MapView(Editor* editor) : GUIWindow("Map View", 1024, 850, false), _cam
 	// Add elements to the window
 	Add(_mapViewToolbar);
 	Add(_viewImage);
-
-	_aspectRatioW = 16;
-	_aspectRatioH = 9;
 }
 
 void MapView::ProcessInput()
