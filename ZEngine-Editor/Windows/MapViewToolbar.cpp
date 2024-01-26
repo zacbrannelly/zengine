@@ -1,4 +1,6 @@
 #include "MapViewToolbar.h"
+#include "MapView.h"
+#include <ZEngine-Core/Component/Camera.h>
 
 MapViewToolbar::MapViewToolbar(Editor* editor, MapView* mapView) : _editor(editor), _mapView(mapView), _objectGizmoOp(ImGuizmo::TRANSLATE), _objectGizmoMode(ImGuizmo::LOCAL)
 {
@@ -38,7 +40,8 @@ void MapViewToolbar::RenderElement()
     ImGui::Selectable("Scale", &scale, 0, scaleButtonSize);
     
     ImGui::SameLine();
-    ImGui::SetCursorPosX(translateButtonSize.x + rotateButtonSize.x + scaleButtonSize.x + 50);
+    auto localWorldButtonPos = translateButtonSize.x + rotateButtonSize.x + scaleButtonSize.x + 50;
+    ImGui::SetCursorPosX(localWorldButtonPos);
     
     bool local = _objectGizmoMode == ImGuizmo::LOCAL;
     bool world = _objectGizmoMode == ImGuizmo::WORLD;
@@ -56,7 +59,27 @@ void MapViewToolbar::RenderElement()
     {
         _objectGizmoMode = ImGuizmo::WORLD;
     }
-    
+
+    ImGui::SameLine();
+
+    auto perspectiveButtonSize = ImGui::CalcTextSize("Perspective");
+    auto orthographicButtonSize = ImGui::CalcTextSize("Orthographic");
+    ImGui::SetCursorPosX(_mapView->GetContentWidth() - perspectiveButtonSize.x - orthographicButtonSize.x - 4);
+
+    bool perspective = _mapView->GetCamera()->GetProjectionMode() == Camera::PERSPECTIVE;
+    if (ImGui::Selectable("Perspective", &perspective, 0, perspectiveButtonSize))
+    {
+        _mapView->GetCamera()->SetProjectionMode(Camera::PERSPECTIVE);
+    }
+
+    ImGui::SameLine();
+
+    bool orthographic = _mapView->GetCamera()->GetProjectionMode() == Camera::ORTHOGRAPHIC;
+    if (ImGui::Selectable("Orthographic", &orthographic, 0, orthographicButtonSize))
+    {
+        _mapView->GetCamera()->SetProjectionMode(Camera::ORTHOGRAPHIC);
+    }
+
     if (translate && !wasTranslateSelected)
     {
         _objectGizmoOp = _objectGizmoOp | ImGuizmo::TRANSLATE;

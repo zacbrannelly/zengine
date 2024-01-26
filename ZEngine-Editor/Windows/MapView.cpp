@@ -160,6 +160,11 @@ void MapView::RenderElement()
 	GUIWindow::RenderElement();
 }
 
+Camera* MapView::GetCamera() const
+{
+	return _viewCamera;
+}
+
 MapView::~MapView()
 {
 	delete _mapViewPicker;

@@ -22,6 +22,8 @@ public:
 	void RenderInWindow() override;
 	void RenderElement() override;
 
+	Camera* GetCamera() const;
+
 private:
 	GUIImage* _viewImage;
 	Entity* _viewEntity;
