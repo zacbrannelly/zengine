@@ -11,6 +11,9 @@ namespace ZEngine.Core {
       { typeof(CSharpScriptComponent), ObjectType.CSHARP_SCRIPT_COMPONENT },
       { typeof(Transform), ObjectType.TRANSFORM },
       { typeof(AudioSource), ObjectType.AUDIO_SOURCE },
+      { typeof(RigidBody3D), ObjectType.RIGID_BODY_3D },
+      { typeof(Camera), ObjectType.CAMERA },
+      { typeof(Collider3D), ObjectType.COLLIDER_3D },
     };
 
     public static ObjectType ResolveObjectType<T>()
