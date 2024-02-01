@@ -73,7 +73,7 @@ Entity* MapViewPicker::Pick(int mouseX, int mouseY, const Camera* camera)
     boundingBoxes.push_back(boundingBox);
   }
 
-  const auto mouseRay = _picker.GetRayFromScreenPos(mouseX, mouseY, camera);
+  const auto mouseRay = Ray::FromScreenPos(mouseX, mouseY, camera);
   const auto pickedAABB = _picker.PickAABB(boundingBoxes, mouseRay);
   if (pickedAABB == nullptr) return nullptr;
 

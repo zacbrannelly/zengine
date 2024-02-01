@@ -28,6 +28,8 @@ public:
 
 	MapController* GetMapController() const;
 
+	Display* GetDisplay() const;
+
 private:
 	Display* _display;
 	Project* _project;

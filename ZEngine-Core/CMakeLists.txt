@@ -83,6 +83,7 @@ set(SOURCE_FILES
     "Utilities/FutureHelpers.cpp"
     "GameLoop/GameLoop.cpp"
     "Math/Picker.cpp"
+    "Math/Ray.cpp"
 )
 source_group("Source Files" FILES ${SOURCE_FILES})
 

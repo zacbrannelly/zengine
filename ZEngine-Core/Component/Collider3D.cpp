@@ -87,6 +87,7 @@ void Collider3D::OnGeometryChanged()
 
     // Create shape and attach to actor.
     auto shape = physics->GetPhysics()->createShape(*_geometry, *physics->GetMaterial(), true);
+    shape->userData = this;
     _staticBody->attachShape(*shape);
     shape->release();
 

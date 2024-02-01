@@ -149,6 +149,11 @@ MapController* Editor::GetMapController() const
 	return _mapController;
 }
 
+Display* Editor::GetDisplay() const
+{
+	return _display;
+}
+
 Editor::~Editor()
 {
 }

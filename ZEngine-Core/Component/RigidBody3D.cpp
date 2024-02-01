@@ -1,11 +1,13 @@
 #include "RigidBody3D.h"
 #include "../Physics/Physics3DSystem.h"
+#include "../Physics/PhysxUtils.h"
 #include "../Map/Objects/Entity.h"
 #include "Transform.h"
 #include "DynamicCollider3D.h"
 
 #define NDEBUG
 #include <PxPhysicsAPI.h>
+#include <extensions/PxRigidBodyExt.h>
 
 #include <string>
 #include <iostream>
@@ -40,6 +42,7 @@ void RigidBody3D::Init()
   PxTransform physxTransform(PxVec3(position.x, position.y, position.z));
 
   // Fetch collider from the parent object.
+  // TODO: Allow multiple colliders per object.
   auto entity = GetOwner();
   auto collider = entity->GetComponentByType<DynamicCollider3D>();
 
@@ -63,6 +66,7 @@ void RigidBody3D::Init()
   
   // Create shape and attach to actor.
   auto shape = sdk->createShape(*geometry, *physics->GetMaterial(), true);
+  shape->userData = collider;
   dynamic->attachShape(*shape);
   shape->release();
 
@@ -105,6 +109,7 @@ void RigidBody3D::OnColliderModified()
     collider->BuildGeometry();
     auto geometry = collider->GetGeometry();
     auto shape = sdk->createShape(*geometry, *physics->GetMaterial(), true);
+    shape->userData = collider;
     _rigidBody->attachShape(*shape);
 
     // Calculate mass and inertia based on the shape and density.
@@ -213,6 +218,42 @@ glm::vec3 RigidBody3D::GetKinematicTarget() const
   }
 
   return glm::vec3(0.0f);
+}
+
+void RigidBody3D::ApplyForce(const glm::vec3& force)
+{
+  if (_rigidBody == nullptr) return;
+  _rigidBody->addForce(ToPxVec3(force));
+}
+
+void RigidBody3D::ApplyForceAtPosition(const glm::vec3& force, const glm::vec3& position)
+{
+  if (_rigidBody == nullptr) return;
+  physx::PxRigidBodyExt::addForceAtPos(*_rigidBody, ToPxVec3(force), ToPxVec3(position));
+}
+
+void RigidBody3D::ApplyTorque(const glm::vec3& torque)
+{
+  if (_rigidBody == nullptr) return;
+  _rigidBody->addTorque(ToPxVec3(torque));
+}
+
+void RigidBody3D::ApplyImpulse(const glm::vec3& impulse)
+{
+  if (_rigidBody == nullptr) return;
+  _rigidBody->addForce(ToPxVec3(impulse), PxForceMode::eIMPULSE);
+}
+
+void RigidBody3D::ApplyImpulseAtPosition(const glm::vec3& impulse, const glm::vec3& position)
+{
+  if (_rigidBody == nullptr) return;
+  physx::PxRigidBodyExt::addForceAtPos(*_rigidBody, ToPxVec3(impulse), ToPxVec3(position), PxForceMode::eIMPULSE);
+}
+
+void RigidBody3D::ApplyTorqueImpulse(const glm::vec3& torqueImpulse)
+{
+  if (_rigidBody == nullptr) return;
+  _rigidBody->addTorque(ToPxVec3(torqueImpulse), PxForceMode::eIMPULSE);
 }
 
 void RigidBody3D::Update()

@@ -21,7 +21,21 @@ struct PhysicsSceneDescription
 {
 public:
   glm::vec3 gravity;
-} typedef PhysicsSceneDescription;
+};
+typedef PhysicsSceneDescription PhysicsSceneDescription;
+
+class Ray;
+class Collider3D;
+
+struct RaycastResult
+{
+  bool hit;
+  float distance;
+  glm::vec3 point;
+  glm::vec3 normal;
+  Collider3D* collider;
+};
+typedef RaycastResult RaycastResult;
 
 class Physics3DSystem : public Singleton<Physics3DSystem>
 {
@@ -34,6 +48,8 @@ public:
   physx::PxCooking* GetCooking() const { return _cooking; }
   physx::PxScene* GetScene() const { return _sceneStack.top(); }
   physx::PxMaterial* GetMaterial() const { return _material; }
+
+  bool Raycast(const Ray& ray, float maxDistance, RaycastResult& result);
 
   void PushScene();
   void PushScene(PhysicsSceneDescription description);

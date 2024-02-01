@@ -32,8 +32,11 @@ public:
 	float GetAxis(std::string name);
 	float GetAxisRaw(std::string name);
 
-	glm::vec2 GetMousePos() const;
-	glm::vec2 GetMouseDelta() const;
+	void SetMouseTransform(const glm::mat4& transform);
+	const glm::mat4& GetMouseTransform() const;
+
+	const glm::vec2& GetMousePos() const;
+	const glm::vec2& GetMouseDelta() const;
 
 	bool GetTouchDown(int index);
 	bool GetTouchPressed(int index);
@@ -64,7 +67,9 @@ private:
 	static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 #endif
 
+	glm::mat4 _mouseTransform;
 	glm::vec2 _mousePos;
+	glm::vec2 _rawMousePos;
 	std::map<ButtonCode, bool> _buttonDown;
 	std::map<ButtonCode, bool> _prevButtonDown;
 	std::map<ButtonCode, bool> _buttonUp;

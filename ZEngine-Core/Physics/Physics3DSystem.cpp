@@ -2,6 +2,8 @@
 #include <PxPhysicsAPI.h>
 
 #include "Physics3DSystem.h"
+#include "PhysxUtils.h"
+#include "../Math/Ray.h"
 #include <iostream>
 #include <stdexcept>
 
@@ -102,4 +104,26 @@ void Physics3DSystem::Shutdown()
 
   delete _errorCallback;
   delete _allocator;
+}
+
+bool Physics3DSystem::Raycast(const Ray& ray, float maxDistance, RaycastResult& result)
+{
+  PxScene* scene = GetScene();
+  if (scene == nullptr) return false;
+
+  PxVec3 origin = ToPxVec3(ray.origin);
+  PxVec3 unitDir = ToPxVec3(ray.direction);
+  PxRaycastBuffer hit;
+
+  bool status = scene->raycast(origin, unitDir, maxDistance, hit);
+  if (status)
+  {
+    result.hit = true;
+    result.point = ToGlmVec3(hit.block.position);
+    result.normal = ToGlmVec3(hit.block.normal);
+    result.distance = hit.block.distance;
+    result.collider = static_cast<Collider3D*>(hit.block.shape->userData);
+  }
+
+  return status;
 }

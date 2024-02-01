@@ -40,6 +40,14 @@ public:
   void SetKinematicTarget(const glm::vec3& target);
   glm::vec3 GetKinematicTarget() const;
 
+  void ApplyForce(const glm::vec3& force);
+  void ApplyForceAtPosition(const glm::vec3& force, const glm::vec3& position);
+  void ApplyTorque(const glm::vec3& torque);
+
+  void ApplyImpulse(const glm::vec3& impulse);
+  void ApplyImpulseAtPosition(const glm::vec3& impulse, const glm::vec3& position);
+  void ApplyTorqueImpulse(const glm::vec3& torqueImpulse);
+
 	static ZObject* CreateInstance(std::string name, ObjectType type);
 	static ZObject* Copy(std::string name, ZObject* object);
 

@@ -8,6 +8,7 @@
 %include "std_vector.i"
 
 %template(EntityList) std::vector<Entity*>;
+%template(CameraList) std::vector<Camera*>;
 
 %ignore Map::Init;
 %ignore Map::Update;

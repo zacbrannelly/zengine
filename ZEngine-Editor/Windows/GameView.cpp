@@ -3,7 +3,11 @@
 
 #include <ZEngine-Core/Component/Camera.h>
 #include <ZEngine-Core/Map/Map.h>
+#include <ZEngine-Core/Display/Display.h>
+#include <ZEngine-Core/Input/InputManager.h>
+#include "../Controllers/MapController.h"
 
+#include <glm/gtc/matrix_transform.hpp>
 #include "../imgui-includes.h"
 
 GameView::GameView(Editor* editor) 
@@ -100,6 +104,19 @@ void GameView::RenderInWindowBeforeElements()
 			height = width * ((float)_mainCamera->GetViewportHeight() / _mainCamera->GetViewportWidth());
 		}
 		_viewImage->SetSize(width, height);
+	}
+
+	auto isPlaying = _editor->GetMapController()->GetPlayState() == PlayState::PLAYING;
+	if (isPlaying && ImGui::IsWindowHovered())
+	{
+		// Apply offset and scaling to the game mouse position
+		glm::mat4 transform(1.0f);
+		transform = glm::scale(transform, glm::vec3(_mainCamera->GetViewportWidth() / _viewImage->GetWidth(), _mainCamera->GetViewportHeight() / _viewImage->GetHeight(), 1.0f));
+		transform = glm::translate(transform, glm::vec3(-_viewImage->GetScreenPosition(), 0.0f));
+		InputManager::GetInstance()->SetMouseTransform(transform);
+	} else {
+		// Reset mouse transform
+		InputManager::GetInstance()->SetMouseTransform(glm::mat4(1.0f));
 	}
 }
 

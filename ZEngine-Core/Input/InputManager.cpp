@@ -7,6 +7,7 @@ void InputManager::Init(Display* display)
 {
 	_display = display;
 	_isMouseGrabbed = false;
+	_mouseTransform = glm::mat4(1.0f);
 
 	// Setup callbacks
 #if !TARGET_OS_IPHONE
@@ -35,7 +36,7 @@ bool InputManager::IsMouseGrabbed() const
 	return _isMouseGrabbed;
 }
 
-glm::vec2 InputManager::GetMouseDelta() const
+const glm::vec2& InputManager::GetMouseDelta() const
 {
 	return _mouseDelta;
 }
@@ -138,7 +139,21 @@ bool InputManager::ButtonHasModifier(ButtonCode button, ButtonCode mod)
 	return false;
 }
 
-glm::vec2 InputManager::GetMousePos() const
+void InputManager::SetMouseTransform(const glm::mat4& transform)
+{
+	_mouseTransform = transform;
+
+	// Apply the transform to the current mouse position
+	glm::vec3 mousePos = _mouseTransform * glm::vec4(_rawMousePos, 1.0f, 1.0f);
+	_mousePos = glm::vec2(mousePos.x, mousePos.y);
+}
+
+const glm::mat4& InputManager::GetMouseTransform() const
+{
+	return _mouseTransform;
+}
+
+const glm::vec2& InputManager::GetMousePos() const
 {
 	return _mousePos;
 }
@@ -233,17 +248,22 @@ void InputManager::MousePositionCallback(GLFWwindow* window, double x, double y)
 {
 	auto instance = InputManager::GetInstance();
 
+	instance->_rawMousePos.x = (float)x;
+	instance->_rawMousePos.y = (float)y;
+
+	glm::vec3 mousePos = instance->_mouseTransform * glm::vec4(x, y, 1, 1);
+	glm::vec2 transformedMousePos = glm::vec2(mousePos.x, mousePos.y);
+
 	// Update the mouse delta
-	instance->_mouseDelta = glm::vec2(x, y) - instance->_mousePos;
+	instance->_mouseDelta = transformedMousePos - instance->_mousePos;
 
 	// Set the internal mouse position
-	instance->_mousePos.x = x;
-	instance->_mousePos.y = y;
+	instance->_mousePos = transformedMousePos;
 
 	// Call registered callbacks
 	for (auto callback : instance->_mousePosCallbacks)
 	{
-		(*callback)(window, x, y);
+		(*callback)(window, transformedMousePos.x, transformedMousePos.y);
 	}
 }
 
