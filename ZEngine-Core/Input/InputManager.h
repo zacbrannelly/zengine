@@ -41,7 +41,7 @@ public:
 	bool GetTouchDown(int index);
 	bool GetTouchPressed(int index);
 	bool GetTouchUp(int index);
-	glm::vec2 GetTouchPos(int index) const;
+	const glm::vec2& GetTouchPos(int index) const;
 	static void TouchCallback(int index, int action, float x, float y);
 
 #if !TARGET_OS_IPHONE
@@ -91,6 +91,7 @@ private:
     
 	bool _isMouseGrabbed;
 	glm::vec2 _mouseDelta;
+	glm::vec2 _emptyVector;
 	Display* _display;
 };
 

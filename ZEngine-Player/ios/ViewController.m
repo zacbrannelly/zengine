@@ -75,6 +75,8 @@
   int fingerIndex = 0;
   for (UITouch *touch in touches) {
     CGPoint touchPoint = [touch locationInView:self.view];
+    touchPoint.x = touchPoint.x / self.view.frame.size.width * _metalView.drawableSize.width;
+    touchPoint.y = touchPoint.y / self.view.frame.size.height * _metalView.drawableSize.height;
     [_engine touchCallback:fingerIndex withAction:action andX:(int)touchPoint.x andY:(int)touchPoint.y];
     fingerIndex++;
   }

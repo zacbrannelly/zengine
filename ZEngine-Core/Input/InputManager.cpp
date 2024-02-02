@@ -8,6 +8,7 @@ void InputManager::Init(Display* display)
 	_display = display;
 	_isMouseGrabbed = false;
 	_mouseTransform = glm::mat4(1.0f);
+	_emptyVector = glm::vec2(0.0f, 0.0f);
 
 	// Setup callbacks
 #if !TARGET_OS_IPHONE
@@ -312,10 +313,10 @@ bool InputManager::GetTouchUp(int index)
 	return _touchUp[index];
 }
 
-glm::vec2 InputManager::GetTouchPos(int index) const
+const glm::vec2& InputManager::GetTouchPos(int index) const
 {
 	if (_touchPos.find(index) == _touchPos.end())
-		return glm::vec2(0.0f, 0.0f);
+		return _emptyVector;
 
 	return _touchPos.at(index);
 }
