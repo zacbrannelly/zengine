@@ -7,7 +7,7 @@
 #define NDEBUG
 #include <PxPhysicsAPI.h>
 
-Collider3D::Collider3D(std::string name, ObjectType objectType) : Component(name, objectType), _geometry(nullptr), _staticBody(nullptr)
+Collider3D::Collider3D(std::string name, ObjectType objectType) : Component(name, objectType), _geometry(nullptr), _staticBody(nullptr), _isTrigger(false)
 {
   RegisterDerivedType(COLLIDER_3D);
 }
@@ -22,6 +22,27 @@ void Collider3D::Init()
 
   // Notify the physics system that a static collider has been added.
   OnGeometryChanged();
+}
+
+void Collider3D::SetIsTrigger(bool isTrigger)
+{
+  _isTrigger = isTrigger;
+}
+
+bool Collider3D::IsTrigger() const
+{
+  return _isTrigger;
+}
+
+void Collider3D::ApplyShapeFlags(physx::PxShape* shape)
+{
+  if (shape == nullptr) return;
+  if (_isTrigger) 
+  {
+    shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
+    shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, true);
+    shape->setFlag(physx::PxShapeFlag::eSCENE_QUERY_SHAPE, true);
+  }
 }
 
 void Collider3D::SetGeometry(physx::PxGeometry* geometry, bool notify)
@@ -88,6 +109,10 @@ void Collider3D::OnGeometryChanged()
     // Create shape and attach to actor.
     auto shape = physics->GetPhysics()->createShape(*_geometry, *physics->GetMaterial(), true);
     shape->userData = this;
+
+    // Apply shape flags - such as trigger settings.
+    ApplyShapeFlags(shape);
+
     _staticBody->attachShape(*shape);
     shape->release();
 

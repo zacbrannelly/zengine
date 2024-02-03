@@ -29,56 +29,26 @@ RigidBody3D::RigidBody3D() : Component("Rigid Body 3D", ObjectType::RIGID_BODY_3
 void RigidBody3D::Init()
 {
   auto physics = Physics3DSystem::GetInstance();
-  auto transform = GetOwner()->GetTransform();
+  auto scene = physics->GetScene();
 
   // Release any previously created bodies from the scene.
   if (_rigidBody != nullptr) {
-    physics->GetScene()->removeActor(*_rigidBody);
+    scene->removeActor(*_rigidBody);
     PX_RELEASE(_rigidBody);
   }
 
   // Create PxTransform from existing transform.
+  auto transform = GetOwner()->GetTransform();
   auto position = transform->GetPosition();
   PxTransform physxTransform(PxVec3(position.x, position.y, position.z));
 
-  // Fetch collider from the parent object.
-  // TODO: Allow multiple colliders per object.
-  auto entity = GetOwner();
-  auto collider = entity->GetComponentByType<DynamicCollider3D>();
-
-  if (collider == nullptr) {
-    cout << "RigidBody3D::Init() - No collider found on parent object." << endl;
-    return;
-  }
-
-  collider->BuildGeometry();
-  auto geometry = collider->GetGeometry();
-  if (geometry == nullptr) {
-    cout << "RigidBody3D::Init() - No geometry found on collider." << endl;
-    return;
-  }
-
+  // Create dynamic actor.
   auto sdk = physics->GetPhysics();
-  auto scene = physics->GetScene();
-
-  // Create dynamic actor with a single shape.
-  PxRigidDynamic* dynamic = PxCreateDynamic(*physics->GetPhysics(), physxTransform, *geometry, *physics->GetMaterial(), 10.0f);
-  
-  // Create shape and attach to actor.
-  auto shape = sdk->createShape(*geometry, *physics->GetMaterial(), true);
-  shape->userData = collider;
-  dynamic->attachShape(*shape);
-  shape->release();
-
-  // Calculate mass and inertia based on the shape and density.
-  // TODO: Make this optional & configurable.
-  PxRigidBodyExt::updateMassAndInertia(*dynamic, 10.0f);
+  _rigidBody = sdk->createRigidDynamic(physxTransform);
+  RebuildActorShapes();
 
   // Add actor to the scene.
-	scene->addActor(*dynamic);
-
-  // Store the rigid body.
-  _rigidBody = dynamic;
+	scene->addActor(*_rigidBody);
 
   // Set mass, linear damping, angular damping, and gravity.
   if (_mass > 0) SetMass(_mass);
@@ -89,40 +59,73 @@ void RigidBody3D::Init()
   SetKinematicTarget(_kinematicTarget);
 }
 
-void RigidBody3D::OnColliderModified()
+void RigidBody3D::RebuildActorShapes()
 {
   if (_rigidBody == nullptr) return;
 
-  PxShape* shapes[1];
-  _rigidBody->getShapes(shapes, 1);
-
   auto physics = Physics3DSystem::GetInstance();
   auto sdk = physics->GetPhysics();
+  auto scene = physics->GetScene();
+  
+  auto numShapes = _rigidBody->getNbShapes();
+  if (numShapes > 0) RemoveAllShapes();
 
-  auto collider = GetOwner()->GetComponentByType<DynamicCollider3D>();
-  if (collider != nullptr)
+  auto entity = GetOwner();
+  auto colliders = entity->GetComponentsByType<DynamicCollider3D>();
+
+  // Ensure at least one collider is present, otherwise remove the rigid body.
+  if (colliders.size() == 0) {
+    cout << "RigidBody3D::Init() - No colliders found on parent object." << endl;
+    OnDestroy();
+    return;
+  }
+
+  // Create shape and attach to actor.
+  for (auto collider : colliders) 
   {
-    // Detach the previous shape from the actor.
-    _rigidBody->detachShape(*shapes[0]);
-    
-    // Create new shape and attach to actor.
+    // Build the geometry.
     collider->BuildGeometry();
     auto geometry = collider->GetGeometry();
+    if (geometry == nullptr)
+    {
+      cout << "RigidBody3D::Init() - Failed to create geometry for collider." << endl;
+      continue;
+    }
+
+    // Create shape from geometry.
     auto shape = sdk->createShape(*geometry, *physics->GetMaterial(), true);
     shape->userData = collider;
+
+    // Apply shape flags - such as trigger settings.
+    collider->ApplyShapeFlags(shape);
+
+    // Attach shape to actor.
     _rigidBody->attachShape(*shape);
-
-    // Calculate mass and inertia based on the shape and density.
-    // TODO: Make this optional & configurable.
-    PxRigidBodyExt::updateMassAndInertia(*_rigidBody, 10.0f);
+    shape->release();
   }
-  else
+
+  // Apply mass and inertia based on the shapes and density.
+  // TODO: Make this optional & configurable.
+  PxRigidBodyExt::updateMassAndInertia(*_rigidBody, 10.0f);
+}
+
+void RigidBody3D::RemoveAllShapes()
+{
+  if (_rigidBody == nullptr) return;
+
+  auto numShapes = _rigidBody->getNbShapes();
+  auto shapes = new PxShape*[numShapes];
+  _rigidBody->getShapes(shapes, numShapes);
+
+  for (auto i = 0; i < numShapes; ++i)
   {
-    cout << "RigidBody3D::OnColliderModified() - No collider found on parent object." << endl;
-
-    // Remove the rigid body from the scene.
-    OnDestroy();
+    _rigidBody->detachShape(*shapes[i]);
   }
+}
+
+void RigidBody3D::OnColliderModified()
+{
+  RebuildActorShapes();
 }
 
 void RigidBody3D::SetMass(float mass)

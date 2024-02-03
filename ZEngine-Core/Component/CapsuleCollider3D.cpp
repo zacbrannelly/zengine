@@ -70,6 +70,7 @@ ZObject* CapsuleCollider3D::Copy(std::string name, ZObject* object)
 	auto source = static_cast<CapsuleCollider3D*>(object);
 	auto copy = new CapsuleCollider3D();
 
+	copy->SetIsTrigger(source->IsTrigger());
 	copy->SetSize(source->GetRadius(), source->GetHeight());
 
 	return copy;

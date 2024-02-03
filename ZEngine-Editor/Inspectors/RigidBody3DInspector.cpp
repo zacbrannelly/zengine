@@ -12,7 +12,7 @@ void RigidBody3DInspector::RenderElement()
 	if (GetValue() == nullptr) return;
 	auto rigidBody = static_cast<RigidBody3D*>(GetValue());
 
-	ImGui::BeginChild("Rigid Body 3D", ImVec2(0, 210));
+	ImGui::BeginChild(UniqueLabel("Rigid Body 3D").c_str(), ImVec2(0, 210));
 	{
     auto mass = rigidBody->GetMass();
 		if (ImGui::DragFloat("Mass", &mass, 1, 0, 1000))

@@ -56,6 +56,7 @@ ZObject* SphereCollider3D::Copy(std::string name, ZObject* object)
 	auto source = static_cast<SphereCollider3D*>(object);
 	auto copy = new SphereCollider3D();
 
+	copy->SetIsTrigger(source->IsTrigger());
 	copy->SetRadius(source->GetRadius());
 
 	return copy;

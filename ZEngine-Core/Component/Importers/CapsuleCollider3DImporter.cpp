@@ -8,6 +8,7 @@ using namespace nlohmann;
 ZObject* CapsuleCollider3DImporter::ImportImpl(string name, json& values)
 {
 	auto collider = Factory::CreateInstance<CapsuleCollider3D>(name, CAPSULE_COLLIDER_3D);
+	collider->SetIsTrigger(ReadBool("isTrigger", values));
 	collider->SetSize(ReadFloat("radius", values), ReadFloat("height", values));
 
 	return collider;

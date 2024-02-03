@@ -12,7 +12,7 @@ void BoxCollider3DInspector::RenderElement()
 	if (GetValue() == nullptr) return;
 	auto boxCollider = static_cast<BoxCollider3D*>(GetValue());
 
-	ImGui::BeginChild("Box Collider 3D", ImVec2(0, 40));
+	ImGui::BeginChild(UniqueLabel("Box Collider 3D").c_str(), ImVec2(0, 40));
 	{
 		auto size = boxCollider->GetSize();
 		float sizeArray[3] = { size.x, size.y, size.z };

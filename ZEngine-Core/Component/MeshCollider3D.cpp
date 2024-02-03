@@ -91,6 +91,7 @@ ZObject* MeshCollider3D::Copy(std::string name, ZObject* object)
 {
   auto source = static_cast<MeshCollider3D*>(object);
   auto copy = new MeshCollider3D();
+  copy->SetIsTrigger(source->IsTrigger());
 
   return copy;
 }

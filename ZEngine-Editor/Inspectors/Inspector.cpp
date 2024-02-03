@@ -1,5 +1,5 @@
 #include "Inspector.h"
-
+#include <sstream>
 
 
 Inspector::Inspector()
@@ -15,6 +15,14 @@ void Inspector::Inspect(Component* component)
 Component* Inspector::GetValue() const
 {
 	return _value;
+}
+
+std::string Inspector::UniqueLabel(std::string label) const
+{
+	std::stringstream ss;
+	ss << (void*)_value;
+	auto uniqueId = ss.str();
+	return label + "###" + uniqueId;
 }
 
 GUIElementType Inspector::GetType()

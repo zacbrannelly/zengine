@@ -37,7 +37,7 @@ void MeshRendererInspector::RenderElement()
 	auto catalog = assetManager->GetCatalog();
 
 	auto inspectorHeight = 40 * (_neededMaterials + 2);
-	ImGui::BeginChild("Mesh Renderer", ImVec2(0, inspectorHeight));
+	ImGui::BeginChild(UniqueLabel("Mesh Renderer").c_str(), ImVec2(0, inspectorHeight));
 
 	auto meshName = comp->GetMesh() != nullptr ? comp->GetMesh()->GetName() : "None";
 	if (ImGui::BeginCombo("Mesh", meshName.c_str()))

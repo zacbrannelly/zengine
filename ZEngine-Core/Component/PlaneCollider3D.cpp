@@ -24,6 +24,7 @@ ZObject* PlaneCollider3D::Copy(std::string name, ZObject* object)
 {
 	auto source = static_cast<PlaneCollider3D*>(object);
 	auto copy = new PlaneCollider3D();
+	copy->SetIsTrigger(source->IsTrigger());
 
 	return copy;
 }

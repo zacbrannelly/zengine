@@ -97,6 +97,12 @@
 					"name": "Collider",
 					"type": "SPHERE_COLLIDER_3D",
 					"radius": 1.0
+				},
+				{
+					"name": "Trigger",
+					"type": "SPHERE_COLLIDER_3D",
+					"radius": 5.0,
+					"isTrigger": true
 				}
 			]
 		},

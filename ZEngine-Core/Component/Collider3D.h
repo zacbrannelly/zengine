@@ -7,6 +7,7 @@ namespace physx
 {
   class PxGeometry;
   class PxRigidStatic;
+  class PxShape;
 }
 
 class RigidBody3D;
@@ -25,6 +26,11 @@ public:
   virtual void BuildGeometry() = 0;
   physx::PxGeometry* GetGeometry() const;
 
+  void SetIsTrigger(bool isTrigger);
+  bool IsTrigger() const;
+
+  void ApplyShapeFlags(physx::PxShape* shape);
+
   static ObjectType GetStaticType() 
   {
     return COLLIDER_3D;
@@ -40,4 +46,5 @@ protected:
 private:
   physx::PxGeometry* _geometry;
   physx::PxRigidStatic* _staticBody;
+  bool _isTrigger;
 };

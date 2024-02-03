@@ -57,6 +57,7 @@ ZObject* BoxCollider3D::Copy(std::string name, ZObject* object)
   auto source = static_cast<BoxCollider3D*>(object);
   auto copy = new BoxCollider3D();
 
+  copy->SetIsTrigger(source->IsTrigger());
   copy->SetSize(source->GetSize());
 
   return copy;

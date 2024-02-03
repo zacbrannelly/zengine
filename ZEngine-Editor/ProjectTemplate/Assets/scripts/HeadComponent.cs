@@ -44,17 +44,19 @@ namespace MyGame
       // Spawn testing
       if (_inputManager.GetButtonDown(ButtonCode.BUTTON_KEY_A) || _inputManager.GetTouchDown(0))
       {
-        SpawnBody();
+        // SpawnBody();
       }
 
       // Raycast testing
-      var touchDown = _inputManager.GetTouchDown(0);
+      var touchDown = _inputManager.GetTouchUp(0);
       if (_inputManager.GetButtonUp(ButtonCode.BUTTON_MOUSE_LEFT) || touchDown)
       {
         // Get mouse / touch coordinates
         var mousePos = touchDown ? _inputManager.GetTouchPos(0) : _inputManager.GetMousePos();
         int mouseX = (int)mousePos.x;
         int mouseY = (int)mousePos.y;
+
+        Console.WriteLine($"Mouse pos: {mouseX}, {mouseY}");
 
         // Raycast into the scene (will only hit Collider3D objects)
         var ray = Ray.FromScreenPos(mouseX, mouseY, _camera);

@@ -18,7 +18,7 @@ void TransformInspector::RenderElement()
 		_lastComponentInspected = transform;
 	}
 
-	ImGui::BeginChild("Transform", ImVec2(0, 120));
+	ImGui::BeginChild(UniqueLabel("Transform").c_str(), ImVec2(0, 120));
 	{
 		float pos[3] = { transform->GetPosition().x, transform->GetPosition().y, transform->GetPosition().z };
 		float rot[3] = { _rotationEulerDegrees.x, _rotationEulerDegrees.y, _rotationEulerDegrees.z };

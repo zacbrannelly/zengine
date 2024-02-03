@@ -57,6 +57,9 @@ public:
   }
 
 private:
+  void RemoveAllShapes();
+  void RebuildActorShapes();
+
   physx::PxRigidBody* _rigidBody;
   float _mass;
   float _linearDamping;

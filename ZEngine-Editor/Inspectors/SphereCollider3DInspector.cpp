@@ -12,7 +12,7 @@ void SphereCollider3DInspector::RenderElement()
 	if (GetValue() == nullptr) return;
 	auto collider = static_cast<SphereCollider3D*>(GetValue());
 
-	ImGui::BeginChild("Sphere Collider 3D", ImVec2(0, 40));
+	if (ImGui::BeginChild(UniqueLabel("Sphere Collider 3D").c_str(), ImVec2(0, 40)))
 	{
 		auto radius = collider->GetRadius();
 
