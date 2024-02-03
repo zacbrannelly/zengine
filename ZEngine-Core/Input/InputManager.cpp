@@ -58,6 +58,16 @@ void InputManager::Reset()
 	{
 		pair.second = false;
 	}
+    
+    for (auto& pair : _prevTouchDown)
+    {
+        pair.second = _touchDown[pair.first];
+    }
+    
+    for (auto& pair : _touchUp)
+    {
+        pair.second = false;
+    }
 }
 
 bool InputManager::LoadConfiguration(std::string path)

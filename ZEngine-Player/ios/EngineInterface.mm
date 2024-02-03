@@ -98,6 +98,7 @@
     _graphicsSystem->Render();
 
     _time->Tick();
+    _inputSystem->Reset();
 }
 
 - (void) shutdown
