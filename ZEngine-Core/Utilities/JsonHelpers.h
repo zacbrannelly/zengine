@@ -107,80 +107,60 @@
 #define CONTAINS_ASSET_REFERENCES() \
   auto assetManager = AssetManager::GetInstance(); \
 
+#define _INTERNAL_JSON_ASSET_REF_TO_SETTER(member, setter, DataType) \
+  auto assetId = uuids::uuid::from_string((*parseIn).at(#member).get<std::string>()).value(); \
+  std::string path; \
+  ObjectType type; \
+  if (assetManager->GetCatalog()->GetAssetPathFromID(assetId, path, type)) \
+  { \
+    auto asset = assetManager->FindAssetFromPath(path); \
+    if (asset == nullptr) \
+      asset = assetManager->LoadAsset(path, path, type); \
+    if (asset != nullptr) \
+      parseOut->setter(asset->Cast<DataType>()); \
+  } \
+
 #define JSON_ASSET_REF_TO_SETTER(member, setter, DataType) \
   if (isParsing) \
   { \
-    auto assetId = uuids::uuid::from_string((*parseIn).at(#member).get<std::string>()).value(); \
-    std::string path; \
-    ObjectType type; \
-    if (assetManager->GetCatalog()->GetAssetPathFromID(assetId, path, type)) \
-    { \
-      auto asset = assetManager->FindAssetFromPath(path); \
-      if (asset == nullptr) \
-        asset = assetManager->LoadAsset(path, path, type); \
-      if (asset != nullptr) \
-        parseOut->setter(asset->Cast<DataType>()); \
-    } \
+    _INTERNAL_JSON_ASSET_REF_TO_SETTER(member, setter, DataType) \
   }
 
 #define JSON_ASSET_REF_TO_SETTER_OPTIONAL(member, setter, DataType) \
   if (isParsing && (*parseIn).contains(#member)) \
   { \
-    auto assetId = uuids::uuid::from_string((*parseIn).at(#member).get<std::string>()).value(); \
+    _INTERNAL_JSON_ASSET_REF_TO_SETTER(member, setter, DataType) \
+  }
+
+#define _INTERNAL_JSON_ASSET_REFS_TO_SETTER(member, setter, DataType) \
+  auto assetIds = (*parseIn).at(#member).get<std::vector<std::string>>(); \
+  std::vector<DataType*> assets; \
+  for (auto assetId : assetIds) \
+  { \
+    auto assetUuid = uuids::uuid::from_string(assetId).value(); \
     std::string path; \
     ObjectType type; \
-    if (assetManager->GetCatalog()->GetAssetPathFromID(assetId, path, type)) \
+    if (assetManager->GetCatalog()->GetAssetPathFromID(assetUuid, path, type)) \
     { \
       auto asset = assetManager->FindAssetFromPath(path); \
       if (asset == nullptr) \
         asset = assetManager->LoadAsset(path, path, type); \
       if (asset != nullptr) \
-        parseOut->setter(asset->Cast<DataType>()); \
+        assets.push_back(asset->Cast<DataType>()); \
     } \
-  }
+  } \
+  parseOut->setter(assets);
 
 #define JSON_ASSET_REFS_TO_SETTER(member, setter, DataType) \
   if (isParsing) \
   { \
-    auto assetIds = (*parseIn).at(#member).get<std::vector<std::string>>(); \
-    std::vector<DataType*> assets; \
-    for (auto assetId : assetIds) \
-    { \
-      auto assetUuid = uuids::uuid::from_string(assetId).value(); \
-      std::string path; \
-      ObjectType type; \
-      if (assetManager->GetCatalog()->GetAssetPathFromID(assetUuid, path, type)) \
-      { \
-        auto asset = assetManager->FindAssetFromPath(path); \
-        if (asset == nullptr) \
-          asset = assetManager->LoadAsset(path, path, type); \
-        if (asset != nullptr) \
-          assets.push_back(asset->Cast<DataType>()); \
-      } \
-    } \
-    parseOut->setter(assets); \
+    _INTERNAL_JSON_ASSET_REFS_TO_SETTER(member, setter, DataType) \
   }
 
 #define JSON_ASSET_REFS_TO_SETTER_OPTIONAL(member, setter, DataType) \
   if (isParsing && (*parseIn).contains(#member)) \
   { \
-    auto assetIds = (*parseIn).at(#member).get<std::vector<std::string>>(); \
-    std::vector<DataType*> assets; \
-    for (auto assetId : assetIds) \
-    { \
-      auto assetUuid = uuids::uuid::from_string(assetId).value(); \
-      std::string path; \
-      ObjectType type; \
-      if (assetManager->GetCatalog()->GetAssetPathFromID(assetUuid, path, type)) \
-      { \
-        auto asset = assetManager->FindAssetFromPath(path); \
-        if (asset == nullptr) \
-          asset = assetManager->LoadAsset(path, path, type); \
-        if (asset != nullptr) \
-          assets.push_back(asset->Cast<DataType>()); \
-      } \
-    } \
-    parseOut->setter(assets); \
+    _INTERNAL_JSON_ASSET_REFS_TO_SETTER(member, setter, DataType) \
   }
 
 /**
