@@ -17,19 +17,7 @@
 #include "../Component/CapsuleCollider3D.h"
 #include "../Component/PlaneCollider3D.h"
 #include "../Component/MeshCollider3D.h"
-
 #include "../Scripting/CSharp/CSharpScript.h"
-
-#include "../Component/Importers/BasicImporter.h"
-#include "../Component/Importers/TransformImporter.h"
-#include "../Component/Importers/CameraImporter.h"
-#include "../Component/Importers/MeshRendererImporter.h"
-#include "../Component/Importers/CSharpScriptComponentImporter.h"
-#include "../Component/Importers/AudioSourceImporter.h"
-#include "../Component/Importers/RigidBody3DImporter.h"
-#include "../Component/Importers/BoxCollider3DImporter.h"
-#include "../Component/Importers/SphereCollider3DImporter.h"
-#include "../Component/Importers/CapsuleCollider3DImporter.h"
 
 #include <iostream>
 
@@ -40,73 +28,52 @@ std::map<ObjectType, ImporterFunc> Factory::_importers;
 void Factory::Init()
 {
 	// Register factory methods (real-time creation)
-	RegisterType(ObjectType::ENTITY, &Entity::CreateInstance);
-	RegisterType(ObjectType::MAP, &Map::CreateInstance);
-	RegisterType(ObjectType::MATERIAL, &Material::CreateInstance);
-	RegisterType(ObjectType::MESH, &Mesh::CreateInstance);
-	RegisterType(ObjectType::SHADER, &Shader::CreateInstance);
-	RegisterType(ObjectType::CAMERA, &Camera::CreateInstance);
-	RegisterType(ObjectType::TRANSFORM, &Transform::CreateInstance);
-	RegisterType(ObjectType::MESH_RENDERER, &MeshRenderer::CreateInstance);
-	RegisterType(ObjectType::CSHARP_SCRIPT, &CSharpScript::CreateInstance);
-	RegisterType(ObjectType::CSHARP_SCRIPT_COMPONENT, &CSharpScriptComponent::CreateInstance);
-	RegisterType(ObjectType::AUDIO_SOURCE, &AudioSource::CreateInstance);
-	RegisterType(ObjectType::TEST_RENDERER, &TestRenderer::CreateInstance);
-	RegisterType(ObjectType::RIGID_BODY_3D, &RigidBody3D::CreateInstance);
-	RegisterType(ObjectType::BOX_COLLIDER_3D, &BoxCollider3D::CreateInstance);
-	RegisterType(ObjectType::SPHERE_COLLIDER_3D, &SphereCollider3D::CreateInstance);
-	RegisterType(ObjectType::CAPSULE_COLLIDER_3D, &CapsuleCollider3D::CreateInstance);
-	RegisterType(ObjectType::PLANE_COLLIDER_3D, &PlaneCollider3D::CreateInstance);
-	RegisterType(ObjectType::MESH_COLLIDER_3D, &MeshCollider3D::CreateInstance);
+	RegisterType<Entity>();
+	RegisterType<Map>();
+	RegisterType<Material>();
+	RegisterType<Mesh>();
+	RegisterType<Shader>();
+	RegisterType<Camera>();
+	RegisterType<Transform>();
+	RegisterType<MeshRenderer>();
+	RegisterType<CSharpScript>();
+	RegisterType<CSharpScriptComponent>();
+	RegisterType<AudioSource>();
+	RegisterType<TestRenderer>();
+	RegisterType<RigidBody3D>();
+	RegisterType<BoxCollider3D>();
+	RegisterType<SphereCollider3D>();
+	RegisterType<CapsuleCollider3D>();
+	RegisterType<PlaneCollider3D>();
+	RegisterType<MeshCollider3D>();
 
 	// Register copy methods (real-time copying)
-	RegisterCopyType(ObjectType::MAP, &Map::Copy);
-	RegisterCopyType(ObjectType::ENTITY, &Entity::Copy);
-	RegisterCopyType(ObjectType::TRANSFORM, &Transform::Copy);
-	RegisterCopyType(ObjectType::MESH_RENDERER, &MeshRenderer::Copy);
-	RegisterCopyType(ObjectType::CAMERA, &Camera::Copy);
-	RegisterCopyType(ObjectType::CSHARP_SCRIPT_COMPONENT, &CSharpScriptComponent::Copy);
-	RegisterCopyType(ObjectType::AUDIO_SOURCE, &AudioSource::Copy);
-	RegisterCopyType(ObjectType::RIGID_BODY_3D, &RigidBody3D::Copy);
-	RegisterCopyType(ObjectType::BOX_COLLIDER_3D, &BoxCollider3D::Copy);
-	RegisterCopyType(ObjectType::SPHERE_COLLIDER_3D, &SphereCollider3D::Copy);
-	RegisterCopyType(ObjectType::CAPSULE_COLLIDER_3D, &CapsuleCollider3D::Copy);
-	RegisterCopyType(ObjectType::PLANE_COLLIDER_3D, &PlaneCollider3D::Copy);
-	RegisterCopyType(ObjectType::MESH_COLLIDER_3D, &MeshCollider3D::Copy);
+	RegisterCopyType<Map>();
+	RegisterCopyType<Entity>();
+	RegisterCopyType<Transform>();
+	RegisterCopyType<MeshRenderer>();
+	RegisterCopyType<Camera>();
+	RegisterCopyType<CSharpScriptComponent>();
+	RegisterCopyType<AudioSource>();
+	RegisterCopyType<RigidBody3D>();
+	RegisterCopyType<BoxCollider3D>();
+	RegisterCopyType<SphereCollider3D>();
+	RegisterCopyType<CapsuleCollider3D>();
+	RegisterCopyType<PlaneCollider3D>();
+	RegisterCopyType<MeshCollider3D>();
 
 	// Register component importers (from JSON objects)
-	TransformImporter::Init();
-	RegisterTypeImporter(ObjectType::TRANSFORM, TransformImporter::Import);
-
-	CameraImporter::Init();
-	RegisterTypeImporter(ObjectType::CAMERA, CameraImporter::Import);
-
-	MeshRendererImporter::Init();
-	RegisterTypeImporter(ObjectType::MESH_RENDERER, MeshRendererImporter::Import);
-
-	CSharpScriptComponentImporter::Init();
-	RegisterTypeImporter(ObjectType::CSHARP_SCRIPT_COMPONENT, CSharpScriptComponentImporter::Import);
-
-	AudioSourceImporter::Init();
-	RegisterTypeImporter(ObjectType::AUDIO_SOURCE, AudioSourceImporter::Import);
-
-	RigidBody3DImporter::Init();
-	RegisterTypeImporter(ObjectType::RIGID_BODY_3D, RigidBody3DImporter::Import);
-
-	BoxCollider3DImporter::Init();
-	RegisterTypeImporter(ObjectType::BOX_COLLIDER_3D, BoxCollider3DImporter::Import);
-
-	SphereCollider3DImporter::Init();
-	RegisterTypeImporter(ObjectType::SPHERE_COLLIDER_3D, SphereCollider3DImporter::Import);
-
-	CapsuleCollider3DImporter::Init();
-	RegisterTypeImporter(ObjectType::CAPSULE_COLLIDER_3D, CapsuleCollider3DImporter::Import);
-
-	BasicImporter<PlaneCollider3D>::Init();
-	RegisterTypeImporter(ObjectType::PLANE_COLLIDER_3D, BasicImporter<PlaneCollider3D>::Import);
-
-	BasicImporter<MeshCollider3D>::Init();
-	RegisterTypeImporter(ObjectType::MESH_COLLIDER_3D, BasicImporter<MeshCollider3D>::Import);
+	RegisterTypeImporter<Transform>();
+	RegisterTypeImporter<Camera>();
+	RegisterTypeImporter<MeshRenderer>();
+	RegisterTypeImporter<CSharpScriptComponent>();
+	RegisterTypeImporter<AudioSource>();
+	RegisterTypeImporter<RigidBody3D>();
+	RegisterTypeImporter<BoxCollider3D>();
+	RegisterTypeImporter<SphereCollider3D>();
+	RegisterTypeImporter<CapsuleCollider3D>();
+	RegisterTypeImporter<PlaneCollider3D>();
+	RegisterTypeImporter<MeshCollider3D>();
 }
 
 ZObject* Factory::CreateInstance(std::string name, ObjectType type)

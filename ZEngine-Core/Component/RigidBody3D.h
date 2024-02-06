@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Component.h"
+#include "../Utilities/JsonHelpers.h"
 #include <glm/glm.hpp>
 
 // TODO: Don't use library specific types in the engine
@@ -55,6 +56,17 @@ public:
   {
     return RIGID_BODY_3D;
   }
+
+#ifndef SWIG
+  // Allow serialization / deserialization
+  JSON_SCHEMA_BEGIN(RigidBody3D)
+    JSON_TO_SETTER_OPTIONAL (mass,           SetMass,           float)
+    JSON_TO_SETTER_OPTIONAL (linearDamping,  SetLinearDamping,  float)
+    JSON_TO_SETTER_OPTIONAL (angularDamping, SetAngularDamping, float)
+    JSON_TO_SETTER_OPTIONAL (useGravity,     SetUseGravity,     bool)
+    JSON_TO_SETTER_OPTIONAL (isKinematic,    SetIsKinematic,    bool)
+  JSON_SCHEMA_END()
+#endif
 
 private:
   void RemoveAllShapes();

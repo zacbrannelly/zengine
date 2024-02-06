@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Component.h"
+#include "../Assets/Objects/AudioAsset.h"
+#include "../Utilities/JsonHelpers.h"
 
 class AudioAsset;
 
@@ -24,9 +26,18 @@ public:
 	void Pause();
 	void Stop();
 
+#ifndef SWIG
+	// Allow serialization / deserialization
+	JSON_SCHEMA_BEGIN(AudioSource)
+		CONTAINS_ASSET_REFERENCES()
+		JSON_ASSET_REF_TO_SETTER (audio,    SetAudio,    AudioAsset)
+		JSON_TO_SETTER_OPTIONAL  (autoPlay, SetAutoPlay, bool)
+	JSON_SCHEMA_END()
+#endif
+
 private:
-	AudioAsset* _audioAsset;
 	bool _autoPlay;
+	AudioAsset* _audioAsset;
 	bool _hasAutoPlayed;
 	int _playingChannel;
 

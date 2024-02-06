@@ -19,6 +19,11 @@ std::unordered_set<ObjectType> ZObject::GetDerivedTypes()
 	return _derivedTypesSet;
 }
 
+void ZObject::SetName(std::string name)
+{
+	_name = name;
+}
+
 std::string ZObject::GetName() const
 {
 	return _name;

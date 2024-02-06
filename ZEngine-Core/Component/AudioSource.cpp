@@ -1,6 +1,9 @@
 #include "AudioSource.h"
 #include "../Assets/Objects/AudioAsset.h"
 
+#include "../Assets/AssetManager.h"
+#include "../Assets/AssetCatalog.h"
+
 using namespace std;
 
 AudioSource::AudioSource() : Component("AudioSource", AUDIO_SOURCE)

@@ -115,8 +115,8 @@ Mesh* ModelAsset::LoadMesh(const aiScene* scene)
 		}
 	}
 
-	auto mesh = new Mesh(GetName());
-
+	auto mesh = new Mesh();
+	mesh->SetName(GetName());
 	mesh->SetVertices(vertices);
 	mesh->SetNormals(normals);
 	mesh->SetTextureCoords(texCoords);

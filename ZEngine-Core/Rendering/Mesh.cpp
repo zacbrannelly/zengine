@@ -5,7 +5,7 @@
 #include "Graphics.h"
 #include "Shader.h"
 
-Mesh::Mesh(std::string name) : ZObject(name, ObjectType::MESH)
+Mesh::Mesh() : ZObject("Mesh", ObjectType::MESH)
 {
 	RegisterDerivedType(MESH);
 	_vertexBuffer = nullptr;
@@ -33,7 +33,7 @@ Mesh::Mesh(std::string name) : ZObject(name, ObjectType::MESH)
 
 ZObject* Mesh::CreateInstance(std::string name, ObjectType type)
 {
-	return new Mesh(name);
+	return new Mesh();
 }
 
 void Mesh::SetDynamic(bool isDynamic)
@@ -44,6 +44,14 @@ void Mesh::SetDynamic(bool isDynamic)
 bool Mesh::IsDynamic() const
 {
 	return _isDynamic;
+}
+
+void Mesh::SetSubMeshes(const std::vector<SubMesh>& subMeshes)
+{
+	for (const auto& subMesh : subMeshes)
+	{
+		_subMeshes.push_back(new SubMesh(subMesh));
+	}
 }
 
 void Mesh::SetIndices(const std::vector<uint32_t>& indices)
@@ -57,7 +65,9 @@ void Mesh::SetIndices(int subMesh, const std::vector<uint32_t>& indices)
 
 	if (subMesh >= _subMeshes.size())
 	{
-		_subMeshes.push_back(new SubMesh(_isDynamic));
+		auto newSubMesh = new SubMesh();
+		newSubMesh->SetDynamic(_isDynamic);
+		_subMeshes.push_back(newSubMesh);
 		subMesh = _subMeshes.size() - 1;
 	}
 
@@ -211,20 +221,28 @@ Mesh::~Mesh()
 	delete _normalBuffer;
 }
 
-SubMesh::SubMesh(bool isDynamic)
+SubMesh::SubMesh()
+{
+	_isDynamic = false;
+	_drawMode = DrawMode::TRIANGLES;
+}
+
+SubMesh::SubMesh(const SubMesh& other)
+{
+	_indices = other._indices;
+	_drawMode = other._drawMode;
+	_isDynamic = other._isDynamic;
+	_indexBuffer = other._indexBuffer;
+}
+
+void SubMesh::SetDynamic(bool isDynamic)
 {
 	_isDynamic = isDynamic;
+}
 
-	if (isDynamic)
-	{
-		_indexBuffer = new DynamicIndexBuffer();
-	}
-	else
-	{
-		_indexBuffer = new IndexBuffer();
-	}
-
-	_drawMode = DrawMode::TRIANGLES;
+bool SubMesh::IsDynamic() const
+{
+	return _isDynamic;
 }
 
 void SubMesh::SetMode(DrawMode mode)
@@ -240,6 +258,9 @@ DrawMode SubMesh::GetMode() const
 void SubMesh::SetIndices(const std::vector<uint32_t>& indices)
 {
 	_indices = indices;
+
+	if (_indexBuffer == nullptr)
+		_indexBuffer = _isDynamic ? new DynamicIndexBuffer() : new IndexBuffer();
 
 	if (_isDynamic && _indexBuffer->GetHandle().idx != bgfx::kInvalidHandle)
 	{

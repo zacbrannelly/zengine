@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DynamicCollider3D.h"
+#include "../Utilities/JsonHelpers.h"
 #include <glm/glm.hpp>
 
 class CapsuleCollider3D : public DynamicCollider3D
@@ -11,9 +12,13 @@ public:
 
 	void BuildGeometry() override;
 
-	void SetSize(float radius, float height);
+	void SetRadius(float radius);
 	float GetRadius() const;
+
+	void SetHeight(float height);
 	float GetHeight() const;
+
+	void SetSize(float radius, float height);
 
 	float GetWorldRadius() const;
 	float GetWorldHeight() const;
@@ -25,6 +30,15 @@ public:
 	{
 		return CAPSULE_COLLIDER_3D;
 	}
+
+#ifndef SWIG
+	// Allow serialization / deserialization
+	JSON_SCHEMA_BEGIN(CapsuleCollider3D)
+		JSON_TO_SETTER_OPTIONAL (isTrigger, SetIsTrigger, bool)
+		JSON_TO_SETTER_OPTIONAL (radius,    SetRadius,    float)
+		JSON_TO_SETTER_OPTIONAL (height,    SetHeight,    float)
+	JSON_SCHEMA_END()
+#endif
 
 private:
 	float _radius;

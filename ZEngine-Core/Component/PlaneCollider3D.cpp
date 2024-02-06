@@ -10,8 +10,29 @@ PlaneCollider3D::PlaneCollider3D() : Collider3D("Plane Collider 3D", PLANE_COLLI
   RegisterDerivedType(PLANE_COLLIDER_3D);
 }
 
+void PlaneCollider3D::SetDirection(glm::vec3 direction)
+{
+	_direction = direction;
+}
+
+const glm::vec3& PlaneCollider3D::GetDirection() const
+{
+	return _direction;
+}
+
+void PlaneCollider3D::SetDistance(float distance)
+{
+	_distance = distance;
+}
+
+float PlaneCollider3D::GetDistance() const
+{
+	return _distance;
+}
+
 void PlaneCollider3D::BuildGeometry()
 {
+	// TODO: Use the `direction` and `distance` to create the plane geometry
 	SetGeometrySilently(new physx::PxPlaneGeometry());
 }
 

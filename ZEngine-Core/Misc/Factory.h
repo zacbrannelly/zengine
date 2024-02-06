@@ -53,9 +53,39 @@ public:
 	static void RegisterType(ObjectType type, ConstructorFunc constructor);
 	static void RegisterCopyType(ObjectType type, CopyFunc copyFunc);
 	static void RegisterTypeImporter(ObjectType type, ImporterFunc importerFunc);
+
+	template <class T>
+	static void RegisterType();
+
+	template<class T>
+	static void RegisterTypeImporter();
+
+	template<class T>
+	static void RegisterCopyType();
+
 private:
 	static std::map<ObjectType, ConstructorFunc> _typeConstructors;
 	static std::map<ObjectType, CopyFunc> _copyFunctions;
 	static std::map<ObjectType, ImporterFunc> _importers;
 };
 
+#include "../Component/Importers/JsonImporter.h"
+
+template <class T>
+void Factory::RegisterType()
+{
+	RegisterType(T::GetStaticType(), &T::CreateInstance);
+}
+
+template<class T>
+void Factory::RegisterTypeImporter()
+{
+	JsonImporter<T>::Init();
+	RegisterTypeImporter(T::GetStaticType(), JsonImporter<T>::Import);
+}
+
+template<class T>
+void Factory::RegisterCopyType()
+{
+	RegisterCopyType(T::GetStaticType(), &T::Copy);
+}

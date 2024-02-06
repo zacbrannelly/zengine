@@ -2,6 +2,7 @@
 #include "Transform.h"
 #include "../Map/Objects/Entity.h"
 #include "../Rendering/Mesh.h"
+#include "../Rendering/MeshFactory.h"
 
 using namespace std;
 
@@ -9,6 +10,11 @@ MeshRenderer::MeshRenderer() : Component("Mesh Renderer", ObjectType::MESH_RENDE
 {
 	RegisterDerivedType(MESH_RENDERER);
 	_mesh = nullptr;
+}
+
+void MeshRenderer::SetMeshFromAsset(ModelAsset* modelAsset)
+{
+	_mesh = modelAsset->GetMesh();
 }
 
 void MeshRenderer::SetMesh(Mesh* mesh)
@@ -53,6 +59,14 @@ Material* MeshRenderer::GetMaterial() const
 void MeshRenderer::SetMaterials(const vector<Material*>& materials)
 {
 	_materials = materials;
+}
+
+void MeshRenderer::SetMaterialsFromAssets(const vector<MaterialAsset*>& materialAssets)
+{
+	for (auto materialAsset : materialAssets)
+	{
+		_materials.push_back(materialAsset->GetMaterial());
+	}
 }
 
 const vector<Material*>& MeshRenderer::GetMaterials() const
@@ -103,4 +117,47 @@ ZObject* MeshRenderer::Copy(string name, ZObject* object)
 	copy->SetMesh(source->GetMesh());
 
 	return copy;
+}
+
+void MeshRenderer::OnDeserialization(const nlohmann::json& in, MeshRenderer& out)
+{
+	// Build the mesh from a primitive
+	// TODO: Put this into a struct and define a schema for it.
+	if (in.contains("primitive"))
+	{
+		auto primitive = in["primitive"].get<string>();
+
+		if (primitive == "cube")
+		{
+			out.SetMesh(MeshFactory::CreateCube("Cube"));
+		}
+		else if (primitive == "sphere")
+		{
+			out.SetMesh(MeshFactory::CreateSphereStrip("Sphere"));
+		}
+		else if (primitive == "rectangle")
+		{
+			out.SetMesh(MeshFactory::CreateRectangle("Rectangle"));
+		}
+		else if (primitive == "plane")
+		{
+			int width = 10;
+			int height = 10;
+			PlaneOrientation facing = FRONT;
+
+			if (in.contains("plane_size"))
+			{
+				auto data = in["plane_size"].get<vector<int>>();
+				width = data[0];
+				height = data[1];
+			}
+
+			if (in.contains("plane_facing"))
+			{
+				facing = (PlaneOrientation)in["plane_facing"].get<unsigned int>();
+			}
+
+			out.SetMesh(MeshFactory::CreatePlane("Plane", width, height, facing));
+		}
+	}
 }

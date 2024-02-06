@@ -59,7 +59,7 @@ void TestRenderer::Init()
 			4, 5,
 	};
 
-	_mesh = new Mesh("test mesh");
+	_mesh = new Mesh();
 	_mesh->SetDynamic(false);
 
 	_mesh->SetVertices(verts);

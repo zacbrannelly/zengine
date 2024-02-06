@@ -27,7 +27,7 @@
 					"type": "AUDIO_SOURCE",
 					
 					"audio": "00000000-0000-0000-0000-000000000013",
-					"autoplay": true
+					"autoPlay": true
 				}
 			]
 		},

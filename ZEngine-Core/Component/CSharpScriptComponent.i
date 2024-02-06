@@ -6,6 +6,7 @@
 
 %include "std_string.i"
 
+%ignore CSharpScriptComponent::CSharpScriptComponent;
 %ignore CSharpScriptComponent::GetScript;
 %ignore CSharpScriptComponent::SetScript;
 %ignore CSharpScriptComponent::Init;

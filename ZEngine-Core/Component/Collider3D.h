@@ -43,8 +43,7 @@ protected:
   void OnGeometryChanged();
   RigidBody3D* GetDynamicRigidBody() const;
 
-private:
+  bool _isTrigger;
   physx::PxGeometry* _geometry;
   physx::PxRigidStatic* _staticBody;
-  bool _isTrigger;
 };

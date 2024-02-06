@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include <bgfx/bgfx.h>
+#include "../Utilities/JsonHelpers.h"
 
 class Material;
 class VertexBuffer;
@@ -20,7 +21,8 @@ enum DrawMode
 class SubMesh
 {
 public:
-	SubMesh(bool isDynamic);
+	SubMesh();
+	SubMesh(const SubMesh& other);
 	~SubMesh();
 
 	void SetMode(DrawMode mode);
@@ -29,7 +31,16 @@ public:
 	void SetIndices(const std::vector<uint32_t>& indices);
 	const std::vector<uint32_t>& GetIndices() const;
 
+	void SetDynamic(bool isDynamic);
+	bool IsDynamic() const;
+
 	void Draw(int viewId, Material* material, Graphics* graphics, const Pass& pass);
+
+	JSON_SCHEMA_BEGIN(SubMesh)
+		JSON_TO_SETTER          ("indices", SetIndices, std::vector<uint32_t>)
+		JSON_TO_SETTER          ("mode",    SetMode,    DrawMode)
+		JSON_TO_SETTER_OPTIONAL ("dynamic", SetDynamic, bool)
+	JSON_SCHEMA_END()
 
 private:
 	std::vector<uint32_t> _indices;
@@ -41,7 +52,7 @@ private:
 class Mesh : public ZObject
 {
 public:
-	Mesh(std::string name);
+	Mesh();
 	~Mesh();
 
 	void SetDynamic(bool isDynamic);
@@ -51,6 +62,8 @@ public:
 	void SetIndices(int subMesh, const std::vector<uint32_t>& indices);
 	const std::vector<uint32_t>& GetIndices();
 	const std::vector<uint32_t>& GetIndices(int subMesh);
+
+	void SetSubMeshes(const std::vector<SubMesh>& subMeshes);
 	int GetSubMeshCount() const;
 
 	void SetMode(DrawMode mode);
@@ -109,6 +122,15 @@ public:
 	{
 		return MESH;
 	}
+
+	JSON_SCHEMA_BEGIN(Mesh)
+		JSON_TO_SETTER          ("vertices",  SetVertices,      std::vector<glm::vec3>)
+		JSON_TO_SETTER          ("indices",   SetIndices,       std::vector<uint32_t>)
+		JSON_TO_SETTER_OPTIONAL ("colors",    SetColors,        std::vector<glm::vec4>)
+		JSON_TO_SETTER_OPTIONAL ("texCoords", SetTextureCoords, std::vector<glm::vec2>)
+		JSON_TO_SETTER_OPTIONAL ("normals",   SetNormals,       std::vector<glm::vec3>)
+		JSON_TO_SETTER_OPTIONAL ("subMeshes", SetSubMeshes,     std::vector<SubMesh>)
+	JSON_SCHEMA_END()
 };
 
 #include "./VertexBuffer.h"
@@ -129,12 +151,9 @@ inline void Mesh::SetBuffer(VertexBuffer*& buffer, bgfx::VertexLayout& decl, con
 	if (data.size() == 0) return;
 
 	if (buffer == nullptr)
-	{
-		if (_isDynamic)
-			buffer = new DynamicVertexBuffer(decl);
-		else
-			buffer = new VertexBuffer(decl);
-	}
+		buffer = _isDynamic	
+			? new DynamicVertexBuffer(decl) 
+			: new VertexBuffer(decl);
 
 	if (_isDynamic && buffer->GetHandle().idx != bgfx::kInvalidHandle)
 	{

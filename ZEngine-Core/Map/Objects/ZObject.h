@@ -15,6 +15,8 @@ public:
 	std::unordered_set<ObjectType> GetDerivedTypes();
 
 	ObjectType GetType() const;
+	
+	void SetName(std::string name);
 	std::string GetName() const;
 
 	static ZObject* CreateInstance(std::string name, ObjectType type);

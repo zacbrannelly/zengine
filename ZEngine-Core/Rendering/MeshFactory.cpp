@@ -555,7 +555,8 @@ Mesh* MeshFactory::CreateSphereStrip(std::string name)
 		oddRow = !oddRow;
 	}
 
-	Mesh* newMesh = new Mesh(name);
+	Mesh* newMesh = new Mesh();
+	newMesh->SetName(name);
 	newMesh->SetVertices(positions);
 	newMesh->SetTextureCoords(uv);
 	newMesh->SetNormals(normals);

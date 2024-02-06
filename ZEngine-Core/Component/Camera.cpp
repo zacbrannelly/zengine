@@ -10,7 +10,7 @@ using namespace std;
 Camera::Camera() : Component("Camera", ObjectType::CAMERA)
 {
 	RegisterDerivedType(CAMERA);
-	_projMode = ORTHOGRAPHIC;
+	_projection = ORTHOGRAPHIC;
 	_frameBuffer = BGFX_INVALID_HANDLE;
 	_renderTexture = BGFX_INVALID_HANDLE;
 	_clearFlags = BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH;
@@ -19,7 +19,7 @@ Camera::Camera() : Component("Camera", ObjectType::CAMERA)
 	_viewport = { 0, 0, 1024, 600 };
 	_clearColor = { 1, 1, 1, 1 };
 	_orthoSize = 5.0f;
-	_fov = glm::radians(60.0f);
+	_fieldOfView = glm::radians(60.0f);
 }
 
 void Camera::Init()
@@ -55,7 +55,7 @@ glm::mat4 Camera::GetProjectionMatrix() const
 {
 	auto aspectRatio = GetAspectRatio();
 
-	if (_projMode == Camera::ProjectionMode::ORTHOGRAPHIC)
+	if (_projection == Camera::ProjectionMode::ORTHOGRAPHIC)
 	{
 		// Create orthogonal projection with _orthoSize being the half vertical height
 		return glm::ortho<float>(-aspectRatio * _orthoSize, aspectRatio * _orthoSize, -_orthoSize, _orthoSize, _zNear, _zFar);
@@ -63,7 +63,7 @@ glm::mat4 Camera::GetProjectionMatrix() const
 	else
 	{
 		// Create perspective projection (3D) with the field of view (zoom)
-		return glm::perspective<float>(_fov, aspectRatio, _zNear, _zFar);
+		return glm::perspective<float>(_fieldOfView, aspectRatio, _zNear, _zFar);
 	}
 }
 
@@ -108,6 +108,11 @@ int Camera::GetViewId() const
 	return _viewId;
 }
 
+void Camera::SetViewport(glm::vec4 viewport)
+{
+	SetViewport((int)viewport.x, (int)viewport.y, (int)viewport.z, (int)viewport.w);
+}
+
 void Camera::SetViewport(int x, int y, int width, int height)
 {
 	_viewport = { x, y, width, height };
@@ -148,12 +153,12 @@ float Camera::GetAspectRatio() const
 
 void Camera::SetProjectionMode(Camera::ProjectionMode mode)
 {
-	_projMode = mode;
+	_projection = mode;
 }
 
 Camera::ProjectionMode Camera::GetProjectionMode() const
 {
-	return _projMode;
+	return _projection;
 }
 
 void Camera::SetRenderToTexture(bool renderToTexture)
@@ -182,12 +187,12 @@ bgfx::TextureHandle Camera::GetRenderTexture() const
 
 void Camera::SetFieldOfView(float fov)
 {
-	_fov = glm::radians(fov);
+	_fieldOfView = glm::radians(fov);
 }
 
 float Camera::GetFieldOfView() const
 {
-	return glm::degrees(_fov);
+	return glm::degrees(_fieldOfView);
 }
 
 void Camera::SetOrthoSize(float size)

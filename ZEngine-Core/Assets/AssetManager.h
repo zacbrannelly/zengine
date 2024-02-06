@@ -1,3 +1,5 @@
+#pragma once
+
 #include <map>
 #include <vector>
 
@@ -14,9 +16,9 @@ public:
 
 	void SetCatalog(AssetCatalog* catalog);
 	AssetCatalog* GetCatalog() const;
-    
-    void SetBasePath(std::string basePath);
-    std::string GetBasePath() const;
+
+	void SetBasePath(std::string basePath);
+	std::string GetBasePath() const;
 
 	Asset* LoadAsset(std::string path, ObjectType type);
 	Asset* LoadAsset(std::string name, std::string path, ObjectType type);

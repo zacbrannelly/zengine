@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "Component.h"
+#include "../Utilities/JsonHelpers.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
@@ -12,7 +13,7 @@ public:
 	Transform();
 	~Transform();
     
-    void Set(Transform* source);
+	void Set(Transform* source);
 
 	void SetPosition(const glm::vec3& position);
 	const glm::vec3& GetPosition() const;
@@ -69,5 +70,14 @@ public:
 	{
 		return TRANSFORM;
 	}
+
+#ifndef SWIG
+	// Allow serialization / deserialization
+	JSON_SCHEMA_BEGIN(Transform)
+		JSON_TO_SETTER(position, SetPosition,           glm::vec3)
+		JSON_TO_SETTER(scale,    SetScale,              glm::vec3)
+		JSON_TO_SETTER(rotation, SetRotationQuaternion, glm::quat)
+	JSON_SCHEMA_END()
+#endif
 };
 

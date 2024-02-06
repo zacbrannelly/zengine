@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DynamicCollider3D.h"
+#include "../Utilities/JsonHelpers.h"
 #include <glm/glm.hpp>
 
 class SphereCollider3D : public DynamicCollider3D
@@ -22,6 +23,14 @@ public:
 	{
 		return SPHERE_COLLIDER_3D;
 	}
+
+#ifndef SWIG
+	// Allow serialization / deserialization
+	JSON_SCHEMA_BEGIN(SphereCollider3D)
+		JSON_TO_SETTER_OPTIONAL (isTrigger, SetIsTrigger, bool)
+		JSON_TO_SETTER_OPTIONAL (radius,    SetRadius,    float)
+	JSON_SCHEMA_END()
+#endif
 
 private:
 	float _radius;

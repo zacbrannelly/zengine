@@ -27,6 +27,18 @@ void CapsuleCollider3D::SetSize(float radius, float height)
 	OnGeometryChanged();
 }
 
+void CapsuleCollider3D::SetRadius(float radius)
+{
+	_radius = radius;
+	OnGeometryChanged();
+}
+
+void CapsuleCollider3D::SetHeight(float height)
+{
+	_height = height;
+	OnGeometryChanged();
+}
+
 float CapsuleCollider3D::GetRadius() const
 {
 	return _radius;

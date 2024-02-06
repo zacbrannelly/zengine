@@ -5,7 +5,7 @@
 #define UPDATE_METHOD_NAME "Update"
 #define RENDER_METHOD_NAME "Render"
 
-CSharpScriptComponent::CSharpScriptComponent(std::string name) : Component(name, CSHARP_SCRIPT_COMPONENT)
+CSharpScriptComponent::CSharpScriptComponent() : Component("CSharpScriptComponent", CSHARP_SCRIPT_COMPONENT)
 {
   RegisterDerivedType(CSHARP_SCRIPT_COMPONENT);
   _script = nullptr;
@@ -26,6 +26,7 @@ void CSharpScriptComponent::Render(int viewId) {
 
 void CSharpScriptComponent::SetScript(CSharpScript* script) {
   _script = script;
+  SetName(script->GetClassName());
   SetManagedInstance(_script->CreateManagedObject(this));
 }
 
@@ -43,7 +44,7 @@ void* CSharpScriptComponent::GetManagedInstance() const {
 
 ZObject* CSharpScriptComponent::CreateInstance(std::string name, ObjectType type)
 {
-  return new CSharpScriptComponent(name);
+  return new CSharpScriptComponent();
 }
 
 ZObject* CSharpScriptComponent::Copy(std::string name, ZObject* object)
@@ -51,7 +52,8 @@ ZObject* CSharpScriptComponent::Copy(std::string name, ZObject* object)
   if (object == nullptr || object->GetType() != CSHARP_SCRIPT_COMPONENT)
     return nullptr;
 
-  const auto newComponent = new CSharpScriptComponent(name);
+  const auto newComponent = new CSharpScriptComponent();
+  newComponent->SetName(name);
   newComponent->SetScript(static_cast<CSharpScriptComponent*>(object)->GetScript());
 
   return newComponent;

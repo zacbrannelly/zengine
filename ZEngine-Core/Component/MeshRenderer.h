@@ -1,7 +1,12 @@
 #pragma once
 
 #include "Component.h"
+#include "../Utilities/JsonHelpers.h"
+#include "../Assets/Objects/ModelAsset.h"
+#include "../Assets/Objects/MaterialAsset.h"
+#include "../Rendering/Mesh.h"
 #include <vector>
+#include <uuid.h>
 
 class Mesh;
 class Material;
@@ -26,7 +31,7 @@ public:
 	virtual void Init();
 	virtual void Update();
 	virtual void Render(int viewId);
-    virtual void Render(int viewId, Transform* transform);
+	virtual void Render(int viewId, Transform* transform);
 
 	static ZObject* CreateInstance(std::string name, ObjectType type);
 	static ZObject* Copy(std::string name, ZObject* object);
@@ -36,7 +41,26 @@ public:
 		return MESH_RENDERER;
 	}
 
+#ifndef SWIG
+	// Allow serialization / deserialization
+	JSON_SCHEMA_BEGIN(MeshRenderer)
+	  CONTAINS_ASSET_REFERENCES()
+		JSON_ASSET_REFS_TO_SETTER_OPTIONAL (materials, SetMaterialsFromAssets, MaterialAsset)
+		JSON_ASSET_REF_TO_SETTER_OPTIONAL  (model,     SetMeshFromAsset,       ModelAsset)
+		JSON_TO_FACTORY_SETTER_OPTIONAL    (mesh,      SetMesh,                Mesh)
+
+		// Custom deserialization logic to parse the "primitive" field.
+		// TODO: Make it a struct and use the JSON_SCHEMA_BEGIN macro
+		JSON_ON_DESERIALIZATION(OnDeserialization)
+	JSON_SCHEMA_END()
+#endif
+
+	static void OnDeserialization(const nlohmann::json& in, MeshRenderer& out);
+
 private:
+	void SetMeshFromAsset(ModelAsset* modelAsset);
+	void SetMaterialsFromAssets(const std::vector<MaterialAsset*>& materialAssets);
+
 	Mesh* _mesh;
 	std::vector<Material*> _materials;
 };

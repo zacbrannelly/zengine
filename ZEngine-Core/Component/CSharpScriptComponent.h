@@ -1,13 +1,14 @@
 #pragma once
 
 #include "Component.h"
-
-class CSharpScript;
+#include "../Utilities/JsonHelpers.h"
+#include "../Assets/Objects/CSharpScriptAsset.h"
+#include <uuid.h>
 
 class CSharpScriptComponent : public Component
 {
 public:
-	CSharpScriptComponent(std::string name);
+	CSharpScriptComponent();
 	~CSharpScriptComponent();
 
 	void Init() override;
@@ -20,7 +21,16 @@ public:
 	void SetManagedInstance(void* instance);
 	void* GetManagedInstance() const;
 
+#ifndef SWIG
+	// Allow serialization / deserialization
+	JSON_SCHEMA_BEGIN(CSharpScriptComponent)
+		CONTAINS_ASSET_REFERENCES()
+		JSON_ASSET_REF_TO_SETTER(script, SetScriptFromAsset, CSharpScriptAsset)
+	JSON_SCHEMA_END()
+#endif
+
 private:
+	void SetScriptFromAsset(CSharpScriptAsset* scriptAsset) { SetScript(scriptAsset->GetScript()); }
 	CSharpScript* _script;
   void* _managedInstance;
 
