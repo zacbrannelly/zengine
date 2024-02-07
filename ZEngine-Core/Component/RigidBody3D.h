@@ -60,11 +60,11 @@ public:
 #ifndef SWIG
   // Allow serialization / deserialization
   JSON_SCHEMA_BEGIN(RigidBody3D)
-    JSON_TO_SETTER_OPTIONAL (mass,           SetMass,           float)
-    JSON_TO_SETTER_OPTIONAL (linearDamping,  SetLinearDamping,  float)
-    JSON_TO_SETTER_OPTIONAL (angularDamping, SetAngularDamping, float)
-    JSON_TO_SETTER_OPTIONAL (useGravity,     SetUseGravity,     bool)
-    JSON_TO_SETTER_OPTIONAL (isKinematic,    SetIsKinematic,    bool)
+    JSON_MAP_TO_SETTER_OPTIONAL (mass,           SetMass,           float)
+    JSON_MAP_TO_SETTER_OPTIONAL (linearDamping,  SetLinearDamping,  float)
+    JSON_MAP_TO_SETTER_OPTIONAL (angularDamping, SetAngularDamping, float)
+    JSON_MAP_TO_SETTER_OPTIONAL (useGravity,     SetUseGravity,     bool)
+    JSON_MAP_TO_SETTER_OPTIONAL (isKinematic,    SetIsKinematic,    bool)
   JSON_SCHEMA_END()
 #endif
 

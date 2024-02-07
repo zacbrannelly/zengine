@@ -24,8 +24,8 @@ public:
 #ifndef SWIG
 	// Allow serialization / deserialization
 	JSON_SCHEMA_BEGIN(CSharpScriptComponent)
-		CONTAINS_ASSET_REFERENCES()
-		JSON_ASSET_REF_TO_SETTER(script, SetScriptFromAsset, CSharpScriptAsset)
+		INCLUDE_ASSET_REFERENCES()
+		JSON_MAP_TO_ASSET_REF_SETTER(script, SetScriptFromAsset, CSharpScriptAsset)
 	JSON_SCHEMA_END()
 #endif
 

@@ -29,9 +29,9 @@ public:
 #ifndef SWIG
 	// Allow serialization / deserialization
 	JSON_SCHEMA_BEGIN(AudioSource)
-		CONTAINS_ASSET_REFERENCES()
-		JSON_ASSET_REF_TO_SETTER (audio,    SetAudio,    AudioAsset)
-		JSON_TO_SETTER_OPTIONAL  (autoPlay, SetAutoPlay, bool)
+		INCLUDE_ASSET_REFERENCES()
+		JSON_MAP_TO_ASSET_REF_SETTER (audio,    SetAudio,    AudioAsset)
+		JSON_MAP_TO_SETTER_OPTIONAL  (autoPlay, SetAutoPlay, bool)
 	JSON_SCHEMA_END()
 #endif
 

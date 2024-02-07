@@ -22,10 +22,10 @@
  * 
  * JSON_SCHEMA_BEGIN()
  * 
- *  JSON_TO_MEMBER             ("name", _name);
- *  JSON_TO_GETTER_AND_SETTER  ("name", GetterFunc, SetterFunc, std::string);
- *  JSON_TO_SETTER             ("name", SetterFunc, std::string);
- *  JSON_TO_SETTER_OPTIONAL    ("name", SetterFunc, std::string);
+ *  JSON_MAP_TO_MEMBER             ("name", _name);
+ *  JSON_MAP_TO_GETTER_SETTER  ("name", GetterFunc, SetterFunc, std::string);
+ *  JSON_MAP_TO_SETTER             ("name", SetterFunc, std::string);
+ *  JSON_MAP_TO_SETTER_OPTIONAL    ("name", SetterFunc, std::string);
  * 
  * JSON_SCHEMA_END()
  */
@@ -46,7 +46,7 @@
 #define JSON_SCHEMA_END() \
   }
 
-#define JSON_TO_MEMBER(member, memberName) \
+#define JSON_MAP_TO_MEMBER(member, memberName) \
   if (isParsing) \
   { \
     (*parseIn).at(#member).get_to(parseOut->memberName); \
@@ -56,7 +56,7 @@
     (*exportOut)[#member] = exportIn->memberName; \
   }
 
-#define JSON_TO_GETTER_AND_SETTER(member, getter, setter, DataType) \
+#define JSON_MAP_TO_GETTER_SETTER(member, getter, setter, DataType) \
   if (isParsing) \
   { \
     parseOut->setter((*parseIn).at(#member).get<DataType>()); \
@@ -66,26 +66,26 @@
     (*exportOut)[#member] = exportIn->getter(); \
   }
 
-#define JSON_TO_SETTER(member, setter, DataType) \
+#define JSON_MAP_TO_SETTER(member, setter, DataType) \
   if (isParsing) \
   { \
     parseOut->setter((*parseIn).at(#member).get<DataType>()); \
   }
 
-#define JSON_TO_SETTER_OPTIONAL(member, setter, DataType) \
+#define JSON_MAP_TO_SETTER_OPTIONAL(member, setter, DataType) \
   if (isParsing && (*parseIn).contains(#member)) \
   { \
     parseOut->setter((*parseIn).at(#member).get<DataType>()); \
   }
 
-#define JSON_TO_FACTORY_SETTER(member, setter, DataType) \
+#define JSON_MAP_TO_FACTORY_SETTER(member, setter, DataType) \
   if (isParsing) \
   { \
     auto newPtr = Factory::CreateInstance<DataType>(#DataType, DataType::GetStaticType()); \
     from_json(*parseIn, *newPtr); \
   }
 
-#define JSON_TO_FACTORY_SETTER_OPTIONAL(member, setter, DataType) \
+#define JSON_MAP_TO_FACTORY_SETTER_OPTIONAL(member, setter, DataType) \
   if (isParsing && (*parseIn).contains(#member)) \
   { \
     auto newPtr = Factory::CreateInstance<DataType>(#DataType, DataType::GetStaticType()); \
@@ -98,16 +98,16 @@
     op(*exportOut, *exportIn); \
   }
 
-#define JSON_ON_DESERIALIZATION(op) \
+#define CUSTOM_JSON_DESERIALIZATION(op) \
   if (isParsing) \
   { \
     op(*parseIn, *parseOut); \
   }
 
-#define CONTAINS_ASSET_REFERENCES() \
+#define INCLUDE_ASSET_REFERENCES() \
   auto assetManager = AssetManager::GetInstance(); \
 
-#define _INTERNAL_JSON_ASSET_REF_TO_SETTER(member, setter, DataType) \
+#define _INTERNAL_JSON_MAP_TO_ASSET_REF_SETTER(member, setter, DataType) \
   auto assetId = uuids::uuid::from_string((*parseIn).at(#member).get<std::string>()).value(); \
   std::string path; \
   ObjectType type; \
@@ -120,19 +120,19 @@
       parseOut->setter(asset->Cast<DataType>()); \
   } \
 
-#define JSON_ASSET_REF_TO_SETTER(member, setter, DataType) \
+#define JSON_MAP_TO_ASSET_REF_SETTER(member, setter, DataType) \
   if (isParsing) \
   { \
-    _INTERNAL_JSON_ASSET_REF_TO_SETTER(member, setter, DataType) \
+    _INTERNAL_JSON_MAP_TO_ASSET_REF_SETTER(member, setter, DataType) \
   }
 
-#define JSON_ASSET_REF_TO_SETTER_OPTIONAL(member, setter, DataType) \
+#define JSON_MAP_TO_ASSET_REF_SETTER_OPTIONAL(member, setter, DataType) \
   if (isParsing && (*parseIn).contains(#member)) \
   { \
-    _INTERNAL_JSON_ASSET_REF_TO_SETTER(member, setter, DataType) \
+    _INTERNAL_JSON_MAP_TO_ASSET_REF_SETTER(member, setter, DataType) \
   }
 
-#define _INTERNAL_JSON_ASSET_REFS_TO_SETTER(member, setter, DataType) \
+#define _INTERNAL_JSON_MAP_TO_ASSET_REFS_SETTER(member, setter, DataType) \
   auto assetIds = (*parseIn).at(#member).get<std::vector<std::string>>(); \
   std::vector<DataType*> assets; \
   for (auto assetId : assetIds) \
@@ -151,16 +151,16 @@
   } \
   parseOut->setter(assets);
 
-#define JSON_ASSET_REFS_TO_SETTER(member, setter, DataType) \
+#define JSON_MAP_TO_ASSET_REFS_SETTER(member, setter, DataType) \
   if (isParsing) \
   { \
-    _INTERNAL_JSON_ASSET_REFS_TO_SETTER(member, setter, DataType) \
+    _INTERNAL_JSON_MAP_TO_ASSET_REFS_SETTER(member, setter, DataType) \
   }
 
-#define JSON_ASSET_REFS_TO_SETTER_OPTIONAL(member, setter, DataType) \
+#define JSON_MAP_TO_ASSET_REFS_SETTER_OPTIONAL(member, setter, DataType) \
   if (isParsing && (*parseIn).contains(#member)) \
   { \
-    _INTERNAL_JSON_ASSET_REFS_TO_SETTER(member, setter, DataType) \
+    _INTERNAL_JSON_MAP_TO_ASSET_REFS_SETTER(member, setter, DataType) \
   }
 
 /**

@@ -94,16 +94,16 @@ private:
 #ifndef SWIG
 	// Allow serialization / deserialization
 	JSON_SCHEMA_BEGIN(Camera)
-		JSON_TO_SETTER_OPTIONAL(viewId,          SetViewId,          int)
-		JSON_TO_SETTER_OPTIONAL(clearFlags,      SetClearFlags,      uint16_t)
-		JSON_TO_SETTER_OPTIONAL(clearColor,      SetClearColor,      glm::vec4)
-		JSON_TO_SETTER_OPTIONAL(viewport,        SetViewport,        glm::vec4)
-		JSON_TO_SETTER_OPTIONAL(projection,      SetProjectionMode,  ProjectionMode)
-		JSON_TO_SETTER_OPTIONAL(renderToTexture, SetRenderToTexture, bool)
-		JSON_TO_SETTER_OPTIONAL(fieldOfView,     SetFieldOfView,     float)
-		JSON_TO_SETTER_OPTIONAL(orthoSize,       SetOrthoSize,       float)
-		JSON_TO_SETTER_OPTIONAL(zNear,           SetNear,            float)
-		JSON_TO_SETTER_OPTIONAL(zFar,            SetFar,             float)
+		JSON_MAP_TO_SETTER_OPTIONAL(viewId,          SetViewId,          int)
+		JSON_MAP_TO_SETTER_OPTIONAL(clearFlags,      SetClearFlags,      uint16_t)
+		JSON_MAP_TO_SETTER_OPTIONAL(clearColor,      SetClearColor,      glm::vec4)
+		JSON_MAP_TO_SETTER_OPTIONAL(viewport,        SetViewport,        glm::vec4)
+		JSON_MAP_TO_SETTER_OPTIONAL(projection,      SetProjectionMode,  ProjectionMode)
+		JSON_MAP_TO_SETTER_OPTIONAL(renderToTexture, SetRenderToTexture, bool)
+		JSON_MAP_TO_SETTER_OPTIONAL(fieldOfView,     SetFieldOfView,     float)
+		JSON_MAP_TO_SETTER_OPTIONAL(orthoSize,       SetOrthoSize,       float)
+		JSON_MAP_TO_SETTER_OPTIONAL(zNear,           SetNear,            float)
+		JSON_MAP_TO_SETTER_OPTIONAL(zFar,            SetFar,             float)
 	JSON_SCHEMA_END()
 #endif
 

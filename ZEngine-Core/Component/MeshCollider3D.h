@@ -26,7 +26,7 @@ public:
 #ifndef SWIG
 	// Allow serialization / deserialization
 	JSON_SCHEMA_BEGIN(MeshCollider3D)
-		JSON_TO_SETTER_OPTIONAL(isTrigger, SetIsTrigger, bool)
+		JSON_MAP_TO_SETTER_OPTIONAL(isTrigger, SetIsTrigger, bool)
 	JSON_SCHEMA_END()
 #endif
 

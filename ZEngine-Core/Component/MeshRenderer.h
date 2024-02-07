@@ -44,14 +44,14 @@ public:
 #ifndef SWIG
 	// Allow serialization / deserialization
 	JSON_SCHEMA_BEGIN(MeshRenderer)
-	  CONTAINS_ASSET_REFERENCES()
-		JSON_ASSET_REFS_TO_SETTER_OPTIONAL (materials, SetMaterialsFromAssets, MaterialAsset)
-		JSON_ASSET_REF_TO_SETTER_OPTIONAL  (model,     SetMeshFromAsset,       ModelAsset)
-		JSON_TO_FACTORY_SETTER_OPTIONAL    (mesh,      SetMesh,                Mesh)
+	  INCLUDE_ASSET_REFERENCES()
+		JSON_MAP_TO_ASSET_REFS_SETTER_OPTIONAL (materials, SetMaterialsFromAssets, MaterialAsset)
+		JSON_MAP_TO_ASSET_REF_SETTER_OPTIONAL  (model,     SetMeshFromAsset,       ModelAsset)
+		JSON_MAP_TO_FACTORY_SETTER_OPTIONAL    (mesh,      SetMesh,                Mesh)
 
 		// Custom deserialization logic to parse the "primitive" field.
 		// TODO: Make it a struct and use the JSON_SCHEMA_BEGIN macro
-		JSON_ON_DESERIALIZATION(OnDeserialization)
+		CUSTOM_JSON_DESERIALIZATION(OnDeserialization)
 	JSON_SCHEMA_END()
 #endif
 
