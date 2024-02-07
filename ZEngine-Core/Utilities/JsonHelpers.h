@@ -56,6 +56,12 @@
     (*exportOut)[#member] = exportIn->memberName; \
   }
 
+#define JSON_MAP_TO_MEMBER_OPTIONAL(member, memberName) \
+  if (isParsing && (*parseIn).contains(#member)) \
+  { \
+    (*parseIn).at(#member).get_to(parseOut->memberName); \
+  }
+
 #define JSON_MAP_TO_GETTER_SETTER(member, getter, setter, DataType) \
   if (isParsing) \
   { \
@@ -82,14 +88,14 @@
   if (isParsing) \
   { \
     auto newPtr = Factory::CreateInstance<DataType>(#DataType, DataType::GetStaticType()); \
-    from_json(*parseIn, *newPtr); \
+    from_json(parseIn->at(#member).get<nlohmann::json>(), *newPtr); \
   }
 
 #define JSON_MAP_TO_FACTORY_SETTER_OPTIONAL(member, setter, DataType) \
   if (isParsing && (*parseIn).contains(#member)) \
   { \
     auto newPtr = Factory::CreateInstance<DataType>(#DataType, DataType::GetStaticType()); \
-    from_json(*parseIn, *newPtr); \
+    from_json(parseIn->at(#member).get<nlohmann::json>(), *newPtr); \
   }
 
 #define JSON_ON_SERIALIZATION(op) \

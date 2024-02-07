@@ -37,9 +37,9 @@ public:
 	void Draw(int viewId, Material* material, Graphics* graphics, const Pass& pass);
 
 	JSON_SCHEMA_BEGIN(SubMesh)
-		JSON_TO_SETTER          ("indices", SetIndices, std::vector<uint32_t>)
-		JSON_TO_SETTER          ("mode",    SetMode,    DrawMode)
-		JSON_TO_SETTER_OPTIONAL ("dynamic", SetDynamic, bool)
+		JSON_MAP_TO_SETTER          ("indices", SetIndices, std::vector<uint32_t>)
+		JSON_MAP_TO_SETTER          ("mode",    SetMode,    DrawMode)
+		JSON_MAP_TO_SETTER_OPTIONAL ("dynamic", SetDynamic, bool)
 	JSON_SCHEMA_END()
 
 private:
@@ -124,12 +124,12 @@ public:
 	}
 
 	JSON_SCHEMA_BEGIN(Mesh)
-		JSON_TO_SETTER          ("vertices",  SetVertices,      std::vector<glm::vec3>)
-		JSON_TO_SETTER          ("indices",   SetIndices,       std::vector<uint32_t>)
-		JSON_TO_SETTER_OPTIONAL ("colors",    SetColors,        std::vector<glm::vec4>)
-		JSON_TO_SETTER_OPTIONAL ("texCoords", SetTextureCoords, std::vector<glm::vec2>)
-		JSON_TO_SETTER_OPTIONAL ("normals",   SetNormals,       std::vector<glm::vec3>)
-		JSON_TO_SETTER_OPTIONAL ("subMeshes", SetSubMeshes,     std::vector<SubMesh>)
+		JSON_MAP_TO_SETTER          ("vertices",  SetVertices,      std::vector<glm::vec3>)
+		JSON_MAP_TO_SETTER          ("indices",   SetIndices,       std::vector<uint32_t>)
+		JSON_MAP_TO_SETTER_OPTIONAL ("colors",    SetColors,        std::vector<glm::vec4>)
+		JSON_MAP_TO_SETTER_OPTIONAL ("texCoords", SetTextureCoords, std::vector<glm::vec2>)
+		JSON_MAP_TO_SETTER_OPTIONAL ("normals",   SetNormals,       std::vector<glm::vec3>)
+		JSON_MAP_TO_SETTER_OPTIONAL ("subMeshes", SetSubMeshes,     std::vector<SubMesh>)
 	JSON_SCHEMA_END()
 };
 

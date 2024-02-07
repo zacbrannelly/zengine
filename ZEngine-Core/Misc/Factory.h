@@ -17,10 +17,17 @@ public:
 	static ZObject* CreateInstance(std::string name, ObjectType type);
 	static ZObject* Copy(std::string name, ZObject* object);
 
+	// Deprecated - use CreateInstance<T>(name) instead.
 	template<class T> 
 	static T* CreateInstance(std::string name, ObjectType type)
 	{
 		return static_cast<T*>(CreateInstance(name, type));
+	}
+
+	template<class T>
+	static T* CreateInstance(std::string name)
+	{
+		return static_cast<T*>(CreateInstance(name, T::GetStaticType()));
 	}
 
 	template<class T>

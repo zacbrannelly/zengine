@@ -70,10 +70,10 @@ Asset* AssetManager::LoadAsset(std::string name, std::string path, ObjectType ty
 	{
 		// Load the new asset
 		auto newAsset = constructor(name);
-        
-        // Prepend base path to the provided path.
-        if (_basePath != "" && path[0] != '/')
-            path = _basePath + "/" + path;
+		
+		// Prepend base path to the provided path.
+		if (_basePath != "" && path[0] != '/')
+			path = _basePath + "/" + path;
 		
 		if (newAsset->Load(path))
 		{
