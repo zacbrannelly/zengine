@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Asset.h"
+#include "../../Utilities/JsonHelpers.h"
 #include "../../Audio/AudioSystem.h"
 
 class AudioAsset : public Asset
@@ -16,7 +17,6 @@ public:
 
 private:
 	Sound _sound;
-	bool _autoPlay;
 
 public:
 	static Asset* CreateInstance(std::string name);

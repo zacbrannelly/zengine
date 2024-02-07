@@ -27,7 +27,6 @@ public:
 	}
 
 private:
-	PhysicsSceneDescription LoadPhysicsSceneDescription(nlohmann::json& physics);
 	Entity* LoadEntity(nlohmann::json& entity);
 
 	Map* _map;

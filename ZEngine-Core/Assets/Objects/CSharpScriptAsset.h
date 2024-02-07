@@ -1,8 +1,8 @@
 #pragma once
 
 #include "../Asset.h"
-
-class CSharpScript;
+#include "../../Scripting/CSharp/CSharpScript.h"
+#include "../../Utilities/JsonHelpers.h"
 
 class CSharpScriptAsset : public Asset
 {
@@ -22,7 +22,6 @@ public:
 	{
 		return CSHARP_SCRIPT_ASSET;
 	}
-
 private:
 	CSharpScript* _script;
 };

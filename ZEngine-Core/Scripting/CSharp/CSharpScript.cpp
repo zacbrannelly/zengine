@@ -8,6 +8,16 @@ CSharpScript::CSharpScript(std::string name) : ZObject(name, CSHARP_SCRIPT)
   RegisterDerivedType(CSHARP_SCRIPT);
 }
 
+void CSharpScript::SetNamespace(std::string classNamespace)
+{
+  SetClass(classNamespace, _className);
+}
+
+void CSharpScript::SetClassName(std::string className)
+{
+  SetClass(_namespace, className);
+}
+
 void CSharpScript::SetClass(std::string classNamespace, std::string className)
 {
   _namespace = classNamespace;

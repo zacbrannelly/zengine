@@ -236,4 +236,47 @@ struct adl_serializer<glm::quat> {
     opt.w = j.at(3).get<float>();
   }
 };
+
+template<>
+struct adl_serializer<glm::mat3>
+{
+  static void to_json(json& j, const glm::mat3& opt)
+  {
+    j = json {
+      opt[0][0], opt[0][1], opt[0][2],
+      opt[1][0], opt[1][1], opt[1][2],
+      opt[2][0], opt[2][1], opt[2][2]
+    };
+  }
+
+  static void from_json(const json& j, glm::mat3& opt)
+  {
+    for (int i = 0; i < 9; i++)
+    {
+      opt[i / 3][i % 3] = j.at(i).get<float>();
+    }
+  }
+};
+
+template<>
+struct adl_serializer<glm::mat4>
+{
+  static void to_json(json& j, const glm::mat4& opt)
+  {
+    j = json {
+      opt[0][0], opt[0][1], opt[0][2], opt[0][3],
+      opt[1][0], opt[1][1], opt[1][2], opt[1][3],
+      opt[2][0], opt[2][1], opt[2][2], opt[2][3],
+      opt[3][0], opt[3][1], opt[3][2], opt[3][3]
+    };
+  }
+
+  static void from_json(const json& j, glm::mat4& opt)
+  {
+    for (int i = 0; i < 16; i++)
+    {
+      opt[i / 4][i % 4] = j.at(i).get<float>();
+    }
+  }
+};
 NLOHMANN_JSON_NAMESPACE_END

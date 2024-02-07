@@ -197,11 +197,6 @@ std::vector<Material*> ModelAsset::LoadMaterials(const aiScene* scene)
 		auto metallicAsset = assetManager->LoadAsset("test texture 3", "blank_ao.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
 		auto aoAsset = assetManager->LoadAsset("test texture 5", "blank_ao.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
 
-		// Load the textures into the GPU
-		roughnessAsset->LoadTexture();
-		metallicAsset->LoadTexture();
-		aoAsset->LoadTexture();
-
 		// Set the textures to the shader
 		material->SetTexture("roughnessTexture", roughnessAsset->GetTexture()->GetHandle());
 		material->SetTexture("metallicTexture", metallicAsset->GetTexture()->GetHandle());
@@ -250,7 +245,7 @@ std::vector<Texture2D*> ModelAsset::LoadTextures(const aiMaterial* mat, aiTextur
 		aiString path;
 		mat->GetTexture(type, i, &path);
 
-		// Attemp to load the texture
+		// Attempt to load the texture
 		auto newTexture = assetManager->LoadAsset(GetName() + "_" + path.C_Str(), _directory + '/' + path.C_Str(), ObjectType::TEXTURE_ASSET);
 
 		if (newTexture != nullptr)
@@ -263,11 +258,11 @@ std::vector<Texture2D*> ModelAsset::LoadTextures(const aiMaterial* mat, aiTextur
 				{
 					textures.push_back(textureAsset->GetTexture());
 				}
-
-				// TODO: Release asset on failure to load POSSBILE MEMORY LEAK
 			}
 			else
+			{
 				textures.push_back(textureAsset->GetTexture());
+			}
 		}
 	}
 

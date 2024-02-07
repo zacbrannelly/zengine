@@ -5,10 +5,9 @@
 #include "../AssetManager.h"
 #include "../AssetCatalog.h"
 
-#include <nlohmann/json.hpp>
-#include <uuid.h>
 #include "../../Rendering/Material.h"
 #include "../../Utilities/Directory.h"
+#include "../../Utilities/JsonHelpers.h"
 
 #include <fstream>
 #include <iostream>
@@ -66,7 +65,7 @@ bool MaterialAsset::Load(string path)
 	it = root.find("textures");
 	if (it != root.end())
 	{
-		auto textureArray = (*it).get<json::array_t>();
+		auto textureArray = it->get<json::array_t>();
 		ReadTextures(textureArray, _material);
 	}
 
@@ -74,7 +73,7 @@ bool MaterialAsset::Load(string path)
 	it = root.find("uniforms");
 	if (it != root.end())
 	{
-		auto uniformsArray = (*it).get<json::array_t>();
+		auto uniformsArray = it->get<json::array_t>();
 		ReadUniforms(uniformsArray, _material);
 	}
 
@@ -106,7 +105,7 @@ void MaterialAsset::ReadTextures(json::array_t& values, Material* material)
 		if (it != textureObj.end())
 		{
 			ObjectType type;
-			uuids::uuid id = uuids::uuid::from_string(it.value().get<string>()).value();
+			auto id = it->get<uuids::uuid>();
 			if (!assetManager->GetCatalog()->GetAssetPathFromID(id, path, type))
 			{
 				cout << "MATERIAL_ASSET: Failed to find texture for sampler: " << samplerName.get<string>() << endl;
@@ -122,14 +121,13 @@ void MaterialAsset::ReadTextures(json::array_t& values, Material* material)
 				assetDir += '/';
 			
 			if (it != textureObj.end())
-				path = assetDir + it.value().get<string>();
+				path = assetDir + it->get<string>();
 			else
 			{
 				cout << "MATERIAL_ASSET: Failed to find texture for sampler: " << samplerName.get<string>() << endl;
 				continue;
 			}
 		}
-
 
 		if (samplerName.is_string())
 		{
@@ -141,7 +139,6 @@ void MaterialAsset::ReadTextures(json::array_t& values, Material* material)
 			if (textureAsset == nullptr)
 			{
 				textureAsset = assetManager->LoadAsset(samplerName.get<string>(), path, TEXTURE_ASSET);
-				textureAsset->Cast<TextureAsset>()->LoadTexture();
 			}
 
 			if (textureAsset != nullptr)
@@ -158,43 +155,43 @@ void MaterialAsset::ReadUniforms(json::array_t& values, Material* material)
 	{
 		auto uniformObj = uniform.get<json>();
 
-		auto name = uniformObj.at("name");
-		auto type = uniformObj.at("type");
-		auto numElements = uniformObj.at("numElements");
+		auto name = uniformObj.at("name").get<string>();
+		auto type = uniformObj.at("type").get<bgfx::UniformType::Enum>();
+		auto numElements = uniformObj.at("numElements").get<unsigned short>();
 		auto values = uniformObj.at("values");
 
-		// Register the uniforms
-		if (name.is_string() && type.is_number_unsigned() && numElements.is_number_unsigned())
+		// Register the uniform variable.
+		material->RegisterUniform(name, type, numElements);
+
+		// Store the uniform data in the heap in a format that the material can use.
+		void* data = nullptr;
+		switch (type)
 		{
-			material->RegisterUniform(name.get<string>(), (bgfx::UniformType::Enum)type.get<unsigned int>(), numElements.get<unsigned short>());
-		}
-
-		if (values.is_array())
-		{
-			auto valuesArray = values.get<json::array_t>();
-			auto uniformType = (bgfx::UniformType::Enum)type.get<unsigned int>();
-			auto num = numElements.get<int>();
-
-			void* data = nullptr;
-
-			switch (uniformType)
-			{
 			case bgfx::UniformType::Vec4:
-				data = ReadVec4From(valuesArray, num)->data();
-				break;
-
-			case bgfx::UniformType::Mat3:
-				data = ReadMat3From(valuesArray, num)->data();
-				break;
-
-			case bgfx::UniformType::Mat4:
-				data = ReadMat4From(valuesArray, num)->data();
+			{
+				std::vector<glm::vec4>* vec4 = new std::vector<glm::vec4>(numElements);
+				from_json(values, *vec4);
+				data = vec4->data();
 				break;
 			}
-
-			if (data != nullptr)
-				material->SetUniform(name.get<string>(), data, numElements.get<unsigned short>());
+			case bgfx::UniformType::Mat3:
+			{
+				std::vector<glm::mat3>* mat3 = new std::vector<glm::mat3>(numElements);
+				from_json(values, *mat3);
+				data = mat3->data();
+				break;
+			}
+			case bgfx::UniformType::Mat4:
+			{
+				std::vector<glm::mat4>* mat4 = new std::vector<glm::mat4>(numElements);
+				from_json(values, *mat4);
+				data = mat4->data();
+				break;
+			}
 		}
+
+		// Pass the uniform data to the material
+		if (data != nullptr) material->SetUniform(name, data, numElements);
 	}
 }
 
@@ -208,7 +205,9 @@ void MaterialAsset::ReadShader(json& identifier, Material* material)
 
 	const auto maybeId = uuids::uuid::from_string(identifier.get<string>());
 	if (!maybeId.has_value())
+	{
 		path = identifier.get<string>();
+	}
 	else if (catalog != nullptr)
 	{
 		if (!catalog->GetAssetPathFromID(maybeId.value(), path, type))
@@ -230,72 +229,6 @@ void MaterialAsset::ReadShader(json& identifier, Material* material)
 		auto shaderAsset = asset->Cast<ShaderAsset>();
 		material->SetShader(shaderAsset->GetShader());
 	}
-}
-
-std::vector<glm::vec4>* MaterialAsset::ReadVec4From(json::array_t& values, int num)
-{
-	std::vector<glm::vec4>* results = new std::vector<glm::vec4>();
-
-	if (all_of(values.begin(), values.end(), [&values](auto value) { return value.is_number(); }))
-	{
-		// Extract vec4 from the values array 'num' times
-		int index = 0;
-		for (int i = 0; i < num; ++i)
-		{
-			results->push_back(glm::vec4(values[index].get<float>(), values[index + 1].get<float>(), values[index + 2].get<float>(), values[index + 3].get<float>()));
-			index += 4;
-		}
-	}
-
-	return results;
-}
-
-std::vector<glm::mat3>* MaterialAsset::ReadMat3From(json::array_t& values, int num)
-{
-	std::vector<glm::mat3>* results = new std::vector<glm::mat3>(num);
-
-	if (all_of(values.begin(), values.end(), [&values](auto value) { return value.is_number(); }))
-	{
-		std::vector<float> buffer;
-
-		// Add all the data into a buffer
-		for (int i = 0; i < num * 3 * 3; i++)
-		{
-			buffer.push_back(values[i].get<float>());
-		}
-
-		// Copy the data from the buffer into the results
-		for (int i = 0; i < num; i++)
-		{
-			memcpy(results->data(), buffer.data() + i * 3 * 3, sizeof(float) * 3 * 3);
-		}
-	}
-
-	return results;
-}
-
-std::vector<glm::mat4>* MaterialAsset::ReadMat4From(json::array_t& values, int num)
-{
-	std::vector<glm::mat4>* results = new std::vector<glm::mat4>(num);
-
-	if (all_of(values.begin(), values.end(), [&values](auto value) { return value.is_number(); }))
-	{
-		std::vector<float> buffer;
-
-		// Add all the data into a buffer
-		for (int i = 0; i < num * 4 * 4; i++)
-		{
-			buffer.push_back(values[i].get<float>());
-		}
-
-		// Copy the data from the buffer into the results
-		for (int i = 0; i < num; i++)
-		{
-			memcpy(results->data(), buffer.data() + i * 4 * 4, sizeof(float) * 4 * 4);
-		}
-	}
-
-	return results;
 }
 
 Material* MaterialAsset::GetMaterial() const

@@ -2,6 +2,7 @@
 
 #include <map>
 #include <string>
+#include "../../Utilities/JsonHelpers.h"
 #include "../../Map/Objects/ZObject.h"
 
 class CSharpScriptComponent;
@@ -12,6 +13,8 @@ public:
   CSharpScript(std::string name);
   ~CSharpScript();
 
+  void SetNamespace(std::string classNamespace);
+  void SetClassName(std::string className);
   void SetClass(std::string classNamespace, std::string className);
   std::string GetClassName() const;
 
@@ -31,4 +34,10 @@ public:
   {
     return CSHARP_SCRIPT;
   }
+
+  // Allow serialization / deserialization
+  JSON_SCHEMA_BEGIN(CSharpScript)
+    JSON_MAP_TO_SETTER (namespace, SetNamespace, std::string)
+    JSON_MAP_TO_SETTER (class,     SetClassName, std::string)
+  JSON_SCHEMA_END()
 };

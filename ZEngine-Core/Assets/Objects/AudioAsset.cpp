@@ -39,7 +39,7 @@ bool AudioAsset::Load(string path)
 	if (assetDir[assetDir.size() - 1] != '/')
 		assetDir += '/';
 
-	// Load music data
+	// Load music data using the audio system.
 	auto it = root.find("music");
 	if (it != root.end())
 	{
@@ -47,7 +47,7 @@ bool AudioAsset::Load(string path)
 		_sound = audioSys->LoadMusicData(soundPath);
 	}
 
-	// Load sound data 
+	// Load sound data using the audio system.
 	it = root.find("sound");
 	if (it != root.end())
 	{
@@ -61,38 +61,10 @@ bool AudioAsset::Load(string path)
 		return false;
 	}
 	
-	// Load name 
-	it = root.find("name");
-	if (it != root.end())
-		_sound.name = it->get<string>();
-
-	// Load pref channel number
-	it = root.find("channel");
-	if (it != root.end())
-		_sound.channel = it->get<int>();
-
-	// Load number of times to loop
-	it = root.find("loops");
-	if (it != root.end())
-		_sound.loops = it->get<int>();
-
-	// Load the volume (0 - 128)
-	it = root.find("volume");
-	if (it != root.end())
-		_sound.volume = it->get<int>();
-
-	// Load whether to fade in on play
-	it = root.find("fadeIn");
-	if (it != root.end())
-		_sound.fadeIn = it->get<bool>();
-
-	// Load how long to fade for (in ms)
-	it = root.find("fadeTime");
-	if (it != root.end())
-		_sound.fadeTime = it->get<int>();
+	// Inject the JSON props into the Sound instance.
+	root.get_to(_sound);
 
 	SetPath(path);
-
 	return true;
 }
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Misc/Singleton.h"
+#include "../Utilities/JsonHelpers.h"
 #include <string>
 #include <stack>
 #include <glm/glm.hpp>
@@ -21,6 +22,12 @@ struct PhysicsSceneDescription
 {
 public:
   glm::vec3 gravity;
+
+#ifndef SWIG
+  JSON_SCHEMA_BEGIN(PhysicsSceneDescription)
+    JSON_MAP_TO_MEMBER_OPTIONAL(gravity, gravity)
+  JSON_SCHEMA_END()
+#endif
 };
 typedef PhysicsSceneDescription PhysicsSceneDescription;
 

@@ -2,10 +2,12 @@
 
 #include <string>
 #include <SDL_mixer.h>
+#include "../Utilities/JsonHelpers.h"
 #include "../Misc/Singleton.h"
 
 struct Sound
 {
+public:
 	Sound() : channel(-1), chunk(nullptr), music(nullptr), fadeIn(false), fadeTime(0), loops(0), volume(128)
 	{
 	}
@@ -18,6 +20,15 @@ struct Sound
 	int loops;
 	Mix_Chunk* chunk;
 	Mix_Music* music;
+
+	JSON_SCHEMA_BEGIN(Sound)
+		JSON_MAP_TO_MEMBER_OPTIONAL(name, name)
+		JSON_MAP_TO_MEMBER_OPTIONAL(channel, channel)
+		JSON_MAP_TO_MEMBER_OPTIONAL(volume, volume)
+		JSON_MAP_TO_MEMBER_OPTIONAL(fadeIn, fadeIn)
+		JSON_MAP_TO_MEMBER_OPTIONAL(fadeTime, fadeTime)
+		JSON_MAP_TO_MEMBER_OPTIONAL(loops, loops)
+	JSON_SCHEMA_END()
 };
 
 class AudioSystem : public Singleton<AudioSystem>

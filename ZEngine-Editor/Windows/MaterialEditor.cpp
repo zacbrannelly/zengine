@@ -387,7 +387,6 @@ void MaterialEditor::RenderInWindow()
 						if (newTexture == nullptr)
 						{
 							newTexture = assetManager->LoadAsset(texture.path, texture.path, TEXTURE_ASSET);
-							newTexture->Cast<TextureAsset>()->LoadTexture();
 						}
 
 						// Update texture handle (for preview image)

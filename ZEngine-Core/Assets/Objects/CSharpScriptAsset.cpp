@@ -1,6 +1,6 @@
 #include "CSharpScriptAsset.h"
-#include "../../Scripting/CSharp/CSharpScript.h"
 #include "../../Utilities/File.h"
+#include "../../Misc/Factory.h"
 #include <iostream>
 #include <fstream>
 #include <nlohmann/json.hpp>
@@ -24,40 +24,16 @@ bool CSharpScriptAsset::Load(std::string path)
 		return false;
 	}
 
+  // Parse the JSON data.
 	json root;
 	in >> root;
 	in.close();
 
-  string classNamespace;
-  string className;
+  // Create a script instance and deserialize it from the JSON data.
+  _script = Factory::CreateInstance<CSharpScript>(GetName());
+  root.get_to(*_script);
 
-  _script = new CSharpScript(GetName());
-
-  auto it = root.find("namespace");
-  if (it != root.end() && (*it).is_string())
-  {
-    classNamespace = (*it).get<string>();
-  }
-  else
-  {
-    cerr << "CSHARP_SCRIPT_ASSET: Invalid script file, no namespace specified!" << endl;
-    return false;
-  }
-
-  it = root.find("class");
-  if (it != root.end() && (*it).is_string())
-  {
-    className = (*it).get<string>();
-  }
-  else
-  {
-    cerr << "CSHARP_SCRIPT_ASSET: Invalid script file, no class specified!" << endl;
-    return false;
-  }
-
-  _script->SetClass(classNamespace, className);
   SetPath(path);
-
   return true;
 }
 

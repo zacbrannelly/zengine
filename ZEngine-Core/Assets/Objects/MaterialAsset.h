@@ -28,10 +28,6 @@ private:
 	void ReadUniforms(nlohmann::json::array_t& values, Material* material);
 	void ReadShader(nlohmann::json& identifier, Material* material);
 
-	std::vector<glm::vec4>* ReadVec4From(nlohmann::json::array_t& values, int num);
-	std::vector<glm::mat3>* ReadMat3From(nlohmann::json::array_t& values, int num);
-	std::vector<glm::mat4>* ReadMat4From(nlohmann::json::array_t& values, int num);
-
 	Material* _material;
 };
 

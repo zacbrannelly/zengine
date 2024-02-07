@@ -29,6 +29,9 @@ bool TextureAsset::Load(string path)
 		// Save the path
 		SetPath(path);
 
+		// Load the texture into the graphics system.
+		LoadTexture();
+
 		return true;
 	}
 	else
