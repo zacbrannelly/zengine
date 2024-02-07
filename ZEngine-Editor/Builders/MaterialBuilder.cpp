@@ -54,9 +54,12 @@ bool MaterialBuilder::BuildToFile(const std::string& path, const MaterialEditorD
 
 		uniformObj["values"] = json::array_t();
 
-		for (int i = 0; i < num * uniformPair.second.numElements; i++)
+		for (int i = 0; i < num * uniformPair.second.numElements; i += num)
 		{
-			uniformObj["values"].push_back(((float*)uniformPair.second.data)[i]);
+			json::array_t instance;
+			for (int j = 0; j < num; j++)
+				instance.push_back(((float*)uniformPair.second.data)[i + j]);
+			uniformObj["values"].push_back(instance);
 		}
 
 		uniforms.push_back(uniformObj);
