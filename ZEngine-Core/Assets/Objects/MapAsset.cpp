@@ -18,7 +18,7 @@ MapAsset::MapAsset(string name) : Asset(name, ObjectType::MAP_ASSET)
 	RegisterDerivedType(MAP_ASSET);
 }
 
-Asset* MapAsset::CreateInstance(string name)
+ZObject* MapAsset::CreateInstance(string name, ObjectType type)
 {
 	return new MapAsset(name);
 }

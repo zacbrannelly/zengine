@@ -18,7 +18,7 @@ ModelAsset::ModelAsset(std::string name) : Asset(name, ObjectType::MODEL_ASSET)
 	RegisterDerivedType(MODEL_ASSET);
 }
 
-Asset* ModelAsset::CreateInstance(std::string name)
+ZObject* ModelAsset::CreateInstance(std::string name, ObjectType type)
 {
 	return new ModelAsset(name);
 }

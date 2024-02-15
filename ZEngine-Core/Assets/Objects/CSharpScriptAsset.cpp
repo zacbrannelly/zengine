@@ -58,7 +58,7 @@ void CSharpScriptAsset::Release()
   }
 }
 
-Asset* CSharpScriptAsset::CreateInstance(string name)
+ZObject* CSharpScriptAsset::CreateInstance(string name, ObjectType type)
 {
 	return new CSharpScriptAsset(name);
 }

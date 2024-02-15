@@ -2,6 +2,8 @@
 
 #include "../Map/Objects/ZObject.h"
 
+class AssetManager;
+
 class Asset : public ZObject
 {
 public:
@@ -25,6 +27,7 @@ public:
 		return ASSET;
 	}
 
+	friend class AssetManager;
 protected:
 	void SetPath(std::string path);
 	void SetLoaded(bool loaded);

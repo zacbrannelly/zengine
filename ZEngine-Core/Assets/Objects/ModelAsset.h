@@ -22,7 +22,7 @@ public:
 	Mesh* GetMesh() const;
 	const std::vector<Material*> GetMaterials();
 
-	static Asset* CreateInstance(std::string name);
+	static ZObject* CreateInstance(std::string name, ObjectType type);
 	
 	static ObjectType GetStaticType()
 	{

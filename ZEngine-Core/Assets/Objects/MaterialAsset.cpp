@@ -22,9 +22,16 @@ MaterialAsset::MaterialAsset(string name) : Asset(name, ObjectType::MATERIAL_ASS
 	_material = nullptr;
 }
 
-Asset* MaterialAsset::CreateInstance(string name)
+ZObject* MaterialAsset::CreateInstance(string name, ObjectType type)
 {
 	return new MaterialAsset(name);
+}
+
+ZObject* MaterialAsset::CreateDefaultInstance(string name, ObjectType type)
+{
+	auto newInstance = new MaterialAsset(name);
+	newInstance->_material = Factory::CreateDefaultInstance<Material>(name);
+	return newInstance;
 }
 
 bool MaterialAsset::Load(string path)

@@ -17,7 +17,7 @@ public:
 
 	Texture2D* GetTexture() const;
 
-	static Asset* CreateInstance(std::string name);
+	static ZObject* CreateInstance(std::string name, ObjectType type);
 
 	static ObjectType GetStaticType()
 	{

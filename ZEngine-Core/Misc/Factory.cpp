@@ -19,9 +19,18 @@
 #include "../Component/MeshCollider3D.h"
 #include "../Scripting/CSharp/CSharpScript.h"
 
+#include "../Assets/Objects/AudioAsset.h"
+#include "../Assets/Objects/CSharpScriptAsset.h"
+#include "../Assets/Objects/MapAsset.h"
+#include "../Assets/Objects/MaterialAsset.h"
+#include "../Assets/Objects/ModelAsset.h"
+#include "../Assets/Objects/ShaderAsset.h"
+#include "../Assets/Objects/TextureAsset.h"
+
 #include <iostream>
 
 std::map<ObjectType, ConstructorFunc> Factory::_typeConstructors;
+std::map<ObjectType, DefaultFactoryFunc> Factory::_defaultFactoryFunctions;
 std::map<ObjectType, CopyFunc> Factory::_copyFunctions;
 std::map<ObjectType, ImporterFunc> Factory::_importers;
 
@@ -46,6 +55,25 @@ void Factory::Init()
 	RegisterType<CapsuleCollider3D>();
 	RegisterType<PlaneCollider3D>();
 	RegisterType<MeshCollider3D>();
+
+	// Register factory methods for assets
+	RegisterType<TextureAsset>();
+	RegisterType<ShaderAsset>();
+	RegisterType<MaterialAsset>();
+	RegisterType<MapAsset>();
+	RegisterType<ModelAsset>();
+	RegisterType<CSharpScriptAsset>();
+	RegisterType<AudioAsset>();
+
+	// Register default factory methods (for creating default instances)
+	// e.g. when creating a new material asset, a new material instance is created with a default shader.
+	RegisterDefaultFactoryType<MaterialAsset>();
+	RegisterDefaultFactoryType<Material>();
+	// TODO: RegisterDefaultFactoryType<ShaderAsset>();
+	// TODO: RegisterDefaultFactoryType<Shader>();
+	// TODO: RegisterDefaultFactoryType<MapAsset>();
+	// TODO: RegisterDefaultFactoryType<Map>();
+	// TODO: RegisterDefaultFactoryType<ScriptAsset>();
 
 	// Register copy methods (real-time copying)
 	RegisterCopyType<Map>();
@@ -87,6 +115,17 @@ ZObject* Factory::CreateInstance(std::string name, ObjectType type)
 	return nullptr;
 }
 
+ZObject* Factory::CreateDefaultInstance(std::string name, ObjectType type)
+{
+	auto defaultFactory = _defaultFactoryFunctions.find(type);
+	if (defaultFactory != _defaultFactoryFunctions.end())
+	{
+		return defaultFactory->second(name, type);
+	}
+
+	return nullptr;
+}
+
 ZObject* Factory::Copy(std::string name, ZObject* object)
 {
 	auto copyFunc = _copyFunctions.find(object->GetType());
@@ -103,6 +142,11 @@ ZObject* Factory::Copy(std::string name, ZObject* object)
 void Factory::RegisterType(ObjectType type, ConstructorFunc constructor)
 {
 	_typeConstructors[type] = constructor;
+}
+
+void Factory::RegisterDefaultFactoryType(ObjectType type, DefaultFactoryFunc defaultFactoryFunc)
+{
+	_defaultFactoryFunctions[type] = defaultFactoryFunc;
 }
 
 void Factory::RegisterCopyType(ObjectType type, CopyFunc copyFunc)

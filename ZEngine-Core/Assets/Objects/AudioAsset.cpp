@@ -15,7 +15,7 @@ AudioAsset::AudioAsset(string name) : Asset(name, AUDIO_ASSET)
 	RegisterDerivedType(AUDIO_ASSET);
 }
 
-Asset* AudioAsset::CreateInstance(string name)
+ZObject* AudioAsset::CreateInstance(string name, ObjectType type)
 {
 	return new AudioAsset(name);
 }

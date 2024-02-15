@@ -13,16 +13,7 @@
 
 void AssetManager::Init()
 {
-    _basePath = "";
-    
-	//TODO: Register asset constructors here
-	_assetConstructors[ObjectType::TEXTURE_ASSET] = TextureAsset::CreateInstance;
-	_assetConstructors[ObjectType::SHADER_ASSET] = ShaderAsset::CreateInstance;
-	_assetConstructors[ObjectType::MATERIAL_ASSET] = MaterialAsset::CreateInstance;
-	_assetConstructors[ObjectType::MAP_ASSET] = MapAsset::CreateInstance;
-	_assetConstructors[ObjectType::MODEL_ASSET] = ModelAsset::CreateInstance;
-	_assetConstructors[ObjectType::CSHARP_SCRIPT_ASSET] = CSharpScriptAsset::CreateInstance;
-	_assetConstructors[ObjectType::AUDIO_ASSET] = AudioAsset::CreateInstance;
+	_basePath = "";
 }
 
 void AssetManager::SetCatalog(AssetCatalog* catalog)
@@ -45,6 +36,20 @@ std::string AssetManager::GetBasePath() const
     return _basePath;
 }
 
+Asset* AssetManager::CreateAsset(std::string name, std::string path, ObjectType type)
+{
+	auto newAsset = Factory::CreateDefaultInstance<Asset>(name, type);
+	newAsset->SetPath(path);
+
+	// Add to the list of assets (so it can be released later)
+	_assets.push_back(newAsset);
+
+	// TODO: Save the new asset to file
+	// TODO: Add the new asset to the catalog
+
+	return newAsset;
+}
+
 Asset* AssetManager::LoadAsset(std::string path, ObjectType type)
 {
 	// Derive name from the filename without extension
@@ -56,32 +61,20 @@ Asset* AssetManager::LoadAsset(std::string path, ObjectType type)
 
 Asset* AssetManager::LoadAsset(std::string name, std::string path, ObjectType type)
 {
-	// Check if the asset has a constructor registered
-	if (_assetConstructors.find(type) == _assetConstructors.end())
+	// Create a new empty instance.
+	auto newAsset = Factory::CreateInstance<Asset>(name, type);
+	
+	// Prepend base path to the provided path.
+	if (_basePath != "" && path[0] != '/')
+		path = _basePath + "/" + path;
+	
+	// Load the asset from the provided path.
+	if (newAsset->Load(path))
 	{
-		std::cout << "ASSET_MANAGER: Failed to find an asset for ObjectType: " << type << std::endl;
-		return nullptr;
-	}
+		// Add to the list of assets (so it can be released later)
+		_assets.push_back(newAsset);
 
-	// Get the function that constructs this type of asset
-	auto constructor = _assetConstructors[type];
-
-	if (constructor != nullptr)
-	{
-		// Load the new asset
-		auto newAsset = constructor(name);
-		
-		// Prepend base path to the provided path.
-		if (_basePath != "" && path[0] != '/')
-			path = _basePath + "/" + path;
-		
-		if (newAsset->Load(path))
-		{
-			// Add to the list of assets (so it can be released later)
-			_assets.push_back(newAsset);
-
-			return newAsset;
-		}
+		return newAsset;
 	}
 
 	return nullptr;

@@ -57,7 +57,7 @@ Texture2D* TextureAsset::GetTexture() const
 	return _texture;
 }
 
-Asset* TextureAsset::CreateInstance(std::string name)
+ZObject* TextureAsset::CreateInstance(std::string name, ObjectType type)
 {
 	return new TextureAsset(name);
 }

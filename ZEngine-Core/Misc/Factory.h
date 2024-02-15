@@ -6,6 +6,7 @@
 #include <nlohmann/json.hpp>
 
 typedef ZObject*(*ConstructorFunc)(std::string, ObjectType);
+typedef ZObject*(*DefaultFactoryFunc)(std::string, ObjectType);
 typedef ZObject*(*CopyFunc)(std::string, ZObject*);
 typedef ZObject*(*ImporterFunc)(std::string, nlohmann::json&);
 
@@ -14,10 +15,10 @@ class Factory
 public:
 	static void Init();
 
+	static ZObject* CreateDefaultInstance(std::string name, ObjectType type);
 	static ZObject* CreateInstance(std::string name, ObjectType type);
 	static ZObject* Copy(std::string name, ZObject* object);
 
-	// Deprecated - use CreateInstance<T>(name) instead.
 	template<class T> 
 	static T* CreateInstance(std::string name, ObjectType type)
 	{
@@ -34,6 +35,18 @@ public:
 	static T* Copy(std::string name, ZObject* object)
 	{
 		return static_cast<T*>(Copy(name, object));
+	}
+
+	template<class T>
+	static T* CreateDefaultInstance(std::string name, ObjectType type)
+	{
+		return static_cast<T*>(CreateDefaultInstance(name, type));
+	}
+
+	template<class T>
+	static T* CreateDefaultInstance(std::string name)
+	{
+		return static_cast<T*>(CreateDefaultInstance(name, T::GetStaticType()));
 	}
 
 	template<class T>
@@ -58,11 +71,15 @@ public:
 	}
 
 	static void RegisterType(ObjectType type, ConstructorFunc constructor);
+	static void RegisterDefaultFactoryType(ObjectType type, DefaultFactoryFunc defaultFactoryFunc);
 	static void RegisterCopyType(ObjectType type, CopyFunc copyFunc);
 	static void RegisterTypeImporter(ObjectType type, ImporterFunc importerFunc);
 
-	template <class T>
+	template<class T>
 	static void RegisterType();
+
+	template<class T>
+	static void RegisterDefaultFactoryType();
 
 	template<class T>
 	static void RegisterTypeImporter();
@@ -72,16 +89,24 @@ public:
 
 private:
 	static std::map<ObjectType, ConstructorFunc> _typeConstructors;
+	static std::map<ObjectType, DefaultFactoryFunc> _defaultFactoryFunctions;
 	static std::map<ObjectType, CopyFunc> _copyFunctions;
 	static std::map<ObjectType, ImporterFunc> _importers;
 };
 
 #include "../Component/Importers/JsonImporter.h"
 
-template <class T>
+template<class T>
 void Factory::RegisterType()
 {
 	RegisterType(T::GetStaticType(), &T::CreateInstance);
+	RegisterDefaultFactoryType(T::GetStaticType(), &T::CreateInstance);
+}
+
+template<class T>
+void Factory::RegisterDefaultFactoryType()
+{
+	RegisterDefaultFactoryType(T::GetStaticType(), &T::CreateDefaultInstance);
 }
 
 template<class T>

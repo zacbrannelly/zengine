@@ -16,7 +16,8 @@ public:
 	void Release() override;
 	Material* GetMaterial() const;
 
-	static Asset* CreateInstance(std::string name);
+	static ZObject* CreateInstance(std::string name, ObjectType type);
+	static ZObject* CreateDefaultInstance(std::string name, ObjectType type);
 
 	static ObjectType GetStaticType()
 	{

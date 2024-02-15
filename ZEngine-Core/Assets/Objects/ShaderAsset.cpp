@@ -101,7 +101,7 @@ Shader* ShaderAsset::GetShader() const
 	return _shader;
 }
 
-Asset* ShaderAsset::CreateInstance(std::string name)
+ZObject* ShaderAsset::CreateInstance(std::string name, ObjectType type)
 {
 	return new ShaderAsset(name);
 }

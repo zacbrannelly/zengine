@@ -1,6 +1,7 @@
 #include "Material.h"
 #include "Shader.h"
 #include "Graphics.h"
+#include "StandardShaders.h"
 
 Material::Material(std::string name) : ZObject(name, ObjectType::MATERIAL)
 {
@@ -125,6 +126,16 @@ void Material::Release()
 ZObject* Material::CreateInstance(std::string name, ObjectType type)
 {
 	return new Material(name);
+}
+
+ZObject* Material::CreateDefaultInstance(std::string name, ObjectType type)
+{
+	auto newInstance = new Material(name);
+
+	// TODO: Replace with a lit shader.
+	newInstance->SetShader(StandardShaders::GetUnlitColorShader());
+
+	return newInstance;
 }
 
 Material::~Material()
