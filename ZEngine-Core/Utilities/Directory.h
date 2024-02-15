@@ -25,6 +25,8 @@ public:
 	std::string GetAbsolutePath() const;
 	std::string GetPathRelativeTo(std::string path = "./") const;
 
+	Directory GetParentDirectory() const;
+
 	virtual File FindFile(std::string filename) const;
 	virtual Directory FindDirectory(std::string directoryName) const;
 
@@ -36,6 +38,8 @@ public:
 	virtual std::vector<Directory> GetAllDirectories() const;
 
 private:
+	std::string AddTrailingSlash(std::string path) const;
+
 	std::string _fullpath;
 	std::string _name;
 

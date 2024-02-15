@@ -121,7 +121,7 @@
   { \
     auto asset = assetManager->FindAssetFromPath(path); \
     if (asset == nullptr) \
-      asset = assetManager->LoadAsset(path, path, type); \
+      asset = assetManager->LoadAsset(path, type); \
     if (asset != nullptr) \
       parseOut->setter(asset->Cast<DataType>()); \
   } \
@@ -150,7 +150,7 @@
     { \
       auto asset = assetManager->FindAssetFromPath(path); \
       if (asset == nullptr) \
-        asset = assetManager->LoadAsset(path, path, type); \
+        asset = assetManager->LoadAsset(path, type); \
       if (asset != nullptr) \
         assets.push_back(asset->Cast<DataType>()); \
     } \

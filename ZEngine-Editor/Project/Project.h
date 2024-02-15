@@ -23,15 +23,13 @@ public:
   std::string GetAssemblyPath() const;
   std::string GetAssemblyName() const;
   std::string GetScriptProjectPath() const;
+  Directory GetProjectDirectory() const;
 
   void SetName(std::string name);
   std::string GetName() const;
 
   AssetCatalog& GetCatalog();
 private:
-  CatalogEntry DeserializeCatalogEntry(const nlohmann::json& entry);
-  nlohmann::json SerializeCatalogEntry(const CatalogEntry& entry);
-
   std::string _name;
   File* _projectFile;
   AssetCatalog _catalog;

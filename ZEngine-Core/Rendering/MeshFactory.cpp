@@ -162,6 +162,7 @@ Mesh* MeshFactory::CreateCube(std::string name)
 	};
 
 	auto newMesh = Factory::CreateInstance<Mesh>(name, ObjectType::MESH);
+	newMesh->SetName(name);
 	newMesh->SetVertices(verts);
 	newMesh->SetColors(colors);
 	newMesh->SetIndices(indices);
@@ -202,6 +203,7 @@ Mesh* MeshFactory::CreateCubeOutline(std::string name)
     std::iota(indices.begin(), indices.end(), 0); // Fills indices with 0, 1, 2, 3, ...
 
     auto newMesh = Factory::CreateInstance<Mesh>(name, ObjectType::MESH);
+		newMesh->SetName(name);
     newMesh->SetVertices(verts);
     newMesh->SetIndices(indices);
     newMesh->SetColors(colors);
@@ -235,6 +237,7 @@ Mesh* MeshFactory::CreateSphere(std::string name, int resolution)
 
 	std::vector<glm::vec4> colors(vertices.size(), { 1, 1, 1, 1 });
 
+	newMesh->SetName(name);
 	newMesh->SetVertices(vertices);
 	newMesh->SetColors(colors);
 	newMesh->SetIndices(indices);
@@ -283,6 +286,7 @@ Mesh* MeshFactory::CreateSphereOutline(std::string name, int latitudeBands, int 
 	std::vector<glm::vec4> colors(verts.size(), {1, 1, 1, 1});
 
 	auto newMesh = Factory::CreateInstance<Mesh>(name, ObjectType::MESH);
+	newMesh->SetName(name);
 	newMesh->SetVertices(verts);
 	newMesh->SetIndices(indices);
 	newMesh->SetColors(colors);
@@ -330,6 +334,7 @@ Mesh* MeshFactory::CreateHemiSphereOutline(std::string name, int latitudeBands, 
 	std::vector<glm::vec4> colors(verts.size(), {1, 1, 1, 1});
 
 	auto newMesh = Factory::CreateInstance<Mesh>(name, ObjectType::MESH);
+	newMesh->SetName(name);
 	newMesh->SetVertices(verts);
 	newMesh->SetIndices(indices);
 	newMesh->SetColors(colors);
@@ -369,6 +374,7 @@ Mesh* MeshFactory::CreateCylinderOutline(std::string name, int radialSegments, f
 	std::vector<glm::vec4> colors(verts.size(), {1, 1, 1, 1});
 
 	auto newMesh = Factory::CreateInstance<Mesh>(name, ObjectType::MESH);
+	newMesh->SetName(name);
 	newMesh->SetVertices(verts);
 	newMesh->SetIndices(indices);
 	newMesh->SetColors(colors);
@@ -404,6 +410,7 @@ Mesh* MeshFactory::CreateRectangle(std::string name)
 	};
 
 	auto newMesh = Factory::CreateInstance<Mesh>(name, ObjectType::MESH);
+	newMesh->SetName(name);
 	newMesh->SetVertices(verts);
 	newMesh->SetColors(colors);
 	newMesh->SetIndices(indices);
@@ -422,6 +429,7 @@ Mesh* MeshFactory::CreatePlane(std::string name, int width, int height, PlaneOri
 	std::vector<glm::vec4> colors(verts.size(), { 1, 1, 1, 1 });
 
 	auto newMesh = Factory::CreateInstance<Mesh>(name, ObjectType::MESH);
+	newMesh->SetName(name);
 	newMesh->SetVertices(verts);
 	newMesh->SetColors(colors);
 	newMesh->SetIndices(indices);
@@ -555,7 +563,7 @@ Mesh* MeshFactory::CreateSphereStrip(std::string name)
 		oddRow = !oddRow;
 	}
 
-	Mesh* newMesh = new Mesh();
+	auto newMesh = Factory::CreateInstance<Mesh>(name, ObjectType::MESH);
 	newMesh->SetName(name);
 	newMesh->SetVertices(positions);
 	newMesh->SetTextureCoords(uv);

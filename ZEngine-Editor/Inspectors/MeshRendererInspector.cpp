@@ -42,24 +42,6 @@ void MeshRendererInspector::RenderElement()
 	auto meshName = comp->GetMesh() != nullptr ? comp->GetMesh()->GetName() : "None";
 	if (ImGui::BeginCombo("Mesh", meshName.c_str()))
 	{
-		if (catalog != nullptr)
-		{
-			auto available = catalog->GetAssetsByType(MODEL_ASSET);
-			for (auto& entry : available)
-			{
-				if (ImGui::Selectable(entry.path.c_str()))
-				{
-					auto asset = assetManager->FindAssetFromPath(entry.path);
-
-					if (asset == nullptr)
-						asset = assetManager->LoadAsset(entry.path, entry.path, MODEL_ASSET);
-
-					if (asset != nullptr)
-						comp->SetMesh(asset->Cast<ModelAsset>()->GetMesh());
-				}
-			}
-		}
-
 		if (ImGui::Selectable("Cube"))
 		{
 			auto newMesh = MeshFactory::CreateCube(comp->GetOwner()->GetName() + "_cube");
@@ -84,6 +66,24 @@ void MeshRendererInspector::RenderElement()
 			comp->SetMesh(newMesh);
 		}
 
+		if (catalog != nullptr)
+		{
+			auto available = catalog->GetAssetsByType(MODEL_ASSET);
+			for (auto& entry : available)
+			{
+				if (ImGui::Selectable(entry.name.c_str()))
+				{
+					auto asset = assetManager->FindAssetFromPath(entry.path);
+
+					if (asset == nullptr)
+						asset = assetManager->LoadAsset(entry.path, entry.path, MODEL_ASSET);
+
+					if (asset != nullptr)
+						comp->SetMesh(asset->Cast<ModelAsset>()->GetMesh());
+				}
+			}
+		}
+
 		ImGui::EndCombo();
 	}
 
@@ -103,7 +103,7 @@ void MeshRendererInspector::RenderElement()
 				auto available = catalog->GetAssetsByType(MATERIAL_ASSET);
 				for (auto& entry : available)
 				{
-					if (ImGui::Selectable(entry.path.c_str()))
+					if (ImGui::Selectable(entry.name.c_str()))
 					{
 						auto asset = assetManager->FindAssetFromPath(entry.path);
 

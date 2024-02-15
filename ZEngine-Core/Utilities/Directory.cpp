@@ -11,12 +11,14 @@ using namespace std;
 Directory::Directory(string path)
 {
 	_fullpath = ConvertPath(path);
+	_fullpath = AddTrailingSlash(_fullpath);
 	_name = GetFilename(_fullpath);
 }
 
 void Directory::Set(string path)
 {
 	_fullpath = ConvertPath(path);
+	_fullpath = AddTrailingSlash(_fullpath);
 	_name = GetFilename(_fullpath);
 }
 
@@ -38,6 +40,19 @@ File Directory::FindFile(string filename) const
 Directory Directory::FindDirectory(string directoryName) const
 {
 	return Directory(DirectoryExists(directoryName) ? _fullpath + directoryName : "");
+}
+
+Directory Directory::GetParentDirectory() const
+{
+	auto delim = GetPathDelimiter(_fullpath);
+
+	// Remove trailing slash
+	auto path = _fullpath.substr(0, _fullpath.size() - 1);
+
+	auto index = path.find_last_of(delim);
+	path = path.substr(0, index);
+
+	return Directory(path);
 }
 
 char Directory::GetPathDelimiter(string fullpath)
@@ -100,8 +115,18 @@ string Directory::GetBasePath(string fullpath)
 	return "./";
 }
 
+std::string Directory::AddTrailingSlash(std::string path) const
+{
+	if (path[path.size() - 1] != '/')
+	{
+		path += '/';
+	}
+	return path;
+}
+
 std::string Directory::ConvertPath(std::string path)
 {
+	// Convert all backslashes to forward slashes
 	transform(path.begin(), path.end(), path.begin(), 
 	[](auto c)
 	{ 

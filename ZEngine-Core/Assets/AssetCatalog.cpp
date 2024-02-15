@@ -1,6 +1,7 @@
 #include "AssetCatalog.h"
 #include "Asset.h"
-
+#include "../Utilities/Directory.h"
+#include <iostream>
 #include <fstream>
 #include <algorithm>
 #include <nlohmann/json.hpp>
@@ -37,8 +38,9 @@ bool AssetCatalog::LoadCatalog(string path)
 				auto id = uuids::uuid::from_string(line.substr(0, commaPos)).value();
 				auto type = StringToObjectType(line.substr(commaPos + 1, equalPos - commaPos - 1));
 				auto path = line.substr(equalPos + 1, line.length() - equalPos - 1);
+				auto name = ResolveAssetNameFromPath(path);
 
-				_catalog.push_back({ id, path, type });
+				_catalog.push_back({ id, path, type, name });
 			}
 			catch (std::exception) {}
 		}
@@ -54,29 +56,45 @@ bool AssetCatalog::LoadCatalog(string path)
 
 bool AssetCatalog::LoadCatalogFromProjectJson(string jsonFilePath)
 {
-	ifstream in(jsonFilePath, ios::in);
-
-	if (in.is_open())
+	File jsonFile(jsonFilePath);
+	try
 	{
-		nlohmann::json json;
-		in >> json;
+		auto json = jsonFile.ReadJson();
+		return LoadCatalogFromProjectJson(json);
+	}
+	catch (std::exception)
+	{
+		std::cerr << "Failed to load project file: " << jsonFilePath << std::endl;
+		return false;
+	}
+}
 
-		auto catalog = json["catalog"];
-		for (auto& catalogItem : catalog)
+bool AssetCatalog::LoadCatalogFromProjectJson(const nlohmann::json& json, std::string bathPath)
+{
+	if (!json.contains("catalog"))
+		return false;
+
+	auto catalog = json["catalog"];
+	for (auto& catalogItem : catalog)
+	{
+		auto id = uuids::uuid::from_string(catalogItem["id"].get<string>()).value();
+		auto type = StringToObjectType(catalogItem["type"].get<string>());
+		auto path = catalogItem["path"].get<string>();
+
+		if (!bathPath.empty())
 		{
-			auto id = uuids::uuid::from_string(catalogItem["id"].get<string>()).value();
-			auto type = StringToObjectType(catalogItem["type"].get<string>());
-			auto path = catalogItem["path"].get<string>();
-
-			_catalog.push_back({ id, path, type });
+			path = bathPath + "/" + path;
 		}
+		
+		// TODO: Remove this conditional once all project files contain the name field.
+		auto name = catalogItem.contains("name") 
+			? catalogItem["name"].get<string>()
+			: ResolveAssetNameFromPath(path);
 
-		in.close();
-
-		return true;
+		_catalog.push_back({ id, path, type, name });
 	}
 
-	return false;
+	return true;
 }
 
 bool AssetCatalog::SaveCatalog(string path)
@@ -98,6 +116,32 @@ bool AssetCatalog::SaveCatalog(string path)
 	return false;
 }
 
+bool AssetCatalog::SaveCatalogToProjectJson(nlohmann::json& json, std::string basePath)
+{
+	auto& catalog = json["catalog"] = nlohmann::json::array();
+	for (const auto& entry : _catalog)
+	{
+		nlohmann::json entryJson;
+		entryJson["id"] = uuids::to_string(entry.id);
+		entryJson["name"] = entry.name;
+		entryJson["type"] = ObjectTypeToString(entry.type);
+
+		if (basePath.empty())
+		{
+			entryJson["path"] = entry.path;
+		}
+		else
+		{
+			// Convert the path back to a relative path.
+			Directory workingDir(basePath);
+			File entryFile(entry.path);
+			entryJson["path"] = entryFile.GetRelativePath(workingDir.GetAbsolutePath());
+		}
+
+		catalog.push_back(entryJson);
+	}
+}
+
 void AssetCatalog::RegisterAsset(Asset* asset)
 {
 	if (asset != nullptr)
@@ -106,6 +150,7 @@ void AssetCatalog::RegisterAsset(Asset* asset)
 
 void AssetCatalog::RegisterAsset(std::string path, ObjectType type)
 {
+	// TODO: Clean this up - move to a utility class or something.
 	std::random_device rd;
 	auto seed_data = std::array<int, std::mt19937::state_size> {};
 	std::generate(std::begin(seed_data), std::end(seed_data), std::ref(rd));
@@ -113,7 +158,8 @@ void AssetCatalog::RegisterAsset(std::string path, ObjectType type)
 	std::mt19937 generator(seq);
 	uuids::uuid_random_generator gen{generator};
 
-	_catalog.push_back({ gen(), path, type });
+	auto assetName = ResolveAssetNameFromPath(path);
+	_catalog.push_back({ gen(), path, type, assetName });
 }
 
 void AssetCatalog::PushEntry(CatalogEntry entry)
@@ -168,6 +214,22 @@ std::vector<CatalogEntry> AssetCatalog::GetAssetsByType(ObjectType type)
 	}
 
 	return results;
+}
+
+std::string AssetCatalog::ResolveAssetNameFromPath(const std::string& path)
+{
+	File assetFile(path);
+	auto extension = assetFile.GetExtension();
+	if (extension == "asset" || extension == "shader")
+	{
+		auto json = assetFile.ReadJson();
+		if (json.contains("name"))
+			return json["name"].get<string>();
+		else if (json.contains("class"))
+			return json["class"].get<string>();
+	}
+
+	return assetFile.GetFilename();
 }
 
 const std::vector<CatalogEntry>& AssetCatalog::GetCatalogList() const
