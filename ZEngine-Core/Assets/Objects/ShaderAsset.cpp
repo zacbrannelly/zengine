@@ -68,12 +68,6 @@ bool ShaderAsset::Load(std::string path)
 				auto vertexPath = assetDir + passObject.at("vertex").get<std::string>();
 				auto fragPath = assetDir + passObject.at("fragment").get<std::string>();
 
-				// TODO: Get the fkn states from the 
-				if (passObject.find("states") != passObject.end())
-				{
-					auto states = passObject.at("states");
-				}
-
 				// Load the pass into the shader
 				if (!_shader->Load(vertexPath, fragPath, 0, i))
 				{
