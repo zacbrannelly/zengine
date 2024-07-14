@@ -3,8 +3,7 @@
 #include <vector>
 #include <string>
 #include <ZEngine-Core/Map/Objects/ZObject.h>
-
-#include "../UI/GUIWindow.h"
+#include <ZEngine-Core/ImmediateUI/GUIWindow.h>
 
 class Editor;
 class AssetManager;

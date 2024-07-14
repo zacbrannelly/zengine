@@ -36,8 +36,8 @@
 #include "Controllers/MapController.h"
 #include "Project/Project.h"
 #include "Exporters/ComponentExporter.h"
-#include "UI/GUILibrary.h"
-#include "UI/GUIImage.h"
+#include <ZEngine-Core/ImmediateUI/GUILibrary.h>
+#include <ZEngine-Core/ImmediateUI/GUIImage.h>
 #include "Windows/EditorToolbar.h"
 #include "Windows/MapView.h"
 #include "Windows/InspectorWindow.h"
@@ -50,7 +50,7 @@
 #include "Dialogs/ProjectBrowserDialog.h"
 #include "Dialogs/BuildStatusDialog.h"
 #include "Gizmos/GizmoSystem.h"
-#include "imgui-includes.h"
+#include <ZEngine-Core/ImmediateUI/imgui-includes.h>
 
 Editor::Editor(Display* display) : _display(display), _selectedMap(nullptr), _selectedObject(nullptr), _project(nullptr)
 {

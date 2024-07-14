@@ -1,6 +1,6 @@
 #include "AddComponentPopup.h"
 #include "ComponentInfo.h"
-#include "../UI/GUITextField.h"
+#include <ZEngine-Core/ImmediateUI/GUITextField.h>
 #include "../Editor.h"
 
 #include <ZEngine-Core/Map/Objects/ObjectType.h>

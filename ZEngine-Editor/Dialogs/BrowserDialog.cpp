@@ -1,7 +1,7 @@
 #include "BrowserDialog.h"
 #include "NewFolderDialog.h"
-#include "../UI/GUITextField.h"
-#include "../UI/GUINameGenerator.h"
+#include <ZEngine-Core/ImmediateUI/GUITextField.h>
+#include <ZEngine-Core/ImmediateUI/GUINameGenerator.h>
 #include <ZEngine-Core/Utilities/Directory.h>
 #include <ZEngine-Core/Utilities/File.h>
 

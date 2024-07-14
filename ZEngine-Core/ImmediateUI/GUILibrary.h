@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ZEngine-Core/Misc/Singleton.h>
+#include "../Misc/Singleton.h"
 
 class Display;
 

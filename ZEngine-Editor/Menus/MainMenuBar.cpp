@@ -2,7 +2,7 @@
 #include "../Editor.h"
 #include "../Dialogs/CreateProjectDialog.h"
 #include "../Dialogs/ProjectBrowserDialog.h"
-#include "../imgui-includes.h"
+#include <ZEngine-Core/ImmediateUI/imgui-includes.h>
 
 MainMenuBar::MainMenuBar(Editor* editor) : _editor(editor)
 {

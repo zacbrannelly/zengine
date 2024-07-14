@@ -1,5 +1,5 @@
 #include "TransformInspector.h"
-#include "../imgui-includes.h"
+#include <ZEngine-Core/ImmediateUI/imgui-includes.h>
 
 #include <ZEngine-Core/Component/Transform.h>
 #include <iostream>

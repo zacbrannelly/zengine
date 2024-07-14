@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../UI/GUIWindow.h"
-#include "../UI/GUIImage.h"
+#include <ZEngine-Core/ImmediateUI/GUIWindow.h>
+#include <ZEngine-Core/ImmediateUI/GUIImage.h>
 #include <ZEngine-Core/Rendering/Graphics.h>
 
 class Editor;

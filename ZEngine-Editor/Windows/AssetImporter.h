@@ -8,7 +8,7 @@
 class File;
 class Directory;
 
-#include "../UI/GUIWindow.h"
+#include <ZEngine-Core/ImmediateUI/GUIWindow.h>
 
 class AssetManager;
 

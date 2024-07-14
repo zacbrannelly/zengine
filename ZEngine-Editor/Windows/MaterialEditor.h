@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../UI/GUIWindow.h"
+#include <ZEngine-Core/ImmediateUI/GUIWindow.h>
 #include <ZEngine-Core/Rendering/Material.h>
 #include <uuid.h>
 

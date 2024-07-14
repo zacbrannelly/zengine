@@ -8,7 +8,7 @@
 
 #include "CreateProjectDialog.h"
 #include "BrowserDialog.h"
-#include "../UI/GUITextField.h"
+#include <ZEngine-Core/ImmediateUI/GUITextField.h>
 #include "../Builders/ProjectBuilder.h"
 #include "../Editor.h"
 

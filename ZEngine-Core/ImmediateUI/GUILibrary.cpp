@@ -1,9 +1,9 @@
 #include "GUILibrary.h"
 
-#include "../imgui-includes.h"
-#include <ZEngine-Core/Display/Display.h>
-#include <ZEngine-Core/Input/InputManager.h>
-#include <ZEngine-Core/Rendering/Graphics.h>
+#include "imgui-includes.h"
+#include "../Display/Display.h"
+#include "../Input/InputManager.h"
+#include "../Rendering/Graphics.h"
 
 void GUILibrary::Init(Display* display)
 {

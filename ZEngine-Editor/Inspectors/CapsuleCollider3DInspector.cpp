@@ -1,5 +1,5 @@
 #include "CapsuleCollider3DInspector.h"
-#include "../imgui-includes.h"
+#include <ZEngine-Core/ImmediateUI/imgui-includes.h>
 
 #include <ZEngine-Core/Component/CapsuleCollider3D.h>
 

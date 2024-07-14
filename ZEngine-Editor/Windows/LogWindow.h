@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../UI/GUIWindow.h"
+#include <ZEngine-Core/ImmediateUI/GUIWindow.h>
 
 class LogWindow : public GUIWindow
 {

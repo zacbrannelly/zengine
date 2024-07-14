@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../UI/GUIElement.h"
+#include <ZEngine-Core/ImmediateUI/GUIElement.h>
 #include <ZEngine-Core/Component/Component.h>
 
 class Inspector : public GUIElement

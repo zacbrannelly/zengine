@@ -4,7 +4,7 @@
 #include "CodeEditor.h"
 #include "ShaderEditor.h"
 #include "MaterialEditor.h"
-#include "../imgui-includes.h"
+#include <ZEngine-Core/ImmediateUI/imgui-includes.h>
 
 #include <ZEngine-Core/Assets/AssetManager.h>
 #include <ZEngine-Core/Assets/AssetCatalog.h>

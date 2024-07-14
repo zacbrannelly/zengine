@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "../UI/GUIWindow.h"
+#include <ZEngine-Core/ImmediateUI/GUIWindow.h>
 
 class UnsavedDialog;
 class GUITextField;

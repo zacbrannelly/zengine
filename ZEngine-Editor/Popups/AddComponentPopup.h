@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../UI/GUIDialog.h"
+#include <ZEngine-Core/ImmediateUI/GUIDialog.h>
 #include <vector>
 
 class Editor;

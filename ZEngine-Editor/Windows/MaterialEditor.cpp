@@ -1,8 +1,8 @@
 #include "MaterialEditor.h"
 #include "../Builders/MaterialBuilder.h"
 #include <ZEngine-Core/Utilities/File.h>
-#include "../UI/GUITextField.h"
-#include "../UI/GUIImage.h"
+#include <ZEngine-Core/ImmediateUI/GUITextField.h>
+#include <ZEngine-Core/ImmediateUI/GUIImage.h>
 #include "../Dialogs/UnsavedDialog.h"
 
 #include <ZEngine-Core/Input/InputManager.h>

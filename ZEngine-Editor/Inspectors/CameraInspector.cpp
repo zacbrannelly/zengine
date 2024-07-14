@@ -1,5 +1,5 @@
 #include "CameraInspector.h"
-#include "../imgui-includes.h"
+#include <ZEngine-Core/ImmediateUI/imgui-includes.h>
 #include <ZEngine-Core/Map/Objects/Entity.h>
 #include <ZEngine-Core/Component/Camera.h>
 #include <ZEngine-Core/Component/Transform.h>

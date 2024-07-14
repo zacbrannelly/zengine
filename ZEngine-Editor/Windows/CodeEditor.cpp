@@ -1,6 +1,6 @@
 #include "CodeEditor.h"
 #include "../Dialogs/UnsavedDialog.h"
-#include "../imgui-includes.h"
+#include <ZEngine-Core/ImmediateUI/imgui-includes.h>
 #include <ZEngine-Core/Utilities/File.h>
 
 #include <ZEngine-Core/Assets/AssetManager.h>

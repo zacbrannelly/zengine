@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
-#include "../UI/GUIWindow.h"
-#include "../UI/GUITextField.h"
+#include <ZEngine-Core/ImmediateUI/GUIWindow.h>
+#include <ZEngine-Core/ImmediateUI/GUITextField.h>
 
 #define SHADER_IMPORTER_BUFFER_SIZE 1000
 

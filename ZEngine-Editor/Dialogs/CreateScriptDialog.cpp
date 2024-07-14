@@ -1,6 +1,6 @@
 #include "CreateScriptDialog.h"
 #include "BrowserDialog.h"
-#include "../UI/GUITextField.h"
+#include <ZEngine-Core/ImmediateUI/GUITextField.h>
 
 #include <ZEngine-Core/Utilities/Directory.h>
 #include <ZEngine-Core/Utilities/File.h>

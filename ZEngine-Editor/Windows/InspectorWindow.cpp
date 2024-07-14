@@ -1,7 +1,7 @@
 #include "InspectorWindow.h"
 #include "../Editor.h"
 #include <ZEngine-Core/Component/Transform.h>
-#include "../imgui-includes.h"
+#include <ZEngine-Core/ImmediateUI/imgui-includes.h>
 
 #include "../Popups/AddComponentPopup.h"
 

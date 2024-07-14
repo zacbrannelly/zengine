@@ -75,6 +75,14 @@ set(SOURCE_FILES
     "GameLoop/GameLoop.cpp"
     "Math/Picker.cpp"
     "Math/Ray.cpp"
+    "ImmediateUI/imgui/imgui.cpp"
+    "ImmediateUI/GUIImage.cpp"
+    "ImmediateUI/GUIDialog.cpp"
+    "ImmediateUI/GUIWindow.cpp"
+    "ImmediateUI/GUILibrary.cpp"
+    "ImmediateUI/GUINameGenerator.cpp"
+    "ImmediateUI/Container.cpp"
+    "ImmediateUI/GUITextField.cpp"
 )
 source_group("Source Files" FILES ${SOURCE_FILES})
 
@@ -112,6 +120,9 @@ target_include_directories(ZEngine-Core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3
 target_include_directories(ZEngine-Core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/stb)
 target_include_directories(ZEngine-Core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/stduuid/include)
 target_include_directories(ZEngine-Core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/PhysX/physx/include)
+target_include_directories(ZEngine-Core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/imgui.cmake/imgui)
+target_include_directories(ZEngine-Core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/imgui.cmake/guizmo)
+target_include_directories(ZEngine-Core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/iconfontheaders)
 
 target_include_directories(ZEngine-Core PRIVATE ${SDL2_INCLUDE_DIRS})
 target_include_directories(ZEngine-Core PRIVATE ${SDL2_MIXER_INCLUDE_DIRS})
@@ -142,6 +153,7 @@ target_link_libraries(ZEngine-Core
     PRIVATE bgfx
     PRIVATE bx
     PRIVATE bimg
+    PRIVATE IMGUI
     PRIVATE ${SDL2_LIBRARIES}
     PRIVATE ${SDL2_IMAGE_LIBRARIES}
     PRIVATE ${SDL2_MIXER_LIBRARIES}

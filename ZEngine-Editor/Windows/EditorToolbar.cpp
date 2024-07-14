@@ -1,7 +1,7 @@
 #include "EditorToolbar.h"
 #include "../Editor.h"
 #include "../Menus/MainMenuBar.h"
-#include "../imgui-includes.h"
+#include <ZEngine-Core/ImmediateUI/imgui-includes.h>
 #include "../Controllers/MapController.h"
 
 EditorToolbar::EditorToolbar(Editor* editor) : _editor(editor)

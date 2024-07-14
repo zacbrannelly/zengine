@@ -1,5 +1,5 @@
 #include "GUIImage.h"
-#include "../imgui-includes.h"
+#include "imgui-includes.h"
 
 using namespace bgfx;
 

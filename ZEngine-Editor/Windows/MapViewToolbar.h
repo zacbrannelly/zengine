@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../UI/Container.h"
-#include "../imgui-includes.h"
+#include <ZEngine-Core/ImmediateUI/Container.h>
+#include <ZEngine-Core/ImmediateUI/imgui-includes.h>
 
 class Editor;
 class MapView;

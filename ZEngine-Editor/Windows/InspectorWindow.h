@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../UI/GUIWindow.h"
+#include <ZEngine-Core/ImmediateUI/GUIWindow.h>
 #include "../Inspectors/Inspector.h"
 #include <ZEngine-Core/Map/Objects/ZObject.h>
 #include <map>

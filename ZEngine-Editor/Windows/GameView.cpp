@@ -8,7 +8,7 @@
 #include "../Controllers/MapController.h"
 
 #include <glm/gtc/matrix_transform.hpp>
-#include "../imgui-includes.h"
+#include <ZEngine-Core/ImmediateUI/imgui-includes.h>
 
 GameView::GameView(Editor* editor) 
 	: GUIWindow("Game View", 1024, 600, false),
