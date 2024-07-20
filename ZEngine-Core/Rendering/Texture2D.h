@@ -33,7 +33,12 @@ public:
 	bool IsValid() const;
 	bgfx::TextureHandle GetHandle() const;
 
+	int GetWidth() const;
+	int GetHeight() const;
+
 private:
 	bgfx::TextureHandle _handle;
+	int _width;
+	int _height;
 };
 
