@@ -24,7 +24,7 @@
 	url = https://github.com/pantor/inja
 [submodule "3rdparty/PhysX"]
 	path = 3rdparty/PhysX
-	url = https://github.com/o3de/PhysX
+	url = https://github.com/zacbrannelly/PhysX.git
 [submodule "3rdparty/imgui.cmake/guizmo"]
 	path = 3rdparty/imgui.cmake/guizmo
 	url = https://github.com/CedricGuillemet/ImGuizmo.git
