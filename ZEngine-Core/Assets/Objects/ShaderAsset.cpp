@@ -4,9 +4,9 @@
 #include <iostream>
 #include "../../Utilities/Directory.h"
 
-
 using namespace std;
 using namespace nlohmann;
+using namespace ZEngine;
 
 ShaderAsset::ShaderAsset(std::string name) : Asset(name, ObjectType::SHADER_ASSET)
 {

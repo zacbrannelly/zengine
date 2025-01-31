@@ -10,6 +10,8 @@
 
 #include <iostream>
 
+using namespace ZEngine;
+
 CapsuleCollider3DGizmoRenderer::CapsuleCollider3DGizmoRenderer()
 {
   _hemiSphereOutlineMesh = MeshFactory::CreateHemiSphereOutline("CapsuleCollider3DGizmo", 20, 5);

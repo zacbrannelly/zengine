@@ -5,6 +5,7 @@
 #include <algorithm>
 
 using namespace std;
+using namespace ZEngine;
 
 NewFolderDialog::NewFolderDialog(string basePath) : GUIDialog("New Folder..", 300, 100, true)
 {

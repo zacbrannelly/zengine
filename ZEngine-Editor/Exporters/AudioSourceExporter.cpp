@@ -7,6 +7,7 @@
 #include <uuid.h>
 
 using namespace nlohmann;
+using namespace ZEngine;
 
 json AudioSourceExporter::ExportImpl(ZObject* obj)
 {

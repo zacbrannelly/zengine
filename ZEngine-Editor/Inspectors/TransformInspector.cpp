@@ -4,6 +4,8 @@
 #include <ZEngine-Core/Component/Transform.h>
 #include <iostream>
 
+using namespace ZEngine;
+
 TransformInspector::TransformInspector() : _initialized(false), _lastComponentInspected(nullptr)
 {
 }

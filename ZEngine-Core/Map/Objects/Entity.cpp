@@ -4,6 +4,7 @@
 #include "../../Component/Transform.h"
 
 using namespace std;
+using namespace ZEngine;
 
 Entity::Entity(string name) : ZObject(name, ObjectType::ENTITY)
 {	

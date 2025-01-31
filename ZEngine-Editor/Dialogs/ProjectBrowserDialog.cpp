@@ -3,6 +3,8 @@
 #include <ZEngine-Core/Utilities/File.h>
 #include "../Editor.h"
 
+using namespace ZEngine;
+
 ProjectBrowserDialog::ProjectBrowserDialog(Editor* editor) : BrowserDialog(), _editor(editor)
 {
   SetTitle("Open Project");

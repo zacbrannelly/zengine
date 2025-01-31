@@ -9,6 +9,8 @@
 #include <nlohmann/json.hpp>
 #include <algorithm>
 
+using namespace ZEngine;
+
 CreateMaterialDialog::CreateMaterialDialog(std::string basePath) : GUIDialog("Create Material", 500, 155, true)
 {
 	_basePath = basePath;

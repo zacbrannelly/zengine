@@ -2,6 +2,8 @@
 #include "../Editor.h"
 #include <ZEngine-Core/Map/Map.h>
 
+using namespace ZEngine;
+
 PhysicsSettings::PhysicsSettings(Editor* editor) : GUIWindow("Physics Settings", 400, 300, false), _editor(editor)
 {
 }

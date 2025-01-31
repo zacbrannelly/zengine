@@ -2,17 +2,20 @@
 
 #include "ComponentExporter.h"
 
-class MaterialAsset;
-class Material;
-class ModelAsset;
-class Mesh;
-
-class MeshRendererExporter : public ComponentExporter
+namespace ZEngine
 {
-public:
-	nlohmann::json ExportImpl(ZObject* obj) override;
+	class MaterialAsset;
+	class Material;
+	class ModelAsset;
+	class Mesh;
 
-private:
-	MaterialAsset* GetMaterialAsset(Material* mat) const;
-	ModelAsset* GetModelAsset(Mesh* mesh) const;
-};
+	class MeshRendererExporter : public ComponentExporter
+	{
+	public:
+		nlohmann::json ExportImpl(ZObject* obj) override;
+
+	private:
+		MaterialAsset* GetMaterialAsset(Material* mat) const;
+		ModelAsset* GetModelAsset(Mesh* mesh) const;
+	};
+}

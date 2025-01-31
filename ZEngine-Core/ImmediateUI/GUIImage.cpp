@@ -2,6 +2,7 @@
 #include "imgui-includes.h"
 
 using namespace bgfx;
+using namespace ZEngine;
 
 GUIImage::GUIImage(TextureHandle texture, float width, float height) : _texture(texture), _width(width), _height(height), _flippedVertically(false)
 {

@@ -11,6 +11,8 @@
 #include <algorithm>
 #include <sstream>
 
+using namespace ZEngine;
+
 CreateScriptDialog::CreateScriptDialog(std::string basePath) : GUIDialog("Create Script", 500, 235, true)
 {
 	_basePath = basePath;

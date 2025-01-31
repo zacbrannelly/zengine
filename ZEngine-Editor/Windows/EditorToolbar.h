@@ -1,20 +1,23 @@
 #include <ZEngine-Core/ImmediateUI/Container.h>
 
-class Editor;
-class MapController;
-
-class EditorToolbar : public Container
+namespace ZEngine
 {
-public:
-  EditorToolbar(Editor* editor);
-  ~EditorToolbar();
+  class Editor;
+  class MapController;
 
-  void RenderElement() override;
+  class EditorToolbar : public Container
+  {
+  public:
+    EditorToolbar(Editor* editor);
+    ~EditorToolbar();
 
-private:
-  void RenderPlayButton();
-  void RenderPauseAndStopButtons();
+    void RenderElement() override;
 
-  Editor* _editor;
-  MapController* _mapController;
-};
+  private:
+    void RenderPlayButton();
+    void RenderPauseAndStopButtons();
+
+    Editor* _editor;
+    MapController* _mapController;
+  };
+}

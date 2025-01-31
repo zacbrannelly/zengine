@@ -3,52 +3,55 @@
 #include <TargetConditionals.h>
 #include "AssemblyLoader.h"
 
-typedef void* (*CreateManagedObjectFunction)(const char* typeName);
-typedef void* (*InvokeMethodFunction)(void* object, const char* methodName);
-typedef void (*SetPropertyFunction)(void* object, const char* propertyName, void* value);
-typedef void (*SetScriptNativeInstanceFunction)(void* object, void* nativeInstance);
-typedef bool (*BuildProjectFunction)(const char* projectPath, const char* dllOutputPath);
-typedef void (*LoadProjectAssemblyFunction)(const char* assemblyPath);
-typedef void (*RegisterAdditionalDependencyPathFunction)(const char* path);
-
-class CSharpScriptSystem : public Singleton<CSharpScriptSystem>
+namespace ZEngine
 {
-public:
-  bool Init();
-  void Shutdown();
+  typedef void* (*CreateManagedObjectFunction)(const char* typeName);
+  typedef void* (*InvokeMethodFunction)(void* object, const char* methodName);
+  typedef void (*SetPropertyFunction)(void* object, const char* propertyName, void* value);
+  typedef void (*SetScriptNativeInstanceFunction)(void* object, void* nativeInstance);
+  typedef bool (*BuildProjectFunction)(const char* projectPath, const char* dllOutputPath);
+  typedef void (*LoadProjectAssemblyFunction)(const char* assemblyPath);
+  typedef void (*RegisterAdditionalDependencyPathFunction)(const char* path);
 
-  void* InvokeMethod(void* object, std::string methodName);
-  void* CreateManagedObject(std::string typeName);
-  void SetProperty(void* managedInstance, std::string propertyName, void* value);
-  void SetScriptNativeInstance(void* managedInstance, void* nativeInstance);
-  
-#if !TARGET_OS_IPHONE
-  void HotReload();
+  class CSharpScriptSystem : public Singleton<CSharpScriptSystem>
+  {
+  public:
+    bool Init();
+    void Shutdown();
 
-  bool BuildProject(std::string projectPath, std::string dllOutputPath);
-  void LoadProjectAssembly(std::string assemblyPath);
-  void RegisterAdditionalDependencyPath(std::string path);
-#endif
+    void* InvokeMethod(void* object, std::string methodName);
+    void* CreateManagedObject(std::string typeName);
+    void SetProperty(void* managedInstance, std::string propertyName, void* value);
+    void SetScriptNativeInstance(void* managedInstance, void* nativeInstance);
+    
+  #if !TARGET_OS_IPHONE
+    void HotReload();
 
-private:
-#if !TARGET_OS_IPHONE
-  void LoadPluginManagerAssembly();
-  void LoadProjectAssembly();
-#endif
+    bool BuildProject(std::string projectPath, std::string dllOutputPath);
+    void LoadProjectAssembly(std::string assemblyPath);
+    void RegisterAdditionalDependencyPath(std::string path);
+  #endif
 
-  std::string _currentProjectAssemblyPath;
+  private:
+  #if !TARGET_OS_IPHONE
+    void LoadPluginManagerAssembly();
+    void LoadProjectAssembly();
+  #endif
 
-  AssemblyLoader _pluginManagerAssembly;
-  CreateManagedObjectFunction _createManagedObjectFunction;
-  InvokeMethodFunction _invokeMethodFunction;
-  SetPropertyFunction _setPropertyFunction;
-  SetScriptNativeInstanceFunction _setScriptNativeInstanceFunction;
+    std::string _currentProjectAssemblyPath;
 
-#if !TARGET_OS_IPHONE
-  BuildProjectFunction _buildProjectFunction;
-  LoadProjectAssemblyFunction _loadProjectAssemblyFunction;
-  RegisterAdditionalDependencyPathFunction _registerAdditionalDependencyPathFunction;
-#else
-  void* _libraryHandle;
-#endif
-};
+    AssemblyLoader _pluginManagerAssembly;
+    CreateManagedObjectFunction _createManagedObjectFunction;
+    InvokeMethodFunction _invokeMethodFunction;
+    SetPropertyFunction _setPropertyFunction;
+    SetScriptNativeInstanceFunction _setScriptNativeInstanceFunction;
+
+  #if !TARGET_OS_IPHONE
+    BuildProjectFunction _buildProjectFunction;
+    LoadProjectAssemblyFunction _loadProjectAssemblyFunction;
+    RegisterAdditionalDependencyPathFunction _registerAdditionalDependencyPathFunction;
+  #else
+    void* _libraryHandle;
+  #endif
+  };
+}

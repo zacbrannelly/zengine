@@ -7,6 +7,8 @@
 #include "../../../Rendering/Shader.h"
 #include "../../../Misc/Factory.h"
 
+using namespace ZEngine;
+
 ZObject* Cube::CreateInstance(std::string name, ObjectType type)
 {
 	auto newEntity = new Entity(name);

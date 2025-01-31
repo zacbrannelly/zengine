@@ -6,6 +6,8 @@
 #define NDEBUG
 #include <PxPhysicsAPI.h>
 
+using namespace ZEngine;
+
 CapsuleCollider3D::CapsuleCollider3D() : DynamicCollider3D("Capsule Collider 3D", ObjectType::CAPSULE_COLLIDER_3D), _radius(1), _height(1)
 {
 	RegisterDerivedType(CAPSULE_COLLIDER_3D);

@@ -11,6 +11,7 @@
 #include <nlohmann/json.hpp>
 
 using namespace nlohmann;
+using namespace ZEngine;
 
 bool MapBuilder::BuildToFile(const std::string& path, const Map* map)
 {

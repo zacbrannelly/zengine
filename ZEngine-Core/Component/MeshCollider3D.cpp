@@ -9,6 +9,7 @@
 #include <PxPhysicsAPI.h>
 
 using namespace physx;
+using namespace ZEngine;
 
 MeshCollider3D::MeshCollider3D() : Collider3D("Mesh Collider 3D", MESH_COLLIDER_3D)
 {

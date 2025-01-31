@@ -1,16 +1,19 @@
 #include <ZEngine-Core/ImmediateUI/GUIWindow.h>
 
-class Editor;
-
-class PhysicsSettings : public GUIWindow
+namespace ZEngine
 {
-public:
-  PhysicsSettings(Editor* editor);
-  ~PhysicsSettings();
+  class Editor;
 
-  void ProcessInput() override;
-	void RenderInWindow() override;
+  class PhysicsSettings : public GUIWindow
+  {
+  public:
+    PhysicsSettings(Editor* editor);
+    ~PhysicsSettings();
 
-private:
-  Editor* _editor;
-};
+    void ProcessInput() override;
+    void RenderInWindow() override;
+
+  private:
+    Editor* _editor;
+  };
+}

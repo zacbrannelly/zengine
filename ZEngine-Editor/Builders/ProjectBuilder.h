@@ -1,14 +1,17 @@
 #include <string>
 
-class Project;
-class Directory;
-
-class ProjectBuilder
+namespace ZEngine
 {
-public:
-  static Project* CreateProject(std::string name, std::string projectDirectory);
+  class Project;
+  class Directory;
 
-private:
-  static std::string GenerateProjectFile(const Directory& projectDirectory, std::string name);
-  static std::string GenerateProjectCSharpProjectFile(const Directory& projectDirectory, std::string name);
-};
+  class ProjectBuilder
+  {
+  public:
+    static Project* CreateProject(std::string name, std::string projectDirectory);
+
+  private:
+    static std::string GenerateProjectFile(const Directory& projectDirectory, std::string name);
+    static std::string GenerateProjectCSharpProjectFile(const Directory& projectDirectory, std::string name);
+  };
+}

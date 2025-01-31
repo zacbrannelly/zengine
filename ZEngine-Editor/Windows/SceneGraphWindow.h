@@ -1,21 +1,23 @@
 #pragma once
 #include <ZEngine-Core/ImmediateUI/GUIWindow.h>
 
-class Editor;
-class Entity;
-
-class SceneGraphWindow : public GUIWindow
+namespace ZEngine
 {
-public:
-	SceneGraphWindow(Editor* editor);
-	~SceneGraphWindow();
+	class Editor;
+	class Entity;
 
-	void ProcessInput() override;
-	void RenderInWindow() override;
+	class SceneGraphWindow : public GUIWindow
+	{
+	public:
+		SceneGraphWindow(Editor* editor);
+		~SceneGraphWindow();
 
-private:
-	void RenderNode(Entity* node);
+		void ProcessInput() override;
+		void RenderInWindow() override;
 
-	Editor* _context;
-};
+	private:
+		void RenderNode(Entity* node);
 
+		Editor* _context;
+	};
+}

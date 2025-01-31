@@ -2,16 +2,18 @@
 
 #include "Inspector.h"
 
-class MeshRendererInspector : public Inspector
+namespace ZEngine
 {
-public:
-	MeshRendererInspector();
-	~MeshRendererInspector();
+	class MeshRendererInspector : public Inspector
+	{
+	public:
+		MeshRendererInspector();
+		~MeshRendererInspector();
 
-	void Inspect(Component* comp) override;
-	void RenderElement() override;
+		void Inspect(Component* comp) override;
+		void RenderElement() override;
 
-private:
-	int _neededMaterials;
-};
-
+	private:
+		int _neededMaterials;
+	};
+}

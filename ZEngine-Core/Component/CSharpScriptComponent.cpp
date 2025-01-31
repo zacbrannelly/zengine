@@ -5,6 +5,8 @@
 #define UPDATE_METHOD_NAME "Update"
 #define RENDER_METHOD_NAME "Render"
 
+using namespace ZEngine;
+
 CSharpScriptComponent::CSharpScriptComponent() : Component("CSharpScriptComponent", CSHARP_SCRIPT_COMPONENT)
 {
   RegisterDerivedType(CSHARP_SCRIPT_COMPONENT);

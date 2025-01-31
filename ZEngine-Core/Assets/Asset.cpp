@@ -3,6 +3,7 @@
 #include <fstream>
 
 using namespace std;
+using namespace ZEngine;
 
 Asset::Asset(string name, ObjectType type) : ZObject(name, type)
 {

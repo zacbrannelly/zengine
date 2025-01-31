@@ -2,30 +2,33 @@
 
 #include <ZEngine-Core/ImmediateUI/GUIDialog.h>
 
-class BrowserDialog;
-class GUITextField;
-
-class CreateScriptDialog : public GUIDialog
+namespace ZEngine
 {
-public:
-	CreateScriptDialog(std::string basePath = "");
-	~CreateScriptDialog();
+	class BrowserDialog;
+	class GUITextField;
 
-	void ProcessInput() override;
-	void RenderInWindow() override;
+	class CreateScriptDialog : public GUIDialog
+	{
+	public:
+		CreateScriptDialog(std::string basePath = "");
+		~CreateScriptDialog();
 
-private:
-	std::string GenerateCode(const std::string& name);
-	bool Validate();
-	bool Create(bool import);
+		void ProcessInput() override;
+		void RenderInWindow() override;
+
+	private:
+		std::string GenerateCode(const std::string& name);
+		bool Validate();
+		bool Create(bool import);
 
 
-	std::string _basePath;
-	GUITextField* _nameField;
-	GUITextField* _pathField;
-	BrowserDialog* _browser;
+		std::string _basePath;
+		GUITextField* _nameField;
+		GUITextField* _pathField;
+		BrowserDialog* _browser;
 
-	bool _includeInit;
-	bool _includeUpdate;
-	bool _includeRender;
-};
+		bool _includeInit;
+		bool _includeUpdate;
+		bool _includeRender;
+	};
+}

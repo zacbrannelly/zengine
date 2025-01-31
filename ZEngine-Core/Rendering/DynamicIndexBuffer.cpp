@@ -1,6 +1,7 @@
 #include "DynamicIndexBuffer.h"
 
 using namespace bgfx;
+using namespace ZEngine;
 
 DynamicIndexBuffer::DynamicIndexBuffer()
 {

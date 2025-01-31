@@ -7,6 +7,7 @@
 
 using namespace std;
 using namespace nlohmann;
+using namespace ZEngine;
 
 CSharpScriptAsset::CSharpScriptAsset(std::string name) : Asset(name, CSHARP_SCRIPT_ASSET) 
 {

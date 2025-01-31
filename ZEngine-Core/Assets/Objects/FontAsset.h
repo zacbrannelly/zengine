@@ -1,8 +1,11 @@
 #pragma once
-class FontAsset
-{
-public:
-	FontAsset();
-	~FontAsset();
-};
 
+namespace ZEngine
+{
+	class FontAsset
+	{
+	public:
+		FontAsset();
+		~FontAsset();
+	};
+}

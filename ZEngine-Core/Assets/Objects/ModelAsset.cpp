@@ -12,6 +12,7 @@
 #include <assimp/postprocess.h>
 
 using namespace Assimp;
+using namespace ZEngine;
 
 ModelAsset::ModelAsset(std::string name) : Asset(name, ObjectType::MODEL_ASSET)
 {

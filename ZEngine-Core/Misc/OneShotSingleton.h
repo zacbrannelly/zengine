@@ -1,21 +1,23 @@
 #pragma once
 
-template<typename T>
-class OneShotSingleton
+namespace ZEngine
 {
-public:
-	static T* GetInstance()
+	template<typename T>
+	class OneShotSingleton
 	{
-		if (T::_instance == nullptr)
-			T::_instance = new T();
+	public:
+		static T* GetInstance()
+		{
+			if (T::_instance == nullptr)
+				T::_instance = new T();
 
-		return T::_instance;
-	}
+			return T::_instance;
+		}
 
-protected:
-	static T* _instance;
-};
+	protected:
+		static T* _instance;
+	};
 
-template<typename T>
-T* OneShotSingleton<T>::_instance = nullptr;
-
+	template<typename T>
+	T* OneShotSingleton<T>::_instance = nullptr;
+}

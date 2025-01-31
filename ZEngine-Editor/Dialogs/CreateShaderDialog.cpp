@@ -11,6 +11,8 @@
 #include <algorithm>
 #include <nlohmann/json.hpp>
 
+using namespace ZEngine;
+
 CreateShaderDialog::CreateShaderDialog(std::string basePath) : GUIDialog("Create Shader", 515, 160, true)
 {
 	_basePath = basePath;

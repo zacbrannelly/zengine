@@ -8,6 +8,8 @@
 #include <ZEngine-Core/Rendering/MeshFactory.h>
 #include <ZEngine-Core/Rendering/MaterialFactory.h>
 
+using namespace ZEngine;
+
 BoxCollider3DGizmoRenderer::BoxCollider3DGizmoRenderer()
 {
   _cubeOutlineMesh = MeshFactory::CreateCubeOutline("BoxCollider3DGizmo");

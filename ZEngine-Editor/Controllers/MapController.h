@@ -5,41 +5,44 @@
 #include <future>
 #include "Controller.h"
 
-class Map;
-class Editor;
-class Physics3DSystem;
-
-enum PlayState {
-  PLAYING,
-  BUILDING,
-  PAUSED,
-  STOPPED
-};
-
-class MapController : public Controller
+namespace ZEngine
 {
-public:
-  MapController(Editor* editor);
-  virtual ~MapController();
+  class Map;
+  class Editor;
+  class Physics3DSystem;
 
-  void Update() override;
+  enum PlayState {
+    PLAYING,
+    BUILDING,
+    PAUSED,
+    STOPPED
+  };
 
-  void Play();
-	void Pause();
-	void Continue();
-	void Stop();
+  class MapController : public Controller
+  {
+  public:
+    MapController(Editor* editor);
+    virtual ~MapController();
 
-  PlayState GetPlayState() const;
+    void Update() override;
 
-private:
-	void StartPlaying();
+    void Play();
+    void Pause();
+    void Continue();
+    void Stop();
 
-  Editor* _editor;
-  Map* _previewMap;
-	Map* _originalMap;
-  PlayState _playState;
-  std::future<bool> _buildFuture;
-	std::mutex _updateMapLock;
-  bool _playWhenPossible;
-  Physics3DSystem* _physics;
-};
+    PlayState GetPlayState() const;
+
+  private:
+    void StartPlaying();
+
+    Editor* _editor;
+    Map* _previewMap;
+    Map* _originalMap;
+    PlayState _playState;
+    std::future<bool> _buildFuture;
+    std::mutex _updateMapLock;
+    bool _playWhenPossible;
+    Physics3DSystem* _physics;
+  };
+}

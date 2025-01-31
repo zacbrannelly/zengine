@@ -1,17 +1,20 @@
 #include "BaseGizmoRenderer.h"
 
-class Mesh;
-class Material;
-
-class SphereCollider3DGizmoRenderer : public BaseGizmoRenderer
+namespace ZEngine
 {
-public:
-  SphereCollider3DGizmoRenderer();
-  ~SphereCollider3DGizmoRenderer();
+  class Mesh;
+  class Material;
 
-  void Render(int viewId, const std::vector<Component*>& components) override;
+  class SphereCollider3DGizmoRenderer : public BaseGizmoRenderer
+  {
+  public:
+    SphereCollider3DGizmoRenderer();
+    ~SphereCollider3DGizmoRenderer();
 
-private:
-  Mesh* _outlineMesh;
-  Material* _outlineMaterial;
-};
+    void Render(int viewId, const std::vector<Component*>& components) override;
+
+  private:
+    Mesh* _outlineMesh;
+    Material* _outlineMaterial;
+  };
+}

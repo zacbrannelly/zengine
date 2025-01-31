@@ -3,20 +3,23 @@
 #include <ZEngine-Core/ImmediateUI/GUIElement.h>
 #include <ZEngine-Core/Component/Component.h>
 
-class Inspector : public GUIElement
+namespace ZEngine
 {
-public:
-	Inspector();
-	~Inspector();
+	class Inspector : public GUIElement
+	{
+	public:
+		Inspector();
+		~Inspector();
 
-	virtual void Inspect(Component* component);
-	Component* GetValue() const;
+		virtual void Inspect(Component* component);
+		Component* GetValue() const;
 
-	std::string UniqueLabel(std::string label) const;
+		std::string UniqueLabel(std::string label) const;
 
-	virtual void RenderElement() = 0;
-	GUIElementType GetType();
+		virtual void RenderElement() = 0;
+		GUIElementType GetType();
 
-private:
-	Component* _value;
-};
+	private:
+		Component* _value;
+	};
+}

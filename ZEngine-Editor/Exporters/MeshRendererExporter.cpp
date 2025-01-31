@@ -9,6 +9,7 @@
 #include <uuid.h>
 
 using namespace nlohmann;
+using namespace ZEngine;
 
 json MeshRendererExporter::ExportImpl(ZObject* obj)
 {

@@ -1,6 +1,7 @@
 #include "GUIWindow.h"
 
 using namespace std;
+using namespace ZEngine;
 
 GUIWindow::GUIWindow(string title, int width, int height, bool isChild) : _title(title), _width(width), _height(height), _isChild(isChild), _shouldSetSize(false), _flags(0)
 {

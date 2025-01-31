@@ -14,6 +14,8 @@
 #include <ZEngine-Core/Physics/Time.h>
 #include <ZEngine-Core/Scripting/CSharp/CSharpScriptSystem.h>
 
+using namespace ZEngine;
+
 @interface EngineInterface () 
 {
     // Declare a private variable here

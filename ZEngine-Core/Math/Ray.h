@@ -2,15 +2,18 @@
 
 #include <glm/glm.hpp>
 
-class Ray
+namespace ZEngine
 {
-public:
-  glm::vec3 origin;
-  glm::vec3 direction;
+  class Ray
+  {
+  public:
+    glm::vec3 origin;
+    glm::vec3 direction;
 
-  Ray(const glm::vec3& origin, const glm::vec3& direction) 
-    : origin(origin), direction(glm::normalize(direction)) {}
+    Ray(const glm::vec3& origin, const glm::vec3& direction) 
+      : origin(origin), direction(glm::normalize(direction)) {}
 
-  static Ray FromScreenPos(int mouseX, int mouseY, const class Camera* camera);
-  static glm::vec2 GetNDC(int mouseX, int mouseY, const class Camera* camera);
-};
+    static Ray FromScreenPos(int mouseX, int mouseY, const class Camera* camera);
+    static glm::vec2 GetNDC(int mouseX, int mouseY, const class Camera* camera);
+  };
+}

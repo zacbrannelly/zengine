@@ -2,13 +2,15 @@
 
 #include <ZEngine-Core/ImmediateUI/GUIWindow.h>
 
-class LogWindow : public GUIWindow
+namespace ZEngine
 {
-public:
-	LogWindow();
-	~LogWindow();
+	class LogWindow : public GUIWindow
+	{
+	public:
+		LogWindow();
+		~LogWindow();
 
-	void ProcessInput() override;
-	void RenderInWindow() override;
-};
-
+		void ProcessInput() override;
+		void RenderInWindow() override;
+	};
+}

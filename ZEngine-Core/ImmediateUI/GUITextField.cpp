@@ -1,5 +1,7 @@
 #include "GUITextField.h"
 
+using namespace ZEngine;
+
 GUITextField::GUITextField(std::string label)
 {
 	_label = label;

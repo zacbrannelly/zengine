@@ -3,16 +3,18 @@
 #include "Inspector.h"
 #include <glm/glm.hpp>
 
-class TransformInspector : public Inspector
+namespace ZEngine
 {
-public:
-	TransformInspector();
-	~TransformInspector();
+	class TransformInspector : public Inspector
+	{
+	public:
+		TransformInspector();
+		~TransformInspector();
 
-	void RenderElement() override;
-private:
-	glm::vec3 _rotationEulerDegrees;
-	Component* _lastComponentInspected;
-	bool _initialized;
-};
-
+		void RenderElement() override;
+	private:
+		glm::vec3 _rotationEulerDegrees;
+		Component* _lastComponentInspected;
+		bool _initialized;
+	};
+}

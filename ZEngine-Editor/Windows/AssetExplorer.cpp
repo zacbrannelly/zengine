@@ -11,6 +11,8 @@
 #include <ZEngine-Core/Assets/Objects/MapAsset.h>
 #include <ZEngine-Core/Assets/Objects/CSharpScriptAsset.h>
 
+using namespace ZEngine;
+
 AssetExplorer::AssetExplorer(Editor* editor) : GUIWindow("Asset Explorer", 300, 150, false)
 {
 	_editor = editor;

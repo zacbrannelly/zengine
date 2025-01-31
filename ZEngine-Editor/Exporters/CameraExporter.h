@@ -2,8 +2,11 @@
 
 #include "ComponentExporter.h"
 
-class CameraExporter : public ComponentExporter
+namespace ZEngine
 {
-public:
-	nlohmann::json ExportImpl(ZObject* obj) override;
-};
+	class CameraExporter : public ComponentExporter
+	{
+	public:
+		nlohmann::json ExportImpl(ZObject* obj) override;
+	};
+}

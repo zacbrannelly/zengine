@@ -11,6 +11,7 @@
 #include <nlohmann/json.hpp>
 
 using namespace nlohmann;
+using namespace ZEngine;
 
 ShaderEditor::ShaderEditor(std::string assetPath) : GUIWindow("Shader Editor - " + assetPath, 800, 400, false)
 {

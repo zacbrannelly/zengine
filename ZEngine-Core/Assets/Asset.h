@@ -2,40 +2,43 @@
 
 #include "../Map/Objects/ZObject.h"
 
-class AssetManager;
-
-class Asset : public ZObject
+namespace ZEngine
 {
-public:
-	Asset(std::string name, ObjectType type);
-	virtual ~Asset();
+	class AssetManager;
 
-	virtual bool Load(std::string path) = 0;
-	virtual void Release();
-
-	std::string GetPath() const;
-
-	bool IsLoaded() const;
-
-	template<typename T> T* Cast()
+	class Asset : public ZObject
 	{
-		return static_cast<T*>(this);
-	}
+	public:
+		Asset(std::string name, ObjectType type);
+		virtual ~Asset();
 
-	static ObjectType GetStaticType()
-	{
-		return ASSET;
-	}
+		virtual bool Load(std::string path) = 0;
+		virtual void Release();
 
-	friend class AssetManager;
-protected:
-	void SetPath(std::string path);
-	void SetLoaded(bool loaded);
+		std::string GetPath() const;
 
-	bool LoadText(const std::string& path, std::string& result);
-	bool LoadBinary(const std::string& path, char* result, unsigned int& size);
+		bool IsLoaded() const;
 
-private:
-	std::string _path;
-	bool _isLoaded;
-};
+		template<typename T> T* Cast()
+		{
+			return static_cast<T*>(this);
+		}
+
+		static ObjectType GetStaticType()
+		{
+			return ASSET;
+		}
+
+		friend class AssetManager;
+	protected:
+		void SetPath(std::string path);
+		void SetLoaded(bool loaded);
+
+		bool LoadText(const std::string& path, std::string& result);
+		bool LoadBinary(const std::string& path, char* result, unsigned int& size);
+
+	private:
+		std::string _path;
+		bool _isLoaded;
+	};
+}

@@ -6,14 +6,14 @@
 
 %include "std_string.i"
 
-%ignore CSharpScriptComponent::CSharpScriptComponent;
-%ignore CSharpScriptComponent::GetScript;
-%ignore CSharpScriptComponent::SetScript;
-%ignore CSharpScriptComponent::Init;
-%ignore CSharpScriptComponent::Update;
-%ignore CSharpScriptComponent::Render;
+%ignore ZEngine::CSharpScriptComponent::CSharpScriptComponent;
+%ignore ZEngine::CSharpScriptComponent::GetScript;
+%ignore ZEngine::CSharpScriptComponent::SetScript;
+%ignore ZEngine::CSharpScriptComponent::Init;
+%ignore ZEngine::CSharpScriptComponent::Update;
+%ignore ZEngine::CSharpScriptComponent::Render;
 
-%typemap(cscode) CSharpScriptComponent %{
+%typemap(cscode) ZEngine::CSharpScriptComponent %{
   // Expose a public constructor to C# that takes a pointer to an existing C++ object.
   // TODO: Removed if it is not used.
   public CSharpScriptComponent(global::System.IntPtr cPtr) : base(cPtr) {}

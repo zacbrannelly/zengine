@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+using namespace ZEngine;
+
 Shader* StandardShaders::_unlitColorShader = nullptr;
 
 void StandardShaders::Init()

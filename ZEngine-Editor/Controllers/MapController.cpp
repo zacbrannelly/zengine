@@ -10,6 +10,8 @@
 #include "../Editor.h"
 #include "../Project/Project.h"
 
+using namespace ZEngine;
+
 MapController::MapController(Editor* editor) : _editor(editor), _originalMap(nullptr), _previewMap(nullptr), _playState(STOPPED), _playWhenPossible(false)
 {
   _physics = Physics3DSystem::GetInstance();

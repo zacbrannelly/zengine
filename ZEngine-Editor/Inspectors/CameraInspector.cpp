@@ -4,6 +4,7 @@
 #include <ZEngine-Core/Component/Camera.h>
 #include <ZEngine-Core/Component/Transform.h>
 
+using namespace ZEngine;
 
 CameraInspector::CameraInspector()
 {

@@ -15,6 +15,8 @@
 
 #include <string>
 
+using namespace ZEngine;
+
 InspectorWindow::InspectorWindow(Editor* context) : GUIWindow("Inspector Window", 400, 1000, false)
 {
 	_context = context;

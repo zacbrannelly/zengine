@@ -9,6 +9,7 @@
 #include <ZEngine-Core/Scripting/CSharp/CSharpScriptSystem.h>
 
 using namespace nlohmann;
+using namespace ZEngine;
 
 Project::Project() : _projectFile(nullptr), _buildInProgress(false)
 {

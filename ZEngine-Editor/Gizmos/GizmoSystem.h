@@ -2,18 +2,21 @@
 #include <ZEngine-Core/Map/Objects/ObjectType.h>
 #include <map>
 
-class Editor;
-class BaseGizmoRenderer;
-
-class GizmoSystem : public Singleton<GizmoSystem>
+namespace ZEngine
 {
-public:
-  void Init(Editor* editor);
-  void Shutdown();
+  class Editor;
+  class BaseGizmoRenderer;
 
-  void RenderGizmos(int viewId);
+  class GizmoSystem : public Singleton<GizmoSystem>
+  {
+  public:
+    void Init(Editor* editor);
+    void Shutdown();
 
-private:
-  Editor* _editor;
-  std::map<ObjectType, BaseGizmoRenderer*> _objectTypeToRenderer;
-};
+    void RenderGizmos(int viewId);
+
+  private:
+    Editor* _editor;
+    std::map<ObjectType, BaseGizmoRenderer*> _objectTypeToRenderer;
+  };
+}

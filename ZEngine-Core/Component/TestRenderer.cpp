@@ -15,6 +15,7 @@
 #include "../Rendering/Mesh.h"
 
 using namespace std;
+using namespace ZEngine;
 
 TestRenderer::TestRenderer() : Component("Test Renderer", ObjectType::TEST_RENDERER)
 {

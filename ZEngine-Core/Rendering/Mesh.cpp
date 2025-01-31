@@ -5,6 +5,8 @@
 #include "Graphics.h"
 #include "Shader.h"
 
+using namespace ZEngine;
+
 Mesh::Mesh() : ZObject("Mesh", ObjectType::MESH)
 {
 	RegisterDerivedType(MESH);

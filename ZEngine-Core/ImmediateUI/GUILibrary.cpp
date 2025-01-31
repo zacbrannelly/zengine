@@ -5,6 +5,8 @@
 #include "../Input/InputManager.h"
 #include "../Rendering/Graphics.h"
 
+using namespace ZEngine;
+
 void GUILibrary::Init(Display* display)
 {
 	// Default toolbar height to 100px.

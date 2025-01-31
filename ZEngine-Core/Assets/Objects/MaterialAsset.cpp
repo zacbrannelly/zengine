@@ -15,6 +15,7 @@
 
 using namespace std;
 using namespace nlohmann;
+using namespace ZEngine;
 
 MaterialAsset::MaterialAsset(string name) : Asset(name, ObjectType::MATERIAL_ASSET)
 {

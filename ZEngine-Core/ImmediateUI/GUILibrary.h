@@ -2,24 +2,27 @@
 
 #include "../Misc/Singleton.h"
 
-class Display;
-
-class GUILibrary : public Singleton<GUILibrary>
+namespace ZEngine
 {
-public:
-	void Init(Display* display);
-	void Shutdown();
+	class Display;
 
-	void NewFrame();
-	void EndFrame();
+	class GUILibrary : public Singleton<GUILibrary>
+	{
+	public:
+		void Init(Display* display);
+		void Shutdown();
 
-	void BeginToolbarWindow();
-	void SetToolbarWindowHeight(float toolbarHeight);
-	void EndToolbarWindow();
+		void NewFrame();
+		void EndFrame();
 
-	void BeginMainWindow();
-	void EndMainWindow();
+		void BeginToolbarWindow();
+		void SetToolbarWindowHeight(float toolbarHeight);
+		void EndToolbarWindow();
 
-private:
-	float _toolbarHeight;
-};
+		void BeginMainWindow();
+		void EndMainWindow();
+
+	private:
+		float _toolbarHeight;
+	};
+}

@@ -3,23 +3,26 @@
 #include <ZEngine-Core/ImmediateUI/GUIDialog.h>
 #include <vector>
 
-class Editor;
-class GUITextField;
-struct ComponentInfo;
-
-class AddComponentPopup : public GUIDialog
+namespace ZEngine
 {
-public:
-	AddComponentPopup(Editor* editor);
-	~AddComponentPopup();
+	class Editor;
+	class GUITextField;
+	struct ComponentInfo;
 
-  void RegisterComponent(ComponentInfo component);
+	class AddComponentPopup : public GUIDialog
+	{
+	public:
+		AddComponentPopup(Editor* editor);
+		~AddComponentPopup();
 
-	void ProcessInput() override;
-	void RenderInWindow() override;
+		void RegisterComponent(ComponentInfo component);
 
-private:
-  Editor* _editor;
-	GUITextField* _searchField;
-  std::vector<ComponentInfo> _components;
-};
+		void ProcessInput() override;
+		void RenderInWindow() override;
+
+	private:
+		Editor* _editor;
+		GUITextField* _searchField;
+		std::vector<ComponentInfo> _components;
+	};
+}

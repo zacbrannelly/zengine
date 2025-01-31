@@ -14,8 +14,8 @@
 %include "Misc/Singleton.i"
 %include "Map/Objects/ZObject.i"
 %include "Misc/Factory.i"
-%include "Map/Objects/Entity.i"
 %include "Component/Component.i"
+%include "Map/Objects/Entity.i"
 %include "Component/Camera.i"
 %include "Component/Transform.i"
 %include "Component/AudioSource.i"
@@ -28,3 +28,8 @@
 %include "Math/Ray.i"
 %include "Map/Map.i"
 %include "Map/MapManager.i"
+
+// Add `using namespace ZEngine;` to the generated C++ code.
+%{
+  using namespace ZEngine;
+%}

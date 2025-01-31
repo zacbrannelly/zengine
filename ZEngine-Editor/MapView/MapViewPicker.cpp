@@ -7,6 +7,8 @@
 #include <stack>
 #include <set>
 
+using namespace ZEngine;
+
 MapViewPicker::MapViewPicker(Editor* editor, MapView* mapView) : _editor(editor), _mapView(mapView)
 {
 }

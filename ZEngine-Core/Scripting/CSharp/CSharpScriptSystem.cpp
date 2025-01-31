@@ -8,6 +8,8 @@
 #include <dlfcn.h>
 #endif
 
+using namespace ZEngine;
+
 #define RUNTIME_CONFIG_PATH "ZEngine-Core.runtimeconfig.json"
 
 #define INTEROP_ASSEMBLY_PATH "lib/ZEngine.Interop/ZEngine.Interop.dll"

@@ -14,6 +14,7 @@
 #include <sstream>
 
 using namespace std;
+using namespace ZEngine;
 
 MeshRendererInspector::MeshRendererInspector() 
 {

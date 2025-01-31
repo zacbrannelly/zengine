@@ -3,6 +3,8 @@
 
 #include <ZEngine-Core/Component/BoxCollider3D.h>
 
+using namespace ZEngine;
+
 BoxCollider3DInspector::BoxCollider3DInspector()
 {
 }

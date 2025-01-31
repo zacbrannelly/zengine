@@ -6,6 +6,7 @@
 #include <SDL.h>
 
 using namespace std;
+using namespace ZEngine;
 
 bool AudioSystem::Init()
 {

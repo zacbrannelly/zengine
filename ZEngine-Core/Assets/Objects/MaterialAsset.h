@@ -4,31 +4,33 @@
 #include <glm/glm.hpp>
 #include <nlohmann/json.hpp>
 
-class Material;
-
-class MaterialAsset : public Asset
+namespace ZEngine
 {
-public:
-	MaterialAsset(std::string name);
-	~MaterialAsset();
+	class Material;
 
-	bool Load(std::string path) override;
-	void Release() override;
-	Material* GetMaterial() const;
-
-	static ZObject* CreateInstance(std::string name, ObjectType type);
-	static ZObject* CreateDefaultInstance(std::string name, ObjectType type);
-
-	static ObjectType GetStaticType()
+	class MaterialAsset : public Asset
 	{
-		return MATERIAL_ASSET;
-	}
+	public:
+		MaterialAsset(std::string name);
+		~MaterialAsset();
 
-private:
-	void ReadTextures(nlohmann::json::array_t& values, Material* material);
-	void ReadUniforms(nlohmann::json::array_t& values, Material* material);
-	void ReadShader(nlohmann::json& identifier, Material* material);
+		bool Load(std::string path) override;
+		void Release() override;
+		Material* GetMaterial() const;
 
-	Material* _material;
-};
+		static ZObject* CreateInstance(std::string name, ObjectType type);
+		static ZObject* CreateDefaultInstance(std::string name, ObjectType type);
 
+		static ObjectType GetStaticType()
+		{
+			return MATERIAL_ASSET;
+		}
+
+	private:
+		void ReadTextures(nlohmann::json::array_t& values, Material* material);
+		void ReadUniforms(nlohmann::json::array_t& values, Material* material);
+		void ReadShader(nlohmann::json& identifier, Material* material);
+
+		Material* _material;
+	};
+}

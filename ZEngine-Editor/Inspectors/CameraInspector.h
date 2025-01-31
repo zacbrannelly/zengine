@@ -1,11 +1,14 @@
 #pragma once
 #include "Inspector.h"
-class CameraInspector : public Inspector
+
+namespace ZEngine
 {
-public:
-	CameraInspector();
-	~CameraInspector();
+	class CameraInspector : public Inspector
+	{
+	public:
+		CameraInspector();
+		~CameraInspector();
 
-	void RenderElement() override;
-};
-
+		void RenderElement() override;
+	};
+}

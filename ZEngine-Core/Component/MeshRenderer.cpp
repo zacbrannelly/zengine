@@ -5,6 +5,7 @@
 #include "../Rendering/MeshFactory.h"
 
 using namespace std;
+using namespace ZEngine;
 
 MeshRenderer::MeshRenderer() : Component("Mesh Renderer", ObjectType::MESH_RENDERER)
 {

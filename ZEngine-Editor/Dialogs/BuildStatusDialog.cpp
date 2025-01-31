@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+using namespace ZEngine;
+
 BuildStatusDialog::BuildStatusDialog(Editor* editor) : GUIDialog("Building...", 300, 100, true)
 {
   _editor = editor;

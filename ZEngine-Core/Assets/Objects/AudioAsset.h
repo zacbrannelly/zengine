@@ -4,26 +4,28 @@
 #include "../../Utilities/JsonHelpers.h"
 #include "../../Audio/AudioSystem.h"
 
-class AudioAsset : public Asset
+namespace ZEngine 
 {
-public:
-	AudioAsset(std::string name);
-	~AudioAsset();
-
-	bool Load(std::string path) override;
-	void Release() override;
-
-	const Sound& GetSound() const;
-
-private:
-	Sound _sound;
-
-public:
-	static ZObject* CreateInstance(std::string name, ObjectType type);
-
-	static ObjectType GetStaticType()
+	class AudioAsset : public Asset
 	{
-		return AUDIO_ASSET;
-	}
-};
+	public:
+		AudioAsset(std::string name);
+		~AudioAsset();
 
+		bool Load(std::string path) override;
+		void Release() override;
+
+		const Sound& GetSound() const;
+
+	private:
+		Sound _sound;
+
+	public:
+		static ZObject* CreateInstance(std::string name, ObjectType type);
+
+		static ObjectType GetStaticType()
+		{
+			return AUDIO_ASSET;
+		}
+	};
+}

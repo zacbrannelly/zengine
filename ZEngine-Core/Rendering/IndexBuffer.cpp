@@ -1,6 +1,7 @@
 #include "IndexBuffer.h"
 
 using namespace bgfx;
+using namespace ZEngine;
 
 IndexBuffer::IndexBuffer()
 {

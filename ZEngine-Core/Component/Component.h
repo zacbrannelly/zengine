@@ -2,30 +2,32 @@
 
 #include "../Map/Objects/ZObject.h"
 
-class Entity;
-
-class Component : public ZObject
+namespace ZEngine
 {
-public:
-	Component(std::string name, ObjectType type);
-	virtual ~Component();
+	class Entity;
 
-    // Required hooks
-	virtual void Init() = 0;
-	virtual void Update() = 0;
-	virtual void Render(int viewId) = 0;
-
-	// Optional hooks
-	virtual void OnDestroy() {}
-
-	virtual void SetOwner(Entity* owner);
-	virtual Entity* GetOwner() const;
-
-	static ObjectType GetStaticType()
+	class Component : public ZObject
 	{
-		return COMPONENT;
-	}
-private:
-	Entity* _owner;
-};
+	public:
+		Component(std::string name, ObjectType type);
+		virtual ~Component();
 
+			// Required hooks
+		virtual void Init() = 0;
+		virtual void Update() = 0;
+		virtual void Render(int viewId) = 0;
+
+		// Optional hooks
+		virtual void OnDestroy() {}
+
+		virtual void SetOwner(Entity* owner);
+		virtual Entity* GetOwner() const;
+
+		static ObjectType GetStaticType()
+		{
+			return COMPONENT;
+		}
+	private:
+		Entity* _owner;
+	};
+}

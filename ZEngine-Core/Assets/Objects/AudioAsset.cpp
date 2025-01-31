@@ -9,6 +9,7 @@
 
 using namespace std;
 using namespace nlohmann;
+using namespace ZEngine;
 
 AudioAsset::AudioAsset(string name) : Asset(name, AUDIO_ASSET)
 {

@@ -52,6 +52,8 @@
 #include "Gizmos/GizmoSystem.h"
 #include <ZEngine-Core/ImmediateUI/imgui-includes.h>
 
+using namespace ZEngine;
+
 Editor::Editor(Display* display) : _display(display), _selectedMap(nullptr), _selectedObject(nullptr), _project(nullptr)
 {
 	// Add Views

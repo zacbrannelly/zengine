@@ -4,39 +4,42 @@
 #include <ZEngine-Core/Map/Map.h>
 #include <ZEngine-Core/Map/Objects/Entity.h>
 
-class Project;
-class Display;
-class MapController;
-
-class Editor : public Container
+namespace ZEngine
 {
-public:
-	Editor(Display* display);
-	~Editor();
+	class Project;
+	class Display;
+	class MapController;
 
-	void Update() override;
-	void RequestClose() const;
+	class Editor : public Container
+	{
+	public:
+		Editor(Display* display);
+		~Editor();
 
-	void SetProject(Project* project);
-	Project* GetProject() const;
+		void Update() override;
+		void RequestClose() const;
 
-	void SetSelectedMap(Map* map);
-	Map* GetSelectedMap() const;
+		void SetProject(Project* project);
+		Project* GetProject() const;
 
-	void SetSelectedEntity(Entity* entity);
-	Entity* GetSelectedEntity() const;
+		void SetSelectedMap(Map* map);
+		Map* GetSelectedMap() const;
 
-	MapController* GetMapController() const;
+		void SetSelectedEntity(Entity* entity);
+		Entity* GetSelectedEntity() const;
 
-	Display* GetDisplay() const;
+		MapController* GetMapController() const;
 
-private:
-	Display* _display;
-	Project* _project;
-	Map* _selectedMap;
-	Entity* _selectedObject;
+		Display* GetDisplay() const;
 
-	MapController* _mapController;
+	private:
+		Display* _display;
+		Project* _project;
+		Map* _selectedMap;
+		Entity* _selectedObject;
 
-	std::future<bool> _buildFuture;
-};
+		MapController* _mapController;
+
+		std::future<bool> _buildFuture;
+	};
+}

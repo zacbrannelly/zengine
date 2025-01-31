@@ -2,25 +2,28 @@
 
 #include <ZEngine-Core/ImmediateUI/GUIDialog.h>
 
-class GUITextField;
-
-class NewFolderDialog : public GUIDialog
+namespace ZEngine
 {
-public:
-	NewFolderDialog(std::string basePath);
-	~NewFolderDialog();
+	class GUITextField;
 
-	std::string GetResultPath() const;
+	class NewFolderDialog : public GUIDialog
+	{
+	public:
+		NewFolderDialog(std::string basePath);
+		~NewFolderDialog();
 
-	void ProcessInput() override;
-	void RenderInWindow() override;
+		std::string GetResultPath() const;
 
-	void SetBase(std::string path);
-	const std::string& GetBase() const;
+		void ProcessInput() override;
+		void RenderInWindow() override;
 
-private:
-	bool Validate();
+		void SetBase(std::string path);
+		const std::string& GetBase() const;
 
-	std::string _basePath;
-	GUITextField* _nameField;
-};
+	private:
+		bool Validate();
+
+		std::string _basePath;
+		GUITextField* _nameField;
+	};
+}

@@ -7,17 +7,17 @@
 %include "std_string.i"
 %include "std_vector.i"
 
-%ignore InputManager::Init;
-%ignore InputManager::Reset;
-%ignore InputManager::Shutdown;
-%ignore InputManager::RegisterKeyCallback;
-%ignore InputManager::RegisterMousePosCallback;
-%ignore InputManager::RegisterMouseButtonCallback;
-%ignore InputManager::RemoveKeyCallback;
-%ignore InputManager::RemoveMousePosCallback;
-%ignore InputManager::RemoveMouseButtonCallback;
-%ignore Display;
+%ignore ZEngine::InputManager::Init;
+%ignore ZEngine::InputManager::Reset;
+%ignore ZEngine::InputManager::Shutdown;
+%ignore ZEngine::InputManager::RegisterKeyCallback;
+%ignore ZEngine::InputManager::RegisterMousePosCallback;
+%ignore ZEngine::InputManager::RegisterMouseButtonCallback;
+%ignore ZEngine::InputManager::RemoveKeyCallback;
+%ignore ZEngine::InputManager::RemoveMousePosCallback;
+%ignore ZEngine::InputManager::RemoveMouseButtonCallback;
+%ignore ZEngine::Display;
 
-%template(InputManagerSingleton) Singleton<InputManager>;
+%template(InputManagerSingleton) ZEngine::Singleton<ZEngine::InputManager>;
 
 %include "InputManager.h"

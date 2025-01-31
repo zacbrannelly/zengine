@@ -4,6 +4,8 @@
 #include <sstream>
 #include <TargetConditionals.h>
 
+using namespace ZEngine;
+
 DotnetRuntime::DotnetRuntime() : 
   _hostfxrLib(nullptr),
   _context(nullptr),

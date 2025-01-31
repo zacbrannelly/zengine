@@ -6,35 +6,38 @@
 
 #define GUITEXTFIELD_BUFFER_SIZE 1000
 
-class GUITextField : public GUIElement
+namespace ZEngine
 {
-public:
-	GUITextField(std::string label);
-	~GUITextField();
+	class GUITextField : public GUIElement
+	{
+	public:
+		GUITextField(std::string label);
+		~GUITextField();
 
-	void SetLabel(std::string label);
-	std::string GetLabel() const;
+		void SetLabel(std::string label);
+		std::string GetLabel() const;
 
-	void SetText(std::string text);
-	std::string GetText() const;
+		void SetText(std::string text);
+		std::string GetText() const;
 
-	void SetBufferSize(int size);
-	int GetButterSize() const;
+		void SetBufferSize(int size);
+		int GetButterSize() const;
 
-	void SetMultiline(bool isMulti);
-	bool IsMultiline() const;
+		void SetMultiline(bool isMulti);
+		bool IsMultiline() const;
 
-	void SetSize(float width, float height);
-	float GetWidth() const;
-	float GetHeight() const;
+		void SetSize(float width, float height);
+		float GetWidth() const;
+		float GetHeight() const;
 
-	void RenderElement() override;
-	GUIElementType GetType();
+		void RenderElement() override;
+		GUIElementType GetType();
 
-private:
-	std::string _label;
-	char* _buffer;
-	int _bufferSize;
-	bool _isMultiline;
-	ImVec2 _size;
-};
+	private:
+		std::string _label;
+		char* _buffer;
+		int _bufferSize;
+		bool _isMultiline;
+		ImVec2 _size;
+	};
+}

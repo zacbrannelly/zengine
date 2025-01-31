@@ -8,6 +8,7 @@
 #include "../Project/Project.h"
 
 using namespace nlohmann;
+using namespace ZEngine;
 
 Project* ProjectBuilder::CreateProject(std::string name, std::string projectDirectory)
 {

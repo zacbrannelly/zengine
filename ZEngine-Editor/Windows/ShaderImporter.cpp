@@ -9,6 +9,8 @@
 #include <ZEngine-Core/Assets/AssetCatalog.h>
 #include <nlohmann/json.hpp>
 
+using namespace ZEngine;
+
 ShaderImporter::ShaderImporter(Container* owner) : ShaderImporter(owner, "\0")
 {
 	

@@ -3,20 +3,23 @@
 #include "../../Misc/Singleton.h"
 #include <nlohmann/json.hpp>
 
-template<typename T>
-class ComponentImporter : public Singleton<T>
+namespace ZEngine
 {
-public:
-	static ZObject* Import(std::string name, nlohmann::json& values)
+	template<typename T>
+	class ComponentImporter : public Singleton<T>
 	{
-		return T::GetInstance()->ImportImpl(name, values);
-	}
+	public:
+		static ZObject* Import(std::string name, nlohmann::json& values)
+		{
+			return T::GetInstance()->ImportImpl(name, values);
+		}
 
-	static void Init()
-	{
-		T::GetInstance();
-	}
+		static void Init()
+		{
+			T::GetInstance();
+		}
 
-protected:
-	virtual ZObject* ImportImpl(std::string name, nlohmann::json& values) = 0;
-};
+	protected:
+		virtual ZObject* ImportImpl(std::string name, nlohmann::json& values) = 0;
+	};
+}

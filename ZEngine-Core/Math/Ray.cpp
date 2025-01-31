@@ -3,6 +3,8 @@
 #include "../Map/Objects/Entity.h"
 #include "../Component/Transform.h"
 
+using namespace ZEngine;
+
 Ray Ray::FromScreenPos(int mouseX, int mouseY, const Camera* camera)
 {
   // Convert screen coordinates to Normalized Device Coordinates (NDC).

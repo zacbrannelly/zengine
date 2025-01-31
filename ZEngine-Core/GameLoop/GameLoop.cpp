@@ -3,6 +3,8 @@
 #include "../Display/Display.h"
 #include "../Input/InputManager.h"
 
+using namespace ZEngine;
+
 GameLoop::GameLoop(
   Display* display,
   double dt,

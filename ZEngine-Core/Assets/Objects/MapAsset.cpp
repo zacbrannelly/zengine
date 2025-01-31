@@ -12,6 +12,7 @@
 
 using namespace std;
 using namespace nlohmann;
+using namespace ZEngine;
 
 MapAsset::MapAsset(string name) : Asset(name, ObjectType::MAP_ASSET)
 {

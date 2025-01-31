@@ -2,6 +2,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 using namespace std;
+using namespace ZEngine;
 
 Transform::Transform() : Component("Transform", ObjectType::TRANSFORM)
 {

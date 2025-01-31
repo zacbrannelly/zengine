@@ -6,6 +6,7 @@
 #include <locale>
 
 using namespace std;
+using namespace ZEngine;
 
 vector<string> StringUtil::Split(string data, char delim)
 {

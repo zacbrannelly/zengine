@@ -3,6 +3,8 @@
 #include "Graphics.h"
 #include "StandardShaders.h"
 
+using namespace ZEngine;
+
 Material::Material(std::string name) : ZObject(name, ObjectType::MATERIAL)
 {
 	RegisterDerivedType(MATERIAL);

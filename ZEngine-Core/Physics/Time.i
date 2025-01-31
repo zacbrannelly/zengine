@@ -4,10 +4,10 @@
   #include <Physics/Time.h>
 %}
 
-%ignore Time::Init;
-%ignore Time::Tick;
-%ignore Time::Shutdown;
+%ignore ZEngine::Time::Init;
+%ignore ZEngine::Time::Tick;
+%ignore ZEngine::Time::Shutdown;
 
-%template(TimeSingleton) Singleton<Time>;
+%template(TimeSingleton) ZEngine::Singleton<ZEngine::Time>;
 
 %include "Time.h"

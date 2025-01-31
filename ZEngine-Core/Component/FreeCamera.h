@@ -2,27 +2,30 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-class InputManager;
-
-class FreeCamera : public Camera
+namespace ZEngine
 {
-public:
-  FreeCamera();
-  ~FreeCamera();
+  class InputManager;
 
-  void Init() override;
-  void Update() override;
+  class FreeCamera : public Camera
+  {
+  public:
+    FreeCamera();
+    ~FreeCamera();
 
-  void SetSpeed(float speed);
-  float GetSpeed() const;
+    void Init() override;
+    void Update() override;
 
-  void SetSensitivity(float sensitivity);
-  float GetSensitivity() const;
+    void SetSpeed(float speed);
+    float GetSpeed() const;
 
-private:
-  float _speed;
-  float _sensitivity;
-  InputManager* _inputManager;
-  bool _enabled;
-  glm::quat _originalRotation;
-};
+    void SetSensitivity(float sensitivity);
+    float GetSensitivity() const;
+
+  private:
+    float _speed;
+    float _sensitivity;
+    InputManager* _inputManager;
+    bool _enabled;
+    glm::quat _originalRotation;
+  };
+}

@@ -3,6 +3,8 @@
 
 #include <ZEngine-Core/Component/CapsuleCollider3D.h>
 
+using namespace ZEngine;
+
 CapsuleCollider3DInspector::CapsuleCollider3DInspector()
 {
 }

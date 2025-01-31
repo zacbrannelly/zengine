@@ -7,6 +7,7 @@
 #include <algorithm>
 
 using namespace std;
+using namespace ZEngine;
 
 Map::Map(std::string name) : ZObject(name, ObjectType::MAP)
 {

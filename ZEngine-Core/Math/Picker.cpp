@@ -5,6 +5,8 @@
 #include "../Map/Objects/Entity.h"
 #include "../Component/Transform.h"
 
+using namespace ZEngine;
+
 const AABB* Picker::PickAABB(const std::vector<AABB>& aabbs, const Ray& ray)
 {
   const AABB* pickedBox = nullptr;

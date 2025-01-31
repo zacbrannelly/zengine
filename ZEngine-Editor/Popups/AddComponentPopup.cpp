@@ -11,6 +11,7 @@
 #include <ZEngine-Core/Assets/AssetCatalog.h>
 #include <ZEngine-Core/Assets/Objects/CSharpScriptAsset.h>
 
+using namespace ZEngine;
 
 AddComponentPopup::AddComponentPopup(Editor* editor) : GUIDialog("Add Component", 300, 200, false)
 {

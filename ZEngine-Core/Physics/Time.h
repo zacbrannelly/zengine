@@ -1,23 +1,25 @@
 #pragma once
 #include "../Misc/Singleton.h"
 
-class Time : public Singleton<Time>
+namespace ZEngine
 {
-public:
-	void Init();
-	void Shutdown();
+	class Time : public Singleton<Time>
+	{
+	public:
+		void Init();
+		void Shutdown();
 
-	void Tick();
+		void Tick();
 
-	double GetStartTime() const;
-	double GetTime() const;
-	double GetFPS() const;
-	double GetDeltaTime() const;
+		double GetStartTime() const;
+		double GetTime() const;
+		double GetFPS() const;
+		double GetDeltaTime() const;
 
-private:
-	double _fps;
-	double _deltaTime;
-	double _timeStarted;
-	double _lastTick;
-};
-
+	private:
+		double _fps;
+		double _deltaTime;
+		double _timeStarted;
+		double _lastTick;
+	};
+}

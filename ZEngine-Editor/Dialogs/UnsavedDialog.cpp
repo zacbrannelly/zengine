@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+using namespace ZEngine;
+
 UnsavedDialog::UnsavedDialog()
 {
 	_shouldClose = false;

@@ -3,11 +3,14 @@
 #include "Inspector.h"
 #include <glm/glm.hpp>
 
-class SphereCollider3DInspector : public Inspector
+namespace ZEngine
 {
-public:
-	SphereCollider3DInspector();
-	~SphereCollider3DInspector();
+	class SphereCollider3DInspector : public Inspector
+	{
+	public:
+		SphereCollider3DInspector();
+		~SphereCollider3DInspector();
 
-	void RenderElement() override;
-};
+		void RenderElement() override;
+	};
+}

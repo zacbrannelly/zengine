@@ -6,6 +6,7 @@
 #include <nlohmann/json.hpp>
 
 using namespace nlohmann;
+using namespace ZEngine;
 
 bool MaterialBuilder::BuildToFile(const std::string& path, const MaterialEditorData& data)
 {

@@ -5,6 +5,7 @@
 #include <fstream>
 
 using namespace std;
+using namespace ZEngine;
 
 File::File(string path)
 {

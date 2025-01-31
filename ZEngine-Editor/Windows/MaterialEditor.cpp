@@ -14,6 +14,8 @@
 #include <ZEngine-Core/Rendering/Material.h>
 #include <ZEngine-Core/Rendering/Shader.h>
 
+using namespace ZEngine;
+
 MaterialEditor::MaterialEditor(std::string assetPath) : GUIWindow("Material Editor - " + assetPath, 500, 400, false)
 {
 	_assetFile = new File(assetPath);

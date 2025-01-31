@@ -7,6 +7,7 @@
 #include <nlohmann/json.hpp>
 
 using namespace std;
+using namespace ZEngine;
 
 AssetCatalog::AssetCatalog()
 {

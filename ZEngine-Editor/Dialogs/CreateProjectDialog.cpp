@@ -12,6 +12,7 @@
 #include "../Builders/ProjectBuilder.h"
 #include "../Editor.h"
 
+using namespace ZEngine;
 
 CreateProjectDialog::CreateProjectDialog(Editor* editor, std::string basePath) : GUIDialog("New Project", 500, 200, true)
 {

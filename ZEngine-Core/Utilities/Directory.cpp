@@ -7,6 +7,7 @@
 #include <filesystem>
 
 using namespace std;
+using namespace ZEngine;
 
 Directory::Directory(string path)
 {

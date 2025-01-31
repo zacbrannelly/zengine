@@ -1,13 +1,16 @@
 #pragma once
 #include <vector>
 
-class Component;
-
-class BaseGizmoRenderer
+namespace ZEngine
 {
-public:
-  BaseGizmoRenderer() = default;
-  virtual ~BaseGizmoRenderer() = default;
+  class Component;
 
-  virtual void Render(int viewId, const std::vector<Component*>& components) = 0;
-};
+  class BaseGizmoRenderer
+  {
+  public:
+    BaseGizmoRenderer() = default;
+    virtual ~BaseGizmoRenderer() = default;
+
+    virtual void Render(int viewId, const std::vector<Component*>& components) = 0;
+  };
+}

@@ -3,51 +3,54 @@
 #include <vector>
 #include <ZEngine-Core/ImmediateUI/GUIWindow.h>
 
-class UnsavedDialog;
-class GUITextField;
-
-struct ShaderEditorPass
+namespace ZEngine
 {
-	std::string originalVertSource;
-	std::string originalFragSource;
-	std::string originalVarySource;
+	class UnsavedDialog;
+	class GUITextField;
 
-	std::string workingVertSource;
-	std::string workingFragSource;
-	std::string workingVarySource;
+	struct ShaderEditorPass
+	{
+		std::string originalVertSource;
+		std::string originalFragSource;
+		std::string originalVarySource;
 
-	std::string vertSourcePath;
-	std::string fragSourcePath;
-	std::string varySourcePath;
-};
+		std::string workingVertSource;
+		std::string workingFragSource;
+		std::string workingVarySource;
 
-class ShaderEditor : public GUIWindow
-{
-public:
-	ShaderEditor(std::string assetPath);
-	~ShaderEditor();
+		std::string vertSourcePath;
+		std::string fragSourcePath;
+		std::string varySourcePath;
+	};
 
-	void ProcessInput() override;
-	void RenderInWindow() override;
-	GUIElementType GetType() override;
+	class ShaderEditor : public GUIWindow
+	{
+	public:
+		ShaderEditor(std::string assetPath);
+		~ShaderEditor();
 
-	bool AllowClose() override;
+		void ProcessInput() override;
+		void RenderInWindow() override;
+		GUIElementType GetType() override;
 
-	const std::string& GetAssetPath() const;
+		bool AllowClose() override;
 
-private:
-	bool RetrieveSourcePaths();
-	bool ReadSourceFiles();
-	bool Save();
-	void HotReload();
+		const std::string& GetAssetPath() const;
 
-	std::string _assetPath;
-	int _currentPass;
-	std::vector<ShaderEditorPass> _passes;
-	bool _showUnsavedDialog;
-	UnsavedDialog* _unsavedDialog;
+	private:
+		bool RetrieveSourcePaths();
+		bool ReadSourceFiles();
+		bool Save();
+		void HotReload();
 
-	GUITextField* _vertSourceField;
-	GUITextField* _fragSourceField;
-	GUITextField* _varySourceField;
-};
+		std::string _assetPath;
+		int _currentPass;
+		std::vector<ShaderEditorPass> _passes;
+		bool _showUnsavedDialog;
+		UnsavedDialog* _unsavedDialog;
+
+		GUITextField* _vertSourceField;
+		GUITextField* _fragSourceField;
+		GUITextField* _varySourceField;
+	};
+}

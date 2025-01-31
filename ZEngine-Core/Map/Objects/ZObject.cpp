@@ -1,5 +1,7 @@
 #include "ZObject.h"
 
+using namespace ZEngine;
+
 ZObject::ZObject(std::string name, ObjectType type): _name(name), _type(type)
 {
 }

@@ -5,23 +5,25 @@
 #include <ZEngine-Core/Map/Objects/ZObject.h>
 #include <map>
 
-class Editor;
-class AddComponentPopup;
-
-class InspectorWindow : public GUIWindow
+namespace ZEngine
 {
-public:
-	InspectorWindow(Editor* context);
-	~InspectorWindow();
+	class Editor;
+	class AddComponentPopup;
 
-	void ProcessInput() override;
-	void RenderInWindow() override;
+	class InspectorWindow : public GUIWindow
+	{
+	public:
+		InspectorWindow(Editor* context);
+		~InspectorWindow();
 
-private:
-	Inspector* GetInspector(ObjectType type);
+		void ProcessInput() override;
+		void RenderInWindow() override;
 
-	Editor* _context;
-	AddComponentPopup* _addComponentPopup;
-	std::map<ObjectType, Inspector*> _inspectors;
-};
+	private:
+		Inspector* GetInspector(ObjectType type);
 
+		Editor* _context;
+		AddComponentPopup* _addComponentPopup;
+		std::map<ObjectType, Inspector*> _inspectors;
+	};
+}

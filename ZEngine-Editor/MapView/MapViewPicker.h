@@ -3,24 +3,27 @@
 #include <vector>
 #include <map>
 
-class Editor;
-class MapView;
-class Camera;
-class Entity;
-class MeshRenderer;
-
-class MapViewPicker
+namespace ZEngine
 {
-public:
-  MapViewPicker(Editor* editor, MapView* mapView);
-  ~MapViewPicker();
+  class Editor;
+  class MapView;
+  class Camera;
+  class Entity;
+  class MeshRenderer;
 
-  void UpdateAABBs();
-  Entity* Pick(int mouseX, int mouseY, const Camera* camera);
+  class MapViewPicker
+  {
+  public:
+    MapViewPicker(Editor* editor, MapView* mapView);
+    ~MapViewPicker();
 
-private:
-  Picker _picker;
-  Editor* _editor;
-  MapView* _mapView;
-  std::map<MeshRenderer*, AABB> _meshBoundingBoxMap;
-};
+    void UpdateAABBs();
+    Entity* Pick(int mouseX, int mouseY, const Camera* camera);
+
+  private:
+    Picker _picker;
+    Editor* _editor;
+    MapView* _mapView;
+    std::map<MeshRenderer*, AABB> _meshBoundingBoxMap;
+  };
+}

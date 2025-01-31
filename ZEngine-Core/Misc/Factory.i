@@ -6,12 +6,12 @@
 
 %include "std_string.i"
 
-%ignore Factory::Init;
-%ignore Factory::RegisterType;
-%ignore Factory::RegisterCopyType;
-%ignore Factory::RegisterTypeImporter;
+%ignore ZEngine::Factory::Init;
+%ignore ZEngine::Factory::RegisterType;
+%ignore ZEngine::Factory::RegisterCopyType;
+%ignore ZEngine::Factory::RegisterTypeImporter;
 
-%typemap(cscode) Factory %{
+%typemap(cscode) ZEngine::Factory %{
   public static T CreateInstance<T>(string name) where T : ZObject
   {
     ObjectType type = ObjectTypeResolver.ResolveObjectType<T>();

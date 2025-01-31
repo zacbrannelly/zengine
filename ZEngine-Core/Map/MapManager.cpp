@@ -1,6 +1,8 @@
 #include "MapManager.h"
 #include "Map.h"
 
+using namespace ZEngine;
+
 MapManager::MapManager() : Singleton<MapManager>()
 {
 	_currentMap = nullptr;

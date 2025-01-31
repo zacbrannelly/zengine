@@ -6,6 +6,6 @@
 
 %include "std_string.i"
 
-%ignore Camera::GetRenderTexture;
+%ignore ZEngine::Camera::GetRenderTexture;
 
 %include "Camera.h"

@@ -2,6 +2,7 @@
 #include <ZEngine-Core/Component/Transform.h>
 
 using namespace nlohmann;
+using namespace ZEngine;
 
 json TransformExporter::ExportImpl(ZObject* object)
 {

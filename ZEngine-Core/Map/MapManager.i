@@ -7,6 +7,6 @@
 %include "std_string.i"
 %include "std_vector.i"
 
-%template(MapManagerSingleton) Singleton<MapManager>;
+%template(MapManagerSingleton) ZEngine::Singleton<ZEngine::MapManager>;
 
 %include "MapManager.h"

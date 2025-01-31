@@ -5,6 +5,7 @@
 #include "../Assets/AssetCatalog.h"
 
 using namespace std;
+using namespace ZEngine;
 
 AudioSource::AudioSource() : Component("AudioSource", AUDIO_SOURCE)
 {

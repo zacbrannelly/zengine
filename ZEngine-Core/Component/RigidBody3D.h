@@ -10,73 +10,76 @@ namespace physx
   class PxRigidBody;
 }
 
-class RigidBody3D : public Component
+namespace ZEngine
 {
-public:
-	RigidBody3D();
-	~RigidBody3D();
-
-	void Init() override;
-	void Update() override;
-	void Render(int viewId) override;
-  void OnDestroy() override;
-
-  void OnColliderModified();
-
-  void SetMass(float mass);
-  float GetMass() const;
-
-  void SetLinearDamping(float damping);
-  float GetLinearDamping() const;
-
-  void SetAngularDamping(float damping);
-  float GetAngularDamping() const;
-
-  void SetUseGravity(bool useGravity);
-  bool GetUseGravity() const;
-
-  void SetIsKinematic(bool isKinematic);
-  bool GetIsKinematic() const;
-
-  void SetKinematicTarget(const glm::vec3& target);
-  glm::vec3 GetKinematicTarget() const;
-
-  void ApplyForce(const glm::vec3& force);
-  void ApplyForceAtPosition(const glm::vec3& force, const glm::vec3& position);
-  void ApplyTorque(const glm::vec3& torque);
-
-  void ApplyImpulse(const glm::vec3& impulse);
-  void ApplyImpulseAtPosition(const glm::vec3& impulse, const glm::vec3& position);
-  void ApplyTorqueImpulse(const glm::vec3& torqueImpulse);
-
-	static ZObject* CreateInstance(std::string name, ObjectType type);
-	static ZObject* Copy(std::string name, ZObject* object);
-
-  static ObjectType GetStaticType()
+  class RigidBody3D : public Component
   {
-    return RIGID_BODY_3D;
-  }
+  public:
+    RigidBody3D();
+    ~RigidBody3D();
 
-#ifndef SWIG
-  // Allow serialization / deserialization
-  JSON_SCHEMA_BEGIN(RigidBody3D)
-    JSON_MAP_TO_SETTER_OPTIONAL (mass,           SetMass,           float)
-    JSON_MAP_TO_SETTER_OPTIONAL (linearDamping,  SetLinearDamping,  float)
-    JSON_MAP_TO_SETTER_OPTIONAL (angularDamping, SetAngularDamping, float)
-    JSON_MAP_TO_SETTER_OPTIONAL (useGravity,     SetUseGravity,     bool)
-    JSON_MAP_TO_SETTER_OPTIONAL (isKinematic,    SetIsKinematic,    bool)
-  JSON_SCHEMA_END()
-#endif
+    void Init() override;
+    void Update() override;
+    void Render(int viewId) override;
+    void OnDestroy() override;
 
-private:
-  void RemoveAllShapes();
-  void RebuildActorShapes();
+    void OnColliderModified();
 
-  physx::PxRigidBody* _rigidBody;
-  float _mass;
-  float _linearDamping;
-  float _angularDamping;
-  bool _useGravity;
-  bool _isKinematic;
-  glm::vec3 _kinematicTarget;
-};
+    void SetMass(float mass);
+    float GetMass() const;
+
+    void SetLinearDamping(float damping);
+    float GetLinearDamping() const;
+
+    void SetAngularDamping(float damping);
+    float GetAngularDamping() const;
+
+    void SetUseGravity(bool useGravity);
+    bool GetUseGravity() const;
+
+    void SetIsKinematic(bool isKinematic);
+    bool GetIsKinematic() const;
+
+    void SetKinematicTarget(const glm::vec3& target);
+    glm::vec3 GetKinematicTarget() const;
+
+    void ApplyForce(const glm::vec3& force);
+    void ApplyForceAtPosition(const glm::vec3& force, const glm::vec3& position);
+    void ApplyTorque(const glm::vec3& torque);
+
+    void ApplyImpulse(const glm::vec3& impulse);
+    void ApplyImpulseAtPosition(const glm::vec3& impulse, const glm::vec3& position);
+    void ApplyTorqueImpulse(const glm::vec3& torqueImpulse);
+
+    static ZObject* CreateInstance(std::string name, ObjectType type);
+    static ZObject* Copy(std::string name, ZObject* object);
+
+    static ObjectType GetStaticType()
+    {
+      return RIGID_BODY_3D;
+    }
+
+  #ifndef SWIG
+    // Allow serialization / deserialization
+    JSON_SCHEMA_BEGIN(RigidBody3D)
+      JSON_MAP_TO_SETTER_OPTIONAL (mass,           SetMass,           float)
+      JSON_MAP_TO_SETTER_OPTIONAL (linearDamping,  SetLinearDamping,  float)
+      JSON_MAP_TO_SETTER_OPTIONAL (angularDamping, SetAngularDamping, float)
+      JSON_MAP_TO_SETTER_OPTIONAL (useGravity,     SetUseGravity,     bool)
+      JSON_MAP_TO_SETTER_OPTIONAL (isKinematic,    SetIsKinematic,    bool)
+    JSON_SCHEMA_END()
+  #endif
+
+  private:
+    void RemoveAllShapes();
+    void RebuildActorShapes();
+
+    physx::PxRigidBody* _rigidBody;
+    float _mass;
+    float _linearDamping;
+    float _angularDamping;
+    bool _useGravity;
+    bool _isKinematic;
+    glm::vec3 _kinematicTarget;
+  };
+}

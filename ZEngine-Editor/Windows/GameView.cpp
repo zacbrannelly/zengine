@@ -10,6 +10,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <ZEngine-Core/ImmediateUI/imgui-includes.h>
 
+using namespace ZEngine;
+
 GameView::GameView(Editor* editor) 
 	: GUIWindow("Game View", 1024, 600, false),
 	  _viewImage(nullptr),

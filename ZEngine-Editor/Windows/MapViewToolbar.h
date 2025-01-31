@@ -3,23 +3,26 @@
 #include <ZEngine-Core/ImmediateUI/Container.h>
 #include <ZEngine-Core/ImmediateUI/imgui-includes.h>
 
-class Editor;
-class MapView;
-
-class MapViewToolbar : public Container
+namespace ZEngine
 {
-public:
-  MapViewToolbar(Editor* editor, MapView* mapView);
-  ~MapViewToolbar();
+  class Editor;
+  class MapView;
 
-  ImGuizmo::OPERATION GetObjectGizmoOp() const;
-  ImGuizmo::MODE GetObjectGizmoMode() const;
-    
-  void RenderElement() override;
+  class MapViewToolbar : public Container
+  {
+  public:
+    MapViewToolbar(Editor* editor, MapView* mapView);
+    ~MapViewToolbar();
 
-private:
-  Editor* _editor;
-  MapView* _mapView;
-  ImGuizmo::OPERATION _objectGizmoOp;
-  ImGuizmo::MODE _objectGizmoMode;
-};
+    ImGuizmo::OPERATION GetObjectGizmoOp() const;
+    ImGuizmo::MODE GetObjectGizmoMode() const;
+      
+    void RenderElement() override;
+
+  private:
+    Editor* _editor;
+    MapView* _mapView;
+    ImGuizmo::OPERATION _objectGizmoOp;
+    ImGuizmo::MODE _objectGizmoMode;
+  };
+}

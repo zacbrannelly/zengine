@@ -2,8 +2,10 @@
 
 #include "../Entity.h"
 
-class Cube
+namespace ZEngine
 {
-	static ZObject* CreateInstance(std::string name, ObjectType type);
-};
-
+	class Cube
+	{
+		static ZObject* CreateInstance(std::string name, ObjectType type);
+	};
+}

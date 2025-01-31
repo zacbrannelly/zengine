@@ -15,6 +15,8 @@
 
 #include <iostream>
 
+using namespace ZEngine;
+
 MapView::MapView(Editor* editor) : GUIWindow("Map View", 1024, 850, false), _cameraInFlight(false)
 {
 	_editor = editor;

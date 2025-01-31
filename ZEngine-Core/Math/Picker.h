@@ -3,13 +3,16 @@
 #include <glm/glm.hpp>
 #include <vector>
 
-class AABB;
-class Camera;
-class Ray;
-
-class Picker 
+namespace ZEngine
 {
-public:
-  const AABB* PickAABB(const std::vector<AABB>& aabbs, const Ray& ray);
-  bool RayIntersectsAABB(const Ray& ray, const AABB& box, float& intersectionDistance);
-};
+  class AABB;
+  class Camera;
+  class Ray;
+
+  class Picker 
+  {
+  public:
+    const AABB* PickAABB(const std::vector<AABB>& aabbs, const Ray& ray);
+    bool RayIntersectsAABB(const Ray& ray, const AABB& box, float& intersectionDistance);
+  };
+}

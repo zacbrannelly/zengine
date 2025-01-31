@@ -3,16 +3,18 @@
 #include <bgfx/bgfx.h>
 #include "BufferHandle.h"
 
-class VertexBuffer : public BufferHandle<bgfx::VertexBufferHandle>
+namespace ZEngine
 {
-public:
-	VertexBuffer(bgfx::VertexLayout decl);
-	virtual ~VertexBuffer();
+	class VertexBuffer : public BufferHandle<bgfx::VertexBufferHandle>
+	{
+	public:
+		VertexBuffer(bgfx::VertexLayout decl);
+		virtual ~VertexBuffer();
 
-	virtual void Upload(const void* data, unsigned int size, bool copy);
+		virtual void Upload(const void* data, unsigned int size, bool copy);
 
-	bgfx::VertexLayout GetDecl() const;
-private:
-	bgfx::VertexLayout _decl;
-};
-
+		bgfx::VertexLayout GetDecl() const;
+	private:
+		bgfx::VertexLayout _decl;
+	};
+}

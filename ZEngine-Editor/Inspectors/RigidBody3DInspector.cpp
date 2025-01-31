@@ -3,6 +3,8 @@
 
 #include <ZEngine-Core/Component/RigidBody3D.h>
 
+using namespace ZEngine;
+
 RigidBody3DInspector::RigidBody3DInspector()
 {
 }

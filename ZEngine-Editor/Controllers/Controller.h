@@ -1,17 +1,20 @@
 #include <ZEngine-Core/ImmediateUI/GUIElement.h>
 
-class Controller : public GUIElement
+namespace ZEngine
 {
-public:
-  virtual void Update() override = 0;
-
-  virtual GUIElementType GetType() override
+  class Controller : public GUIElement
   {
-    return GUI_TYPE_CONTROLLER;
-  }
+  public:
+    virtual void Update() override = 0;
 
-  virtual void RenderElement() override
-  {
-    // Controllers don't typically render
-  }
-};
+    virtual GUIElementType GetType() override
+    {
+      return GUI_TYPE_CONTROLLER;
+    }
+
+    virtual void RenderElement() override
+    {
+      // Controllers don't typically render
+    }
+  };
+}

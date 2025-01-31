@@ -17,6 +17,8 @@
 
 #include <iostream>
 
+using namespace ZEngine;
+
 Display::Display(std::string title, int width, int height) : _title(title), _width(width), _height(height)
 {
 #if !TARGET_OS_IPHONE

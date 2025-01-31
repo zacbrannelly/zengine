@@ -2,6 +2,7 @@
 #include "../Map/Objects/Entity.h"
 
 using namespace std;
+using namespace ZEngine;
 
 Component::Component(string name, ObjectType type) : ZObject(name, type), _owner(nullptr)
 {

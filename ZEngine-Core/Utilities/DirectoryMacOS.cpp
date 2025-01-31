@@ -12,6 +12,7 @@
 #define MAX_PATH 260
 
 using namespace std;
+using namespace ZEngine;
 
 bool Directory::Create()
 {

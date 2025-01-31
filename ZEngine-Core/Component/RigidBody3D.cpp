@@ -14,6 +14,7 @@
 
 using namespace std;
 using namespace physx;
+using namespace ZEngine;
 
 RigidBody3D::RigidBody3D() : Component("Rigid Body 3D", ObjectType::RIGID_BODY_3D), _rigidBody(nullptr)
 {

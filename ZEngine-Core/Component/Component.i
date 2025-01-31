@@ -6,11 +6,11 @@
 
 %include "std_string.i"
 
-%ignore Component::Init;
-%ignore Component::Update;
-%ignore Component::Render;
+%ignore ZEngine::Component::Init;
+%ignore ZEngine::Component::Update;
+%ignore ZEngine::Component::Render;
 
-%typemap(cscode) Component %{
+%typemap(cscode) ZEngine::Component %{
   // Expose a public constructor to C# that takes a pointer to an existing C++ object.
   // TODO: Remove this if its not used.
   public Component(global::System.IntPtr cPtr) : this(cPtr, false) {}

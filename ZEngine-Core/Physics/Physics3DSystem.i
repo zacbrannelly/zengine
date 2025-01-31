@@ -6,15 +6,15 @@
 
 %include "std_string.i"
 
-%ignore Physics3DSystem::Init;
-%ignore Physics3DSystem::Update;
-%ignore Physics3DSystem::Shutdown;
-%ignore Physics3DSystem::GetPhysics;
-%ignore Physics3DSystem::GetScene;
-%ignore Physics3DSystem::GetCooking;
-%ignore Physics3DSystem::GetMaterial;
-%ignore Physics3DSystem::PushScene;
-%ignore Physics3DSystem::PopScene;
+%ignore ZEngine::Physics3DSystem::Init;
+%ignore ZEngine::Physics3DSystem::Update;
+%ignore ZEngine::Physics3DSystem::Shutdown;
+%ignore ZEngine::Physics3DSystem::GetPhysics;
+%ignore ZEngine::Physics3DSystem::GetScene;
+%ignore ZEngine::Physics3DSystem::GetCooking;
+%ignore ZEngine::Physics3DSystem::GetMaterial;
+%ignore ZEngine::Physics3DSystem::PushScene;
+%ignore ZEngine::Physics3DSystem::PopScene;
 
 %ignore physx::PxDefaultAllocator;
 %ignore physx::PxDefaultErrorCallback;
@@ -25,6 +25,6 @@
 %ignore physx::PxMaterial;
 %ignore physx::PxCooking;
 
-%template(Physics3DSystemSingleton) Singleton<Physics3DSystem>;
+%template(Physics3DSystemSingleton) ZEngine::Singleton<ZEngine::Physics3DSystem>;
 
 %include "Physics3DSystem.h"

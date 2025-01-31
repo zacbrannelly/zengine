@@ -1,15 +1,20 @@
-class Shader;
+#pragma once
 
-class StandardShaders
+namespace ZEngine
 {
-public:
-  static void Init();
-  static void Release();
+  class Shader;
 
-  static Shader* GetUnlitColorShader();
+  class StandardShaders
+  {
+  public:
+    static void Init();
+    static void Release();
 
-private:
-  static Shader* _unlitColorShader;
+    static Shader* GetUnlitColorShader();
 
-  static void LoadUnlitColorShader();
-};
+  private:
+    static Shader* _unlitColorShader;
+
+    static void LoadUnlitColorShader();
+  };
+}

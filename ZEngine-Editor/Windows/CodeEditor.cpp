@@ -8,6 +8,7 @@
 #include <iostream>
 
 using namespace std;
+using namespace ZEngine;
 
 CodeEditor::CodeEditor(string path) : GUIWindow("Code Editor", 600, 500, false)
 {

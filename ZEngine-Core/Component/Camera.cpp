@@ -6,6 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 using namespace std;
+using namespace ZEngine;
 
 Camera::Camera() : Component("Camera", ObjectType::CAMERA)
 {

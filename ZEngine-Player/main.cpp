@@ -15,6 +15,8 @@
 #include "../ZEngine-Core/Scripting/CSharp/CSharpScriptSystem.h"
 #include "../ZEngine-Core/GameLoop/GameLoop.h"
 
+using namespace ZEngine;
+
 int main(int argc, char* argv[])
 {
 	// Initialize the factory (register the types)

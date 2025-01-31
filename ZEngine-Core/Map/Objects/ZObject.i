@@ -7,10 +7,10 @@
 %include "std_string.i"
 %include "std_vector.i"
 
-%ignore ZObject::CreateInstance;
-%ignore ZObject::GetStaticType;
+%ignore ZEngine::ZObject::CreateInstance;
+%ignore ZEngine::ZObject::GetStaticType;
 
-%typemap(cscode) ZObject %{
+%typemap(cscode) ZEngine::ZObject %{
   // Empty constructor to allow for creation without a pointer.
   internal ZObject() {
     swigCMemOwn = false;

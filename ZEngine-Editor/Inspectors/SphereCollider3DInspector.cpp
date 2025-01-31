@@ -3,6 +3,8 @@
 
 #include <ZEngine-Core/Component/SphereCollider3D.h>
 
+using namespace ZEngine;
+
 SphereCollider3DInspector::SphereCollider3DInspector()
 {
 }

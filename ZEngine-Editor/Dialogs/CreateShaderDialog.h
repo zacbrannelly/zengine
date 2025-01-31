@@ -2,31 +2,34 @@
 
 #include <ZEngine-Core/ImmediateUI/GUIDialog.h>
 
-class GUITextField;
-class BrowserDialog;
-
-class CreateShaderDialog : public GUIDialog
+namespace ZEngine
 {
-public:
-	CreateShaderDialog(std::string basePath = "./");
-	~CreateShaderDialog();
+	class GUITextField;
+	class BrowserDialog;
 
-	void ProcessInput() override;
-	void RenderInWindow() override;
+	class CreateShaderDialog : public GUIDialog
+	{
+	public:
+		CreateShaderDialog(std::string basePath = "./");
+		~CreateShaderDialog();
 
-private:
-	std::string GenerateVertexCode() const;
-	std::string GenerateFragmentCode() const;
-	std::string GenerateVaryingDefCode() const;
-	std::string GenerateJSON() const;
+		void ProcessInput() override;
+		void RenderInWindow() override;
 
-	bool Validate();
-	bool ValidatePath(const std::string& path, std::string prefExtension);
-	bool Create(bool import);
+	private:
+		std::string GenerateVertexCode() const;
+		std::string GenerateFragmentCode() const;
+		std::string GenerateVaryingDefCode() const;
+		std::string GenerateJSON() const;
 
-	GUITextField* _nameField;
-	GUITextField* _assetPathField;
-	BrowserDialog* _browser;
-	std::string _basePath;
-	int _numberOfPasses;
-};
+		bool Validate();
+		bool ValidatePath(const std::string& path, std::string prefExtension);
+		bool Create(bool import);
+
+		GUITextField* _nameField;
+		GUITextField* _assetPathField;
+		BrowserDialog* _browser;
+		std::string _basePath;
+		int _numberOfPasses;
+	};
+}

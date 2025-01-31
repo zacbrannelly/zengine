@@ -9,6 +9,8 @@
 #include <ZEngine-Core/Assets/AssetManager.h>
 #include <algorithm>
 
+using namespace ZEngine;
+
 CreateMapDialog::CreateMapDialog(std::string basePath) : GUIDialog("Create Map", 500, 200, true)
 {
 	_basePath = basePath;

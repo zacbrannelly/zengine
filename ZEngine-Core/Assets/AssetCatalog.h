@@ -5,46 +5,48 @@
 #include "../Map/Objects/ZObject.h"
 #include "../Utilities/File.h"
 
-class Asset;
-
-struct CatalogEntry
+namespace ZEngine
 {
-	uuids::uuid id;
-	std::string path;
-	ObjectType type;
-	std::string name;
-};
+	class Asset;
 
-class AssetCatalog
-{
-public:
-	AssetCatalog();
-	~AssetCatalog();
+	struct CatalogEntry
+	{
+		uuids::uuid id;
+		std::string path;
+		ObjectType type;
+		std::string name;
+	};
 
-	void ClearCatalog();
-	bool LoadCatalog(std::string path = "catalog.zengine");
-	bool LoadCatalogFromProjectJson(std::string jsonFilePath);
-	bool LoadCatalogFromProjectJson(const nlohmann::json& json, std::string basePath = "");
+	class AssetCatalog
+	{
+	public:
+		AssetCatalog();
+		~AssetCatalog();
 
-	bool SaveCatalog(std::string path = "catalog.zengine");
-	bool SaveCatalogToProjectJson(nlohmann::json& json, std::string basePath = "");
+		void ClearCatalog();
+		bool LoadCatalog(std::string path = "catalog.zengine");
+		bool LoadCatalogFromProjectJson(std::string jsonFilePath);
+		bool LoadCatalogFromProjectJson(const nlohmann::json& json, std::string basePath = "");
 
-	void RegisterAsset(Asset* asset);
-	void RegisterAsset(std::string path, ObjectType type);
+		bool SaveCatalog(std::string path = "catalog.zengine");
+		bool SaveCatalogToProjectJson(nlohmann::json& json, std::string basePath = "");
 
-	void PushEntry(CatalogEntry entry);
+		void RegisterAsset(Asset* asset);
+		void RegisterAsset(std::string path, ObjectType type);
 
-	bool HasAsset(std::string assetPath);
-	bool GetAssetPathFromID(uuids::uuid id, std::string& path, ObjectType& type);
-	uuids::uuid GetAssetIDFromPath(std::string path);
-	std::vector<CatalogEntry> GetAssetsByType(ObjectType type);
+		void PushEntry(CatalogEntry entry);
 
-	const std::vector<CatalogEntry>& GetCatalogList() const;
-	const std::string& GetLastCatalogPath() const;
+		bool HasAsset(std::string assetPath);
+		bool GetAssetPathFromID(uuids::uuid id, std::string& path, ObjectType& type);
+		uuids::uuid GetAssetIDFromPath(std::string path);
+		std::vector<CatalogEntry> GetAssetsByType(ObjectType type);
 
-	std::string ResolveAssetNameFromPath(const std::string& path);
-private:
-	std::string _lastCatalogPath;
-	std::vector<CatalogEntry> _catalog;
-};
+		const std::vector<CatalogEntry>& GetCatalogList() const;
+		const std::string& GetLastCatalogPath() const;
 
+		std::string ResolveAssetNameFromPath(const std::string& path);
+	private:
+		std::string _lastCatalogPath;
+		std::vector<CatalogEntry> _catalog;
+	};
+}

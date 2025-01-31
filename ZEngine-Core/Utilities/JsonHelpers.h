@@ -23,7 +23,7 @@
  * JSON_SCHEMA_BEGIN()
  * 
  *  JSON_MAP_TO_MEMBER             ("name", _name);
- *  JSON_MAP_TO_GETTER_SETTER  ("name", GetterFunc, SetterFunc, std::string);
+ *  JSON_MAP_TO_GETTER_SETTER      ("name", GetterFunc, SetterFunc, std::string);
  *  JSON_MAP_TO_SETTER             ("name", SetterFunc, std::string);
  *  JSON_MAP_TO_SETTER_OPTIONAL    ("name", SetterFunc, std::string);
  * 
@@ -87,14 +87,14 @@
 #define JSON_MAP_TO_FACTORY_SETTER(member, setter, DataType) \
   if (isParsing) \
   { \
-    auto newPtr = Factory::CreateInstance<DataType>(#DataType, DataType::GetStaticType()); \
+    auto newPtr = ZEngine::Factory::CreateInstance<DataType>(#DataType, DataType::GetStaticType()); \
     from_json(parseIn->at(#member).get<nlohmann::json>(), *newPtr); \
   }
 
 #define JSON_MAP_TO_FACTORY_SETTER_OPTIONAL(member, setter, DataType) \
   if (isParsing && (*parseIn).contains(#member)) \
   { \
-    auto newPtr = Factory::CreateInstance<DataType>(#DataType, DataType::GetStaticType()); \
+    auto newPtr = ZEngine::Factory::CreateInstance<DataType>(#DataType, DataType::GetStaticType()); \
     from_json(parseIn->at(#member).get<nlohmann::json>(), *newPtr); \
   }
 
@@ -111,12 +111,12 @@
   }
 
 #define INCLUDE_ASSET_REFERENCES() \
-  auto assetManager = AssetManager::GetInstance(); \
+  auto assetManager = ZEngine::AssetManager::GetInstance(); \
 
 #define _INTERNAL_JSON_MAP_TO_ASSET_REF_SETTER(member, setter, DataType) \
   auto assetId = uuids::uuid::from_string((*parseIn).at(#member).get<std::string>()).value(); \
   std::string path; \
-  ObjectType type; \
+  ZEngine::ObjectType type; \
   if (assetManager->GetCatalog()->GetAssetPathFromID(assetId, path, type)) \
   { \
     auto asset = assetManager->FindAssetFromPath(path); \
@@ -145,7 +145,7 @@
   { \
     auto assetUuid = uuids::uuid::from_string(assetId).value(); \
     std::string path; \
-    ObjectType type; \
+    ZEngine::ObjectType type; \
     if (assetManager->GetCatalog()->GetAssetPathFromID(assetUuid, path, type)) \
     { \
       auto asset = assetManager->FindAssetFromPath(path); \

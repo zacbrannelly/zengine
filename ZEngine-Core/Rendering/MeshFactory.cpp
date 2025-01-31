@@ -2,6 +2,8 @@
 #include "Mesh.h"
 #include "../Misc/Factory.h"
 
+using namespace ZEngine;
+
 Mesh* MeshFactory::CreateCube(std::string name)
 {
 	std::vector<glm::vec3> verts

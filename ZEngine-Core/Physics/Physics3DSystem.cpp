@@ -8,6 +8,7 @@
 #include <stdexcept>
 
 using namespace physx;
+using namespace ZEngine;
 
 bool Physics3DSystem::Init()
 {

@@ -2,6 +2,8 @@
 #include "MapView.h"
 #include <ZEngine-Core/Component/Camera.h>
 
+using namespace ZEngine;
+
 MapViewToolbar::MapViewToolbar(Editor* editor, MapView* mapView) : _editor(editor), _mapView(mapView), _objectGizmoOp(ImGuizmo::TRANSLATE), _objectGizmoMode(ImGuizmo::LOCAL)
 {
 }

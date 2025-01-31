@@ -2,6 +2,8 @@
 #include "Material.h"
 #include "StandardShaders.h"
 
+using namespace ZEngine;
+
 Material* MaterialFactory::CreateUnlitVertexColorMaterial(std::string name)
 {
   // Create the material using the unlit color shader.

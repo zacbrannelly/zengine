@@ -5,6 +5,7 @@
 #include "CameraExporter.h"
 
 using namespace nlohmann;
+using namespace ZEngine;
 
 std::map<ObjectType, ComponentExporter*> ComponentExporter::_exporters;
 

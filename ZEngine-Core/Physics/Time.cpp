@@ -3,6 +3,7 @@
 #include <chrono>
 
 using namespace std::chrono;
+using namespace ZEngine;
 
 void Time::Init()
 {

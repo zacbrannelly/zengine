@@ -7,6 +7,8 @@
 #define NDEBUG
 #include <PxPhysicsAPI.h>
 
+using namespace ZEngine;
+
 Collider3D::Collider3D(std::string name, ObjectType objectType) : Component(name, objectType), _geometry(nullptr), _staticBody(nullptr), _isTrigger(false)
 {
   RegisterDerivedType(COLLIDER_3D);

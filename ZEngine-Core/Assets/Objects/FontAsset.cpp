@@ -1,6 +1,6 @@
 #include "FontAsset.h"
 
-
+using namespace ZEngine;
 
 FontAsset::FontAsset()
 {

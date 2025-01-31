@@ -9,6 +9,7 @@
 #include <Shlwapi.h>
 
 using namespace std;
+using namespace ZEngine;
 
 bool Directory::Create()
 {

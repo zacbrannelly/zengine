@@ -3,12 +3,14 @@
 #include <bgfx/bgfx.h>
 #include "BufferHandle.h"
 
-class IndexBuffer : public BufferHandle<bgfx::IndexBufferHandle>
+namespace ZEngine
 {
-public:
-	IndexBuffer();
-	~IndexBuffer();
+	class IndexBuffer : public BufferHandle<bgfx::IndexBufferHandle>
+	{
+	public:
+		IndexBuffer();
+		~IndexBuffer();
 
-	virtual void Upload(const unsigned int* indices, unsigned int size, bool copy);
-};
-
+		virtual void Upload(const unsigned int* indices, unsigned int size, bool copy);
+	};
+}

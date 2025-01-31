@@ -2,33 +2,35 @@
 
 #include <ZEngine-Core/ImmediateUI/GUIWindow.h>
 
-class UnsavedDialog;
-class File;
-
-class CodeEditor : public GUIWindow
+namespace ZEngine
 {
-public:
-	CodeEditor(std::string path);
-	~CodeEditor();
+	class UnsavedDialog;
+	class File;
 
-	void ProcessInput() override;
-	void RenderInWindow() override;
-	GUIElementType GetType() override;
-	bool AllowClose() override;
+	class CodeEditor : public GUIWindow
+	{
+	public:
+		CodeEditor(std::string path);
+		~CodeEditor();
 
-	const File& GetFile();
+		void ProcessInput() override;
+		void RenderInWindow() override;
+		GUIElementType GetType() override;
+		bool AllowClose() override;
 
-	void Save();
-	void HotReload();
+		const File& GetFile();
 
-private:
-	static int TextInputCallback(ImGuiInputTextCallbackData* data);
+		void Save();
+		void HotReload();
 
-	UnsavedDialog* _unsavedDialog;
-	bool _showUnsavedDialog;
-	char* _originalBuffer;
-	char* _buffer;
-	int _bufferSize;
-	File* _file;
-};
+	private:
+		static int TextInputCallback(ImGuiInputTextCallbackData* data);
 
+		UnsavedDialog* _unsavedDialog;
+		bool _showUnsavedDialog;
+		char* _originalBuffer;
+		char* _buffer;
+		int _bufferSize;
+		File* _file;
+	};
+}

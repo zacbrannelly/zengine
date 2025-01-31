@@ -2,6 +2,7 @@
 #include "../Display/Display.h"
 #include <iostream>
 
+using namespace ZEngine;
 
 void InputManager::Init(Display* display)
 {

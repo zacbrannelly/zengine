@@ -2,27 +2,30 @@
 
 #include <ZEngine-Core/ImmediateUI/GUIDialog.h>
 
-class GUITextField;
-class BrowserDialog;
-class Editor;
-
-class CreateProjectDialog : public GUIDialog
+namespace ZEngine
 {
-public:
-  CreateProjectDialog(Editor* editor, std::string basePath = "./");
-  ~CreateProjectDialog();
+  class GUITextField;
+  class BrowserDialog;
+  class Editor;
 
-  void ProcessInput() override;
-  void RenderInWindow() override;
-  void RenderElement() override;
+  class CreateProjectDialog : public GUIDialog
+  {
+  public:
+    CreateProjectDialog(Editor* editor, std::string basePath = "./");
+    ~CreateProjectDialog();
 
-private:
-  bool Validate();
-  bool Create();
+    void ProcessInput() override;
+    void RenderInWindow() override;
+    void RenderElement() override;
 
-  Editor* _editor;
-  GUITextField* _nameField;
-  GUITextField* _pathField;
-  BrowserDialog* _browser;
-  std::string _basePath;
-};
+  private:
+    bool Validate();
+    bool Create();
+
+    Editor* _editor;
+    GUITextField* _nameField;
+    GUITextField* _pathField;
+    BrowserDialog* _browser;
+    std::string _basePath;
+  };
+}

@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <Reference Include="ZEngine.Interop">
-      <HintPath>../../debug/ZEngine-Core/lib/ZEngine.Interop/ZEngine.Interop.dll</HintPath>
+      <HintPath>/Users/zacbrannelly/GitRepos/gba-emulator/3rdparty/zengine/build/ZEngine-Core/lib/ZEngine.Interop/ZEngine.Interop.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

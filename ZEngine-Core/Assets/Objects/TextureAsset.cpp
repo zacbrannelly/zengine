@@ -5,6 +5,7 @@
 #include "stb_image.h"
 
 using namespace std;
+using namespace ZEngine;
 
 TextureAsset::TextureAsset(std::string name) : Asset(name, ObjectType::TEXTURE_ASSET)
 {

@@ -1,15 +1,18 @@
 #include "BrowserDialog.h"
 
-class Editor;
-
-class ProjectBrowserDialog : public BrowserDialog
+namespace ZEngine
 {
-public:
-  ProjectBrowserDialog(Editor* editor);
-  ~ProjectBrowserDialog();
+  class Editor;
 
-  void RenderInWindow() override;
+  class ProjectBrowserDialog : public BrowserDialog
+  {
+  public:
+    ProjectBrowserDialog(Editor* editor);
+    ~ProjectBrowserDialog();
 
-private:
-  Editor* _editor;
-};
+    void RenderInWindow() override;
+
+  private:
+    Editor* _editor;
+  };
+}

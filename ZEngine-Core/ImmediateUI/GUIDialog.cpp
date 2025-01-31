@@ -1,6 +1,8 @@
 #include "GUIDialog.h"
 #include "GUINameGenerator.h"
 
+using namespace ZEngine;
+
 GUIDialog::GUIDialog(std::string name, int width, int height, bool isModal) : GUIWindow(GUINameGenerator::GetUniqueName(name), width, height, false)
 {
 	_isVisible = false;

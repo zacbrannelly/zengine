@@ -12,6 +12,8 @@
 #include <ZEngine-Core/Assets/AssetManager.h>
 #include <ZEngine-Core/Assets/AssetCatalog.h>
 
+using namespace ZEngine;
+
 #define REGISTER_EXTENSION(x, y) _validExtensions[x] = y
 
 AssetImporter::AssetImporter() : GUIWindow("Asset Importer", 200, 150, false)

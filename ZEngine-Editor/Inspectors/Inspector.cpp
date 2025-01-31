@@ -1,6 +1,7 @@
 #include "Inspector.h"
 #include <sstream>
 
+using namespace ZEngine;
 
 Inspector::Inspector()
 {

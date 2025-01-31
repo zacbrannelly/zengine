@@ -2,6 +2,8 @@
 #include <stdexcept>
 #include <unordered_map>
 
+using namespace ZEngine;
+
 static std::unordered_map<std::string, ObjectType> _stringToObjectTypeMap;
 static std::unordered_map<ObjectType, std::string> _objectTypeToStringMap;
 
@@ -39,7 +41,7 @@ void RegisterObjectTypes() {
   ADD_OBJECT_TYPE(MESH_COLLIDER_3D)
 }
 
-std::string ObjectTypeToString(ObjectType type) {
+std::string ZEngine::ObjectTypeToString(ObjectType type) {
   if (_objectTypeToStringMap.size() == 0) {
     RegisterObjectTypes();
   }
@@ -51,7 +53,7 @@ std::string ObjectTypeToString(ObjectType type) {
   return result->second;
 }
 
-ObjectType StringToObjectType(std::string type) {
+ObjectType ZEngine::StringToObjectType(std::string type) {
   if (_objectTypeToStringMap.size() == 0) {
     RegisterObjectTypes();
   }

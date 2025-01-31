@@ -3,11 +3,14 @@
 #include "Inspector.h"
 #include <glm/glm.hpp>
 
-class RigidBody3DInspector : public Inspector
+namespace ZEngine
 {
-public:
-	RigidBody3DInspector();
-	~RigidBody3DInspector();
+	class RigidBody3DInspector : public Inspector
+	{
+	public:
+		RigidBody3DInspector();
+		~RigidBody3DInspector();
 
-	void RenderElement() override;
-};
+		void RenderElement() override;
+	};
+}

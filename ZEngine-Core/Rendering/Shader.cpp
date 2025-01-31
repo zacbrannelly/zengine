@@ -3,6 +3,7 @@
 #include <iostream>
 
 using namespace std;
+using namespace ZEngine;
 
 Shader::Shader(string name) : ZObject(name, SHADER)
 {

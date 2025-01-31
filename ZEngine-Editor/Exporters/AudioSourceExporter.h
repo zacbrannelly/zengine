@@ -2,8 +2,11 @@
 
 #include "ComponentExporter.h"
 
-class AudioSourceExporter : public ComponentExporter
+namespace ZEngine
 {
-public:
-	nlohmann::json ExportImpl(ZObject* obj) override;
-};
+	class AudioSourceExporter : public ComponentExporter
+	{
+	public:
+		nlohmann::json ExportImpl(ZObject* obj) override;
+	};
+}

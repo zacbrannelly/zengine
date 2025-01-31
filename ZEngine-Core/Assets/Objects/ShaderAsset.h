@@ -3,27 +3,29 @@
 #include "../Asset.h"
 #include "../../Rendering/Shader.h"
 
-class Shader;
-
-class ShaderAsset : public Asset
+namespace ZEngine
 {
-public:
-	ShaderAsset(std::string name);
-	~ShaderAsset();
+	class Shader;
 
-	bool Load(std::string path) override;
-	void Release() override;
-
-	Shader* GetShader() const;
-
-	static ZObject* CreateInstance(std::string name, ObjectType type);
-
-	static ObjectType GetStaticType()
+	class ShaderAsset : public Asset
 	{
-		return SHADER_ASSET;
-	}
+	public:
+		ShaderAsset(std::string name);
+		~ShaderAsset();
 
-private:
-	Shader* _shader;
-};
+		bool Load(std::string path) override;
+		void Release() override;
 
+		Shader* GetShader() const;
+
+		static ZObject* CreateInstance(std::string name, ObjectType type);
+
+		static ObjectType GetStaticType()
+		{
+			return SHADER_ASSET;
+		}
+
+	private:
+		Shader* _shader;
+	};
+}

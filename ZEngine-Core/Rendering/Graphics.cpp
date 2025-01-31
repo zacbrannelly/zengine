@@ -20,6 +20,7 @@
 #include <iostream>
 
 using namespace bgfx;
+using namespace ZEngine;
 
 uint32_t convertRGBToInt(int r, int g, int b, int a)
 {

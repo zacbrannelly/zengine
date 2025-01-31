@@ -2,24 +2,27 @@
 
 #include <ZEngine-Core/ImmediateUI/GUIDialog.h>
 
-class GUITextField;
-class BrowserDialog;
-
-class CreateMapDialog : public GUIDialog
+namespace ZEngine
 {
-public:
-	CreateMapDialog(std::string basePath = "./");
-	~CreateMapDialog();
+	class GUITextField;
+	class BrowserDialog;
 
-	void ProcessInput() override;
-	void RenderInWindow() override;
+	class CreateMapDialog : public GUIDialog
+	{
+	public:
+		CreateMapDialog(std::string basePath = "./");
+		~CreateMapDialog();
 
-private:
-	bool Validate();
-	bool Create(bool import);
+		void ProcessInput() override;
+		void RenderInWindow() override;
 
-	GUITextField* _nameField;
-	GUITextField* _pathField;
-	BrowserDialog* _browser;
-	std::string _basePath;
-};
+	private:
+		bool Validate();
+		bool Create(bool import);
+
+		GUITextField* _nameField;
+		GUITextField* _pathField;
+		BrowserDialog* _browser;
+		std::string _basePath;
+	};
+}

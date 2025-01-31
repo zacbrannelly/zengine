@@ -29,6 +29,8 @@
 
 #include <iostream>
 
+using namespace ZEngine;
+
 std::map<ObjectType, ConstructorFunc> Factory::_typeConstructors;
 std::map<ObjectType, DefaultFactoryFunc> Factory::_defaultFactoryFunctions;
 std::map<ObjectType, CopyFunc> Factory::_copyFunctions;

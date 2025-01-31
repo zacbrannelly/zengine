@@ -4,6 +4,8 @@
 #include <ZEngine-Core/ImmediateUI/imgui-includes.h>
 #include "../Controllers/MapController.h"
 
+using namespace ZEngine;
+
 EditorToolbar::EditorToolbar(Editor* editor) : _editor(editor)
 {
   _mapController = editor->GetMapController();

@@ -1,6 +1,7 @@
 #include "VertexBuffer.h"
 
 using namespace bgfx;
+using namespace ZEngine;
 
 VertexBuffer::VertexBuffer(VertexLayout decl)
 {

@@ -8,6 +8,8 @@
 #include <ZEngine-Core/Rendering/MeshFactory.h>
 #include <ZEngine-Core/Rendering/MaterialFactory.h>
 
+using namespace ZEngine;
+
 SphereCollider3DGizmoRenderer::SphereCollider3DGizmoRenderer()
 {
   _outlineMesh = MeshFactory::CreateSphereOutline("SphereCollider3DGizmo", 20, 5);

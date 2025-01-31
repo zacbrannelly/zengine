@@ -1,6 +1,7 @@
 #include "DynamicVertexBuffer.h"
 
 using namespace bgfx;
+using namespace ZEngine;
 
 DynamicVertexBuffer::DynamicVertexBuffer(bgfx::VertexLayout decl) : VertexBuffer(decl)
 {
@@ -40,4 +41,3 @@ void DynamicVertexBuffer::Update(unsigned int startIndex, const void* data, unsi
 DynamicVertexBuffer::~DynamicVertexBuffer()
 {
 }
-

@@ -4,36 +4,39 @@
 #include <ZEngine-Core/ImmediateUI/GUIImage.h>
 #include <ZEngine-Core/Rendering/Graphics.h>
 
-class Editor;
-class Camera;
-class Entity;
-class Map;
-class TransformInspector;
-class CameraInspector;
-
-enum GameViewSizeMode
+namespace ZEngine
 {
-	FIT,
-	SCALED,
-};
+	class Editor;
+	class Camera;
+	class Entity;
+	class Map;
+	class TransformInspector;
+	class CameraInspector;
 
-class GameView : public GUIWindow
-{
-public:
-	GameView(Editor* map);
-	~GameView();
+	enum GameViewSizeMode
+	{
+		FIT,
+		SCALED,
+	};
 
-	void SetupCamera();
+	class GameView : public GUIWindow
+	{
+	public:
+		GameView(Editor* map);
+		~GameView();
 
-	void ProcessInput() override;
-	void RenderInWindowBeforeElements() override;
-	void RenderInWindow() override;
-	void RenderElement() override;
-private:
-	GUIImage* _viewImage;
-	Editor* _editor;
-	Camera* _mainCamera;
-	Map* _currentMap;
-	GameViewSizeMode _sizeMode;
-	float _scale;
-};
+		void SetupCamera();
+
+		void ProcessInput() override;
+		void RenderInWindowBeforeElements() override;
+		void RenderInWindow() override;
+		void RenderElement() override;
+	private:
+		GUIImage* _viewImage;
+		Editor* _editor;
+		Camera* _mainCamera;
+		Map* _currentMap;
+		GameViewSizeMode _sizeMode;
+		float _scale;
+	};
+}

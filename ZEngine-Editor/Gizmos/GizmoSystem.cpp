@@ -7,6 +7,8 @@
 #include <ZEngine-Core/Component/Component.h>
 #include <vector>
 
+using namespace ZEngine;
+
 void GizmoSystem::Init(Editor* editor)
 {
   _editor = editor;

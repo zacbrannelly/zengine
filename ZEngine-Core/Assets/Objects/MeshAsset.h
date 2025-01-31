@@ -1,8 +1,10 @@
 #pragma once
-class MeshAsset
+namespace ZEngine
 {
-public:
-	MeshAsset();
-	~MeshAsset();
-};
-
+	class MeshAsset
+	{
+	public:
+		MeshAsset();
+		~MeshAsset();
+	};
+}

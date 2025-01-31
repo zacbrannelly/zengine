@@ -2,6 +2,7 @@
 #include <ZEngine-Core/Component/Camera.h>
 
 using namespace nlohmann;
+using namespace ZEngine;
 
 json CameraExporter::ExportImpl(ZObject* obj)
 {

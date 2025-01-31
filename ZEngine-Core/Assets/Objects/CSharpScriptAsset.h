@@ -4,24 +4,27 @@
 #include "../../Scripting/CSharp/CSharpScript.h"
 #include "../../Utilities/JsonHelpers.h"
 
-class CSharpScriptAsset : public Asset
+namespace ZEngine 
 {
-public:
-	CSharpScriptAsset(std::string name);
-	~CSharpScriptAsset();
-
-	bool Load(std::string path);
-  void Release() override;
-	
-	CSharpScript* GetScript() const;
-	std::string GetScriptPath() const;
-
-	static ZObject* CreateInstance(std::string name, ObjectType type);
-	
-	static ObjectType GetStaticType()
+	class CSharpScriptAsset : public Asset
 	{
-		return CSHARP_SCRIPT_ASSET;
-	}
-private:
-	CSharpScript* _script;
-};
+	public:
+		CSharpScriptAsset(std::string name);
+		~CSharpScriptAsset();
+
+		bool Load(std::string path);
+		void Release() override;
+		
+		CSharpScript* GetScript() const;
+		std::string GetScriptPath() const;
+
+		static ZObject* CreateInstance(std::string name, ObjectType type);
+		
+		static ObjectType GetStaticType()
+		{
+			return CSHARP_SCRIPT_ASSET;
+		}
+	private:
+		CSharpScript* _script;
+	};
+}

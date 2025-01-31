@@ -1,6 +1,8 @@
 #include "Container.h"
 #include "GUIWindow.h"
 
+using namespace ZEngine;
+
 Container::Container()
 {
 }

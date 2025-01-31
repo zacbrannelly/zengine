@@ -4,52 +4,55 @@
 #include <ZEngine-Core/Rendering/Material.h>
 #include <uuid.h>
 
-class File;
-class GUITextField;
-class GUIImage;
-class UnsavedDialog;
-
-struct MaterialEditorSampler
+namespace ZEngine
 {
-	Sampler sampler;
-	uuids::uuid assetID;
-	std::string assetPath;
-	GUITextField* nameField;
-	GUIImage* previewImage;
-};
+	class File;
+	class GUITextField;
+	class GUIImage;
+	class UnsavedDialog;
 
-struct MaterialEditorData
-{
-	std::string name;
-	uuids::uuid shaderID;
-	std::string shaderPath;
+	struct MaterialEditorSampler
+	{
+		Sampler sampler;
+		uuids::uuid assetID;
+		std::string assetPath;
+		GUITextField* nameField;
+		GUIImage* previewImage;
+	};
 
-	std::map<std::string, Uniform> uniforms;
-	std::map<std::string, MaterialEditorSampler> samplers;
+	struct MaterialEditorData
+	{
+		std::string name;
+		uuids::uuid shaderID;
+		std::string shaderPath;
 
-	std::map<std::string, GUITextField*> uniformNameFields;
-};
+		std::map<std::string, Uniform> uniforms;
+		std::map<std::string, MaterialEditorSampler> samplers;
 
-class MaterialEditor : public GUIWindow
-{
-public:
-	MaterialEditor(std::string assetPath);
-	~MaterialEditor();
+		std::map<std::string, GUITextField*> uniformNameFields;
+	};
 
-	void ProcessInput() override;
-	void RenderInWindow() override;
-	bool AllowClose() override;
-	GUIElementType GetType() override;
+	class MaterialEditor : public GUIWindow
+	{
+	public:
+		MaterialEditor(std::string assetPath);
+		~MaterialEditor();
 
-	bool LoadData();
-	bool Save();
-	void HotReload();
+		void ProcessInput() override;
+		void RenderInWindow() override;
+		bool AllowClose() override;
+		GUIElementType GetType() override;
 
-	const std::string& GetAssetPath() const;
+		bool LoadData();
+		bool Save();
+		void HotReload();
 
-private:
-	File* _assetFile;
-	MaterialEditorData _data;
-	bool _showUnsavedDialog;
-	UnsavedDialog* _unsavedDialog;
-};
+		const std::string& GetAssetPath() const;
+
+	private:
+		File* _assetFile;
+		MaterialEditorData _data;
+		bool _showUnsavedDialog;
+		UnsavedDialog* _unsavedDialog;
+	};
+}

@@ -5,6 +5,8 @@
 
 #include <iostream>
 
+using namespace ZEngine;
+
 FreeCamera::FreeCamera() : Camera()
 {
   _speed = 0.1f;

@@ -5,6 +5,8 @@
 #include <bx/process.h>
 #include <bgfx/bgfx.h>
 
+using namespace ZEngine;
+
 bool ShaderBuilder::BuildToFile(ShaderBuilderType type, const std::string& path, const std::string& varyingDefPath)
 {
 	// Attempt to build the shader

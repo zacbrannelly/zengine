@@ -3,6 +3,8 @@
 
 #include "../../Component/CSharpScriptComponent.h"
 
+using namespace ZEngine;
+
 CSharpScript::CSharpScript(std::string name) : ZObject(name, CSHARP_SCRIPT)
 {
   RegisterDerivedType(CSHARP_SCRIPT);

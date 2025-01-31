@@ -2,19 +2,21 @@
 
 #include "../Misc/Singleton.h"
 
-class Map;
-
-class MapManager : public Singleton<MapManager>
+namespace ZEngine
 {
-public:
-	MapManager();
+	class Map;
 
-	void SetCurrentMap(Map* map);
-	Map* GetCurrentMap() const;
-	Map* GetPreviousMap() const;
+	class MapManager : public Singleton<MapManager>
+	{
+	public:
+		MapManager();
 
-private:
-	Map* _currentMap;
-	Map* _prevMap;
-};
+		void SetCurrentMap(Map* map);
+		Map* GetCurrentMap() const;
+		Map* GetPreviousMap() const;
 
+	private:
+		Map* _currentMap;
+		Map* _prevMap;
+	};
+}

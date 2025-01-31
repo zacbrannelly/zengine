@@ -4,31 +4,33 @@
 #include "../../Physics/Physics3DSystem.h"
 #include <nlohmann/json.hpp>
 
-class Map;
-class Entity;
-class Component;
-
-class MapAsset : public Asset
+namespace ZEngine
 {
-public:
-	MapAsset(std::string name);
-	~MapAsset();
+	class Map;
+	class Entity;
+	class Component;
 
-	bool Load(std::string path) override;
-	void Release() override;
-
-	Map* GetMap() const;
-
-	static ZObject* CreateInstance(std::string name, ObjectType type);
-	
-	static ObjectType GetStaticType()
+	class MapAsset : public Asset
 	{
-		return MAP_ASSET;
-	}
+	public:
+		MapAsset(std::string name);
+		~MapAsset();
 
-private:
-	Entity* LoadEntity(nlohmann::json& entity);
+		bool Load(std::string path) override;
+		void Release() override;
 
-	Map* _map;
-};
+		Map* GetMap() const;
 
+		static ZObject* CreateInstance(std::string name, ObjectType type);
+		
+		static ObjectType GetStaticType()
+		{
+			return MAP_ASSET;
+		}
+
+	private:
+		Entity* LoadEntity(nlohmann::json& entity);
+
+		Map* _map;
+	};
+}

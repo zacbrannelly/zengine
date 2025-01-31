@@ -2,64 +2,67 @@
 
 #include <ZEngine-Core/ImmediateUI/GUIDialog.h>
 
-class File;
-class Directory;
-class GUITextField;
-class NewFolderDialog;
-
-enum BrowserDialogType
+namespace ZEngine
 {
-	BROWSER_OPEN_FILE,
-	BROWSER_OPEN_FOLDER,
-	BROWSER_SAVE_FILE,
-};
+	class File;
+	class Directory;
+	class GUITextField;
+	class NewFolderDialog;
 
-class BrowserDialog : public GUIDialog
-{
-public:
-	BrowserDialog(std::string basePath = "./", BrowserDialogType type = BROWSER_OPEN_FILE);
-	virtual ~BrowserDialog();
+	enum BrowserDialogType
+	{
+		BROWSER_OPEN_FILE,
+		BROWSER_OPEN_FOLDER,
+		BROWSER_SAVE_FILE,
+	};
 
-	void SetFilter(std::vector<std::string> extensions);
-	const std::vector<std::string>& GetFilter() const;
-	
-	void SetSaveExtension(std::string extension);
-	const std::string& GetSaveExtension() const;
+	class BrowserDialog : public GUIDialog
+	{
+	public:
+		BrowserDialog(std::string basePath = "./", BrowserDialogType type = BROWSER_OPEN_FILE);
+		virtual ~BrowserDialog();
 
-	void SetUserData(void* data);
-	void* GetUserData() const;
+		void SetFilter(std::vector<std::string> extensions);
+		const std::vector<std::string>& GetFilter() const;
+		
+		void SetSaveExtension(std::string extension);
+		const std::string& GetSaveExtension() const;
 
-	void Refresh();
+		void SetUserData(void* data);
+		void* GetUserData() const;
 
-	void ProcessInput() override;
-	void RenderInWindow() override;
+		void Refresh();
 
-	void SetDirectory(std::string basePath);
+		void ProcessInput() override;
+		void RenderInWindow() override;
 
-	const File& GetFile() const;
-	const Directory& GetDirectory() const;
-	const Directory& GetSelectedDirectory() const;
-	
-	const BrowserDialogType& GetBrowserType() const;
+		void SetDirectory(std::string basePath);
 
-private:
-	bool ValidateOpenFile();
-	bool ValidateSaveFile();
-	bool ValidateSelectFolder();
+		const File& GetFile() const;
+		const Directory& GetDirectory() const;
+		const Directory& GetSelectedDirectory() const;
+		
+		const BrowserDialogType& GetBrowserType() const;
 
-	Directory* _rootDir;
-	File* _selectedFile;
-	Directory* _selectedDir;
-	BrowserDialogType _type;
-	std::string _saveExtension;
+	private:
+		bool ValidateOpenFile();
+		bool ValidateSaveFile();
+		bool ValidateSelectFolder();
 
-	GUITextField* _pathField;
-	GUITextField* _nameField;
-	NewFolderDialog* _newFolderDiag;
+		Directory* _rootDir;
+		File* _selectedFile;
+		Directory* _selectedDir;
+		BrowserDialogType _type;
+		std::string _saveExtension;
 
-	std::vector<Directory> _cachedDirs;
-	std::vector<File> _cachedFiles;
-	std::vector<std::string> _filter;
+		GUITextField* _pathField;
+		GUITextField* _nameField;
+		NewFolderDialog* _newFolderDiag;
 
-	void* _userData;
-};
+		std::vector<Directory> _cachedDirs;
+		std::vector<File> _cachedFiles;
+		std::vector<std::string> _filter;
+
+		void* _userData;
+	};
+}

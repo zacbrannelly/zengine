@@ -3,26 +3,29 @@
 #include <ZEngine-Core/ImmediateUI/GUIDialog.h>
 #include <uuid.h>
 
-class GUITextField;
-class BrowserDialog;
-
-class CreateMaterialDialog : public GUIDialog
+namespace ZEngine
 {
-public:
-	CreateMaterialDialog(std::string basePath = "./");
-	~CreateMaterialDialog();
+	class GUITextField;
+	class BrowserDialog;
 
-	void ProcessInput() override;
-	void RenderInWindow() override;
-	
-private:
-	std::string GenerateJSON();
-	bool Validate();
-	bool Create(bool import);
+	class CreateMaterialDialog : public GUIDialog
+	{
+	public:
+		CreateMaterialDialog(std::string basePath = "./");
+		~CreateMaterialDialog();
 
-	GUITextField* _nameField;
-	GUITextField* _pathField;
-	BrowserDialog* _browser;
-	std::string _basePath;
-	uuids::uuid _shaderID;
-};
+		void ProcessInput() override;
+		void RenderInWindow() override;
+		
+	private:
+		std::string GenerateJSON();
+		bool Validate();
+		bool Create(bool import);
+
+		GUITextField* _nameField;
+		GUITextField* _pathField;
+		BrowserDialog* _browser;
+		std::string _basePath;
+		uuids::uuid _shaderID;
+	};
+}

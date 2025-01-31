@@ -1,29 +1,32 @@
 #pragma once
 
-template<typename T>
-class BufferHandle
+namespace ZEngine
 {
-public:
-	T GetHandle() const;
+	template<typename T>
+	class BufferHandle
+	{
+	public:
+		T GetHandle() const;
 
-protected:
-	void SetHandleID(unsigned short idx);
+	protected:
+		void SetHandleID(unsigned short idx);
 
-private:
-	unsigned short _idx;
-};
+	private:
+		unsigned short _idx;
+	};
 
-template<typename T>
-T BufferHandle<T>::GetHandle() const
-{
-	T buffer;
-	buffer.idx = _idx;
+	template<typename T>
+	T BufferHandle<T>::GetHandle() const
+	{
+		T buffer;
+		buffer.idx = _idx;
 
-	return buffer;
-}
+		return buffer;
+	}
 
-template<typename T>
-void BufferHandle<T>::SetHandleID(unsigned short idx)
-{
-	_idx = idx;
+	template<typename T>
+	void BufferHandle<T>::SetHandleID(unsigned short idx)
+	{
+		_idx = idx;
+	}
 }

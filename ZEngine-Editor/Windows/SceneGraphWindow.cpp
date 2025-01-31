@@ -8,6 +8,7 @@
 #include <ZEngine-Core/ImmediateUI/imgui-includes.h>
 #include <iostream>
 
+using namespace ZEngine;
 
 SceneGraphWindow::SceneGraphWindow(Editor* editor) : GUIWindow("Hierarchy Window", 800, 400, false)
 {

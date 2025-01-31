@@ -4,6 +4,8 @@
 #include <sstream>
 #include "DotnetRuntime.h"
 
+using namespace ZEngine;
+
 #define ENTRYPOINT_TYPE_NAME "Entrypoint"
 #define ENTRYPOINT_METHOD_NAME "Initialize"
 

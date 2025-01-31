@@ -11,6 +11,8 @@
 #include "Objects/AudioAsset.h"
 #include "../Utilities/Directory.h"
 
+using namespace ZEngine;
+
 void AssetManager::Init()
 {
 	_basePath = "";

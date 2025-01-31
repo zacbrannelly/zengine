@@ -1,6 +1,7 @@
 #include "GUINameGenerator.h"
 
 using namespace std;
+using namespace ZEngine;
 
 map<string, int> GUINameGenerator::_counter;
 

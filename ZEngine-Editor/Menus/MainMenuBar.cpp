@@ -4,6 +4,8 @@
 #include "../Dialogs/ProjectBrowserDialog.h"
 #include <ZEngine-Core/ImmediateUI/imgui-includes.h>
 
+using namespace ZEngine;
+
 MainMenuBar::MainMenuBar(Editor* editor) : _editor(editor)
 {
 }
