@@ -63,3 +63,31 @@ Then open the generated XCode project and build the ZEngine-Player target:
 ```shell
 open iOS-Build/ZEngine.xcodeproj
 ```
+
+## WASM Support (very very experimental)
+
+First start a Docker container for the Emscripten SDK:
+
+```shell
+docker run \
+  --rm \
+  -v $(pwd):/zengine \
+  -w /zengine \
+  emscripten/emsdk:4.0.4-arm64 \
+  bash
+```
+
+Before being able to build the project for WASM, you will need to build the PhysX library for WASM. To do this, you can run the following script:
+
+```shell
+cd 3rdparty/PhysX/physx
+./generate_projects.sh emscripten
+```
+
+Then to build the Editor and Player modules for WASM, you can run the following script which will use Docker to build the project:
+
+```shell
+./build-wasm.sh
+```
+
+The output can be found in the `web-build` directory.
