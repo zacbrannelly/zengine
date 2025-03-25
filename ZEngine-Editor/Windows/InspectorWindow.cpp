@@ -50,7 +50,7 @@ void InspectorWindow::RenderInWindow()
 		ImGui::Separator();
 		
 		auto deleteButtonIdx = 0;
-		auto windowWidth = ImGui::GetWindowContentRegionWidth();
+		auto windowWidth = ImGui::GetWindowContentRegionMax().x;
 		for (auto component : entity->GetAllComponents())
 		{
 			auto inspectorElement = GetInspector(component->GetType());

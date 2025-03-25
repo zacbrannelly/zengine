@@ -12,7 +12,7 @@ void InputManager::Init(Display* display)
 	_emptyVector = glm::vec2(0.0f, 0.0f);
 
 	// Setup callbacks
-#if !TARGET_OS_IPHONE
+#if (defined(__EMSCRIPTEN__) || defined(__APPLE__)) && !TARGET_OS_IPHONE
 	glfwSetKeyCallback(display->GetHandle(), &InputManager::KeyCallback);
 	glfwSetCursorPosCallback(display->GetHandle(), &InputManager::MousePositionCallback);
 	glfwSetMouseButtonCallback(display->GetHandle(), &InputManager::MouseButtonCallback);
@@ -23,7 +23,7 @@ void InputManager::SetMouseGrabbed(bool grabbed)
 {
 	_isMouseGrabbed = grabbed;
 
-#if !TARGET_OS_IPHONE
+#if (defined(__EMSCRIPTEN__) || defined(__APPLE__)) && !TARGET_OS_IPHONE
 	// Set the mouse position to the center of the screen (to avoid weird jumps)
 	glfwSetCursorPos(_display->GetHandle(), _display->GetWidth() / 2, _display->GetHeight() / 2);
 	_mousePos = glm::vec2(_display->GetWidth() / 2, _display->GetHeight() / 2);
@@ -170,7 +170,7 @@ const glm::vec2& InputManager::GetMousePos() const
 	return _mousePos;
 }
 
-#if !TARGET_OS_IPHONE
+#if (defined(__EMSCRIPTEN__) || defined(__APPLE__)) && !TARGET_OS_IPHONE
 void InputManager::RegisterKeyCallback(GLFWkeyfun cb)
 {
 	_keyCallbacks.push_back(cb);
@@ -242,7 +242,7 @@ void InputManager::UpdateButton(ButtonCode code, int action, int mods)
 	_buttonModifiers[code] = mods;
 }
 
-#if !TARGET_OS_IPHONE
+#if (defined(__EMSCRIPTEN__) || defined(__APPLE__)) && !TARGET_OS_IPHONE
 void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	// Update the internal state

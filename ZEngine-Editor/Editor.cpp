@@ -52,6 +52,10 @@
 #include "Gizmos/GizmoSystem.h"
 #include <ZEngine-Core/ImmediateUI/imgui-includes.h>
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten/emscripten.h>
+#endif
+
 using namespace ZEngine;
 
 Editor::Editor(Display* display) : _display(display), _selectedMap(nullptr), _selectedObject(nullptr), _project(nullptr)
@@ -160,38 +164,47 @@ Editor::~Editor()
 {
 }
 
-int main(int argc, char* argv[])
+int do_main()
 {
 	// Initialize the factory (register the types)
 	Factory::Init();
+	std::cout << "Factory initialized" << std::endl;
 
 	//TODO: Register any editor specific ZObject's here
 	ComponentExporter::RegisterAllTypes();
+	std::cout << "Component exporter initialized" << std::endl;
 
 	// Init CSharp scripting system
 	auto cSharpScriptSystem = CSharpScriptSystem::GetInstance();
 	cSharpScriptSystem->Init();
+	std::cout << "CSharp scripting system initialized" << std::endl;
 
 	auto physics3DSystem = Physics3DSystem::GetInstance();
 	physics3DSystem->Init();
+	std::cout << "Physics 3D system initialized" << std::endl;
 
 	// Init window
 	Display display("ZEngine", 1920, 1060);
 	display.Init();
+	std::cout << "Display initialized" << std::endl;
 
 	auto inputManager = InputManager::GetInstance();
 	inputManager->Init(&display);
+	std::cout << "Input manager initialized" << std::endl;
 
 	auto audioSystem = AudioSystem::GetInstance();
 	audioSystem->Init();
+	std::cout << "Audio system initialized" << std::endl;
 
 	// Init graphics sub-system
 	auto graphics = Graphics::GetInstance();
 	graphics->Init(&display);
+	std::cout << "Graphics initialized" << std::endl;
 
 	// Init asset management system
 	auto assetManager = AssetManager::GetInstance();
 	assetManager->Init();
+	std::cout << "Asset manager initialized" << std::endl;
 
 	// Init GUI sub-system
 	auto gui = GUILibrary::GetInstance();
@@ -265,4 +278,34 @@ int main(int argc, char* argv[])
 	ComponentExporter::Cleanup();
 
 	return 0;
+}
+
+#ifdef __EMSCRIPTEN__
+extern "C" {
+	void EMSCRIPTEN_KEEPALIVE start_app() {
+		do_main();
+	}
+}
+#endif
+
+int main(int argc, char* argv[])
+{
+#ifdef __EMSCRIPTEN__
+	EM_ASM(
+		// Make a directory other than '/'
+		FS.mkdir('/disk');
+		// Then mount with IDBFS type
+		FS.mount(IDBFS, { autoPersist: true }, '/disk');
+
+		// Then sync
+		FS.syncfs(true, function (err) {
+			// Error
+			if (err) console.log(err);
+			Module._start_app();
+		});
+	);
+	return 0;
+#else
+	return do_main();
+#endif
 }

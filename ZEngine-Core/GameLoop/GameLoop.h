@@ -21,6 +21,7 @@ namespace ZEngine
 
     void StartLoop();
     void UpdateGame();
+    void FullStep();
     
     bool CloseRequested() const;
 

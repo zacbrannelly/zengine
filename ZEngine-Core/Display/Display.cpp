@@ -5,14 +5,19 @@
 
 #define GLFW_EXPOSE_NATIVE_WIN32
 
-#else
+#elif defined(__APPLE__) && !TARGET_OS_IPHONE
 
 #define GLFW_EXPOSE_NATIVE_COCOA
 
 #endif
 
-#if !TARGET_OS_IPHONE
+#if defined(__APPLE__) && !TARGET_OS_IPHONE
 #include <GLFW/glfw3native.h>
+#endif
+
+#ifdef __EMSCRIPTEN__
+#include <emscripten/emscripten.h>
+#include <emscripten/html5.h>
 #endif
 
 #include <iostream>
@@ -21,7 +26,7 @@ using namespace ZEngine;
 
 Display::Display(std::string title, int width, int height) : _title(title), _width(width), _height(height)
 {
-#if !TARGET_OS_IPHONE
+#if (defined(__EMSCRIPTEN__) || defined(__APPLE__)) && !TARGET_OS_IPHONE
 	_handle = nullptr;
 #endif
 	_isInitialized = false;
@@ -32,9 +37,19 @@ Display::Display(std::string title, int width, int height) : _title(title), _wid
 	_maximize = false;
 }
 
+#ifdef __EMSCRIPTEN__
+static EM_BOOL onCanvasSizeChanged(int /* event_type */, const EmscriptenUiEvent* /* ui_event */, void* user_data)
+{
+  double canvas_width, canvas_height;
+  emscripten_get_element_css_size("#canvas-container", &canvas_width, &canvas_height);
+  glfwSetWindowSize((GLFWwindow*)user_data, (int)canvas_width, (int)canvas_height);
+  return true;
+}
+#endif
+
 bool Display::Init()
 {
-#if !TARGET_OS_IPHONE
+#if (defined(__EMSCRIPTEN__) || defined(__APPLE__)) && !TARGET_OS_IPHONE
 	if (glfwInit() == GLFW_FALSE)
 	{
 		std::cout << "DISPLAY: Failed to initialize GLFW" << std::endl;
@@ -46,10 +61,13 @@ bool Display::Init()
 	glfwWindowHint(GLFW_DECORATED, _isDecorated ? GLFW_TRUE : GLFW_FALSE);
 	glfwWindowHint(GLFW_RESIZABLE, _isResizable ? GLFW_TRUE : GLFW_FALSE);
 	glfwWindowHint(GLFW_VISIBLE, _isVisible ? GLFW_TRUE : GLFW_FALSE);
+
 	glfwWindowHint(GLFW_MAXIMIZED, _maximize ? GLFW_TRUE : GLFW_FALSE);
 
 	// TODO: Figure out if this is doing anything.
+#ifdef __APPLE__
 	glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_TRUE);
+#endif
 
 	GLFWmonitor* monitor = nullptr;
 
@@ -70,6 +88,11 @@ bool Display::Init()
 	glfwSetWindowSizeCallback(_handle, &Display::CallbackWindowResize);
 #endif
 
+#ifdef __EMSCRIPTEN__
+	emscripten_set_resize_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, _handle, false, onCanvasSizeChanged);
+	onCanvasSizeChanged(EMSCRIPTEN_EVENT_RESIZE, nullptr, _handle);
+#endif
+
 	_isInitialized = true;
 
 	return true;
@@ -77,14 +100,14 @@ bool Display::Init()
 
 void Display::Update()
 {
-#if !TARGET_OS_IPHONE
+#if (defined(__EMSCRIPTEN__) || defined(__APPLE__)) && !TARGET_OS_IPHONE
 	glfwPollEvents();
 #endif
 }
 
 void Display::RequestClose() const
 {
-#if !TARGET_OS_IPHONE
+#if defined(__APPLE__) && !TARGET_OS_IPHONE
 	if (_handle == nullptr) return;
 	glfwSetWindowShouldClose(_handle, GLFW_TRUE);
 #endif
@@ -92,7 +115,7 @@ void Display::RequestClose() const
 
 bool Display::CloseRequested() const
 {
-#if !TARGET_OS_IPHONE
+#if defined(__APPLE__) && !TARGET_OS_IPHONE
 	return _handle != nullptr ? glfwWindowShouldClose(_handle) : false;
 #else
 	return false;
@@ -106,7 +129,7 @@ bool Display::IsInitialized() const
 
 void Display::Shutdown()
 {
-#if !TARGET_OS_IPHONE
+#if (defined(__EMSCRIPTEN__) || defined(__APPLE__)) && !TARGET_OS_IPHONE
 	glfwDestroyWindow(_handle);
 	glfwTerminate();
 #endif
@@ -116,7 +139,7 @@ void Display::SetTitle(std::string title)
 {
 	_title = title;
 
-#if !TARGET_OS_IPHONE
+#if (defined(__EMSCRIPTEN__) || defined(__APPLE__)) && !TARGET_OS_IPHONE
 	if (_handle != nullptr)
 		glfwSetWindowTitle(_handle, _title.c_str());
 #endif
@@ -132,7 +155,7 @@ void Display::SetSize(int width, int height)
 	_width = width;
 	_height = height;
 
-#if !TARGET_OS_IPHONE
+#if (defined(__EMSCRIPTEN__) || defined(__APPLE__))&& !TARGET_OS_IPHONE
 	if (_handle != nullptr)
 		glfwSetWindowSize(_handle, _width, _height);
 #endif
@@ -162,7 +185,7 @@ int Display::GetHeight() const
 
 void Display::SetFullscreen(bool isFullscreen)
 {
-#if !TARGET_OS_IPHONE
+#if (defined(__EMSCRIPTEN__) || defined(__APPLE__)) && !TARGET_OS_IPHONE
 	if (_isInitialized)
 	{
 		if (isFullscreen && !_isFullscreen)
@@ -192,7 +215,7 @@ bool Display::IsDecorated() const
 
 void Display::SetVisible(bool isVisible)
 {
-#if !TARGET_OS_IPHONE
+#if (defined(__EMSCRIPTEN__) || defined(__APPLE__)) && !TARGET_OS_IPHONE
 	if (_isInitialized)
 	{
 		if (isVisible && !_isVisible)
@@ -234,7 +257,7 @@ void* Display::GetNativeHandle() const
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 	return glfwGetWin32Window(_handle);
-#elif !TARGET_OS_IPHONE
+#elif defined(__APPLE__) && !TARGET_OS_IPHONE
   // TODO: Get native handle for other platforms
 	return glfwGetCocoaWindow(_handle);
 #else
@@ -243,7 +266,7 @@ void* Display::GetNativeHandle() const
 #endif
 }
 
-#if !TARGET_OS_IPHONE
+#if (defined(__EMSCRIPTEN__) || defined(__APPLE__)) && !TARGET_OS_IPHONE
 GLFWwindow* Display::GetHandle() const
 {
 	return _handle;

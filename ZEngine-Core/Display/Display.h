@@ -1,8 +1,10 @@
 #pragma once
 
+#if defined(__APPLE__)
 #include <TargetConditionals.h>
+#endif
 
-#if !TARGET_OS_IPHONE
+#if (defined(__EMSCRIPTEN__) || defined(__APPLE__)) && !TARGET_OS_IPHONE
 #include <GLFW/glfw3.h>
 #endif
 
@@ -20,7 +22,7 @@ namespace ZEngine
 		void Update();
 		void Shutdown();
 
-	#if !TARGET_OS_IPHONE
+	#if (defined(__EMSCRIPTEN__) || defined(__APPLE__)) && !TARGET_OS_IPHONE
 		GLFWwindow* GetHandle() const;
 	#endif
 
@@ -60,7 +62,7 @@ namespace ZEngine
 		int _width, _height;
 		std::string _title;
 
-	#if !TARGET_OS_IPHONE
+	#if (defined(__EMSCRIPTEN__) || defined(__APPLE__)) && !TARGET_OS_IPHONE
 		GLFWwindow* _handle;
 		static void CallbackWindowResize(GLFWwindow* handle, int newWidth, int newHeight);
 	#endif

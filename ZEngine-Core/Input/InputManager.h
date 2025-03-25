@@ -7,9 +7,11 @@
 #include <vector>
 #include <algorithm>
 
+#if defined(__APPLE__)
 #include <TargetConditionals.h>
+#endif
 
-#if !TARGET_OS_IPHONE
+#if (defined(__EMSCRIPTEN__) || defined(__APPLE__)) && !TARGET_OS_IPHONE
 #include <GLFW/glfw3.h>
 #endif
 
@@ -46,7 +48,7 @@ namespace ZEngine
 		const glm::vec2& GetTouchPos(int index) const;
 		static void TouchCallback(int index, int action, float x, float y);
 
-	#if !TARGET_OS_IPHONE
+	#if (defined(__EMSCRIPTEN__) || defined(__APPLE__)) && !TARGET_OS_IPHONE
 		void RegisterKeyCallback(GLFWkeyfun cb);
 		void RegisterMousePosCallback(GLFWcursorposfun cb);
 		void RegisterMouseButtonCallback(GLFWmousebuttonfun cb);
@@ -63,7 +65,7 @@ namespace ZEngine
 	private:
 		void UpdateButton(ButtonCode code, int action, int mods);
 
-	#if !TARGET_OS_IPHONE
+	#if (defined(__EMSCRIPTEN__) || defined(__APPLE__)) && !TARGET_OS_IPHONE
 		static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		static void MousePositionCallback(GLFWwindow* window, double x, double y);
 		static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
@@ -79,7 +81,7 @@ namespace ZEngine
 		std::map<ButtonCode, float> _buttonAxis;
 		std::map<std::string, ButtonCode> _axisMapping;
 
-	#if !TARGET_OS_IPHONE
+	#if (defined(__EMSCRIPTEN__) || defined(__APPLE__)) && !TARGET_OS_IPHONE
 		std::vector<GLFWkeyfun> _keyCallbacks;
 		std::vector<GLFWcursorposfun> _mousePosCallbacks;
 		std::vector<GLFWmousebuttonfun> _mouseButtonCallbacks;
@@ -90,7 +92,7 @@ namespace ZEngine
 		std::map<int, bool> _touchUp;
 		std::map<int, glm::vec2> _touchPos;
 		std::map<int, glm::vec2> _touchDelta;
-			
+
 		bool _isMouseGrabbed;
 		glm::vec2 _mouseDelta;
 		glm::vec2 _emptyVector;

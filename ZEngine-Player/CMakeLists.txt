@@ -11,6 +11,8 @@ if (IOS)
   include(iOS.cmake)
 elseif (WIN32)
   include(Windows.cmake)
+elseif (EMSCRIPTEN)
+  include(Emscripten.cmake)
 elseif (UNIX AND NOT APPLE)
   include(Linux.cmake)
 elseif (APPLE)
@@ -28,6 +30,7 @@ target_include_directories(ZEngine-Player PRIVATE ${SDL2_MIXER_INCLUDE_DIRS})
 target_include_directories(ZEngine-Player PRIVATE ${SDL2_IMAGE_INCLUDE_DIRS})
 target_include_directories(ZEngine-Player PRIVATE ${GLM_INCLUDE_DIRS})
 target_include_directories(ZEngine-Player PRIVATE ${GLFW_INCLUDE_DIRS})
+target_include_directories(ZEngine-Player PRIVATE ${NLOHMANN_JSON_INCLUDE_DIRS})
 
 ################################################################################
 # Linking

@@ -65,8 +65,6 @@ void MeshCollider3D::BuildGeometry()
   meshDesc.flags = PxMeshFlag::eFLIPNORMALS;
 
   auto thePhysics = Physics3DSystem::GetInstance()->GetPhysics();
-  auto theCooking = Physics3DSystem::GetInstance()->GetCooking();
-
   _triangleMesh = PxCreateTriangleMesh(
     params,
     meshDesc,

@@ -9,9 +9,11 @@
 #include "MetalLayerSetup.h"
 #include "StandardShaders.h"
 
+#if defined(__APPLE__)
 #include <TargetConditionals.h>
+#endif
 
-#if !TARGET_OS_IPHONE
+#if defined(__APPLE__) && !TARGET_OS_IPHONE
 #include <GLFW/glfw3.h>
 #endif
 
@@ -40,7 +42,7 @@ bool Graphics::Init(Display* display)
 		return false;
 	}
     
-#if !TARGET_OS_IPHONE
+#if defined(__APPLE__) && !TARGET_OS_IPHONE
     if (display->GetHandle() == nullptr)
     {
         std::cout << "GRAPHICS: Display was null or not created, it is needed to create a rendering context!" << std::endl;
@@ -62,6 +64,10 @@ bool Graphics::Init(void* nativeWindowHandle, int width, int height)
 
 #if defined(__APPLE__) && !TARGET_OS_IPHONE
 	pd.nwh = setupMetalLayer(nativeWindowHandle);
+#elif defined(__EMSCRIPTEN__)
+	// The ID of the canvas element
+	static const char* canvasId = "#canvas";
+	pd.nwh = (void*)canvasId;
 #else
 	pd.nwh = nativeWindowHandle;
 #endif

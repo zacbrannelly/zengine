@@ -227,6 +227,7 @@ SubMesh::SubMesh()
 {
 	_isDynamic = false;
 	_drawMode = DrawMode::TRIANGLES;
+	_indexBuffer = nullptr;
 }
 
 SubMesh::SubMesh(const SubMesh& other)

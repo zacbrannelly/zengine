@@ -48,6 +48,7 @@ std::future<bool> Project::BuildAndLoadAsync()
 
 bool Project::Build(bool loadIntoScriptSystem)
 {
+#if defined(__APPLE__)
   // Make sure the project has been loaded
   if (_projectFile == nullptr)
   {
@@ -78,6 +79,9 @@ bool Project::Build(bool loadIntoScriptSystem)
   _buildInProgress = false;
 
   return success;
+#else
+  throw std::runtime_error("Not supported on this platform yet!");
+#endif
 }
 
 bool Project::IsBuildInProgress() const

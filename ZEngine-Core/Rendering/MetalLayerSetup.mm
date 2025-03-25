@@ -1,14 +1,17 @@
+#if defined(__APPLE__)
 #import <QuartzCore/CAMetalLayer.h>
 #import <Metal/Metal.h>
 #import <MetalKit/MetalKit.h>
 
-#if !TARGET_OS_IPHONE
+#endif
+
+#if defined(__APPLE__) && !TARGET_OS_IPHONE
 #import <Cocoa/Cocoa.h>
 #endif
 
 namespace bgfx {
   void* setupMetalLayer(void* wnd) {
-#if !TARGET_OS_IPHONE
+#if defined(__APPLE__) && !TARGET_OS_IPHONE
     NSWindow *window = (NSWindow*)wnd;
     NSView *contentView = [window contentView];
 
@@ -31,7 +34,7 @@ namespace bgfx {
     return metalLayer;
 #else
     // TODO: Figure out how to pass the view to the renderer
-    return nil;
+    return nullptr;
 #endif
   }
 }

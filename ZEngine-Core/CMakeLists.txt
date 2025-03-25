@@ -91,7 +91,11 @@ source_group("Source Files" FILES ${SOURCE_FILES})
 ################################################################################
 
 # Configure the ZEngine-Core target, which will be a shared library used by both the C++ and C# projects.
-add_library(ZEngine-Core SHARED ${SOURCE_FILES})
+if (EMSCRIPTEN)
+    add_library(ZEngine-Core STATIC ${SOURCE_FILES})
+else()
+    add_library(ZEngine-Core SHARED ${SOURCE_FILES})
+endif()
 
 # Path to the C# interop project.
 set(ZENGINE_INTEROP_PROJECT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Scripting/CSharp/Lib/ZEngine.Interop)
@@ -99,12 +103,13 @@ set(ZENGINE_INTEROP_PROJECT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Scripting/CSharp/Li
 # Path where the C# interop project will be built (this is where the generated C# code will be placed).
 set(ZENGINE_INTEROP_PROJECT_BUILD_PATH ${CMAKE_CURRENT_BINARY_DIR}/projects/ZEngine.Interop)
 
-
 # Include platform specific configurations
 if (IOS)
     include(iOS.cmake)
 elseif (WIN32)
     include(Windows.cmake)
+elseif (EMSCRIPTEN)
+    include(Emscripten.cmake)
 elseif (UNIX AND NOT APPLE)
     include(Linux.cmake)
 elseif (APPLE)
@@ -135,19 +140,6 @@ target_include_directories(ZEngine-Core PRIVATE ${NLOHMANN_JSON_INCLUDE_DIRS})
 ################################################################################
 # Linking
 ################################################################################
-
-# Find PhysX libraries
-# TODO: This might be better placed in the parent CMakeLists.txt
-message(STATUS "PhysX bin path: ${PHYSX_BIN_PATH}")
-set(PHYSX_COMMON "${PHYSX_BIN_PATH}/libPhysXCommon_static_64.a")
-set(PHYSX_CORE "${PHYSX_BIN_PATH}/libPhysX_static_64.a")
-set(PHYSX_FOUNDATION "${PHYSX_BIN_PATH}/libPhysXFoundation_static_64.a")
-set(PHYSX_CHARACTER_KINEMATIC "${PHYSX_BIN_PATH}/libPhysXCharacterKinematic_static_64.a")
-set(PHYSX_COOKING "${PHYSX_BIN_PATH}/libPhysXCooking_static_64.a")
-set(PHYSX_PVD "${PHYSX_BIN_PATH}/libPhysXPvdSDK_static_64.a")
-set(PHYSX_EXTENSIONS "${PHYSX_BIN_PATH}/libPhysXExtensions_static_64.a")
-
-# TODO: Check if the PhysX libraries are found or not
 
 target_link_libraries(ZEngine-Core
     PRIVATE bgfx
@@ -188,12 +180,21 @@ set_property(SOURCE Core.i PROPERTY COMPILE_OPTIONS
         -dllimport ${ZENGINE_INTEROP_DLL_IMPORT_PATH})
 
 # Generate C# wrapper code for the C++ code, and generate a native shared library the generated C# code can use called ZEngine-PInvoke.
-swig_add_library(ZEngine-PInvoke 
-    TYPE SHARED
-    SOURCES Core.i
-    LANGUAGE csharp
-    OUTPUT_DIR ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}
-)
+if (EMSCRIPTEN)
+    swig_add_library(ZEngine-PInvoke 
+        TYPE STATIC
+        SOURCES Core.i
+        LANGUAGE csharp
+        OUTPUT_DIR ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}
+    )
+else()
+    swig_add_library(ZEngine-PInvoke 
+        TYPE SHARED
+        SOURCES Core.i
+        LANGUAGE csharp
+        OUTPUT_DIR ${ZENGINE_INTEROP_PROJECT_BUILD_PATH}
+    )
+endif()
 
 target_link_libraries(ZEngine-PInvoke
     PRIVATE ZEngine-Core

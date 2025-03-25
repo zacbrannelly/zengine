@@ -15,7 +15,6 @@ namespace physx
   class PxDefaultCpuDispatcher;
   class PxScene;
   class PxMaterial;
-  class PxCooking;
 }
 
 namespace ZEngine
@@ -54,7 +53,6 @@ namespace ZEngine
     void Shutdown();
 
     physx::PxPhysics* GetPhysics() const { return _physics; }
-    physx::PxCooking* GetCooking() const { return _cooking; }
     physx::PxScene* GetScene() const { return _sceneStack.top(); }
     physx::PxMaterial* GetMaterial() const { return _material; }
 
@@ -69,7 +67,6 @@ namespace ZEngine
     physx::PxDefaultErrorCallback* _errorCallback;
     physx::PxFoundation* _foundation;
     physx::PxPhysics* _physics;
-    physx::PxCooking* _cooking;
     physx::PxDefaultCpuDispatcher* _dispatcher;
     physx::PxMaterial* _material;
     std::stack<physx::PxScene*> _sceneStack;

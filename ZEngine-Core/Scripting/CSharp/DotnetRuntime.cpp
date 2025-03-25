@@ -2,7 +2,10 @@
 #include <iostream>
 #include <dlfcn.h>
 #include <sstream>
+
+#if defined(__APPLE__)
 #include <TargetConditionals.h>
+#endif
 
 using namespace ZEngine;
 
@@ -19,7 +22,7 @@ DotnetRuntime::DotnetRuntime() :
 
 void DotnetRuntime::Initialize(std::string runtimeConfigPath)
 {
-#if !TARGET_OS_IPHONE
+#if defined(__APPLE__) && !TARGET_OS_IPHONE
   _runtimeConfigPath = runtimeConfigPath;
   _hostfxrLibPath = GetHostFxrPath();
 
@@ -33,7 +36,7 @@ void DotnetRuntime::Initialize(std::string runtimeConfigPath)
 
 void DotnetRuntime::InitializeRuntime()
 {
-#if !TARGET_OS_IPHONE
+#if defined(__APPLE__) && !TARGET_OS_IPHONE
   // Prepare for hosting in the current process.
   InitializeHostFxrContext(_runtimeConfigPath);
 
@@ -62,7 +65,7 @@ load_assembly_and_get_function_pointer_fn DotnetRuntime::GetLoadAssemblyAndGetFu
 
 void DotnetRuntime::Shutdown()
 {
-#if !TARGET_OS_IPHONE
+#if defined(__APPLE__) && !TARGET_OS_IPHONE
   CloseHostFxr();
   dlclose(_hostfxrLib);
 #endif
@@ -70,7 +73,7 @@ void DotnetRuntime::Shutdown()
 
 std::string DotnetRuntime::GetHostFxrPath() const
 {
-#if !TARGET_OS_IPHONE
+#if defined(__APPLE__) && !TARGET_OS_IPHONE
   // Pre-allocate a large buffer for the path to hostfxr
   char buffer[4096];
   size_t buffer_size = sizeof(buffer) / sizeof(char_t);
@@ -91,7 +94,7 @@ std::string DotnetRuntime::GetHostFxrPath() const
 
 bool DotnetRuntime::LoadHostFxr(std::string& hostfxrLibPath) 
 {
-#if !TARGET_OS_IPHONE
+#if defined(__APPLE__) && !TARGET_OS_IPHONE
   _hostfxrLib = dlopen(hostfxrLibPath.c_str(), RTLD_NOW);
   
   if (!_hostfxrLib)
@@ -132,7 +135,7 @@ bool DotnetRuntime::LoadHostFxr(std::string& hostfxrLibPath)
 
 bool DotnetRuntime::InitializeHostFxrContext(std::string& runtimeConfigPath)
 {
-#if !TARGET_OS_IPHONE
+#if defined(__APPLE__) && !TARGET_OS_IPHONE
   // Initialize hostfxr context (prepare for creating the CoreCLR runtime).
   int initRuntimeResult = _hostfxrInitializeForRuntimeConfig(runtimeConfigPath.c_str(), nullptr, &_context);
   if (initRuntimeResult != 0 && initRuntimeResult != 1)
@@ -154,7 +157,7 @@ bool DotnetRuntime::InitializeHostFxrContext(std::string& runtimeConfigPath)
 
 void DotnetRuntime::CloseHostFxr() 
 {
-#if !TARGET_OS_IPHONE
+#if defined(__APPLE__) && !TARGET_OS_IPHONE
   _hostfxrClose(_context);
   _context = nullptr;
   _loadAssemblyAndGetFunctionPtr = nullptr;

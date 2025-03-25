@@ -33,16 +33,14 @@ bool Physics3DSystem::Init()
     std::cerr << "PxCreatePhysics failed!" << std::endl;
     return false;
   }
+  std::cout << "Physics initialized" << std::endl;
 
-  _cooking = PxCreateCooking(PX_PHYSICS_VERSION, *_foundation, PxCookingParams(scale));
-  if (!_cooking)
-  {
-    std::cerr << "PxCreateCooking failed!" << std::endl;
-    return false;
-  }
-
+#ifndef __EMSCRIPTEN__
   // Setup CPU dispatcher.
   _dispatcher = PxDefaultCpuDispatcherCreate(1);
+#else
+  _dispatcher = PxDefaultCpuDispatcherCreate(0);
+#endif
 
   // Create basic material.
   // TODO: Create Asset type for physics materials.
@@ -99,7 +97,6 @@ void Physics3DSystem::Shutdown()
     _sceneStack.pop();
   }
   PX_RELEASE(_dispatcher);
-  PX_RELEASE(_cooking);
   PX_RELEASE(_physics);
   PX_RELEASE(_foundation);
 

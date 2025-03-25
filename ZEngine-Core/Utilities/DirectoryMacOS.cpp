@@ -1,4 +1,4 @@
-#if __APPLE__
+#if defined(__APPLE__) || defined(__EMSCRIPTEN__)
 
 #include "Directory.h"
 #include "File.h"

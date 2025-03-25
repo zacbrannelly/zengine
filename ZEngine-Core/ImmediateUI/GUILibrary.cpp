@@ -5,6 +5,10 @@
 #include "../Input/InputManager.h"
 #include "../Rendering/Graphics.h"
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten/emscripten.h>
+#endif
+
 using namespace ZEngine;
 
 void GUILibrary::Init(Display* display)
@@ -13,6 +17,8 @@ void GUILibrary::Init(Display* display)
 	_toolbarHeight = 100;
 
 	imguiCreate();
+
+#if (defined(__EMSCRIPTEN__) || defined(__APPLE__)) && !TARGET_OS_IPHONE
 	ImGui_ImplGlfw_InitForOpenGL(display->GetHandle(), false);
 	
 	auto input = InputManager::GetInstance();
@@ -24,11 +30,11 @@ void GUILibrary::Init(Display* display)
 	// Setup the rest of the callbacks we don't clash with (yet)
 	glfwSetScrollCallback(display->GetHandle(), ImGui_ImplGlfw_ScrollCallback);
 	glfwSetCharCallback(display->GetHandle(), ImGui_ImplGlfw_CharCallback);
+#endif
 
 	ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
 	ImGui::StyleColorsDark();
-	ImGui::LoadIniSettingsFromDisk("layout.ini");
 
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8, 8));
 	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(8, 8));
@@ -97,11 +103,19 @@ void GUILibrary::Init(Display* display)
 	colors[ImGuiCol_NavWindowingHighlight]  = ImVec4(0.13f, 0.13f, 0.15f, 1.00f);
 	colors[ImGuiCol_NavWindowingDimBg]      = ImVec4(0.10f, 0.10f, 0.12f, 1.00f);
 	colors[ImGuiCol_ModalWindowDimBg]       = ImVec4(0.49f, 0.49f, 0.49f, 0.70f);
+
+#ifdef __EMSCRIPTEN__
+	ImGui::LoadIniSettingsFromDisk("/disk/layout.ini");
+#else
+	ImGui::LoadIniSettingsFromDisk("layout.ini");
+#endif
 }
 
 void GUILibrary::NewFrame()
 {
+#if (defined(__EMSCRIPTEN__) || defined(__APPLE__)) && !TARGET_OS_IPHONE
 	ImGui_ImplGlfw_NewFrame();
+#endif
 	ImGui::NewFrame();
 	ImGuizmo::BeginFrame();
 }
@@ -167,5 +181,8 @@ void GUILibrary::EndToolbarWindow()
 void GUILibrary::Shutdown()
 {
 	ImGui::SaveIniSettingsToDisk("layout.ini");
+#if (defined(__EMSCRIPTEN__) || defined(__APPLE__)) && !TARGET_OS_IPHONE
+	ImGui_ImplGlfw_Shutdown();
+#endif
 	imguiDestroy();
 }

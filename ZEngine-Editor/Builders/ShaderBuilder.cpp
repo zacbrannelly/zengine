@@ -31,6 +31,7 @@ bool ShaderBuilder::Build(ShaderBuilderType type, const std::string& path, const
 	// TODO: Make a subprocess call to the `shaderc` executable to build the shader.
 	// Getting Brtshaderc working with CMake is proving more difficult than its worth.
 
+#if !BX_PLATFORM_EMSCRIPTEN
 	bx::ProcessReader reader;
 
 #if BX_PLATFORM_WINDOWS
@@ -87,4 +88,8 @@ bool ShaderBuilder::Build(ShaderBuilderType type, const std::string& path, const
 	*size = outputBuffer.str().length();
 
 	return true;
+#else
+	// TODO: Implement Emscripten shader building
+	return false;
+#endif
 }

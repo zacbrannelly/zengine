@@ -29,7 +29,7 @@ void EditorToolbar::RenderElement()
 
 void EditorToolbar::RenderPlayButton()
 {
-  auto windowWidth = ImGui::GetWindowContentRegionWidth();
+  auto windowWidth = ImGui::GetContentRegionMax().x;
   auto playButtonLabel = ICON_FA_PLAY_CIRCLE "  Play";
   ImVec2 buttonSize(ImGui::CalcTextSize(playButtonLabel).x + 20, 0);
 
@@ -41,7 +41,7 @@ void EditorToolbar::RenderPlayButton()
 
 void EditorToolbar::RenderPauseAndStopButtons()
 {
-  auto windowWidth = ImGui::GetWindowContentRegionWidth();
+  auto windowWidth = ImGui::GetContentRegionMax().x;
   auto isPaused = _mapController->GetPlayState() == PAUSED;
   auto pauseToggleLabel = isPaused ? (ICON_FA_PLAY_CIRCLE "  Continue") : (ICON_FA_PAUSE_CIRCLE "  Pause");
   auto stopButtonLabel = ICON_FA_STOP "  Stop";

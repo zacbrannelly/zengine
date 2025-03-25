@@ -3,6 +3,10 @@
 #include "../Display/Display.h"
 #include "../Input/InputManager.h"
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten/emscripten.h>
+#endif
+
 using namespace ZEngine;
 
 GameLoop::GameLoop(
@@ -28,29 +32,41 @@ GameLoop::~GameLoop()
 {
 }
 
+void GameLoop::FullStep() 
+{
+  _newTime = _time->GetTime();
+  _frameTime = _newTime - _currentTime;
+  _currentTime = _newTime;
+
+  _accumulator += _frameTime;
+
+  while (_accumulator >= _dt)
+  {
+    UpdateGame();
+    _accumulator -= _dt;
+  }
+
+  if (_renderCallback)
+  {
+    _renderCallback();
+  }
+}
+
 void GameLoop::StartLoop()
 {
   _currentTime = _time->GetTime();
 
+#ifdef __EMSCRIPTEN__
+  emscripten_cancel_main_loop();
+  emscripten_set_main_loop_arg([](void* gameLoop) {
+    static_cast<GameLoop*>(gameLoop)->FullStep();
+  }, this, 0, 1);
+#else
   while (!CloseRequested())
   {
-    _newTime = _time->GetTime();
-    _frameTime = _newTime - _currentTime;
-    _currentTime = _newTime;
-
-    _accumulator += _frameTime;
-
-    while (_accumulator >= _dt)
-    {
-      UpdateGame();
-      _accumulator -= _dt;
-    }
-
-    if (_renderCallback)
-    {
-      _renderCallback();
-    }
+    FullStep();
   }
+#endif
 }
 
 void GameLoop::UpdateGame()

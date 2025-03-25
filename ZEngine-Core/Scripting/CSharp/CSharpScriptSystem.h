@@ -1,6 +1,10 @@
 #include "../../Misc/Singleton.h"
 #include <string>
+
+#if defined(__APPLE__)
 #include <TargetConditionals.h>
+#endif
+
 #include "AssemblyLoader.h"
 
 namespace ZEngine
@@ -24,7 +28,7 @@ namespace ZEngine
     void SetProperty(void* managedInstance, std::string propertyName, void* value);
     void SetScriptNativeInstance(void* managedInstance, void* nativeInstance);
     
-  #if !TARGET_OS_IPHONE
+  #if defined(__APPLE__) && !TARGET_OS_IPHONE
     void HotReload();
 
     bool BuildProject(std::string projectPath, std::string dllOutputPath);
@@ -33,7 +37,7 @@ namespace ZEngine
   #endif
 
   private:
-  #if !TARGET_OS_IPHONE
+  #if defined(__APPLE__) && !TARGET_OS_IPHONE
     void LoadPluginManagerAssembly();
     void LoadProjectAssembly();
   #endif
@@ -46,7 +50,7 @@ namespace ZEngine
     SetPropertyFunction _setPropertyFunction;
     SetScriptNativeInstanceFunction _setScriptNativeInstanceFunction;
 
-  #if !TARGET_OS_IPHONE
+  #if defined(__APPLE__) && !TARGET_OS_IPHONE
     BuildProjectFunction _buildProjectFunction;
     LoadProjectAssemblyFunction _loadProjectAssemblyFunction;
     RegisterAdditionalDependencyPathFunction _registerAdditionalDependencyPathFunction;

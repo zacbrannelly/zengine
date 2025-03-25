@@ -2,17 +2,19 @@
 # CMake Project Setup
 ################################################################################
 project(IMGUI)
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.22)
 
 ################################################################################
 # Compiler flags
 ################################################################################
-set (CMAKE_CXX_STANDARD 14)
+set (CMAKE_CXX_STANDARD 17)
 
 ################################################################################
 # Dependencies
 ################################################################################
-find_package(glfw3 3.3 REQUIRED)
+if (NOT EMSCRIPTEN)
+  find_package(glfw3 3.3 REQUIRED)
+endif()
 
 ################################################################################
 # IMGUI
@@ -33,7 +35,13 @@ add_library(IMGUI STATIC ${SOURCE_FILES})
 # Includes
 ################################################################################
 target_include_directories(IMGUI PRIVATE ${IMGUI_DIR})
-target_include_directories(IMGUI PRIVATE ${GLFW_INCLUDE_DIRS})
+
+if (EMSCRIPTEN)
+  target_compile_options(IMGUI PUBLIC "--use-port=contrib.glfw3")
+  target_link_options(IMGUI PUBLIC "--use-port=contrib.glfw3")
+else()
+  target_include_directories(IMGUI PRIVATE ${GLFW_INCLUDE_DIRS})
+endif()
 
 ################################################################################
 # Linking

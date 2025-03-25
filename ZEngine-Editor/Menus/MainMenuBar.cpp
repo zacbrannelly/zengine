@@ -4,6 +4,10 @@
 #include "../Dialogs/ProjectBrowserDialog.h"
 #include <ZEngine-Core/ImmediateUI/imgui-includes.h>
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten/emscripten.h>
+#endif
+
 using namespace ZEngine;
 
 MainMenuBar::MainMenuBar(Editor* editor) : _editor(editor)
@@ -23,6 +27,22 @@ void MainMenuBar::RenderElement()
 		if (ImGui::MenuItem("Open Project", NULL, (bool*)NULL))
 		{
 			_editor->Add(new ProjectBrowserDialog(_editor));
+		}
+		if (ImGui::MenuItem("Load Layout", NULL, (bool*)NULL))
+		{
+#ifdef __EMSCRIPTEN__
+			ImGui::LoadIniSettingsFromDisk("/disk/layout.ini");
+#else
+			ImGui::LoadIniSettingsFromDisk("layout.ini");
+#endif
+		}
+		if (ImGui::MenuItem("Save Layout", NULL, (bool*)NULL))
+		{
+#ifdef __EMSCRIPTEN__
+			ImGui::SaveIniSettingsToDisk("/disk/layout.ini");
+#else
+			ImGui::SaveIniSettingsToDisk("layout.ini");
+#endif
 		}
 		if (ImGui::MenuItem("Close", NULL, (bool*)NULL))
 		{

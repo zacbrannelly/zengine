@@ -4,7 +4,7 @@
 #include "DotnetRuntime.h"
 #include "AssemblyLoader.h"
 
-#if TARGET_OS_IPHONE
+#if defined(__APPLE__) && TARGET_OS_IPHONE
 #include <dlfcn.h>
 #endif
 
@@ -31,9 +31,13 @@ using namespace ZEngine;
 
 bool CSharpScriptSystem::Init()
 {
-#if !TARGET_OS_IPHONE
+#if defined(__APPLE__) && !TARGET_OS_IPHONE
   DotnetRuntime::GetInstance()->Initialize(RUNTIME_CONFIG_PATH);
   LoadPluginManagerAssembly();
+#elif defined(__EMSCRIPTEN__)
+  // Emscripten doesn't support loading shared libraries.
+  // TODO: Figure out how to load the interop assembly.
+  return false;
 #else
   // C# code is natively compiled on iOS, so we need to load it from a shared library instead.
   const char* interopDllPath = "ZEngine-Interop.framework/ZEngine-Interop";
@@ -50,7 +54,7 @@ bool CSharpScriptSystem::Init()
 #endif
 }
 
-#if !TARGET_OS_IPHONE
+#if defined(__APPLE__) && !TARGET_OS_IPHONE
 void CSharpScriptSystem::HotReload()
 {
   LoadProjectAssembly();
@@ -173,7 +177,7 @@ void CSharpScriptSystem::SetScriptNativeInstance(void* object, void* nativeInsta
   _setScriptNativeInstanceFunction(object, nativeInstance);
 }
 
-#if !TARGET_OS_IPHONE
+#if defined(__APPLE__) && !TARGET_OS_IPHONE
 bool CSharpScriptSystem::BuildProject(std::string projectPath, std::string dllOutputPath)
 {
   if (!_buildProjectFunction) {
@@ -218,8 +222,10 @@ void CSharpScriptSystem::RegisterAdditionalDependencyPath(std::string path)
 
 void CSharpScriptSystem::Shutdown() 
 {
-#if !TARGET_OS_IPHONE
+#if defined(__APPLE__) && !TARGET_OS_IPHONE
   DotnetRuntime::GetInstance()->Shutdown();
+#elif defined(__EMSCRIPTEN__)
+  // Emscripten doesn't support loading shared libraries.
 #else
   dlclose(_libraryHandle);
 #endif

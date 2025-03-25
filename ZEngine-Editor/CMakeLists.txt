@@ -4,8 +4,6 @@
 # Compiler flags
 ################################################################################
 set (CMAKE_CXX_STANDARD 20)
-set(DOTNET_LIBRARY_PATH "/usr/local/share/dotnet/shared/Microsoft.NETCore.App/6.0.14")
-set(DOTNET_HOST_PATH "/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Host.osx-arm64/6.0.14/runtimes/osx-arm64/native")
 
 ################################################################################
 # Source files
@@ -92,6 +90,8 @@ add_custom_command(TARGET ZEngine-Editor POST_BUILD
 ################################################################################
 # Includes
 ################################################################################
+include_directories("./")
+
 target_include_directories(ZEngine-Editor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/bgfx.cmake/bgfx/include)
 target_include_directories(ZEngine-Editor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/bgfx.cmake/bx/include)
 target_include_directories(ZEngine-Editor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/bgfx.cmake/bgfx/tools)
@@ -108,6 +108,9 @@ target_include_directories(ZEngine-Editor PRIVATE ${SDL2_MIXER_INCLUDE_DIRS})
 target_include_directories(ZEngine-Editor PRIVATE ${SDL2_IMAGE_INCLUDE_DIRS})
 target_include_directories(ZEngine-Editor PRIVATE ${GLM_INCLUDE_DIRS})
 target_include_directories(ZEngine-Editor PRIVATE ${GLFW_INCLUDE_DIRS})
+target_include_directories(ZEngine-Editor PRIVATE ${NLOHMANN_JSON_INCLUDE_DIRS})
+target_include_directories(ZEngine-Editor PRIVATE ${ASSIMP_INCLUDE_DIRS})
+
 
 ################################################################################
 # Linking
@@ -122,37 +125,52 @@ target_link_libraries (ZEngine-Editor
   PRIVATE spirv-cross
   PRIVATE spirv-tools
   PRIVATE glfw
-  PRIVATE SDL2_mixer::SDL2_mixer
+  PRIVATE ${SDL2_MIXER_LIBRARIES}
 )
+
+if (EMSCRIPTEN)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --shell-file ${CMAKE_CURRENT_LIST_DIR}/shell.html")
+  target_link_options(ZEngine-Editor PRIVATE
+    "-sALLOW_MEMORY_GROWTH=1"
+    "-sMIN_WEBGL_VERSION=2"
+    "-sSAFE_HEAP=1"
+    "-lidbfs.js"
+  )
+  set_target_properties(ZEngine-Editor PROPERTIES OUTPUT_NAME "index")
+  set_target_properties(ZEngine-Editor PROPERTIES SUFFIX ".html")
+endif()
 
 ################################################################################
 # Copy dependencies from ZEngine-Core to build directory
 ################################################################################
 
-add_dependencies(ZEngine-Editor ZEngine-PluginManager-Dotnet)
-add_dependencies(ZEngine-Editor ZEngine-Interop-Dotnet)
+if (NOT EMSCRIPTEN)
+  add_dependencies(ZEngine-Editor ZEngine-PluginManager-Dotnet)
+  add_dependencies(ZEngine-Editor ZEngine-Interop-Dotnet)
 
-add_custom_command(TARGET ZEngine-Editor POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/lib/ZEngine.PluginManager $<TARGET_FILE_DIR:ZEngine-Editor>/lib/ZEngine.PluginManager
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/lib/ZEngine.Interop $<TARGET_FILE_DIR:ZEngine-Editor>/lib/ZEngine.Interop
-    DEPENDS
-      ZEngine-PluginManager-Dotnet
-      ZEngine-Interop-Dotnet
-      ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/lib/ZEngine.PluginManager
-      ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/lib/ZEngine.Interop
-    COMMENT "Copying ZEngine.PluginManager and ZEngine.Interop to build directory"
-    VERBATIM
-)
+  add_custom_command(TARGET ZEngine-Editor POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/lib/ZEngine.PluginManager $<TARGET_FILE_DIR:ZEngine-Editor>/lib/ZEngine.PluginManager
+      COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/lib/ZEngine.Interop $<TARGET_FILE_DIR:ZEngine-Editor>/lib/ZEngine.Interop
+      DEPENDS
+        ZEngine-PluginManager-Dotnet
+        ZEngine-Interop-Dotnet
+        ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/lib/ZEngine.PluginManager
+        ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/lib/ZEngine.Interop
+      COMMENT "Copying ZEngine.PluginManager and ZEngine.Interop to build directory"
+      VERBATIM
+  )
 
-add_custom_command(TARGET ZEngine-Editor POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ZEngine-Core> $<TARGET_FILE_DIR:ZEngine-Editor>/libZEngine-Core.dylib
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ZEngine-PInvoke> $<TARGET_FILE_DIR:ZEngine-Editor>/lib/libZEngine-PInvoke.dylib
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/ZEngine-Core.runtimeconfig.json $<TARGET_FILE_DIR:ZEngine-Editor>/ZEngine-Core.runtimeconfig.json
-    DEPENDS
-      ZEngine-Core
-      ZEngine-PInvoke
-      ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/libZEngine-Core.dylib
-      ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/ZEngine-Core.runtimeconfig.json
-    COMMENT "Copying ZEngine-Core library, ZEngine-P/Invoke library and C# runtime config to binary directory"
-    VERBATIM
-)
+  add_custom_command(TARGET ZEngine-Editor POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ZEngine-Core> $<TARGET_FILE_DIR:ZEngine-Editor>/libZEngine-Core.dylib
+      COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ZEngine-PInvoke> $<TARGET_FILE_DIR:ZEngine-Editor>/lib/libZEngine-PInvoke.dylib
+      COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/ZEngine-Core.runtimeconfig.json $<TARGET_FILE_DIR:ZEngine-Editor>/ZEngine-Core.runtimeconfig.json
+      DEPENDS
+        ZEngine-Core
+        ZEngine-PInvoke
+        ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/libZEngine-Core.dylib
+        ${CMAKE_CURRENT_BINARY_DIR}/../ZEngine-Core/ZEngine-Core.runtimeconfig.json
+      COMMENT "Copying ZEngine-Core library, ZEngine-P/Invoke library and C# runtime config to binary directory"
+      VERBATIM
+  )
+
+endif()
