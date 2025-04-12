@@ -67,23 +67,18 @@
     },
     {
       "id": "00000000-0000-0000-0000-000000000017",
-      "path": "Assets/shaders/basic_shader.shader",
+      "path": "Assets/shaders/BasicShader.shader",
       "type": "SHADER_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000018",
-      "path": "Assets/shaders/pbr_shader.shader",
+      "path": "Assets/shaders/PBRShader.shader",
       "type": "SHADER_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000019",
       "path": "Assets/textures/rustediron2_albedo.png",
       "type": "TEXTURE_ASSET"
-    },
-    {
-      "id": "00000000-0000-0000-0000-000000000020",
-      "path": "Assets/shaders/test_multi_pass.shader",
-      "type": "SHADER_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000021",

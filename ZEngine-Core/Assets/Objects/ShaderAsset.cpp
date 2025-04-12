@@ -59,12 +59,26 @@ bool ShaderAsset::Load(std::string path)
 			return false;
 		}
 
+#ifdef __EMSCRIPTEN__
+		std::string arch = "webgl";
+#elif defined(__APPLE__)
+		std::string arch = "metal";
+#else
+		// TODO: Support Windows/Linux platform.
+		std::string arch = "vulkan";
+#endif
+
 		for (int i = 0; i < numPasses; i++)
 		{
 			if (passes[i].is_object())
 			{
-				auto passObject = passes[i];
-
+				if (passes[i].find(arch) == passes[i].end())
+				{
+					cout << "SHADER_ASSET: Failed to load the shader '" << name << "' since it has no shader for the current architecture `" << arch << "`" << "!" << endl;
+					return false;
+				}
+				
+				auto passObject = passes[i].at(arch).get<json::object_t>();
 				auto vertexPath = assetDir + passObject.at("vertex").get<std::string>();
 				auto fragPath = assetDir + passObject.at("fragment").get<std::string>();
 

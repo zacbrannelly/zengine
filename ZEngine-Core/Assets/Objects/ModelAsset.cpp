@@ -151,6 +151,7 @@ std::vector<Material*> ModelAsset::LoadMaterials(const aiScene* scene)
 		Material* material = new Material(name.C_Str());
 		
 		// Set the shader to the pbr shader
+		// TODO: Stop hardcoding the shader name, use a standard shader built into the engine instead.
 		material->SetShader(AssetManager::GetInstance()->GetAsset("pbr_direct")->Cast<ShaderAsset>()->GetShader());
 
 		auto diffuseTextures = LoadTextures(sceneMaterial, aiTextureType_DIFFUSE);
