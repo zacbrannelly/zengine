@@ -129,11 +129,11 @@ target_link_libraries (ZEngine-Editor
 )
 
 if (EMSCRIPTEN)
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --shell-file ${CMAKE_CURRENT_LIST_DIR}/shell.html")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --shell-file ${CMAKE_CURRENT_LIST_DIR}/shell.html --preload-file ${CMAKE_CURRENT_SOURCE_DIR}/ProjectTemplate@/ProjectTemplate")
   target_link_options(ZEngine-Editor PRIVATE
     "-sALLOW_MEMORY_GROWTH=1"
     "-sMIN_WEBGL_VERSION=2"
-    "-sSAFE_HEAP=1"
+    "-sSAFE_HEAP=2"
     "-lidbfs.js"
   )
   set_target_properties(ZEngine-Editor PROPERTIES OUTPUT_NAME "index")

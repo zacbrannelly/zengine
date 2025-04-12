@@ -114,8 +114,10 @@ void Editor::SetProject(Project* project)
 	_project = project;
 	assetManager->SetCatalog(&project->GetCatalog());
 
+#ifndef __EMSCRIPTEN__
 	// Build the project in the background
 	_buildFuture = _project->BuildAndLoadAsync();
+#endif
 }
 
 Project* Editor::GetProject() const

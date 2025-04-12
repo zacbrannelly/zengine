@@ -45,6 +45,7 @@ void MapController::Play()
 		return;
 	}
 
+#ifndef __EMSCRIPTEN__
 	// Build the project scripts and then start playing.
 	_playState = BUILDING;
 	_buildFuture = _editor->GetProject()->BuildAndLoadAsync();
@@ -62,6 +63,10 @@ void MapController::Play()
 		// TODO: Handle build failure in the UI.
 		return result;
 	});
+#else
+	// TODO: Support building in emscripten.
+	this->_playWhenPossible = true;
+#endif
 }
 
 void MapController::StartPlaying()

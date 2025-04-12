@@ -14,6 +14,7 @@ CSharpScriptComponent::CSharpScriptComponent() : Component("CSharpScriptComponen
   _managedInstance = nullptr;
 }
 
+#ifndef __EMSCRIPTEN__
 void CSharpScriptComponent::Init() {
   _script->InvokeMethod(_managedInstance, INIT_METHOD_NAME);
 }
@@ -31,6 +32,24 @@ void CSharpScriptComponent::SetScript(CSharpScript* script) {
   SetName(script->GetClassName());
   SetManagedInstance(_script->CreateManagedObject(this));
 }
+#else
+void CSharpScriptComponent::Init() {
+  // TODO: Support scripting in emscripten.
+}
+
+void CSharpScriptComponent::Update() {
+  // TODO: Support scripting in emscripten.
+}
+
+void CSharpScriptComponent::Render(int viewId) {
+  // TODO: Support scripting in emscripten.
+}
+
+void CSharpScriptComponent::SetScript(CSharpScript* script) {
+  _script = script;
+  // TODO: Support scripting in emscripten.
+}
+#endif
 
 CSharpScript* CSharpScriptComponent::GetScript() const {
   return _script;
