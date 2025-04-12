@@ -1,7 +1,8 @@
 {
 	"name": "slate_material",
-	"shader": "00000000-0000-0000-0000-000000000018",
-	
+	"shader": {
+		"assetId": "00000000-0000-0000-0000-000000000018"
+	},
 	"textures": [
 		{
 			"name": "albedoTexture",

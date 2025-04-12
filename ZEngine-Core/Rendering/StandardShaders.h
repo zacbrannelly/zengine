@@ -1,7 +1,15 @@
 #pragma once
 
+#include <string>
+
 namespace ZEngine
 {
+  enum StandardShader
+  {
+    UNLIT_COLOR_SHADER,
+    UNLIT_TEXTURE_SHADER,
+  };
+
   class Shader;
 
   class StandardShaders
@@ -9,6 +17,9 @@ namespace ZEngine
   public:
     static void Init();
     static void Release();
+
+    static Shader* GetShader(const std::string& enumName);
+    static Shader* GetShader(StandardShader shader);
 
     static Shader* GetUnlitColorShader();
     static Shader* GetUnlitTextureShader();

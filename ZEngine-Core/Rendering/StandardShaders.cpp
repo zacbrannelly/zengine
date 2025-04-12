@@ -4,16 +4,49 @@
 #include "StandardShaders/UnlitTextureShader.h"
 
 #include <iostream>
+#include <map>
 
 using namespace ZEngine;
 
 Shader* StandardShaders::_unlitColorShader = nullptr;
 Shader* StandardShaders::_unlitTextureShader = nullptr;
 
+static std::map<std::string, StandardShader> shaderNameToEnum = {
+  { "UNLIT_COLOR_SHADER",   UNLIT_COLOR_SHADER   },
+  { "UNLIT_TEXTURE_SHADER", UNLIT_TEXTURE_SHADER },
+};
+
 void StandardShaders::Init()
 {
   LoadUnlitColorShader();
   LoadUnlitTextureShader();
+}
+
+Shader* StandardShaders::GetShader(const std::string& shaderName)
+{
+  auto it = shaderNameToEnum.find(shaderName);
+  if (it != shaderNameToEnum.end())
+  {
+    return GetShader(it->second);
+  }
+  else
+  {
+    std::cout << "STANDARD SHADERS: Shader not found: " << shaderName << std::endl;
+    return nullptr;
+  }
+}
+
+Shader* StandardShaders::GetShader(StandardShader shader)
+{
+  switch (shader)
+  {
+    case UNLIT_COLOR_SHADER:
+      return _unlitColorShader;
+    case UNLIT_TEXTURE_SHADER:
+      return _unlitTextureShader;
+    default:
+      return nullptr;
+  }
 }
 
 void StandardShaders::LoadUnlitColorShader()

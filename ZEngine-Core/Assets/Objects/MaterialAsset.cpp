@@ -4,7 +4,7 @@
 
 #include "../AssetManager.h"
 #include "../AssetCatalog.h"
-
+#include "../../Rendering/StandardShaders.h"
 #include "../../Rendering/Material.h"
 #include "../../Utilities/Directory.h"
 #include "../../Utilities/JsonHelpers.h"
@@ -203,7 +203,7 @@ void MaterialAsset::ReadUniforms(json::array_t& values, Material* material)
 	}
 }
 
-void MaterialAsset::ReadShader(json& identifier, Material* material)
+void MaterialAsset::ReadShader(json& shaderRef, Material* material)
 {
 	auto assetManager = AssetManager::GetInstance();
 	auto catalog = assetManager->GetCatalog();
@@ -211,31 +211,60 @@ void MaterialAsset::ReadShader(json& identifier, Material* material)
 	string path = "";
 	ObjectType type;
 
-	const auto maybeId = uuids::uuid::from_string(identifier.get<string>());
-	if (!maybeId.has_value())
+	if (shaderRef.find("assetId") != shaderRef.end())
 	{
-		path = identifier.get<string>();
-	}
-	else if (catalog != nullptr)
-	{
+		// Resolve path via Asset UUID.
+		const auto maybeId = uuids::uuid::from_string(shaderRef.at("assetId").get<string>());
+		if (!maybeId.has_value())
+		{
+			cout << "MATERIAL_ASSET: Invalid shader asset ID: " << shaderRef.at("assetId").get<string>() << endl;
+			return;
+		}
+
 		if (!catalog->GetAssetPathFromID(maybeId.value(), path, type))
 		{
 			cout << "Failed to find the shader for material: " << _material->GetName() << endl;
 			return;
 		}
 	}
+	else if (shaderRef.find("path") != shaderRef.end())
+	{
+		// Use path provided in the JSON.
+		path = shaderRef.at("path").get<string>();
+	}
+	else if (shaderRef.find("standardShader") != shaderRef.end())
+	{
+		// Use a standard shader.
+		auto shader = StandardShaders::GetShader(shaderRef.at("standardShader").get<string>());
+		if (shader == nullptr) {
+			cout << "MATERIAL_ASSET: Failed to find standard shader for material: " << _material->GetName() << endl;
+			return;
+		}
+		material->SetShader(shader);
+		return;
+	}
+	else
+	{
+		cout << "MATERIAL_ASSET: Failed to find shader for material: " << _material->GetName() << endl;
+		return;
+	}
 
+	// Load the shader asset from the resolved path.
 	auto asset = assetManager->FindAssetFromPath(path);
-
 	if (asset == nullptr)
 	{
 		asset = assetManager->LoadAsset(path, path, SHADER_ASSET);
 	}
 
+	// Assign the shader to the material.
 	if (asset != nullptr)
 	{
 		auto shaderAsset = asset->Cast<ShaderAsset>();
 		material->SetShader(shaderAsset->GetShader());
+	}
+	else
+	{
+		cout << "MATERIAL_ASSET: Failed to load shader for material: " << _material->GetName() << endl;
 	}
 }
 
