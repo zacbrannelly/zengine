@@ -39,6 +39,8 @@ namespace ZEngine
     void ClearLogs();
     const std::vector<LogMessage>& GetLogs() const;
     std::vector<LogMessage> GetLogsFromLevel(LogLevel level) const;
+
+    static std::string LogLevelToString(LogLevel level);
   private:
     std::vector<LogMessage> _logs;
     LogLevel _printLogLevel;

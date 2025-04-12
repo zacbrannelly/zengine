@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ZEngine-Core/ImmediateUI/GUIWindow.h>
+#include <ZEngine-Core/Logging/LoggingSystem.h>
 
 namespace ZEngine
 {
@@ -12,5 +13,7 @@ namespace ZEngine
 
 		void ProcessInput() override;
 		void RenderInWindow() override;
+	private:
+		LoggingSystem* _loggingSystem;
 	};
 }

@@ -3,18 +3,6 @@
 
 using namespace ZEngine;
 
-std::string LogLevelToString(LogLevel level)
-{
-  switch (level)
-  {
-    case LOG_ERROR:   return "ERROR";
-    case LOG_WARNING: return "WARNING";
-    case LOG_INFO:    return "INFO";
-    case LOG_DEBUG:   return "DEBUG";
-    default:         return "UNKNOWN";
-  }
-}
-
 void LoggingSystem::Init()
 {
   _printLogLevel = LOG_INFO;
@@ -86,4 +74,16 @@ std::vector<LogMessage> LoggingSystem::GetLogsFromLevel(LogLevel level) const
     }
   }
   return filteredLogs;
+}
+
+std::string LoggingSystem::LogLevelToString(LogLevel level)
+{
+  switch (level)
+  {
+    case LOG_ERROR:   return "ERROR";
+    case LOG_WARNING: return "WARNING";
+    case LOG_INFO:    return "INFO";
+    case LOG_DEBUG:   return "DEBUG";
+    default:          return "UNKNOWN";
+  }
 }
