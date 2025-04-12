@@ -11,10 +11,13 @@ namespace ZEngine
     static void Release();
 
     static Shader* GetUnlitColorShader();
+    static Shader* GetUnlitTextureShader();
 
   private:
     static Shader* _unlitColorShader;
+    static Shader* _unlitTextureShader;
 
     static void LoadUnlitColorShader();
+    static void LoadUnlitTextureShader();
   };
 }

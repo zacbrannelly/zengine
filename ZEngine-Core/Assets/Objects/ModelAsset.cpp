@@ -195,6 +195,7 @@ std::vector<Material*> ModelAsset::LoadMaterials(const aiScene* scene)
 
 		auto assetManager = AssetManager::GetInstance();
 
+		// TODO: Sort out this mess.
 		auto roughnessAsset = assetManager->LoadAsset("test texture 2", "blank_ao.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
 		auto metallicAsset = assetManager->LoadAsset("test texture 3", "blank_ao.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
 		auto aoAsset = assetManager->LoadAsset("test texture 5", "blank_ao.png", ObjectType::TEXTURE_ASSET)->Cast<TextureAsset>();
