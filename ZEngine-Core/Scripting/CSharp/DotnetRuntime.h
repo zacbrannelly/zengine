@@ -1,5 +1,6 @@
 #include <string>
 #include "../../Misc/Singleton.h"
+#include "../../Logging/Logger.h"
 #include "Dotnet/nethost.h"
 #include "Dotnet/hostfxr.h"
 #include "Dotnet/coreclr_delegates.h"
@@ -19,7 +20,7 @@ namespace ZEngine
   private:
     void InitializeRuntime();
 
-    std::string GetHostFxrPath() const;
+    std::string GetHostFxrPath();
     bool LoadHostFxr(std::string& hostfxrLibPath);
     bool InitializeHostFxrContext(std::string& runtimeConfigPath);
 
@@ -34,5 +35,7 @@ namespace ZEngine
     hostfxr_get_runtime_delegate_fn _hostfxrGetRuntimeDelegate;
     load_assembly_and_get_function_pointer_fn _loadAssemblyAndGetFunctionPtr;
     bool _loaded;
+
+    Logger _logger { "DotnetRuntime" };
   };
 }

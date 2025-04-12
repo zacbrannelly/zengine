@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "../../Logging/Logger.h"
 
 namespace ZEngine
 {
@@ -44,5 +45,6 @@ namespace ZEngine
     std::string _assemblyPath;
     std::string _assemblyName;
     bool _loaded;
+    Logger _logger { "AssemblyLoader" };
   };
 }

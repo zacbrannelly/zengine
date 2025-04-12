@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <uuid.h>
+#include "../Logging/Logger.h"
 #include "../Map/Objects/ZObject.h"
 #include "../Utilities/File.h"
 
@@ -48,5 +49,6 @@ namespace ZEngine
 	private:
 		std::string _lastCatalogPath;
 		std::vector<CatalogEntry> _catalog;
+		Logger _logger;
 	};
 }

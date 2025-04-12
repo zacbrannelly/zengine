@@ -1,7 +1,7 @@
 #include "AssetCatalog.h"
 #include "Asset.h"
 #include "../Utilities/Directory.h"
-#include <iostream>
+#include "../Logging/Logger.h"
 #include <fstream>
 #include <algorithm>
 #include <nlohmann/json.hpp>
@@ -9,7 +9,9 @@
 using namespace std;
 using namespace ZEngine;
 
-AssetCatalog::AssetCatalog()
+static const std::string MODULE_NAME = "AssetCatalog";
+
+AssetCatalog::AssetCatalog() : _logger(MODULE_NAME)
 {
 }
 
@@ -43,7 +45,9 @@ bool AssetCatalog::LoadCatalog(string path)
 
 				_catalog.push_back({ id, path, type, name });
 			}
-			catch (std::exception) {}
+			catch (std::exception) {
+				_logger.LogError("Failed to load asset from line: " + line);
+			}
 		}
 
 		in.close();
@@ -65,7 +69,7 @@ bool AssetCatalog::LoadCatalogFromProjectJson(string jsonFilePath)
 	}
 	catch (std::exception)
 	{
-		std::cerr << "Failed to load project file: " << jsonFilePath << std::endl;
+		_logger.LogError("Failed to load project file: " + jsonFilePath);
 		return false;
 	}
 }

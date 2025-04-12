@@ -20,8 +20,6 @@
 #include <emscripten/html5.h>
 #endif
 
-#include <iostream>
-
 using namespace ZEngine;
 
 Display::Display(std::string title, int width, int height) : _title(title), _width(width), _height(height)
@@ -52,7 +50,7 @@ bool Display::Init()
 #if (defined(__EMSCRIPTEN__) || defined(__APPLE__)) && !TARGET_OS_IPHONE
 	if (glfwInit() == GLFW_FALSE)
 	{
-		std::cout << "DISPLAY: Failed to initialize GLFW" << std::endl;
+		_logger.LogError("Init: Failed to initialize GLFW");
 		return false;
 	}
 
@@ -80,7 +78,7 @@ bool Display::Init()
 
 	if (_handle == nullptr)
 	{
-		std::cout << "DISPLAY: Failed to create window" << std::endl;
+		_logger.LogError("Init: Failed to create window");
 		return false;
 	}
 

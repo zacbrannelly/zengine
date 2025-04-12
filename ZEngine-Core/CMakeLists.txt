@@ -40,6 +40,8 @@ set(SOURCE_FILES
     "Display/Display.cpp"
     "Engine.cpp"
     "Input/InputManager.cpp"
+    "Logging/Logger.cpp"
+    "Logging/LoggingSystem.cpp"
     "Map/Map.cpp"
     "Map/MapManager.cpp"
     "Map/Objects/Entity.cpp"

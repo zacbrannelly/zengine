@@ -2,14 +2,16 @@
 #include "Shader.h"
 #include "StandardShaders/UnlitColorShader.h"
 #include "StandardShaders/UnlitTextureShader.h"
+#include "../Logging/LoggingSystem.h"
 
-#include <iostream>
 #include <map>
 
 using namespace ZEngine;
 
 Shader* StandardShaders::_unlitColorShader = nullptr;
 Shader* StandardShaders::_unlitTextureShader = nullptr;
+
+static const std::string MODUlE_NAME = "StandardShaders";
 
 static std::map<std::string, StandardShader> shaderNameToEnum = {
   { "UNLIT_COLOR_SHADER",   UNLIT_COLOR_SHADER   },
@@ -31,7 +33,7 @@ Shader* StandardShaders::GetShader(const std::string& shaderName)
   }
   else
   {
-    std::cout << "STANDARD SHADERS: Shader not found: " << shaderName << std::endl;
+    LoggingSystem::GetInstance()->LogError("GetShader: Shader not found: " + shaderName, MODUlE_NAME);
     return nullptr;
   }
 }
@@ -59,11 +61,11 @@ void StandardShaders::LoadUnlitColorShader()
     (uint32_t)sizeof(UNLIT_COLOR_FRAGMENT_SHADER)
   ))
   {
-    std::cout << "STANDARD SHADERS: Loaded Unlit Color Shader" << std::endl;
+    LoggingSystem::GetInstance()->LogInfo("Loaded Unlit Color Shader.", MODUlE_NAME);
   }
   else
   {
-    std::cout << "STANDARD SHADERS: Failed to load Unlit Color Shader" << std::endl;
+    LoggingSystem::GetInstance()->LogError("LoadUnlitColorShader: Failed to load.", MODUlE_NAME);
   }
 }
 
@@ -77,11 +79,11 @@ void StandardShaders::LoadUnlitTextureShader()
     (uint32_t)sizeof(UNLIT_TEXTURE_FRAGMENT_SHADER)
   ))
   {
-    std::cout << "STANDARD SHADERS: Loaded Unlit Texture Shader" << std::endl;
+    LoggingSystem::GetInstance()->LogInfo("Loaded Unlit Texture Shader.", MODUlE_NAME);
   }
   else
   {
-    std::cout << "STANDARD SHADERS: Failed to load Unlit Texture Shader" << std::endl;
+    LoggingSystem::GetInstance()->LogError("LoadUnlitTextureShader: Failed to load.", MODUlE_NAME);
   }
 }
 

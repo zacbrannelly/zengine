@@ -2,14 +2,16 @@
 #include "../Builders/ShaderBuilder.h"
 #include <ZEngine-Core/Utilities/File.h>
 #include <ZEngine-Core/Utilities/Directory.h>
+#include <ZEngine-Core/Logging/LoggingSystem.h>
 
 #include <string>
-#include <iostream>
 #include <ZEngine-Core/Assets/AssetManager.h>
 #include <ZEngine-Core/Assets/AssetCatalog.h>
 #include <nlohmann/json.hpp>
 
 using namespace ZEngine;
+
+static const std::string MODULE_NAME = "ShaderImporter";
 
 ShaderImporter::ShaderImporter(Container* owner) : ShaderImporter(owner, "\0")
 {
@@ -43,19 +45,19 @@ bool ShaderImporter::Validate()
 
 		if (!vertFile.Exists())
 		{
-			std::cout << "SHADER_IMPORTER: Failed to locate vertex shader code at: " << vertFile.GetPath() << std::endl;
+			LoggingSystem::GetInstance()->LogError("Validate: Failed to locate vertex shader code at: " + vertFile.GetPath(), MODULE_NAME);
 			return false;
 		}
 
 		if (!fragFile.Exists())
 		{
-			std::cout << "SHADER_IMPORTER: Failed to locate fragment shader code at: " << fragFile.GetPath() << std::endl;
+			LoggingSystem::GetInstance()->LogError("Validate: Failed to locate fragment shader code at: " + fragFile.GetPath(), MODULE_NAME);
 			return false;
 		}
 
 		if (!varyFile.Exists())
 		{
-			std::cout << "SHADER_IMPORTER: Failed to locate varying def code at: " << varyFile.GetPath() << std::endl;
+			LoggingSystem::GetInstance()->LogError("Validate: Failed to locate varying def code at: " + varyFile.GetPath(), MODULE_NAME);
 			return false;
 		}
 	}
@@ -78,13 +80,13 @@ bool ShaderImporter::Create()
 		{
 			if (!ShaderBuilder::BuildToFile(SB_VERTEX, pass.vertShaderPath, pass.varyingDefPath))
 			{
-				std::cout << "SHADER_IMPORTER: Failed to build vertex shader code at path: " << pass.vertShaderPath << std::endl;
+				LoggingSystem::GetInstance()->LogError("Create: Failed to build vertex shader code at path: " + pass.vertShaderPath, MODULE_NAME);
 				return false;
 			}
 
 			if (!ShaderBuilder::BuildToFile(SB_FRAGMENT, pass.fragShaderPath, pass.varyingDefPath))
 			{
-				std::cout << "SHADER_IMPORTER: Failed to build fragment shader code at path: " << pass.vertShaderPath << std::endl;
+				LoggingSystem::GetInstance()->LogError("Create: Failed to build fragment shader code at path: " + pass.fragShaderPath, MODULE_NAME);
 				return false;
 			}
 

@@ -1,6 +1,5 @@
 #include "AssemblyLoader.h"
 
-#include <iostream>
 #include <sstream>
 #include "DotnetRuntime.h"
 
@@ -41,7 +40,7 @@ void* AssemblyLoader::GetFunction(std::string typeName, std::string owningNamesp
 void* AssemblyLoader::GetFunction(std::string typeName, std::string owningNamespace, std::string methodName, std::string assemblyName)
 {
   if (!_loaded) {
-    std::cerr << "AssemblyLoader::GetFunction called before assembly was loaded." << std::endl;
+    _logger.LogError("GetFunction: Called before assembly was loaded.");
     throw std::runtime_error("Failed to get function pointer");
   }
 
@@ -61,7 +60,7 @@ void* AssemblyLoader::GetFunction(std::string typeName, std::string owningNamesp
   );
 
   if (getFunctionPointerResult < 0) {
-    std::cerr << "get_function_pointer failed: " << std::hex << std::showbase << getFunctionPointerResult << std::endl;
+    _logger.LogError("GetFunction: Failed to get function pointer. Error code: " + std::to_string(getFunctionPointerResult));
     throw std::runtime_error("Failed to get function pointer");
   }
 
@@ -90,7 +89,7 @@ bool AssemblyLoader::LoadAssembly(
 
   if (loadAssemblyResult != 0 || !executeDelegate)
   {
-    std::cerr << "Failed to load the assembly. Error code: " << loadAssemblyResult << std::endl;
+    _logger.LogError("LoadAssembly: Failed to load the assembly. Error code: " + std::to_string(loadAssemblyResult));
     return false;
   }
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "../Misc/Singleton.h"
+#include "../Logging/Logger.h"
 #include <bgfx/bgfx.h>
 #include <glm/glm.hpp>
 #include <string>
@@ -53,5 +54,6 @@ namespace ZEngine
 		const bool IsInitialized() const;
 	private:
 		bool _initialized;
+		Logger _logger { "Graphics" };
 	};
 }

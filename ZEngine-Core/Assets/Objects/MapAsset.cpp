@@ -6,13 +6,15 @@
 #include "../../Component/Component.h"
 #include "../../Component/Transform.h"
 #include "../../Misc/Factory.h"
-#include <iostream>
+#include "../../Logging/LoggingSystem.h"
 #include <fstream>
 #include <algorithm>
 
 using namespace std;
 using namespace nlohmann;
 using namespace ZEngine;
+
+static const string MODULE_NAME = "MapAsset";
 
 MapAsset::MapAsset(string name) : Asset(name, ObjectType::MAP_ASSET)
 {
@@ -30,7 +32,7 @@ bool MapAsset::Load(string path)
 
 	if (!in.is_open())
 	{
-		cout << "MAP_ASSET: Failed to load file: " << path << endl;
+		LoggingSystem::GetInstance()->LogError("Load: Failed to load file: " + path, MODULE_NAME);
 		return false;
 	}
 
@@ -46,7 +48,7 @@ bool MapAsset::Load(string path)
 	}
 	else
 	{
-		cout << "MAP_ASSET: Invalid map file, no name specified!" << endl;
+		LoggingSystem::GetInstance()->LogError("Load: Invalid map file, no name specified!", MODULE_NAME);
 		return false;
 	}
 

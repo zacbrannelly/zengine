@@ -2,6 +2,7 @@
 #include "../Physics/Physics3DSystem.h"
 #include "../Physics/PhysxUtils.h"
 #include "../Map/Objects/Entity.h"
+#include "../Logging/LoggingSystem.h"
 #include "Transform.h"
 #include "DynamicCollider3D.h"
 
@@ -10,11 +11,12 @@
 #include <extensions/PxRigidBodyExt.h>
 
 #include <string>
-#include <iostream>
 
 using namespace std;
 using namespace physx;
 using namespace ZEngine;
+
+static const string MODULE_NAME = "RigidBody3D";
 
 RigidBody3D::RigidBody3D() : Component("Rigid Body 3D", ObjectType::RIGID_BODY_3D), _rigidBody(nullptr)
 {
@@ -76,7 +78,7 @@ void RigidBody3D::RebuildActorShapes()
 
   // Ensure at least one collider is present, otherwise remove the rigid body.
   if (colliders.size() == 0) {
-    cout << "RigidBody3D::Init() - No colliders found on parent object." << endl;
+    LoggingSystem::GetInstance()->LogError("Init: No colliders found on parent object.", MODULE_NAME);
     OnDestroy();
     return;
   }
@@ -89,7 +91,7 @@ void RigidBody3D::RebuildActorShapes()
     auto geometry = collider->GetGeometry();
     if (geometry == nullptr)
     {
-      cout << "RigidBody3D::Init() - Failed to create geometry for collider." << endl;
+      LoggingSystem::GetInstance()->LogError("Init: Failed to create geometry for collider.", MODULE_NAME);
       continue;
     }
 

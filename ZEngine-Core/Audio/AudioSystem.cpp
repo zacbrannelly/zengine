@@ -1,7 +1,5 @@
 #include "AudioSystem.h"
 
-#include <iostream>
-
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 
@@ -14,19 +12,19 @@ bool AudioSystem::Init()
 
 	if (SDL_Init(SDL_INIT_AUDIO) < 0)
 	{
-		cout << "AUDIO_SYSTEM: Failed to initialize SDL because: " << SDL_GetError() << endl;
+		_logger.LogError("Init: Failed to initialize SDL because: " + string(SDL_GetError()));
 		return false;
 	}
 
 	if (Mix_Init(MIX_INIT_MP3) < 0)
 	{
-		cout << "AUDIO_SYSTEM: Failed to initialize the mixer because: " << Mix_GetError() << endl;
+		_logger.LogError("Init: Failed to initialize SDL_mixer because: " + string(Mix_GetError()));
 		return false;
 	}
 
 	if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 2048) < 0)
 	{
-		cout << "AUDIO_SYSTEM: Failed to open audio device because: " << Mix_GetError() << endl;
+		_logger.LogError("Init: Failed to open audio device because: " + string(Mix_GetError()));
 		return false;
 	}
 
@@ -40,7 +38,7 @@ Sound AudioSystem::LoadSoundData(string path)
 
 	if (sound.chunk == nullptr)
 	{
-		cout << "AUDIO_SYSTEM: Failed to load audio data from '" << path << "' because: " << Mix_GetError() << endl;
+		_logger.LogError("LoadSoundData: Failed to load audio data from '" + path + "' because: " + string(Mix_GetError()));
 	}
 
 	return sound;
@@ -53,7 +51,7 @@ Sound AudioSystem::LoadMusicData(string path)
 
 	if (sound.music == nullptr)
 	{
-		cout << "AUDIO_SYSTEM: Failed to load audio data from '" << path << "' because: " << Mix_GetError() << endl;
+		_logger.LogError("LoadMusicData: Failed to load audio data from '" + path + "' because: " + string(Mix_GetError()));
 	}
 
 	return sound;

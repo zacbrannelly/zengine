@@ -3,6 +3,7 @@
 #include <iostream>
 #include <future>
 
+#include <ZEngine-Core/Logging/LoggingSystem.h>
 #include <ZEngine-Core/Display/Display.h>
 #include <ZEngine-Core/Input/InputManager.h>
 #include <ZEngine-Core/Rendering/Graphics.h>
@@ -57,6 +58,8 @@
 #endif
 
 using namespace ZEngine;
+
+static const std::string MODULE_NAME = "Editor";
 
 Editor::Editor(Display* display) : _display(display), _selectedMap(nullptr), _selectedObject(nullptr), _project(nullptr)
 {
@@ -168,45 +171,49 @@ Editor::~Editor()
 
 int do_main()
 {
+	// Initialize the logging system
+	auto loggingSystem = LoggingSystem::GetInstance();
+	loggingSystem->Init();
+
 	// Initialize the factory (register the types)
 	Factory::Init();
-	std::cout << "Factory initialized" << std::endl;
+	loggingSystem->LogInfo("Factory initialized", MODULE_NAME);
 
 	//TODO: Register any editor specific ZObject's here
 	ComponentExporter::RegisterAllTypes();
-	std::cout << "Component exporter initialized" << std::endl;
+	loggingSystem->LogInfo("Component exporter initialized", MODULE_NAME);
 
 	// Init CSharp scripting system
 	auto cSharpScriptSystem = CSharpScriptSystem::GetInstance();
 	cSharpScriptSystem->Init();
-	std::cout << "CSharp scripting system initialized" << std::endl;
+	loggingSystem->LogInfo("CSharp scripting system initialized", MODULE_NAME);
 
 	auto physics3DSystem = Physics3DSystem::GetInstance();
 	physics3DSystem->Init();
-	std::cout << "Physics 3D system initialized" << std::endl;
+	loggingSystem->LogInfo("Physics 3D system initialized", MODULE_NAME);
 
 	// Init window
 	Display display("ZEngine", 1920, 1060);
 	display.Init();
-	std::cout << "Display initialized" << std::endl;
+	loggingSystem->LogInfo("Display initialized", MODULE_NAME);
 
 	auto inputManager = InputManager::GetInstance();
 	inputManager->Init(&display);
-	std::cout << "Input manager initialized" << std::endl;
+	loggingSystem->LogInfo("Input manager initialized", MODULE_NAME);
 
 	auto audioSystem = AudioSystem::GetInstance();
 	audioSystem->Init();
-	std::cout << "Audio system initialized" << std::endl;
+	loggingSystem->LogInfo("Audio system initialized", MODULE_NAME);
 
 	// Init graphics sub-system
 	auto graphics = Graphics::GetInstance();
 	graphics->Init(&display);
-	std::cout << "Graphics initialized" << std::endl;
+	loggingSystem->LogInfo("Graphics system initialized", MODULE_NAME);
 
 	// Init asset management system
 	auto assetManager = AssetManager::GetInstance();
 	assetManager->Init();
-	std::cout << "Asset manager initialized" << std::endl;
+	loggingSystem->LogInfo("Asset manager initialized", MODULE_NAME);
 
 	// Init GUI sub-system
 	auto gui = GUILibrary::GetInstance();
@@ -276,8 +283,8 @@ int do_main()
 	cSharpScriptSystem->Shutdown();
 	time->Shutdown();
 	physics3DSystem->Shutdown();
-
 	ComponentExporter::Cleanup();
+	loggingSystem->Shutdown();
 
 	return 0;
 }

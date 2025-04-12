@@ -2,8 +2,8 @@
 
 #include "Directory.h"
 #include "File.h"
+#include "../Logging/LoggingSystem.h"
 
-#include <iostream>
 #include <algorithm>
 #include <sys/stat.h>
 #include <cstdio>
@@ -14,16 +14,18 @@
 using namespace std;
 using namespace ZEngine;
 
+static const string MODULE_NAME = "Directory";
+
 bool Directory::Create()
 {
   if (!mkdir(_fullpath.c_str(), 0777)) {
-    cout << "DIRECTORY: Successfully created the directory '" << _fullpath << "'" << endl;
+    LoggingSystem::GetInstance()->LogInfo("Successfully created the directory '" + _fullpath + "'", MODULE_NAME);
     return true;
   } else {
     if (errno == EEXIST) {
-      cout << "DIRECTORY: Failed to create the directory '" << _fullpath << "' since it already exists!" << endl;
+      LoggingSystem::GetInstance()->LogError("Create: Failed to create the directory '" + _fullpath + "' since it already exists!", MODULE_NAME);
     } else {
-      cout << "DIRECTORY: Failed to create the directory '" << _fullpath << "' since the path was invalid!" << endl;
+      LoggingSystem::GetInstance()->LogError("Create: Failed to create the directory '" + _fullpath + "' with error code: " + std::to_string(errno), MODULE_NAME);
     }
     return false;
   }
@@ -32,11 +34,11 @@ bool Directory::Create()
 bool Directory::Move(string newPath)
 {
   if (!std::rename(_fullpath.c_str(), newPath.c_str())) {
-    cout << "DIRECTORY: Successfully moved the directory '" << _fullpath << "'" << endl;
+    LoggingSystem::GetInstance()->LogInfo("Successfully moved the directory '" + _fullpath + "'", MODULE_NAME);
     _fullpath = newPath;
     return true;
   } else {
-    cout << "DIRECTORY: Failed to move the directory '" << _fullpath << "' with error code: " << errno << endl;
+    LoggingSystem::GetInstance()->LogError("Move: Failed to move the directory '" + _fullpath + "' with error code: " + std::to_string(errno), MODULE_NAME);
     return false;
   }
 }
@@ -44,10 +46,10 @@ bool Directory::Move(string newPath)
 bool Directory::Delete()
 {
   if (!std::remove(_fullpath.c_str())) {
-    cout << "DIRECTORY: Successfully deleted directory '" << _fullpath << "'" << endl;
+    LoggingSystem::GetInstance()->LogInfo("Successfully deleted the directory '" + _fullpath + "'", MODULE_NAME);
     return true;
   } else {
-    cout << "DIRECTORY: Failed to delete the directory '" << _fullpath << "' with error code: " << errno << endl;
+    LoggingSystem::GetInstance()->LogError("Delete: Failed to delete the directory '" + _fullpath + "' with error code: " + std::to_string(errno), MODULE_NAME);
     return false;
   }
 }
@@ -137,7 +139,7 @@ std::vector<File> Directory::GetAllFiles() const
     }
     closedir(dir);
   } else {
-    cout << "DIRECTORY: Failed to open directory '" << _fullpath << "' with error code: " << errno << endl;
+    LoggingSystem::GetInstance()->LogError("GetAllFiles: Failed to open directory '" + _fullpath + "' with error code: " + std::to_string(errno), MODULE_NAME);
     throw std::runtime_error("Failed to open directory '" + _fullpath + "'");
   }
 
@@ -160,7 +162,7 @@ std::vector<Directory> Directory::GetAllDirectories() const
     }
     closedir(dir);
   } else {
-    cout << "DIRECTORY: Failed to open directory '" << _fullpath << "' with error code: " << errno << endl;
+    LoggingSystem::GetInstance()->LogError("GetAllDirectories: Failed to open directory '" + _fullpath + "' with error code: " + std::to_string(errno), MODULE_NAME);
     throw std::runtime_error("Failed to open directory '" + _fullpath + "'");
   }
 

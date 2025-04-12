@@ -1,19 +1,18 @@
 #include "Asset.h"
-#include <iostream>
 #include <fstream>
+#include "../Logging/LoggingSystem.h"
 
-using namespace std;
 using namespace ZEngine;
 
-Asset::Asset(string name, ObjectType type) : ZObject(name, type)
+Asset::Asset(std::string name, ObjectType type) : ZObject(name, type)
 {
 	RegisterDerivedType(ASSET);
 	_isLoaded = false;
 }
 
-bool Asset::LoadBinary(const string& path, char* result, unsigned int& resultSize)
+bool Asset::LoadBinary(const std::string& path, char* result, unsigned int& resultSize)
 {
-	ifstream in(path, ios::in | ios::binary | ios::ate);
+	std::ifstream in(path, std::ios::in | std::ios::binary | std::ios::ate);
 
 	if (in.is_open())
 	{
@@ -32,7 +31,7 @@ bool Asset::LoadBinary(const string& path, char* result, unsigned int& resultSiz
 	}
 	else
 	{
-		cout << "ASSET: Failed to open file at path: " << path << endl;
+		LoggingSystem::GetInstance()->LogError("LoadBinary: Failed to open file at path: " + path, "Asset");
 		return false;
 	}
 
@@ -41,17 +40,17 @@ bool Asset::LoadBinary(const string& path, char* result, unsigned int& resultSiz
 	return true;
 }
 
-bool Asset::LoadText(const string& path, string& result)
+bool Asset::LoadText(const std::string& path, std::string& result)
 {
-	ifstream in(path, ios::in);
+	std::ifstream in(path, std::ios::in);
 
 	if (in.is_open())
 	{
-		result = string((std::istreambuf_iterator<char>(in)), (std::istreambuf_iterator<char>()));
+		result = std::string((std::istreambuf_iterator<char>(in)), (std::istreambuf_iterator<char>()));
 	}
 	else
 	{
-		cout << "ASSET: Failed to open file at path: " << path << endl;
+		LoggingSystem::GetInstance()->LogError("LoadText: Failed to open file at path: " + path, "Asset");
 		return false;
 	}
 

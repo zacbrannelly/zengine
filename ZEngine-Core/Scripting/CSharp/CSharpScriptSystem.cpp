@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "CSharpScriptSystem.h"
 #include "DotnetRuntime.h"
 #include "AssemblyLoader.h"
@@ -43,7 +41,7 @@ bool CSharpScriptSystem::Init()
   const char* interopDllPath = "ZEngine-Interop.framework/ZEngine-Interop";
   _libraryHandle = dlopen(interopDllPath, RTLD_NOW);
   if (!_libraryHandle) {
-    std::cerr << "Failed to load interop assembly: " << dlerror() << std::endl;
+    _logger.LogError("Init: Failed to load interop assembly: " + std::string(dlerror()));
     throw std::runtime_error("Failed to load interop assembly");
   }
 
@@ -71,6 +69,7 @@ void CSharpScriptSystem::LoadPluginManagerAssembly()
     PLUGIN_MANAGER_ENTRYPOINT_NAMESPACE,
     PLUGIN_MANAGER_ASSEMBLY_NAME
   )) {
+    _logger.LogError("LoadPluginManagerAssembly: Failed to load plugin manager assembly.");
     throw std::runtime_error("Failed to load plugin manager assembly.");
   }
 
@@ -140,7 +139,7 @@ void CSharpScriptSystem::LoadPluginManagerAssembly()
 void* CSharpScriptSystem::CreateManagedObject(std::string typeName)
 {
   if (!_createManagedObjectFunction) {
-    std::cerr << "CSharpScriptSystem::CreateManagedObject called before plugin assembly was loaded." << std::endl;
+    _logger.LogError("CreateManagedObject: Called before plugin assembly was loaded.");
     throw std::runtime_error("Failed to create managed object");
   }
 
@@ -150,7 +149,7 @@ void* CSharpScriptSystem::CreateManagedObject(std::string typeName)
 void* CSharpScriptSystem::InvokeMethod(void* object, std::string methodName)
 {
   if (!_invokeMethodFunction) {
-    std::cerr << "CSharpScriptSystem::InvokeMEthod called before plugin assembly was loaded." << std::endl;
+    _logger.LogError("InvokeMethod: Called before plugin assembly was loaded.");
     throw std::runtime_error("Failed to invoke method");
   }
 
@@ -160,7 +159,7 @@ void* CSharpScriptSystem::InvokeMethod(void* object, std::string methodName)
 void CSharpScriptSystem::SetProperty(void* object, std::string propertyName, void* value)
 {
   if (!_setPropertyFunction) {
-    std::cerr << "CSharpScriptSystem::SetProperty called before plugin assembly was loaded." << std::endl;
+    _logger.LogError("SetProperty: Called before plugin assembly was loaded.");
     throw std::runtime_error("Failed to set property");
   }
 
@@ -170,7 +169,7 @@ void CSharpScriptSystem::SetProperty(void* object, std::string propertyName, voi
 void CSharpScriptSystem::SetScriptNativeInstance(void* object, void* nativeInstance)
 {
   if (!_setScriptNativeInstanceFunction) {
-    std::cerr << "CSharpScriptSystem::SetScriptNativeInstance called before plugin assembly was loaded." << std::endl;
+    _logger.LogError("SetScriptNativeInstance: Called before plugin assembly was loaded.");
     throw std::runtime_error("Failed to set script native instance");
   }
 
@@ -181,7 +180,7 @@ void CSharpScriptSystem::SetScriptNativeInstance(void* object, void* nativeInsta
 bool CSharpScriptSystem::BuildProject(std::string projectPath, std::string dllOutputPath)
 {
   if (!_buildProjectFunction) {
-    std::cerr << "CSharpScriptSystem::BuildProject called before plugin assembly was loaded." << std::endl;
+    _logger.LogError("BuildProject: Called before plugin assembly was loaded.");
     throw std::runtime_error("Failed to build project");
   }
 
@@ -197,12 +196,12 @@ void CSharpScriptSystem::LoadProjectAssembly(std::string assemblyPath)
 void CSharpScriptSystem::LoadProjectAssembly()
 {
   if (!_loadProjectAssemblyFunction) {
-    std::cerr << "CSharpScriptSystem::LoadProjectAssembly called before plugin assembly was loaded." << std::endl;
+    _logger.LogError("LoadProjectAssembly: Called before plugin assembly was loaded.");
     throw std::runtime_error("Failed to load project assembly");
   }
 
   if (_currentProjectAssemblyPath.empty()) {
-    std::cerr << "CSharpScriptSystem::LoadProjectAssembly called before project assembly path was set." << std::endl;
+    _logger.LogError("LoadProjectAssembly: Called before project assembly path was set.");
     throw std::runtime_error("Failed to load project assembly");
   }
 
@@ -212,7 +211,7 @@ void CSharpScriptSystem::LoadProjectAssembly()
 void CSharpScriptSystem::RegisterAdditionalDependencyPath(std::string path)
 {
   if (!_registerAdditionalDependencyPathFunction) {
-    std::cerr << "CSharpScriptSystem::RegisterAdditionalDependencyPath called before plugin assembly was loaded." << std::endl;
+    _logger.LogError("RegisterAdditionalDependencyPath: Called before plugin assembly was loaded.");
     throw std::runtime_error("Failed to register additional dependency path");
   }
 

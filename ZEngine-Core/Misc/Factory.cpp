@@ -1,5 +1,6 @@
 #include "Factory.h"
 
+#include "../Logging/LoggingSystem.h"
 #include "../Map/Objects/Entity.h"
 #include "../Map/Map.h"
 #include "../Rendering/Shader.h"
@@ -27,14 +28,14 @@
 #include "../Assets/Objects/ShaderAsset.h"
 #include "../Assets/Objects/TextureAsset.h"
 
-#include <iostream>
-
 using namespace ZEngine;
 
 std::map<ObjectType, ConstructorFunc> Factory::_typeConstructors;
 std::map<ObjectType, DefaultFactoryFunc> Factory::_defaultFactoryFunctions;
 std::map<ObjectType, CopyFunc> Factory::_copyFunctions;
 std::map<ObjectType, ImporterFunc> Factory::_importers;
+
+static std::string MODULE_NAME = "Factory";
 
 void Factory::Init()
 {
@@ -137,7 +138,7 @@ ZObject* Factory::Copy(std::string name, ZObject* object)
 		return copyFunc->second(name, object);
 	}
 
-	std::cout << "Factory::Copy: No copy function found for type " << object->GetType() << std::endl;
+	LoggingSystem::GetInstance()->LogError("Copy: No copy function found for type " + std::to_string(object->GetType()), MODULE_NAME);
 	return nullptr;
 }
 

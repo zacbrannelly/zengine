@@ -1,11 +1,13 @@
 #include "TextureAsset.h"
-#include <iostream>
+#include "../../Logging/LoggingSystem.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
 using namespace std;
 using namespace ZEngine;
+
+static const std::string MODULE_NAME = "TextureAsset";
 
 TextureAsset::TextureAsset(std::string name) : Asset(name, ObjectType::TEXTURE_ASSET)
 {
@@ -38,7 +40,9 @@ bool TextureAsset::Load(string path)
 		return true;
 	}
 	else
-		std::cout << "TEXTURE_ASSET: Failed to load the image: " << path << endl;
+	{
+		LoggingSystem::GetInstance()->LogError("Load: Failed to load the image: " + path, MODULE_NAME);
+	}
 
 	return false;
 }

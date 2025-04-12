@@ -1,12 +1,14 @@
 #include "ShaderAsset.h"
 #include <nlohmann/json.hpp>
 #include <fstream>
-#include <iostream>
+#include "../../Logging/LoggingSystem.h"
 #include "../../Utilities/Directory.h"
 
 using namespace std;
 using namespace nlohmann;
 using namespace ZEngine;
+
+static const std::string MODULE_NAME = "ShaderAsset";
 
 ShaderAsset::ShaderAsset(std::string name) : Asset(name, ObjectType::SHADER_ASSET)
 {
@@ -36,7 +38,7 @@ bool ShaderAsset::Load(std::string path)
 	if (it != root.end())
 	{
 		name = it.value().get<std::string>();
-		cout << "Loading shader asset: " << name << endl;
+		LoggingSystem::GetInstance()->LogInfo("Loading shader asset: " + name, MODULE_NAME);
 	}
 	else
 		return false;
@@ -55,7 +57,7 @@ bool ShaderAsset::Load(std::string path)
 
 		if (numPasses == 0)
 		{
-			cout << "SHADER_ASSET: Failed to load the shader '" << name << "' since it has no pass!" << endl;
+			LoggingSystem::GetInstance()->LogError("Load: Failed to load the shader '" + name + "' since it has no pass!", MODULE_NAME);
 			return false;
 		}
 
@@ -74,7 +76,7 @@ bool ShaderAsset::Load(std::string path)
 			{
 				if (passes[i].find(arch) == passes[i].end())
 				{
-					cout << "SHADER_ASSET: Failed to load the shader '" << name << "' since it has no shader for the current architecture `" << arch << "`" << "!" << endl;
+					LoggingSystem::GetInstance()->LogError("Load: Failed to load the shader '" + name + "' since it has no shader for the current architecture `" + arch + "`" + "!", MODULE_NAME);
 					return false;
 				}
 				
@@ -85,7 +87,7 @@ bool ShaderAsset::Load(std::string path)
 				// Load the pass into the shader
 				if (!_shader->Load(vertexPath, fragPath, 0, i))
 				{
-					cout << "SHADER_ASSET: Failed to load a shader from pass: " << i << endl;
+					LoggingSystem::GetInstance()->LogError("Load: Failed to load the shader '" + name + "' from pass: " + std::to_string(i) + "!", MODULE_NAME);
 					return false;
 				}
 			}

@@ -5,6 +5,7 @@
 #include <ZEngine-Core/Utilities/Directory.h>
 #include <ZEngine-Core/Assets/AssetCatalog.h>
 #include <ZEngine-Core/Assets/AssetManager.h>
+#include <ZEngine-Core/Logging/LoggingSystem.h>
 
 #include "CreateProjectDialog.h"
 #include "BrowserDialog.h"
@@ -13,6 +14,8 @@
 #include "../Editor.h"
 
 using namespace ZEngine;
+
+static const std::string MODULE_NAME = "CreateProjectDialog";
 
 CreateProjectDialog::CreateProjectDialog(Editor* editor, std::string basePath) : GUIDialog("New Project", 500, 200, true)
 {
@@ -25,7 +28,6 @@ CreateProjectDialog::CreateProjectDialog(Editor* editor, std::string basePath) :
 
   SetVisible(true);
   SetFlags(ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
-
 }
 
 bool CreateProjectDialog::Validate()
@@ -62,7 +64,7 @@ bool CreateProjectDialog::Create()
     project = ProjectBuilder::CreateProject(name, path);
   }
   catch (const std::exception& e) {
-    std::cout << e.what() << std::endl;
+    LoggingSystem::GetInstance()->LogError("Create: Failed to create the project '" + name + "' with error: " + std::string(e.what()), MODULE_NAME);
     return false;
   }
 

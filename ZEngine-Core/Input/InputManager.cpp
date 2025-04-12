@@ -1,6 +1,5 @@
 #include "InputManager.h"
 #include "../Display/Display.h"
-#include <iostream>
 
 using namespace ZEngine;
 
@@ -98,7 +97,7 @@ float InputManager::GetAxis(std::string name)
 	}
 	else
 	{
-		std::cout << "INPUT_MANAGER: Failed to find the axis '" << name << "' in the mappings!" << std::endl;
+		_logger.LogError("GetAxis: Failed to find the axis '" + name + "' in the mappings!");
 	}
 
 	return 0.0f;

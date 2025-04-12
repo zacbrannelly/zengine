@@ -19,8 +19,6 @@
 
 #include <bgfx/platform.h>
 
-#include <iostream>
-
 using namespace bgfx;
 using namespace ZEngine;
 
@@ -38,18 +36,18 @@ bool Graphics::Init(Display* display)
 {
 	if (display == nullptr)
 	{
-		std::cout << "GRAPHICS: Display was null or not created, it is needed to create a rendering context!" << std::endl;
+		_logger.LogError("Init: Display was null or not created, it is needed to create a rendering context!");
 		return false;
 	}
-    
+
 #if defined(__APPLE__) && !TARGET_OS_IPHONE
-    if (display->GetHandle() == nullptr)
-    {
-        std::cout << "GRAPHICS: Display was null or not created, it is needed to create a rendering context!" << std::endl;
-        return false;
-    }
+	if (display->GetHandle() == nullptr)
+	{
+		_logger.LogError("Init: Display was null or not created, it is needed to create a rendering context!");
+		return false;
+	}
 #endif
-    
+
 	return Init(display->GetNativeHandle(), display->GetWidth(), display->GetHeight());
 }
 
@@ -95,7 +93,7 @@ bool Graphics::Init(void* nativeWindowHandle, int width, int height)
 
 	if (!init(i))
 	{
-		std::cout << "GRAPHICS: Failed to initialize BGFX (Rendering context)" << std::endl;
+		_logger.LogError("Init: Failed to initialize BGFX (Rendering context)");
 		return false;
 	}
 

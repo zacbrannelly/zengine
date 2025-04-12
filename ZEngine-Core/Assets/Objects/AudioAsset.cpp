@@ -1,15 +1,18 @@
 #include "AudioAsset.h"
 
 #include <fstream>
-#include <iostream>
-#include "../../Audio/AudioSystem.h"
 #include <nlohmann/json.hpp>
 #include <SDL_mixer.h>
+
+#include "../../Audio/AudioSystem.h"
 #include "../../Utilities/Directory.h"
+#include "../../Logging/LoggingSystem.h"
 
 using namespace std;
 using namespace nlohmann;
 using namespace ZEngine;
+
+static const string MODULE_NAME = "AudioAsset";
 
 AudioAsset::AudioAsset(string name) : Asset(name, AUDIO_ASSET)
 {
@@ -27,7 +30,7 @@ bool AudioAsset::Load(string path)
 
 	if (!in.is_open())
 	{
-		cout << "AUDIO_ASSET: Failed to load from file: " << path << endl;
+		LoggingSystem::GetInstance()->LogError("Load: Failed to load from file: " + path, MODULE_NAME);
 		return false;
 	}
 
@@ -58,7 +61,7 @@ bool AudioAsset::Load(string path)
 
 	if (_sound.chunk == nullptr && _sound.music == nullptr)
 	{
-		cout << "AUDIO_ASSET: Failed to load the asset " << GetName() << endl;
+		LoggingSystem::GetInstance()->LogError("Load: Failed to load the asset " + GetName(), MODULE_NAME);
 		return false;
 	}
 	

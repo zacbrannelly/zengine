@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Misc/Singleton.h"
+#include "../Logging/Logger.h"
 #include "InputTypes.h"
 #include <glm/glm.hpp>
 #include <map>
@@ -97,5 +98,7 @@ namespace ZEngine
 		glm::vec2 _mouseDelta;
 		glm::vec2 _emptyVector;
 		Display* _display;
+
+		Logger _logger { "InputManager" };
 	};
 }

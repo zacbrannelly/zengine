@@ -2,6 +2,7 @@
 
 #include "../Misc/Singleton.h"
 #include "../Utilities/JsonHelpers.h"
+#include "../Logging/Logger.h"
 #include <string>
 #include <stack>
 #include <glm/glm.hpp>
@@ -70,5 +71,6 @@ namespace ZEngine
     physx::PxDefaultCpuDispatcher* _dispatcher;
     physx::PxMaterial* _material;
     std::stack<physx::PxScene*> _sceneStack;
+    Logger _logger { "Physics3DSystem" };
   };
 }

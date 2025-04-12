@@ -8,14 +8,16 @@
 #include "../../Rendering/Material.h"
 #include "../../Utilities/Directory.h"
 #include "../../Utilities/JsonHelpers.h"
+#include "../../Logging/LoggingSystem.h"
 
 #include <fstream>
-#include <iostream>
 #include <string>
 
 using namespace std;
 using namespace nlohmann;
 using namespace ZEngine;
+
+static const string MODULE_NAME = "MaterialAsset";
 
 MaterialAsset::MaterialAsset(string name) : Asset(name, ObjectType::MATERIAL_ASSET)
 {
@@ -42,7 +44,7 @@ bool MaterialAsset::Load(string path)
 
 	if (!in.is_open())
 	{
-		cout << "MATERIAL_ASSET: Failed to open file: " << path << endl;
+		LoggingSystem::GetInstance()->LogError("Load: Failed to open file: " + path, MODULE_NAME);
 		return false;
 	}
 
@@ -65,7 +67,7 @@ bool MaterialAsset::Load(string path)
 
 	if (_material == nullptr)
 	{
-		cout << "MATERIAL_ASSET: Invalid material, no name was found!" << endl;
+		LoggingSystem::GetInstance()->LogError("Load: Invalid material, no name was found!", MODULE_NAME);
 		return false;
 	}
 
@@ -116,7 +118,7 @@ void MaterialAsset::ReadTextures(json::array_t& values, Material* material)
 			auto id = it->get<uuids::uuid>();
 			if (!assetManager->GetCatalog()->GetAssetPathFromID(id, path, type))
 			{
-				cout << "MATERIAL_ASSET: Failed to find texture for sampler: " << samplerName.get<string>() << endl;
+				LoggingSystem::GetInstance()->LogError("ReadTextures: Failed to find texture for sampler: " + samplerName.get<string>(), MODULE_NAME);
 				continue;
 			}
 		}
@@ -132,7 +134,7 @@ void MaterialAsset::ReadTextures(json::array_t& values, Material* material)
 				path = assetDir + it->get<string>();
 			else
 			{
-				cout << "MATERIAL_ASSET: Failed to find texture for sampler: " << samplerName.get<string>() << endl;
+				LoggingSystem::GetInstance()->LogError("ReadTextures: Failed to find texture for sampler: " + samplerName.get<string>(), MODULE_NAME);
 				continue;
 			}
 		}
@@ -217,13 +219,13 @@ void MaterialAsset::ReadShader(json& shaderRef, Material* material)
 		const auto maybeId = uuids::uuid::from_string(shaderRef.at("assetId").get<string>());
 		if (!maybeId.has_value())
 		{
-			cout << "MATERIAL_ASSET: Invalid shader asset ID: " << shaderRef.at("assetId").get<string>() << endl;
+			LoggingSystem::GetInstance()->LogError("ReadShader: Invalid shader asset ID: " + shaderRef.at("assetId").get<string>(), MODULE_NAME);
 			return;
 		}
 
 		if (!catalog->GetAssetPathFromID(maybeId.value(), path, type))
 		{
-			cout << "Failed to find the shader for material: " << _material->GetName() << endl;
+			LoggingSystem::GetInstance()->LogError("ReadShader: Failed to find shader for material: " + _material->GetName(), MODULE_NAME);
 			return;
 		}
 	}
@@ -237,7 +239,7 @@ void MaterialAsset::ReadShader(json& shaderRef, Material* material)
 		// Use a standard shader.
 		auto shader = StandardShaders::GetShader(shaderRef.at("standardShader").get<string>());
 		if (shader == nullptr) {
-			cout << "MATERIAL_ASSET: Failed to find standard shader for material: " << _material->GetName() << endl;
+			LoggingSystem::GetInstance()->LogError("ReadShader: Failed to find standard shader for material: " + _material->GetName(), MODULE_NAME);
 			return;
 		}
 		material->SetShader(shader);
@@ -245,7 +247,7 @@ void MaterialAsset::ReadShader(json& shaderRef, Material* material)
 	}
 	else
 	{
-		cout << "MATERIAL_ASSET: Failed to find shader for material: " << _material->GetName() << endl;
+		LoggingSystem::GetInstance()->LogError("ReadShader: Failed to find shader for material: " + _material->GetName(), MODULE_NAME);
 		return;
 	}
 
@@ -264,7 +266,7 @@ void MaterialAsset::ReadShader(json& shaderRef, Material* material)
 	}
 	else
 	{
-		cout << "MATERIAL_ASSET: Failed to load shader for material: " << _material->GetName() << endl;
+		LoggingSystem::GetInstance()->LogError("ReadShader: Failed to load shader for material: " + _material->GetName(), MODULE_NAME);
 	}
 }
 

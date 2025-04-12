@@ -1,4 +1,6 @@
+#pragma once
 #include "../../Misc/Singleton.h"
+#include "../../Logging/Logger.h"
 #include <string>
 
 #if defined(__APPLE__)
@@ -57,5 +59,7 @@ namespace ZEngine
   #else
     void* _libraryHandle;
   #endif
+
+    Logger _logger { "CSharpScriptSystem" };
   };
 }

@@ -2,10 +2,10 @@
 #include "../../Rendering/Mesh.h"
 #include "../../Rendering/Texture2D.h"
 #include "../../Rendering/Material.h"
+#include "../../Logging/LoggingSystem.h"
 #include "ShaderAsset.h"
 #include "../AssetManager.h"
 #include "TextureAsset.h"
-#include <iostream>
 
 #include <glm/glm.hpp>
 #include <assimp/scene.h>
@@ -13,6 +13,8 @@
 
 using namespace Assimp;
 using namespace ZEngine;
+
+static const std::string MODULE_NAME = "ModelAsset";
 
 ModelAsset::ModelAsset(std::string name) : Asset(name, ObjectType::MODEL_ASSET)
 {
@@ -30,7 +32,7 @@ bool ModelAsset::Load(std::string path)
 
 	if (scene == nullptr)
 	{
-		std::cout << "MODEL_ASSET: Failed to load model '" << path << "' since assimp returned a null scene!" << std::endl;
+		LoggingSystem::GetInstance()->LogError("Load: Failed to load model '" + path + "' since assimp returned a null scene!", MODULE_NAME);
  		return false;
 	}
 
@@ -39,7 +41,7 @@ bool ModelAsset::Load(std::string path)
 
 	if (!scene->HasMeshes())
 	{
-		std::cout << "MODEL_ASSET: Faild to import model as it has no mesh data!" << std::endl;
+		LoggingSystem::GetInstance()->LogError("Load: Failed to load model '" + path + "' since it has no mesh data!", MODULE_NAME);
 		return false;
 	}
 	else

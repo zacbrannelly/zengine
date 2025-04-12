@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "../Misc/Singleton.h"
+#include "../Logging/Logger.h"
 #include "Asset.h"
 
 namespace ZEngine
@@ -69,5 +70,6 @@ namespace ZEngine
 		std::string _basePath;
 		std::vector<Asset*> _assets;
 		AssetCatalog* _catalog;
+		Logger _logger { "AssetManager" };
 	};
 }

@@ -115,7 +115,7 @@ bool AssetManager::ReloadAsset(std::string name)
 		return asset->Load(asset->GetPath());
 	}
 
-	std::cout << "ASSET_MANAGER: Failed to find asset for reload: " << name << std::endl;
+	_logger.LogError("ReloadAsset: Failed to find asset for reload: " + name);
 	return false;
 }
 

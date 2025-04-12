@@ -1,6 +1,7 @@
 #include "CSharpScriptAsset.h"
 #include "../../Utilities/File.h"
 #include "../../Misc/Factory.h"
+#include "../../Logging/LoggingSystem.h"
 #include <iostream>
 #include <fstream>
 #include <nlohmann/json.hpp>
@@ -8,6 +9,8 @@
 using namespace std;
 using namespace nlohmann;
 using namespace ZEngine;
+
+static const std::string MODULE_NAME = "CSharpScriptAsset";
 
 CSharpScriptAsset::CSharpScriptAsset(std::string name) : Asset(name, CSHARP_SCRIPT_ASSET) 
 {
@@ -21,7 +24,7 @@ bool CSharpScriptAsset::Load(std::string path)
 
 	if (!in.is_open())
 	{
-		cout << "CSHARP_SCRIPT_ASSET: Failed to load file: " << path << endl;
+		LoggingSystem::GetInstance()->LogError("Load: Failed to load from file: " + path, MODULE_NAME);
 		return false;
 	}
 

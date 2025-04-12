@@ -1,9 +1,11 @@
 #include "Shader.h"
+#include "../Logging/LoggingSystem.h"
 #include <fstream>
-#include <iostream>
 
 using namespace std;
 using namespace ZEngine;
+
+static const std::string MODULE_NAME = "Shader";
 
 Shader::Shader(string name) : ZObject(name, SHADER)
 {
@@ -21,7 +23,7 @@ bool Shader::Load(std::string vertPath, std::string fragPath, uint64_t state, in
 	
 	if (vertexShaderData == nullptr)
 	{
-		cout << "SHADER: Failed to load vertex shader from file: " << vertPath << endl;
+		LoggingSystem::GetInstance()->LogError("Load: Failed to load vertex shader from file: " + vertPath, MODULE_NAME);
 		return false;
 	}
 
@@ -29,7 +31,7 @@ bool Shader::Load(std::string vertPath, std::string fragPath, uint64_t state, in
 
 	if (fragShaderData == nullptr)
 	{
-		cout << "SHADER: Failed to load frag shader from file: " << fragPath << endl;
+		LoggingSystem::GetInstance()->LogError("Load: Failed to load fragment shader from file: " + fragPath, MODULE_NAME);
 		return false;
 	}
 

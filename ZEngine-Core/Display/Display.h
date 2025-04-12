@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../Logging/Logger.h"
+
 #if defined(__APPLE__)
 #include <TargetConditionals.h>
 #endif
@@ -73,5 +75,7 @@ namespace ZEngine
 		bool _isVisible;
 		bool _isFullscreen;
 		bool _maximize;
+
+		Logger _logger { "Display" };
 	};
 }

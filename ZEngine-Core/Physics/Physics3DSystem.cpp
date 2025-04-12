@@ -19,26 +19,27 @@ bool Physics3DSystem::Init()
   _foundation = PxCreateFoundation(PX_PHYSICS_VERSION, *_allocator, *_errorCallback);
   if (!_foundation)
   {
-    std::cerr << "PxCreateFoundation failed!" << std::endl;
+    _logger.LogError("PhysX: PxCreateFoundation failed!");
     return false;
   }
-
-  std::cout << "PhysX version: " << PX_PHYSICS_VERSION_MAJOR << "." << PX_PHYSICS_VERSION_MINOR << std::endl;
 
   // Setup physics.
   auto scale = PxTolerancesScale();
   _physics = PxCreatePhysics(PX_PHYSICS_VERSION, *_foundation, scale);
   if (!_physics)
   {
-    std::cerr << "PxCreatePhysics failed!" << std::endl;
+    _logger.LogError("PxCreatePhysics failed!");
     return false;
   }
-  std::cout << "Physics initialized" << std::endl;
+
+  _logger.LogInfo("PhysX version: " + std::to_string(PX_PHYSICS_VERSION_MAJOR) + "." + std::to_string(PX_PHYSICS_VERSION_MINOR));
+  _logger.LogInfo("Physics initialized");
 
 #ifndef __EMSCRIPTEN__
   // Setup CPU dispatcher.
   _dispatcher = PxDefaultCpuDispatcherCreate(1);
 #else
+  // Emscripten does not support multi-threading.
   _dispatcher = PxDefaultCpuDispatcherCreate(0);
 #endif
 
@@ -74,7 +75,8 @@ void Physics3DSystem::PushScene(PhysicsSceneDescription description)
 void Physics3DSystem::PopScene()
 {
   if (_sceneStack.size() == 1) {
-    throw std::runtime_error("Cannot pop scene stack with only one element");
+    _logger.LogError("PopScene: Cannot pop scene stack with only one element");
+    throw std::runtime_error("PopScene: Cannot pop scene stack with only one element");
   }
 
   auto poppedScene = _sceneStack.top();

@@ -2,6 +2,7 @@
 
 #include "Directory.h"
 #include "File.h"
+#include "../Logging/LoggingSystem.h"
 
 #include <iostream>
 #include <algorithm>
@@ -11,22 +12,24 @@
 using namespace std;
 using namespace ZEngine;
 
+static const string MODULE_NAME = "Directory";
+
 bool Directory::Create()
 {
 	if (CreateDirectoryA(_fullpath.c_str(), nullptr))
 	{
-		cout << "DIRECTORY: Successfully created the directory '" << _fullpath << "'" << endl;
+		LoggingSystem::GetInstance()->LogInfo("Successfully created the directory '" + _fullpath + "'", MODULE_NAME);
 		return true;
 	}
 	else
 	{
 		if (GetLastError() == ERROR_ALREADY_EXISTS)
 		{
-			cout << "DIRECTORY: Failed to create the directory '" << _fullpath << "' since it already exists!" << endl;
+			LoggingSystem::GetInstance()->LogError("Create: Failed to create the directory '" + _fullpath + "' since it already exists!", MODULE_NAME);
 		}
 		else
 		{
-			cout << "DIRECTORY: Failed to create the directory '" << _fullpath << "' since the path was invalid!" << endl;
+			LoggingSystem::GetInstance()->LogError("Create: Failed to create the directory '" + _fullpath + "' with error code: " + std::to_string(GetLastError()), MODULE_NAME);
 		}
 
 		return false;
@@ -37,14 +40,14 @@ bool Directory::Move(string newPath)
 {
 	if (MoveFileExA(_fullpath.c_str(), newPath.c_str(), MOVEFILE_WRITE_THROUGH))
 	{
-		cout << "DIRECTORY: Successfully moved the directory '" << _fullpath << "'" << endl;
+		LoggingSystem::GetInstance()->LogInfo("Successfully moved the directory '" + _fullpath + "'", MODULE_NAME);
 		_fullpath = newPath;
 
 		return true;
 	}
 	else
 	{
-		cout << "DIRECTORY: Failed to move the directory '" << _fullpath << "' with error code: " << GetLastError() << endl;
+		LoggingSystem::GetInstance()->LogError("Move: Failed to move the directory '" + _fullpath + "' with error code: " + std::to_string(GetLastError()), MODULE_NAME);
 		return false;
 	}
 }
@@ -53,12 +56,12 @@ bool Directory::Delete()
 {
 	if (RemoveDirectoryA(_fullpath.c_str()))
 	{
-		cout << "DIRECTORY: Successfully deleted directory '" << _fullpath << "'" << endl;
+		LoggingSystem::GetInstance()->LogInfo("Successfully deleted the directory '" + _fullpath + "'", MODULE_NAME);
 		return true;
 	}
 	else
 	{
-		cout << "DIRECTORY: Failed to delete the directory '" << _fullpath << "' with error code: " << GetLastError() << endl;
+		LoggingSystem::GetInstance()->LogError("Delete: Failed to delete the directory '" + _fullpath + "' with error code: " + std::to_string(GetLastError()), MODULE_NAME);
 		return false;
 	}
 }

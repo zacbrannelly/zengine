@@ -1,8 +1,8 @@
-#include <iostream>
 #include <stdexcept>
 #include <inja.hpp>
 #include <nlohmann/json.hpp>
 #include <ZEngine-Core/Utilities/Directory.h>
+#include <ZEngine-Core/Logging/LoggingSystem.h>
 
 #include "ProjectBuilder.h"
 #include "../Project/Project.h"
@@ -10,11 +10,16 @@
 using namespace nlohmann;
 using namespace ZEngine;
 
+static std::string MODULE_NAME = "ProjectBuilder";
+
 Project* ProjectBuilder::CreateProject(std::string name, std::string projectDirectory)
 {
+  auto log = LoggingSystem::GetInstance();
+
   // Check if the project directory already exists
   Directory projectDir(projectDirectory + "/" + name);
   if (projectDir.Exists()) {
+    log->LogError("CreateProject: Failed to create the project '" + name + "' since the directory already exists!", MODULE_NAME);
     throw std::runtime_error("Project directory already exists.");
   }
 
@@ -25,9 +30,9 @@ Project* ProjectBuilder::CreateProject(std::string name, std::string projectDire
   auto projectFilePath = GenerateProjectFile(projectDir, name);
   auto csprojFilePath = GenerateProjectCSharpProjectFile(projectDir, name);
 
-  std::cout << "Created project at " << projectDir.GetAbsolutePath() << std::endl;
-  std::cout << "Created project file at " << projectFilePath << std::endl;
-  std::cout << "Created C# project file at " << csprojFilePath << std::endl;
+  log->LogInfo("Created project at " + projectDir.GetAbsolutePath(), MODULE_NAME);
+  log->LogInfo("Created project file at " + projectFilePath, MODULE_NAME);
+  log->LogInfo("Created C# project file at " + csprojFilePath, MODULE_NAME);
 
   auto project = new Project();
   project->Load(projectFilePath);

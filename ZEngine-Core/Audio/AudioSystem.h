@@ -4,6 +4,7 @@
 #include <SDL_mixer.h>
 #include "../Utilities/JsonHelpers.h"
 #include "../Misc/Singleton.h"
+#include "../Logging/Logger.h"
 
 namespace ZEngine
 {
@@ -56,5 +57,7 @@ namespace ZEngine
 		void Stop(int channel);
 		void Stop(int channel, int fadeOutTime);
 		void StopMusic();
+	private:
+		Logger _logger { "AudioSystem" };
 	};
 }
