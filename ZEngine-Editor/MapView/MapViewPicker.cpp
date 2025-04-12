@@ -38,7 +38,7 @@ void MapViewPicker::UpdateAABBs()
         // Update the transform of the mesh's bounding box.
         _meshBoundingBoxMap[meshRenderer].SetTransform(entity->GetTransform()->GetWorldTransformMatrix());
       } 
-      else 
+      else if (meshRenderer->GetMesh() != nullptr)
       {
         // Create a new bounding box for the mesh.
         AABB boundingBox;
