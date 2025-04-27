@@ -38,6 +38,15 @@ void MeshRendererInspector::RenderElement()
 	auto catalog = assetManager->GetCatalog();
 
 	auto inspectorHeight = 40 * (_neededMaterials + 2);
+
+	for (auto material : comp->GetMaterials())
+	{
+		for (auto uniform : material->GetUniforms())
+		{
+			inspectorHeight += 40;
+		}
+	}
+
 	ImGui::BeginChild(UniqueLabel("Mesh Renderer").c_str(), ImVec2(0, inspectorHeight));
 
 	auto meshName = comp->GetMesh() != nullptr ? comp->GetMesh()->GetName() : "None";
@@ -119,13 +128,52 @@ void MeshRendererInspector::RenderElement()
 					}
 				}
 			}
-
 			ImGui::EndCombo();
+		}
+
+		for (auto uniform : current->GetUniforms())
+		{
+			switch (uniform.second.type)
+			{
+			case bgfx::UniformType::Vec4:
+				float data[uniform.second.numElements * 4];
+				memset(data, 0, sizeof(float) * uniform.second.numElements * 4);
+
+				// Copy the data from the uniform to the local data array
+				if (uniform.second.data != nullptr)
+				{
+					memcpy(data, uniform.second.data, sizeof(float) * uniform.second.numElements * 4);
+				}
+				
+				for (int j = 0; j < uniform.second.numElements; j++)
+				{
+					auto ptrString = std::to_string((uintptr_t)&data[j * 4]);
+					auto label = uniform.first;
+					if (uniform.second.numElements > 1)
+					{
+						label += " " + std::to_string(j);
+					}
+					if (ImGui::DragFloat4((label + "###" + to_string(uniform.second.handle.idx)).c_str(), &data[j * 4], 0.01f))
+					{
+						if (uniform.second.data != nullptr)
+						{
+							memcpy(uniform.second.data, data, sizeof(float) * uniform.second.numElements * 4);
+							current->SetUniform(uniform.first, uniform.second.data, uniform.second.numElements);
+						}
+						else
+						{
+							auto newData = new float[uniform.second.numElements * 4];
+							memcpy(newData, data, sizeof(float) * uniform.second.numElements * 4);
+							current->SetUniform(uniform.first, newData, uniform.second.numElements);
+						}
+					}
+				}
+				break;
+			}
 		}
 	}
 
 	ImGui::EndChild();
-
 }
 
 MeshRendererInspector::~MeshRendererInspector()
