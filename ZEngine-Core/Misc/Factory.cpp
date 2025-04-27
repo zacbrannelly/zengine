@@ -21,6 +21,7 @@
 #include "../Scripting/CSharp/CSharpScript.h"
 #include "../Component/Lighting/DirectionalLight.h"
 #include "../Component/Lighting/PointLight.h"
+#include "../Component/Lighting/SpotLight.h"
 
 #include "../Assets/Objects/AudioAsset.h"
 #include "../Assets/Objects/CSharpScriptAsset.h"
@@ -62,6 +63,7 @@ void Factory::Init()
 	RegisterType<MeshCollider3D>();
 	RegisterType<DirectionalLight>();
 	RegisterType<PointLight>();
+	RegisterType<SpotLight>();
 
 	// Register factory methods for assets
 	RegisterType<TextureAsset>();
@@ -98,6 +100,7 @@ void Factory::Init()
 	RegisterCopyType<MeshCollider3D>();
 	RegisterCopyType<DirectionalLight>();
 	RegisterCopyType<PointLight>();
+	RegisterCopyType<SpotLight>();
 
 	// Register component importers (from JSON objects)
 	RegisterTypeImporter<Transform>();
@@ -113,6 +116,7 @@ void Factory::Init()
 	RegisterTypeImporter<MeshCollider3D>();
 	RegisterTypeImporter<DirectionalLight>();
 	RegisterTypeImporter<PointLight>();
+	RegisterTypeImporter<SpotLight>();
 }
 
 ZObject* Factory::CreateInstance(std::string name, ObjectType type)

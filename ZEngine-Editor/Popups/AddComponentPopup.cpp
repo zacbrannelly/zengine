@@ -30,6 +30,7 @@ AddComponentPopup::AddComponentPopup(Editor* editor) : GUIDialog("Add Component"
   RegisterComponent({ "Mesh Collider 3D",    "Mesh Collider 3D (Static-only) component",  MESH_COLLIDER_3D });
   RegisterComponent({ "Directional Light",   "Directional Light component",               DIRECTIONAL_LIGHT });
   RegisterComponent({ "Point Light",         "Point Light component",                     POINT_LIGHT });
+  RegisterComponent({ "Spot Light",          "Spot Light component",                      SPOT_LIGHT });
 }
 
 void AddComponentPopup::RegisterComponent(ComponentInfo component)

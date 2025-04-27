@@ -44,6 +44,7 @@ namespace ZEngine
     bgfx::UniformHandle _lightPositionsUniform;
     bgfx::UniformHandle _lightDirectionsUniform;
     bgfx::UniformHandle _lightRangesUniform;
+    bgfx::UniformHandle _lightPrenumbraAndUmbraUniform;
     bgfx::UniformHandle _lightCountUniform;
     bgfx::UniformHandle _cameraPosUniform;
 
@@ -54,6 +55,7 @@ namespace ZEngine
       &_lightPositionsUniform,
       &_lightDirectionsUniform,
       &_lightRangesUniform,
+      &_lightPrenumbraAndUmbraUniform,
       &_lightCountUniform,
       &_cameraPosUniform,
     };
@@ -63,6 +65,7 @@ namespace ZEngine
     glm::vec4 _lightPositions[MAX_LIGHTS];
     glm::vec4 _lightDirections[MAX_LIGHTS];
     glm::vec4 _lightRanges[MAX_LIGHTS];
+    glm::vec4 _lightPrenumbraAndUmbra[MAX_LIGHTS];
     glm::vec4 _lightCount;
     glm::vec4 _cameraPos;
   };

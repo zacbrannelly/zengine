@@ -39,6 +39,7 @@ namespace ZEngine
 		LIGHT,
 		DIRECTIONAL_LIGHT,
 		POINT_LIGHT,
+		SPOT_LIGHT,
 	};
 
 	std::string ObjectTypeToString(ObjectType type);

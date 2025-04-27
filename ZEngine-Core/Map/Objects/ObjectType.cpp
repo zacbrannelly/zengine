@@ -58,6 +58,7 @@ void RegisterObjectTypes() {
   ADD_OBJECT_TYPE(LIGHT)
   ADD_OBJECT_TYPE(DIRECTIONAL_LIGHT)
   ADD_OBJECT_TYPE(POINT_LIGHT)
+  ADD_OBJECT_TYPE(SPOT_LIGHT)
 }
 
 std::string ZEngine::ObjectTypeToString(ObjectType type) {

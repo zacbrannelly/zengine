@@ -429,12 +429,38 @@ Mesh* MeshFactory::CreatePlane(std::string name, int width, int height, PlaneOri
 	GeneratePlaneVertices(glm::vec3(0, 0, 0), width, height, verts, indices, facing);
 
 	std::vector<glm::vec4> colors(verts.size(), { 1, 1, 1, 1 });
+	std::vector<glm::vec3> normals;
+	switch (facing)
+	{
+	case PlaneOrientation::FRONT:
+		normals.resize(verts.size(), { 0, 0, -1 });
+		break;
+	case PlaneOrientation::BACK:
+		normals.resize(verts.size(), { 0, 0, 1 });
+		break;
+	case PlaneOrientation::LEFT:
+		normals.resize(verts.size(), { 1, 0, 0 });
+		break;
+	case PlaneOrientation::RIGHT:
+		normals.resize(verts.size(), { -1, 0, 0 });
+		break;
+	case PlaneOrientation::TOP:
+		normals.resize(verts.size(), { 0, -1, 0 });
+		break;
+	case PlaneOrientation::BOTTOM:	
+		normals.resize(verts.size(), { 0, 1, 0 });
+		break;
+	}
 
 	auto newMesh = Factory::CreateInstance<Mesh>(name, ObjectType::MESH);
 	newMesh->SetName(name);
 	newMesh->SetVertices(verts);
 	newMesh->SetColors(colors);
 	newMesh->SetIndices(indices);
+	newMesh->SetNormals(normals);
+
+	// TODO: Without the below, the normals are not set correctly, need a better solution.
+	newMesh->SetTextureCoords(std::vector<glm::vec2>(1, { 0, 0 }));
 
 	return newMesh;
 }

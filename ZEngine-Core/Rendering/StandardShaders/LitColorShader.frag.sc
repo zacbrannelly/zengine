@@ -6,6 +6,7 @@ $input v_position, v_color0, v_normal
 #define MAX_LIGHTS 16
 #define LIGHT_TYPE_DIRECTIONAL 0
 #define LIGHT_TYPE_POINT 1
+#define LIGHT_TYPE_SPOT 2
 
 // Standard lighting uniforms (managed by the engine)
 uniform vec4 u_lightCount;
@@ -16,6 +17,7 @@ uniform vec4 u_lightIntensities[MAX_LIGHTS];
 uniform vec4 u_lightPositions[MAX_LIGHTS];
 uniform vec4 u_lightDirections[MAX_LIGHTS];
 uniform vec4 u_lightRanges[MAX_LIGHTS];
+uniform vec4 u_lightPrenumbraAndUmbra[MAX_LIGHTS];
 
 // Material uniforms (managed by the programmer)
 uniform vec4 albedoTint;
@@ -64,6 +66,28 @@ void main()
         lightPosition,
         lightColor,
         u_lightRanges[i].x
+      );
+    }
+    else if (int(u_lightTypes[i].x) == LIGHT_TYPE_SPOT)
+    {
+      // Spot light
+      vec3 lightPosition = u_lightPositions[i].xyz;
+      vec3 lightDirection = normalize(u_lightDirections[i].xyz);
+      vec3 lightColor = u_lightIntensities[i].x * u_lightColors[i].xyz;
+
+      outColor.rgb += calculateSpotLightContribution(
+        normal,
+        v_color0.rgb * albedoTint.rgb,
+        v_position.xyz,
+        roughness.x,
+        metallic.x,
+        vertexToCamera,
+        lightPosition,
+        lightDirection,
+        lightColor,
+        u_lightRanges[i].x,
+        u_lightPrenumbraAndUmbra[i].x,
+        u_lightPrenumbraAndUmbra[i].y
       );
     }
   }

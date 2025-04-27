@@ -7,6 +7,7 @@
 #include "../../Component/Lighting/Light.h"
 #include "../../Component/Lighting/DirectionalLight.h"
 #include "../../Component/Lighting/PointLight.h"
+#include "../../Component/Lighting/SpotLight.h"
 
 #include <algorithm>
 
@@ -29,7 +30,7 @@ void LightingSystem::Init()
   }
 
   // General light uniforms
-  _cameraPosUniform =       _graphics->CreateUniform("u_cameraPos", bgfx::UniformType::Vec4, 1);
+  _cameraPosUniform =        _graphics->CreateUniform("u_cameraPos", bgfx::UniformType::Vec4, 1);
   _lightTypesUniform =       _graphics->CreateUniform("u_lightTypes", bgfx::UniformType::Vec4, MAX_LIGHTS);
   _lightCountUniform =       _graphics->CreateUniform("u_lightCount", bgfx::UniformType::Vec4, 1);
   _lightColorsUniform =      _graphics->CreateUniform("u_lightColors", bgfx::UniformType::Vec4, MAX_LIGHTS);
@@ -40,7 +41,8 @@ void LightingSystem::Init()
   _lightRangesUniform =     _graphics->CreateUniform("u_lightRanges", bgfx::UniformType::Vec4, MAX_LIGHTS);
   _lightDirectionsUniform = _graphics->CreateUniform("u_lightDirections", bgfx::UniformType::Vec4, MAX_LIGHTS);
 
-  // TODO: Spot light uniforms
+  // Spot light uniforms
+  _lightPrenumbraAndUmbraUniform = _graphics->CreateUniform("u_lightPrenumbraAndUmbra", bgfx::UniformType::Vec4, MAX_LIGHTS);
 
   _logger.LogInfo("Lighting system initialized.");
 }
@@ -101,8 +103,21 @@ void LightingSystem::Update(Map* currentMap, Camera* camera)
         _lightRanges[totalLightCount] = glm::vec4(pointLight->GetRange(), 0.0f, 0.0f, 0.0f);
         _lightPositions[totalLightCount] = glm::vec4(entity->GetTransform()->GetWorldPosition(), 1.0f);
       }
-      // TODO: Add support for spot lights
-      // else if (light->IsDerivedType(SPOT_LIGHT))
+      else if (light->IsDerivedType(SPOT_LIGHT))
+      {
+        auto spotLight = static_cast<SpotLight*>(light);
+        _lightTypes[totalLightCount] = glm::vec4(SPOT, 0.0f, 0.0f, 0.0f);
+        _lightColors[totalLightCount] = glm::vec4(spotLight->GetColor(), 1.0f);
+        _lightIntensities[totalLightCount] = glm::vec4(spotLight->GetIntensity(), 0.0f, 0.0f, 0.0f);
+        _lightRanges[totalLightCount] = glm::vec4(spotLight->GetRange(), 0.0f, 0.0f, 0.0f);
+        _lightPositions[totalLightCount] = glm::vec4(entity->GetTransform()->GetWorldPosition(), 1.0f);
+        _lightDirections[totalLightCount] = entity->GetTransform()->GetWorldRotationQuaternion() * glm::vec4(spotLight->GetDirection(), 0.0f);
+        _lightPrenumbraAndUmbra[totalLightCount] = glm::vec4(spotLight->GetPenumbraAngleRadians(), spotLight->GetUmbraAngleRadians(), 0.0f, 0.0f);
+      }
+      else
+      {
+        continue;
+      }
 
       totalLightCount++;
     }
@@ -115,14 +130,15 @@ void LightingSystem::Update(Map* currentMap, Camera* camera)
 void LightingSystem::ApplyUniforms()
 {
   auto const numLights = static_cast<uint16_t>(_lightCount.x);
-  _graphics->SetUniform(_cameraPosUniform,        &_cameraPos,       1);
-  _graphics->SetUniform(_lightCountUniform,       &_lightCount,      1);
-  _graphics->SetUniform(_lightTypesUniform,       _lightTypes,       numLights);
-  _graphics->SetUniform(_lightColorsUniform,      _lightColors,      numLights);
-  _graphics->SetUniform(_lightIntensitiesUniform, _lightIntensities, numLights);
-  _graphics->SetUniform(_lightPositionsUniform,   _lightPositions,   numLights);
-  _graphics->SetUniform(_lightRangesUniform,      _lightRanges,      numLights);
-  _graphics->SetUniform(_lightDirectionsUniform,  _lightDirections,  numLights);
+  _graphics->SetUniform(_cameraPosUniform,              &_cameraPos,             1);
+  _graphics->SetUniform(_lightCountUniform,             &_lightCount,            1);
+  _graphics->SetUniform(_lightTypesUniform,             _lightTypes,             numLights);
+  _graphics->SetUniform(_lightColorsUniform,            _lightColors,            numLights);
+  _graphics->SetUniform(_lightIntensitiesUniform,       _lightIntensities,       numLights);
+  _graphics->SetUniform(_lightPositionsUniform,         _lightPositions,         numLights);
+  _graphics->SetUniform(_lightRangesUniform,            _lightRanges,            numLights);
+  _graphics->SetUniform(_lightPrenumbraAndUmbraUniform, _lightPrenumbraAndUmbra, numLights);
+  _graphics->SetUniform(_lightDirectionsUniform,        _lightDirections,        numLights);
 }
 
 bool LightingSystem::IsLightingUniform(const bgfx::UniformHandle& uniform) const
@@ -152,6 +168,7 @@ void LightingSystem::Shutdown()
   _graphics->DestroyUniform(_lightIntensitiesUniform);
   _graphics->DestroyUniform(_lightPositionsUniform);
   _graphics->DestroyUniform(_lightRangesUniform);
+  _graphics->DestroyUniform(_lightPrenumbraAndUmbraUniform);
   _graphics->DestroyUniform(_lightDirectionsUniform);
   _logger.LogInfo("Lighting system shut down.");
 }

@@ -182,4 +182,45 @@ vec3 calculateDirectionalLightContribution(
   );
 }
 
+vec3 calculateSpotLightContribution(
+  vec3 surfaceNormal,
+  vec3 surfaceColor,
+  vec3 surfacePos,
+  float roughness,
+  float metallic,
+  vec3 viewDir,
+  vec3 lightPos,
+  vec3 spotLightDir,
+  vec3 lightColor,
+  float lightRadius,
+  float innerAngle,
+  float outerAngle
+) {
+  vec3 lightDir = normalize(lightPos - surfacePos);
+  float distance = length(lightPos - surfacePos);
+  float attenuation = clamp(1.0 - (distance / lightRadius), 0.0, 1.0);
+
+  float spotLightAngle = dot(spotLightDir, -lightDir);
+  float penumbraAngle = cos(innerAngle);
+  float umbraAngle = cos(outerAngle);
+
+  float tNom = spotLightAngle - umbraAngle;
+  float tDenom = penumbraAngle - umbraAngle;
+  float t = clamp(tNom / tDenom, 0.0, 1.0);
+
+  attenuation *= t * t;
+
+  vec3 lightContribution = calculateDirectLightContribution(
+    lightDir,
+    surfaceNormal,
+    viewDir,
+    lightColor,
+    surfaceColor,
+    roughness,
+    metallic
+  );
+
+  return lightContribution * attenuation;
+}
+
 #endif // ZENGINE_STANDARD_LIGHTING_H

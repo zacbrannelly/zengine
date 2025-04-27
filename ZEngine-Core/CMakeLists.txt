@@ -39,6 +39,7 @@ set(SOURCE_FILES
     "Component/MeshCollider3D.cpp"
     "Component/Lighting/DirectionalLight.cpp"
     "Component/Lighting/PointLight.cpp"
+    "Component/Lighting/SpotLight.cpp"
     "Display/Display.cpp"
     "Engine.cpp"
     "Input/InputManager.cpp"

@@ -5,6 +5,7 @@
 #include <ZEngine-Core/Component/MeshRenderer.h>
 #include <ZEngine-Core/Component/Lighting/DirectionalLight.h>
 #include <ZEngine-Core/Component/Lighting/PointLight.h>
+#include <ZEngine-Core/Component/Lighting/SpotLight.h>
 #include <ZEngine-Core/Component/Transform.h>
 #include <ZEngine-Core/Map/Objects/Entity.h>
 #include <ZEngine-Core/ImmediateUI/imgui-includes.h>
@@ -104,7 +105,7 @@ void SceneGraphWindow::RenderInWindow()
 					auto newEntity = Factory::CreateInstance<Entity>("Sphere", ENTITY);
 					auto meshRenderer = Factory::CreateInstance<MeshRenderer>("MeshRenderer", MESH_RENDERER);
 
-					auto mesh = MeshFactory::CreateSphere("Sphere");
+					auto mesh = MeshFactory::CreateSphereStrip("Sphere");
 					meshRenderer->SetMesh(mesh);
 
 					auto material = Factory::CreateInstance<Material>("Default Material", MATERIAL);
@@ -175,6 +176,18 @@ void SceneGraphWindow::RenderInWindow()
 				{
 					auto newEntity = Factory::CreateInstance<Entity>("Point Light", ENTITY);
 					auto light = Factory::CreateInstance<PointLight>("PointLight", POINT_LIGHT);
+
+					newEntity->AddComponent(light);
+					map->Add(newEntity);
+
+					// Set the new entity as the selected entity
+					_context->SetSelectedEntity(newEntity);
+				}
+
+				if (ImGui::MenuItem("Spot Light"))
+				{
+					auto newEntity = Factory::CreateInstance<Entity>("Spot Light", ENTITY);
+					auto light = Factory::CreateInstance<SpotLight>("SpotLight", SPOT_LIGHT);
 
 					newEntity->AddComponent(light);
 					map->Add(newEntity);
