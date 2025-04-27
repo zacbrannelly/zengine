@@ -2,6 +2,7 @@
 #include "Shader.h"
 #include "StandardShaders/UnlitColorShader.h"
 #include "StandardShaders/UnlitTextureShader.h"
+#include "StandardShaders/LitColorShader.h"
 #include "../Logging/LoggingSystem.h"
 
 #include <map>
@@ -10,6 +11,7 @@ using namespace ZEngine;
 
 Shader* StandardShaders::_unlitColorShader = nullptr;
 Shader* StandardShaders::_unlitTextureShader = nullptr;
+Shader* StandardShaders::_litColorShader = nullptr;
 std::vector<ShaderInfo> StandardShaders::_shaders;
 
 static const std::string MODUlE_NAME = "StandardShaders";
@@ -20,6 +22,7 @@ void StandardShaders::Init()
 {
   LoadUnlitColorShader();
   LoadUnlitTextureShader();
+  LoadLitColorShader();
 
   // Build the shader name to enum map
   for (const auto& info : _shaders)
@@ -50,6 +53,8 @@ Shader* StandardShaders::GetShader(StandardShader shader)
       return _unlitColorShader;
     case UNLIT_TEXTURE_SHADER:
       return _unlitTextureShader;
+    case LIT_COLOR_SHADER:
+      return _litColorShader;
     default:
       return nullptr;
   }
@@ -90,6 +95,25 @@ void StandardShaders::LoadUnlitTextureShader()
   else
   {
     LoggingSystem::GetInstance()->LogError("LoadUnlitTextureShader: Failed to load.", MODUlE_NAME);
+  }
+}
+
+void StandardShaders::LoadLitColorShader()
+{
+  _litColorShader = new Shader("Lit Color");
+  if (_litColorShader->Load(
+    (uint8_t*)LIT_COLOR_VERTEX_SHADER,
+    (uint32_t)sizeof(LIT_COLOR_VERTEX_SHADER),
+    (uint8_t*)LIT_COLOR_FRAGMENT_SHADER,
+    (uint32_t)sizeof(LIT_COLOR_FRAGMENT_SHADER)
+  ))
+  {
+    _shaders.push_back({ "LIT_COLOR_SHADER", LIT_COLOR_SHADER, _litColorShader });
+    LoggingSystem::GetInstance()->LogInfo("Loaded Lit Color Shader.", MODUlE_NAME);
+  }
+  else
+  {
+    LoggingSystem::GetInstance()->LogError("LoadLitColorShader: Failed to load.", MODUlE_NAME);
   }
 }
 

@@ -7,6 +7,7 @@
 namespace ZEngine
 {
 	class Editor;
+	class LightingSystem;
 	class Camera;
 	class Entity;
 	class Map;
@@ -34,6 +35,7 @@ namespace ZEngine
 	private:
 		GUIImage* _viewImage;
 		Editor* _editor;
+		LightingSystem* _lightingSystem;
 		Camera* _mainCamera;
 		Map* _currentMap;
 		GameViewSizeMode _sizeMode;

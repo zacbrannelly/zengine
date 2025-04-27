@@ -32,6 +32,7 @@
 #include <ZEngine-Core/Utilities/File.h>
 #include <ZEngine-Core/GameLoop/GameLoop.h>
 #include <ZEngine-Core/Physics/Physics3DSystem.h>
+#include <ZEngine-Core/Rendering/Lighting/LightingSystem.h>
 #include <glm/glm.hpp>
 
 #include "Controllers/MapController.h"
@@ -210,6 +211,10 @@ int do_main()
 	graphics->Init(&display);
 	loggingSystem->LogInfo("Graphics system initialized", MODULE_NAME);
 
+	// Init lighting system
+	auto lightingSystem = LightingSystem::GetInstance();
+	lightingSystem->Init();
+
 	// Init asset management system
 	auto assetManager = AssetManager::GetInstance();
 	assetManager->Init();
@@ -276,6 +281,7 @@ int do_main()
 	gizmoSystem->Shutdown();
 	gui->Shutdown();
 	assetManager->Shutdown();
+	lightingSystem->Shutdown();
 	graphics->Shutdown();
 	audioSystem->Shutdown();
 	inputManager->Shutdown();

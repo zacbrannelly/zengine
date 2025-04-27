@@ -13,6 +13,8 @@ static std::unordered_map<std::string, ObjectType> _extensionToObjectTypeMap {
   { "script",   ObjectType::CSHARP_SCRIPT_ASSET },
   { "audio",    ObjectType::AUDIO_ASSET },
   { "fbx",      ObjectType::MODEL_ASSET },
+  { "glb",      ObjectType::MODEL_ASSET },
+  { "gltf",     ObjectType::MODEL_ASSET },
   { "map",      ObjectType::MAP_ASSET },
   { "png",      ObjectType::TEXTURE_ASSET },
   { "jpg",      ObjectType::TEXTURE_ASSET },
@@ -53,6 +55,9 @@ void RegisterObjectTypes() {
   ADD_OBJECT_TYPE(CAPSULE_COLLIDER_3D)
   ADD_OBJECT_TYPE(PLANE_COLLIDER_3D)
   ADD_OBJECT_TYPE(MESH_COLLIDER_3D)
+  ADD_OBJECT_TYPE(LIGHT)
+  ADD_OBJECT_TYPE(DIRECTIONAL_LIGHT)
+  ADD_OBJECT_TYPE(POINT_LIGHT)
 }
 
 std::string ZEngine::ObjectTypeToString(ObjectType type) {

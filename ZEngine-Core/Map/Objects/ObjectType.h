@@ -36,6 +36,9 @@ namespace ZEngine
 		CAPSULE_COLLIDER_3D,
 		PLANE_COLLIDER_3D,
 		MESH_COLLIDER_3D,
+		LIGHT,
+		DIRECTIONAL_LIGHT,
+		POINT_LIGHT,
 	};
 
 	std::string ObjectTypeToString(ObjectType type);

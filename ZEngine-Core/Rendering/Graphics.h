@@ -34,6 +34,7 @@ namespace ZEngine
 		void Touch(int viewId);
 
 		bgfx::UniformHandle CreateUniform(const std::string& name, bgfx::UniformType::Enum type, uint16_t numElements);
+		void DestroyUniform(const bgfx::UniformHandle& uniform);
 
 		void SetVertexBuffer(uint8_t stream, VertexBuffer* buffer);
 		void SetIndexBuffer(IndexBuffer* buffer);

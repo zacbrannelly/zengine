@@ -5,6 +5,7 @@
 #include <ZEngine-Core/Map/Map.h>
 #include <ZEngine-Core/Display/Display.h>
 #include <ZEngine-Core/Input/InputManager.h>
+#include <ZEngine-Core/Rendering/Lighting/LightingSystem.h>
 #include "../Controllers/MapController.h"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -21,6 +22,7 @@ GameView::GameView(Editor* editor)
 		_sizeMode(FIT),
 		_scale(100.0f)
 {
+	_lightingSystem = LightingSystem::GetInstance();
 	SetupCamera();
 	SetFlags(ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_HorizontalScrollbar);
 }
@@ -147,9 +149,11 @@ void GameView::RenderElement()
 	_mainCamera->Render(-1);
 
 	// Render the world without the internal cameras
-	if (_editor->GetSelectedMap() != nullptr)
+	Map* selectedMap = _editor->GetSelectedMap();
+	if (selectedMap != nullptr)
 	{
-		_editor->GetSelectedMap()->RenderWorld(_mainCamera->GetViewId());
+		_lightingSystem->Update(selectedMap, _mainCamera);
+		selectedMap->RenderWorld(_mainCamera->GetViewId());
 	}
 
 	// Render the actual texture to the screen (more like submit the draw call to bgfx)

@@ -4,6 +4,7 @@
 #include "Material.h"
 #include "Graphics.h"
 #include "Shader.h"
+#include "Lighting/LightingSystem.h"
 
 using namespace ZEngine;
 
@@ -298,6 +299,13 @@ void SubMesh::Draw(int viewId, Material* material, Graphics* graphics, const Pas
 		break;
 	case TRIANGLE_STRIP:
 		renderFlags |= BGFX_STATE_PT_TRISTRIP;
+	}
+
+	// TODO: Make this optional to avoid setting uniforms every time
+	auto lighting = LightingSystem::GetInstance();
+	if (lighting != nullptr)
+	{
+		LightingSystem::GetInstance()->ApplyUniforms();
 	}
 
 	material->Apply();

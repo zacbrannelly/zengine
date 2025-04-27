@@ -5,6 +5,7 @@
 #include <ZEngine-Core/Map/Objects/Entity.h>
 #include <ZEngine-Core/Component/Transform.h>
 #include <ZEngine-Core/Input/InputManager.h>
+#include <ZEngine-Core/Rendering/Lighting/LightingSystem.h>
 #include <glm/gtc/type_ptr.hpp>
 
 #include "MapViewToolbar.h"
@@ -21,6 +22,7 @@ MapView::MapView(Editor* editor) : GUIWindow("Map View", 1024, 850, false), _cam
 {
 	_editor = editor;
 	_gizmoSystem = GizmoSystem::GetInstance();
+	_lightingSystem = LightingSystem::GetInstance();
 
 	// We must create an entity (so we can transform the camera) and translate it back 10 units
 	_viewEntity = Factory::CreateInstance<Entity>("View Object", ObjectType::ENTITY);
@@ -152,6 +154,11 @@ void MapView::RenderElement()
 		// Render the world to the render texture
 		auto map = _editor->GetSelectedMap();
 		auto viewId = _viewCamera->GetViewId();
+
+		// Update the lighting system with the current map and camera
+		_lightingSystem->Update(map, _viewCamera);
+
+		// Render the map
 		map->RenderWorld(viewId);
 
 		// Render the gizmos (UI elements) to the render texture

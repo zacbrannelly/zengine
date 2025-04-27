@@ -12,6 +12,8 @@
 #include "../Inspectors/BoxCollider3DInspector.h"
 #include "../Inspectors/SphereCollider3DInspector.h"
 #include "../Inspectors/CapsuleCollider3DInspector.h"
+#include "../Inspectors/DirectionalLightInspector.h"
+#include "../Inspectors/PointLightInspector.h"
 
 #include <string>
 
@@ -30,6 +32,8 @@ InspectorWindow::InspectorWindow(Editor* context) : GUIWindow("Inspector Window"
 	_inspectors[BOX_COLLIDER_3D] = new BoxCollider3DInspector();
 	_inspectors[SPHERE_COLLIDER_3D] = new SphereCollider3DInspector();
 	_inspectors[CAPSULE_COLLIDER_3D] = new CapsuleCollider3DInspector();
+	_inspectors[DIRECTIONAL_LIGHT] = new DirectionalLightInspector();
+	_inspectors[POINT_LIGHT] = new PointLightInspector();
 }
 
 Inspector* InspectorWindow::GetInspector(ObjectType type)

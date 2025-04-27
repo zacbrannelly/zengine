@@ -160,6 +160,11 @@ bgfx::UniformHandle Graphics::CreateUniform(const std::string & name, bgfx::Unif
 	return createUniform(name.c_str(), type, numElements);
 }
 
+void Graphics::DestroyUniform(const bgfx::UniformHandle& uniform)
+{
+	destroy(uniform);
+}
+
 void Graphics::SetVertexBuffer(uint8_t stream, VertexBuffer* buffer)
 {
 	if (buffer != nullptr)

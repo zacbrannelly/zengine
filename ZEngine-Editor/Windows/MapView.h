@@ -8,6 +8,7 @@ namespace ZEngine
 {
 	class Editor;
 	class GizmoSystem;
+	class LightingSystem;
 	class Camera;
 	class Entity;
 	class Map;
@@ -32,6 +33,7 @@ namespace ZEngine
 		Camera* _viewCamera;
 		Editor* _editor;
 		GizmoSystem* _gizmoSystem;
+		LightingSystem* _lightingSystem;
 		MapViewToolbar* _mapViewToolbar;
 		MapViewPicker* _mapViewPicker;
 		bool _cameraInFlight;

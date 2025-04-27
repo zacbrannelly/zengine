@@ -51,6 +51,8 @@ set (SOURCE_FILES
   "Inspectors/BoxCollider3DInspector.cpp"
   "Inspectors/SphereCollider3DInspector.cpp"
   "Inspectors/CapsuleCollider3DInspector.cpp"
+  "Inspectors/DirectionalLightInspector.cpp"
+  "Inspectors/PointLightInspector.cpp"
   "Inspectors/Inspector.cpp"
   "Menus/MainMenuBar.cpp"
   "Project/Project.cpp"

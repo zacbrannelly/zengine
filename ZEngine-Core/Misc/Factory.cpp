@@ -19,6 +19,8 @@
 #include "../Component/PlaneCollider3D.h"
 #include "../Component/MeshCollider3D.h"
 #include "../Scripting/CSharp/CSharpScript.h"
+#include "../Component/Lighting/DirectionalLight.h"
+#include "../Component/Lighting/PointLight.h"
 
 #include "../Assets/Objects/AudioAsset.h"
 #include "../Assets/Objects/CSharpScriptAsset.h"
@@ -58,6 +60,8 @@ void Factory::Init()
 	RegisterType<CapsuleCollider3D>();
 	RegisterType<PlaneCollider3D>();
 	RegisterType<MeshCollider3D>();
+	RegisterType<DirectionalLight>();
+	RegisterType<PointLight>();
 
 	// Register factory methods for assets
 	RegisterType<TextureAsset>();
@@ -92,6 +96,8 @@ void Factory::Init()
 	RegisterCopyType<CapsuleCollider3D>();
 	RegisterCopyType<PlaneCollider3D>();
 	RegisterCopyType<MeshCollider3D>();
+	RegisterCopyType<DirectionalLight>();
+	RegisterCopyType<PointLight>();
 
 	// Register component importers (from JSON objects)
 	RegisterTypeImporter<Transform>();
@@ -105,6 +111,8 @@ void Factory::Init()
 	RegisterTypeImporter<CapsuleCollider3D>();
 	RegisterTypeImporter<PlaneCollider3D>();
 	RegisterTypeImporter<MeshCollider3D>();
+	RegisterTypeImporter<DirectionalLight>();
+	RegisterTypeImporter<PointLight>();
 }
 
 ZObject* Factory::CreateInstance(std::string name, ObjectType type)
@@ -138,7 +146,7 @@ ZObject* Factory::Copy(std::string name, ZObject* object)
 		return copyFunc->second(name, object);
 	}
 
-	LoggingSystem::GetInstance()->LogError("Copy: No copy function found for type " + std::to_string(object->GetType()), MODULE_NAME);
+	LoggingSystem::GetInstance()->LogError("Copy: No copy function found for type " + ObjectTypeToString(object->GetType()), MODULE_NAME);
 	return nullptr;
 }
 

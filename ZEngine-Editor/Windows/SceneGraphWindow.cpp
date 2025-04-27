@@ -3,6 +3,8 @@
 #include <ZEngine-Core/Misc/Factory.h>
 #include <ZEngine-Core/Rendering/MeshFactory.h>
 #include <ZEngine-Core/Component/MeshRenderer.h>
+#include <ZEngine-Core/Component/Lighting/DirectionalLight.h>
+#include <ZEngine-Core/Component/Lighting/PointLight.h>
 #include <ZEngine-Core/Component/Transform.h>
 #include <ZEngine-Core/Map/Objects/Entity.h>
 #include <ZEngine-Core/ImmediateUI/imgui-includes.h>
@@ -157,11 +159,28 @@ void SceneGraphWindow::RenderInWindow()
 
 			if (ImGui::BeginMenu("Lighting"))
 			{
-				// TODO: Come up with lighting options
-
 				if (ImGui::MenuItem("Directional Light"))
 				{
+					auto newEntity = Factory::CreateInstance<Entity>("Directional Light", ENTITY);
+					auto light = Factory::CreateInstance<DirectionalLight>("DirectionalLight", DIRECTIONAL_LIGHT);
 
+					newEntity->AddComponent(light);
+					map->Add(newEntity);
+
+					// Set the new entity as the selected entity
+					_context->SetSelectedEntity(newEntity);
+				}
+
+				if (ImGui::MenuItem("Point Light"))
+				{
+					auto newEntity = Factory::CreateInstance<Entity>("Point Light", ENTITY);
+					auto light = Factory::CreateInstance<PointLight>("PointLight", POINT_LIGHT);
+
+					newEntity->AddComponent(light);
+					map->Add(newEntity);
+
+					// Set the new entity as the selected entity
+					_context->SetSelectedEntity(newEntity);
 				}
 
 				ImGui::EndMenu();
