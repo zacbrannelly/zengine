@@ -45,6 +45,20 @@ bool Shader::Load(std::string vertPath, std::string fragPath, uint64_t state, in
 	);
 }
 
+void Shader::LoadUniforms(const bgfx::ShaderHandle& shader)
+{
+	// Fetch the uniforms 
+	bgfx::UniformHandle foundUniforms[256];
+	uint16_t numUniforms = bgfx::getShaderUniforms(shader, foundUniforms, 256);
+	for (uint16_t i = 0; i < numUniforms; ++i)
+	{
+		bgfx::UniformHandle uniform = foundUniforms[i];
+		bgfx::UniformInfo info;
+		bgfx::getUniformInfo(uniform, info);
+		_uniforms.push_back({ info.name, uniform, info.type, info.num });
+	}
+}
+
 bool Shader::Load(uint8_t* vertData, uint32_t vertSize, uint8_t* fragData, uint32_t fragSize, uint64_t state, int pass)
 {
 	const bgfx::Memory* vertexShaderData = bgfx::makeRef(vertData, vertSize);
@@ -56,6 +70,10 @@ bool Shader::Load(uint8_t* vertData, uint32_t vertSize, uint8_t* fragData, uint3
 
 	if (program.idx != bgfx::kInvalidHandle)
 	{
+		// Fetch the uniforms 
+		LoadUniforms(vertexShader);
+		LoadUniforms(fragmentShader);
+
 		// Either set the pass to an existing, or create a new one
 		if (_pass.size() == 0 || pass >= _pass.size())
 		{
@@ -101,6 +119,11 @@ const bgfx::ShaderHandle & Shader::GetFragmentShader(int pass) const
 const std::vector<Pass>& Shader::GetPasses() const
 {
 	return _pass;
+}
+
+const std::vector<UniformInfo>& Shader::GetUniforms() const
+{
+	return _uniforms;
 }
 
 const bgfx::Memory* Shader::LoadFile(const std::string & path) const

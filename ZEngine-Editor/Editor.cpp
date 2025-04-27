@@ -68,7 +68,7 @@ Editor::Editor(Display* display) : _display(display), _selectedMap(nullptr), _se
 	Add(new InspectorWindow(this));
 	Add(new SceneGraphWindow(this));
 	Add(new GameView(this));
-	Add(new AssetImporter());
+	Add(new AssetImporter(this));
 	Add(new AssetExplorer(this));
 	Add(new LogWindow());
 	Add(new PhysicsSettings(this));

@@ -30,6 +30,7 @@ namespace ZEngine
 		void ReadTextures(nlohmann::json::array_t& values, Material* material);
 		void ReadUniforms(nlohmann::json::array_t& values, Material* material);
 		void ReadShader(nlohmann::json& identifier, Material* material);
+		void PopulateUniformsFromShader();
 
 		Material* _material;
 	};

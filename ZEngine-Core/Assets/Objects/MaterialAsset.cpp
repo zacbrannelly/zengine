@@ -9,6 +9,7 @@
 #include "../../Utilities/Directory.h"
 #include "../../Utilities/JsonHelpers.h"
 #include "../../Logging/LoggingSystem.h"
+#include "../../Rendering/Lighting/LightingSystem.h"
 
 #include <fstream>
 #include <string>
@@ -93,6 +94,9 @@ bool MaterialAsset::Load(string path)
 	{
 		ReadShader(*it, _material);
 	}
+
+	// Read uniforms from the shader.
+	PopulateUniformsFromShader();
 
 	return true;
 }
@@ -267,6 +271,42 @@ void MaterialAsset::ReadShader(json& shaderRef, Material* material)
 	else
 	{
 		LoggingSystem::GetInstance()->LogError("ReadShader: Failed to load shader for material: " + _material->GetName(), MODULE_NAME);
+	}
+}
+
+void MaterialAsset::PopulateUniformsFromShader()
+{
+	if (_material == nullptr) return;
+	if (_material->GetShader() == nullptr) return;
+
+	auto shader = _material->GetShader();
+	auto uniforms = shader->GetUniforms();
+	auto lightingSystem = LightingSystem::GetInstance();
+
+	auto existingUniforms = _material->GetUniforms();
+	auto existingSamplers = _material->GetSamplers();
+
+	for (auto& uniform : uniforms)
+	{
+		// Don't register uniforms managed by the lighting system.
+		if (lightingSystem->IsLightingUniform(uniform.handle)) continue;
+
+		if (uniform.type == bgfx::UniformType::Sampler)
+		{
+			auto maybeSampler = existingSamplers.find(uniform.name);
+			if (maybeSampler == existingSamplers.end())
+			{
+				_material->RegisterSampler(uniform.name);
+			}
+		}
+		else
+		{
+			auto maybeUniform = existingUniforms.find(uniform.name);
+			if (maybeUniform == existingUniforms.end())
+			{
+				_material->RegisterUniform(uniform.name, uniform.type, uniform.numElements);
+			}
+		}
 	}
 }
 

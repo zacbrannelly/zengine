@@ -14,6 +14,10 @@ Material::Material(std::string name) : ZObject(name, ObjectType::MATERIAL)
 
 void Material::RegisterUniform(const std::string& name, bgfx::UniformType::Enum type, uint16_t numElements)
 {
+	// If already exists, do nothing.
+	auto maybeExisting = _uniforms.find(name);
+	if (maybeExisting != _uniforms.end()) return;
+
 	Uniform uniform = 
 	{
 		_graphics->CreateUniform(name, type, numElements),
@@ -27,6 +31,10 @@ void Material::RegisterUniform(const std::string& name, bgfx::UniformType::Enum 
 
 void Material::RegisterSampler(const std::string& name)
 {
+	// If already exists, do nothing.
+	auto maybeExisting = _textureSamplers.find(name);
+	if (maybeExisting != _textureSamplers.end()) return;
+
 	_textureSamplers[name] = 
 	{
 		_graphics->CreateUniform(name, bgfx::UniformType::Sampler, 1),
@@ -41,7 +49,7 @@ void Material::SetUniform(const std::string& name, void* data, uint16_t numEleme
 	{
 		auto uniform = iterator->second;
 
-		if (uniform.data != nullptr)
+		if (uniform.data != nullptr && uniform.data != data)
 			delete uniform.data;
 
 		uniform.data = data;
@@ -91,6 +99,7 @@ void Material::Apply()
 	for (auto pair : _uniforms)
 	{
 		auto uniform = pair.second;
+		if (pair.second.data == nullptr) continue;
 		_graphics->SetUniform(uniform.handle, uniform.data, uniform.numElements);
 	}
 
@@ -99,6 +108,7 @@ void Material::Apply()
 	for (auto it = _textureSamplers.begin(); it != _textureSamplers.end(); it++, count++)
 	{
 		auto sampler = it->second;
+		if (sampler.texture.idx == bgfx::kInvalidHandle) continue;
 		_graphics->SetTexture(count, sampler.handle, sampler.texture);
 	}
 }

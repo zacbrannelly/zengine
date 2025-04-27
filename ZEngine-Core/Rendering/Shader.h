@@ -14,6 +14,14 @@ namespace ZEngine
 		uint64_t state;
 	};
 
+	struct UniformInfo
+	{
+		std::string name;
+		bgfx::UniformHandle handle;
+		bgfx::UniformType::Enum type;
+		uint16_t numElements;
+	};
+
 	class Shader : public ZObject
 	{
 	public:
@@ -29,12 +37,15 @@ namespace ZEngine
 		const bgfx::ShaderHandle& GetFragmentShader(int pass = 0) const;
 
 		const std::vector<Pass>& GetPasses() const;
+		const std::vector<UniformInfo>& GetUniforms() const;
 
 	private:
 		const bgfx::Memory* LoadFile(const std::string& path) const;
+		void LoadUniforms(const bgfx::ShaderHandle& shader);
+
 		std::vector<Pass> _pass;
+		std::vector<UniformInfo> _uniforms;
 		bool _isLoaded;
-		
 	public:
 		static ZObject* CreateInstance(std::string name, ObjectType type);
 		
