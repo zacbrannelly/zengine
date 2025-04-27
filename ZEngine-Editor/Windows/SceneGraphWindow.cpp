@@ -6,6 +6,8 @@
 #include <ZEngine-Core/Component/Transform.h>
 #include <ZEngine-Core/Map/Objects/Entity.h>
 #include <ZEngine-Core/ImmediateUI/imgui-includes.h>
+#include <ZEngine-Core/Rendering/StandardShaders.h>
+#include <ZEngine-Core/Rendering/Material.h>
 #include <iostream>
 
 using namespace ZEngine;
@@ -35,8 +37,12 @@ void SceneGraphWindow::RenderNode(Entity* node)
 		flags |= ImGuiTreeNodeFlags_Selected;
 	}
 
+	// Get node pointer as string
+	std::string nodePtr = std::to_string(reinterpret_cast<std::uintptr_t>(node));
+	std::string nodeId = node->GetName() + "###" + nodePtr;
+
 	// Render the node
-	bool nodeOpen = ImGui::TreeNodeEx(node->GetName().c_str(), flags);
+	bool nodeOpen = ImGui::TreeNodeEx(nodeId.c_str(), flags);
 
 	// If the node is clicked, select the entity in the editor
 	if (ImGui::IsItemClicked())
@@ -73,17 +79,62 @@ void SceneGraphWindow::RenderInWindow()
 			{
 				if (ImGui::MenuItem("Cube"))
 				{
+					auto newEntity = Factory::CreateInstance<Entity>("Cube", ENTITY);
+					auto meshRenderer = Factory::CreateInstance<MeshRenderer>("MeshRenderer", MESH_RENDERER);
 
+					auto mesh = MeshFactory::CreateCube("Cube");
+					meshRenderer->SetMesh(mesh);
+					
+					auto material = Factory::CreateInstance<Material>("Default Material", MATERIAL);
+					auto shader = StandardShaders::GetUnlitColorShader();
+					material->SetShader(shader);
+					meshRenderer->SetMaterial(material);
+
+					newEntity->AddComponent(meshRenderer);
+					map->Add(newEntity);
+
+					// Set the new entity as the selected entity
+					_context->SetSelectedEntity(newEntity);
 				}
 
 				if (ImGui::MenuItem("Sphere"))
 				{
-					// TODO: Create sphere object
+					auto newEntity = Factory::CreateInstance<Entity>("Sphere", ENTITY);
+					auto meshRenderer = Factory::CreateInstance<MeshRenderer>("MeshRenderer", MESH_RENDERER);
+
+					auto mesh = MeshFactory::CreateSphere("Sphere");
+					meshRenderer->SetMesh(mesh);
+
+					auto material = Factory::CreateInstance<Material>("Default Material", MATERIAL);
+					auto shader = StandardShaders::GetUnlitColorShader();
+					material->SetShader(shader);
+					meshRenderer->SetMaterial(material);
+
+					newEntity->AddComponent(meshRenderer);
+					map->Add(newEntity);
+
+					// Set the new entity as the selected entity
+					_context->SetSelectedEntity(newEntity);
 				}
 
 				if (ImGui::MenuItem("Plane"))
 				{
-					// TODO: Create pop-up dialog for setting width and height
+					auto newEntity = Factory::CreateInstance<Entity>("Plane", ENTITY);
+					auto meshRenderer = Factory::CreateInstance<MeshRenderer>("MeshRenderer", MESH_RENDERER);
+
+					auto mesh = MeshFactory::CreatePlane("Plane", 10, 10);
+					meshRenderer->SetMesh(mesh);
+
+					auto material = Factory::CreateInstance<Material>("Default Material", MATERIAL);
+					auto shader = StandardShaders::GetUnlitColorShader();
+					material->SetShader(shader);
+					meshRenderer->SetMaterial(material);
+
+					newEntity->AddComponent(meshRenderer);
+					map->Add(newEntity);
+
+					// Set the new entity as the selected entity
+					_context->SetSelectedEntity(newEntity);
 				}
 
 				ImGui::EndMenu();
