@@ -208,6 +208,19 @@ uuids::uuid AssetCatalog::GetAssetIDFromPath(std::string path)
 	return uuids::uuid();
 }
 
+bool AssetCatalog::GetAssetTypeFromPath(std::string path, ObjectType& type)
+{
+	auto it = find_if(_catalog.begin(), _catalog.end(), [&path](auto item) { return item.path == path; });
+
+	if (it != _catalog.end())
+	{
+		type = it->type;
+		return true;
+	}
+
+	return false;
+}
+
 std::vector<CatalogEntry> AssetCatalog::GetAssetsByType(ObjectType type)
 {
 	std::vector<CatalogEntry> results;

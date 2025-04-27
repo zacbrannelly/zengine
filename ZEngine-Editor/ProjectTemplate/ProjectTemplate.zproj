@@ -2,122 +2,260 @@
   "catalog": [
     {
       "id": "00000000-0000-0000-0000-000000000000",
-      "path": "Assets/materials/test_material.asset",
+      "name": "test_material",
+      "path": "Assets/materials/test_material.material",
       "type": "MATERIAL_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000001",
+      "name": "nanosuit.obj",
       "path": "Assets/models/suit/nanosuit.obj",
       "type": "MODEL_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000030",
+      "name": "Pool_Table.fbx",
       "path": "Assets/models/pool_table/Pool_Table.fbx",
       "type": "MODEL_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000031",
-      "path": "Assets/models/pool_table/pool_table_mat.asset",
+      "name": "pool_table_mat",
+      "path": "Assets/models/pool_table/pool_table_mat.material",
       "type": "MATERIAL_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000008",
-      "path": "Assets/materials/metal_grid/metal_grid.asset",
+      "name": "slate_material",
+      "path": "Assets/materials/metal_grid/metal_grid.material",
       "type": "MATERIAL_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000009",
+      "name": "coke2.obj",
       "path": "Assets/models/coke/coke2.obj",
       "type": "MODEL_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000010",
-      "path": "Assets/models/coke/coke_mat.asset",
+      "name": "coke_material",
+      "path": "Assets/models/coke/coke_mat.material",
       "type": "MATERIAL_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000011",
-      "path": "Assets/models/coke/coke_top_mat.asset",
+      "name": "coke_top_material",
+      "path": "Assets/models/coke/coke_top_mat.material",
       "type": "MATERIAL_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000012",
-      "path": "Assets/sounds/test_sound.asset",
+      "name": "test_sound",
+      "path": "Assets/sounds/test_sound.audio",
       "type": "AUDIO_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000013",
-      "path": "Assets/sounds/background_music.asset",
+      "name": "background_music",
+      "path": "Assets/sounds/background_music.audio",
       "type": "AUDIO_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000014",
-      "path": "Assets/materials/background/background_mat.asset",
+      "name": "background_mat",
+      "path": "Assets/materials/background/background_mat.material",
       "type": "MATERIAL_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000015",
-      "path": "Assets/materials/plastic/plastic_mat.asset",
+      "name": "plastic_mat",
+      "path": "Assets/materials/plastic/plastic_mat.material",
       "type": "MATERIAL_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000016",
+      "name": "test_map.map",
       "path": "Assets/maps/test_map.map",
       "type": "MAP_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000018",
+      "name": "PBRShader",
       "path": "Assets/shaders/PBRShader.shader",
       "type": "SHADER_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000019",
+      "name": "rustediron2_albedo.png",
       "path": "Assets/textures/rustediron2_albedo.png",
       "type": "TEXTURE_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000021",
+      "name": "new_map.map",
       "path": "Assets/maps/new_map.map",
       "type": "MAP_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000022",
+      "name": "menu_screen.map",
       "path": "Assets/maps/menu_screen.map",
       "type": "MAP_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000023",
-      "path": "Assets/scripts/TestComponent.asset",
+      "name": "TestComponent",
+      "path": "Assets/scripts/TestComponent.script",
       "type": "CSHARP_SCRIPT_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000024",
-      "path": "Assets/scripts/RotateComponent.asset",
+      "name": "RotateComponent",
+      "path": "Assets/scripts/RotateComponent.script",
       "type": "CSHARP_SCRIPT_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000025",
-      "path": "Assets/scripts/HeadComponent.asset",
+      "name": "HeadComponent",
+      "path": "Assets/scripts/HeadComponent.script",
       "type": "CSHARP_SCRIPT_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000026",
-      "path": "Assets/scripts/BodyComponent.asset",
+      "name": "BodyComponent",
+      "path": "Assets/scripts/BodyComponent.script",
       "type": "CSHARP_SCRIPT_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000027",
-      "path": "Assets/scripts/FoodComponent.asset",
+      "name": "FoodComponent",
+      "path": "Assets/scripts/FoodComponent.script",
       "type": "CSHARP_SCRIPT_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000028",
+      "name": "blank_ao.png",
       "path": "Assets/textures/blank_ao.png",
       "type": "TEXTURE_ASSET"
     },
     {
       "id": "00000000-0000-0000-0000-000000000029",
+      "name": "blank_normal.png",
       "path": "Assets/textures/blank_normal.png",
+      "type": "TEXTURE_ASSET"
+    },
+    {
+      "id": "a9fa49de-566e-453c-8f81-3f14242db772",
+      "name": "rustediron2_roughness.png",
+      "path": "Assets/textures/rustediron2_roughness.png",
+      "type": "TEXTURE_ASSET"
+    },
+    {
+      "id": "d03c73ed-4333-421a-a62e-7ba8125eb1c2",
+      "name": "background.png",
+      "path": "Assets/materials/background/background.png",
+      "type": "TEXTURE_ASSET"
+    },
+    {
+      "id": "14d00999-39fd-43ba-8282-f4a242a5b5ba",
+      "name": "scuffed-plastic5-alb.png",
+      "path": "Assets/materials/plastic/scuffed-plastic5-alb.png",
+      "type": "TEXTURE_ASSET"
+    },
+    {
+      "id": "302861dc-9ded-4e17-bc3b-445351359fa8",
+      "name": "scuffed-plastic4-alb.png",
+      "path": "Assets/materials/plastic/scuffed-plastic4-alb.png",
+      "type": "TEXTURE_ASSET"
+    },
+    {
+      "id": "e63695c9-c833-4aff-a8bb-26ebd3f154f9",
+      "name": "scuffed-plastic-alb.png",
+      "path": "Assets/materials/plastic/scuffed-plastic-alb.png",
+      "type": "TEXTURE_ASSET"
+    },
+    {
+      "id": "8746c9b1-9b31-4bf1-954b-f14514401853",
+      "name": "scuffed-plastic6-alb.png",
+      "path": "Assets/materials/plastic/scuffed-plastic6-alb.png",
+      "type": "TEXTURE_ASSET"
+    },
+    {
+      "id": "42fc5b18-a6b5-4674-961c-bcc41e0d519f",
+      "name": "scuffed-plastic-normal.png",
+      "path": "Assets/materials/plastic/scuffed-plastic-normal.png",
+      "type": "TEXTURE_ASSET"
+    },
+    {
+      "id": "65dacdbe-4534-428d-ba39-f948eda5b1b5",
+      "name": "scuffed-plastic7-alb.png",
+      "path": "Assets/materials/plastic/scuffed-plastic7-alb.png",
+      "type": "TEXTURE_ASSET"
+    },
+    {
+      "id": "955063aa-89d5-4121-b555-28c2867224f6",
+      "name": "scuffed-plastic-metal.png",
+      "path": "Assets/materials/plastic/scuffed-plastic-metal.png",
+      "type": "TEXTURE_ASSET"
+    },
+    {
+      "id": "6860aa9a-0108-4ce1-b6b7-db3e0d0b0192",
+      "name": "scuffed-plastic2-alb.png",
+      "path": "Assets/materials/plastic/scuffed-plastic2-alb.png",
+      "type": "TEXTURE_ASSET"
+    },
+    {
+      "id": "7d031fe7-3519-4837-bd14-1342b72c882e",
+      "name": "scuffed-plastic-rough.png",
+      "path": "Assets/materials/plastic/scuffed-plastic-rough.png",
+      "type": "TEXTURE_ASSET"
+    },
+    {
+      "id": "e33c6dd2-484b-4474-bf36-c46d33ccc7da",
+      "name": "scuffed-plastic3-alb.png",
+      "path": "Assets/materials/plastic/scuffed-plastic3-alb.png",
+      "type": "TEXTURE_ASSET"
+    },
+    {
+      "id": "f35e82bf-9610-44e8-b769-91983bde131a",
+      "name": "scuffed-plastic8-alb.png",
+      "path": "Assets/materials/plastic/scuffed-plastic8-alb.png",
+      "type": "TEXTURE_ASSET"
+    },
+    {
+      "id": "30047dab-6043-48d3-be12-e5e0a8f4395f",
+      "name": "scuffed-plastic-ao.png",
+      "path": "Assets/materials/plastic/scuffed-plastic-ao.png",
+      "type": "TEXTURE_ASSET"
+    },
+    {
+      "id": "b55a5cd1-d2cf-4052-be86-62afed8ea281",
+      "name": "metalgrid2_roughness.png",
+      "path": "Assets/materials/metal_grid/metalgrid2_roughness.png",
+      "type": "TEXTURE_ASSET"
+    },
+    {
+      "id": "69b11d6f-22eb-4c74-977a-7aba7dcfb891",
+      "name": "metalgrid2_basecolor.png",
+      "path": "Assets/materials/metal_grid/metalgrid2_basecolor.png",
+      "type": "TEXTURE_ASSET"
+    },
+    {
+      "id": "6427d315-6186-4e42-b4c0-081d56a9a525",
+      "name": "metalgrid2_normal-dx.png",
+      "path": "Assets/materials/metal_grid/metalgrid2_normal-dx.png",
+      "type": "TEXTURE_ASSET"
+    },
+    {
+      "id": "d040a404-aece-4d5c-9c63-d7ae44ee5bda",
+      "name": "metalgrid2_AO.png",
+      "path": "Assets/materials/metal_grid/metalgrid2_AO.png",
+      "type": "TEXTURE_ASSET"
+    },
+    {
+      "id": "4fa76216-489c-4aa3-9c67-facb5b27b1c1",
+      "name": "metalgrid2_metallic.png",
+      "path": "Assets/materials/metal_grid/metalgrid2_metallic.png",
       "type": "TEXTURE_ASSET"
     }
   ],

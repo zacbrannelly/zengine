@@ -13,7 +13,8 @@ bool MaterialBuilder::BuildToFile(const std::string& path, const MaterialEditorD
 	json root;
 
 	root["name"] = data.name;
-	root["shader"] = uuids::to_string(data.shaderID);
+	root["shader"] = json::object_t();
+	root["shader"]["assetId"] = uuids::to_string(data.shaderID);
 	
 	auto& textures = root["textures"] = json::array_t();
 	auto& uniforms = root["uniforms"] = json::array_t();

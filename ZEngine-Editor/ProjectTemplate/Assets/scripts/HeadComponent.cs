@@ -76,7 +76,7 @@ namespace MyGame
           if (result.collider.GetOwner().GetName() == "Head")
           {
             Console.WriteLine("Raycast hit self");
-            _rigidBody.ApplyImpulse(new vec3(0.1f, 0.1f, 0));
+            _rigidBody.ApplyImpulse(new vec3(0.5f, 0.0f, 0));
           }
         }
       }

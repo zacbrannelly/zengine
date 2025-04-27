@@ -16,8 +16,9 @@ using namespace ZEngine;
 
 #define REGISTER_EXTENSION(x, y) _validExtensions[x] = y
 
-AssetImporter::AssetImporter() : GUIWindow("Asset Importer", 200, 150, false)
+AssetImporter::AssetImporter(Editor* editor) : GUIWindow("Asset Importer", 200, 150, false)
 {
+	_editor = editor;
 	REGISTER_EXTENSION("png", TEXTURE_ASSET);
 	REGISTER_EXTENSION("jpg", TEXTURE_ASSET);
 	REGISTER_EXTENSION("map", MAP_ASSET);
@@ -77,7 +78,7 @@ void AssetImporter::RenderInWindow()
 
 			if (ImGui::MenuItem("Material"))
 			{
-				auto dialog = new CreateMaterialDialog(_rootFolder->GetPath());
+				auto dialog = new CreateMaterialDialog(_editor, _rootFolder->GetPath());
 				dialog->Show();
 
 				Add(dialog);

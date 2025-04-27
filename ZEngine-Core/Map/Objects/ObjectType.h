@@ -40,4 +40,6 @@ namespace ZEngine
 
 	std::string ObjectTypeToString(ObjectType type);
 	ObjectType StringToObjectType(std::string type);
+
+	bool GetObjectTypeFromExtension(std::string extension, ObjectType& type);
 }

@@ -1,18 +1,23 @@
 #include "CreateMaterialDialog.h"
 #include "BrowserDialog.h"
+#include "../Editor.h"
+#include "../Project/Project.h"
 #include <ZEngine-Core/ImmediateUI/GUITextField.h>
 #include <ZEngine-Core/Utilities/Directory.h>
 #include <ZEngine-Core/Utilities/File.h>
 
 #include <ZEngine-Core/Assets/AssetManager.h>
 #include <ZEngine-Core/Assets/AssetCatalog.h>
+#include <ZEngine-Core/Rendering/StandardShaders.h>
+#include <ZEngine-Core/Rendering/Shader.h>
 #include <nlohmann/json.hpp>
 #include <algorithm>
 
 using namespace ZEngine;
 
-CreateMaterialDialog::CreateMaterialDialog(std::string basePath) : GUIDialog("Create Material", 500, 155, true)
+CreateMaterialDialog::CreateMaterialDialog(Editor* editor, std::string basePath) : GUIDialog("Create Material", 600, 300, true)
 {
+	_editor = editor;
 	_basePath = basePath;
 
 	_nameField = new GUITextField("Name");
@@ -32,7 +37,7 @@ bool CreateMaterialDialog::Validate()
 	if (std::all_of(name.begin(), name.end(), [](const auto& c) { return c == ' '; }))
 		return false;
 
-	if (_shaderID.is_nil())
+	if (_shaderID.is_nil() && _standardShader == nullptr)
 		return false;
 
 	return true;
@@ -45,12 +50,21 @@ std::string CreateMaterialDialog::GenerateJSON()
 	json root;
 
 	root["name"] = _nameField->GetText();
-	root["shader"] = uuids::to_string(_shaderID);
+	root["shader"] = json::object_t();
+
+	if (_standardShader != nullptr)
+	{
+		root["shader"]["standardShader"] = _standardShader->enumName;
+	}
+	else
+	{
+		root["shader"]["assetId"] = uuids::to_string(_shaderID);
+	}
 
 	return root.dump(4);
 }
 
-bool CreateMaterialDialog::Create(bool import)
+bool CreateMaterialDialog::Create()
 {
 	if (Validate())
 	{
@@ -60,17 +74,8 @@ bool CreateMaterialDialog::Create(bool import)
 		if (!assetFile.WriteContent(&jsonCode[0], jsonCode.size()))
 			return false;
 
-		if (import)
-		{
-			auto catalog = AssetManager::GetInstance()->GetCatalog();
-
-			if (catalog != nullptr)
-			{
-				catalog->RegisterAsset(_pathField->GetText(), MATERIAL_ASSET);
-				catalog->SaveCatalog(catalog->GetLastCatalogPath());
-			}
-		}
-
+		_editor->GetProject()->GetCatalog().RegisterAsset(_pathField->GetText(), MATERIAL_ASSET);
+		_editor->GetProject()->Save();
 		return true;
 	}
 
@@ -97,7 +102,7 @@ void CreateMaterialDialog::ProcessInput()
 	}
 
 	if (_nameField->GetText() != "")
-		_pathField->SetText(_basePath + _nameField->GetText() + ".asset");
+		_pathField->SetText(_basePath + _nameField->GetText() + ".material");
 	else
 		_pathField->SetText(_basePath);
 }
@@ -125,16 +130,33 @@ void CreateMaterialDialog::RenderInWindow()
 		catalog->GetAssetPathFromID(_shaderID, shaderName, type);
 	}
 
+	if (_standardShader != nullptr)
+	{
+		shaderName = _standardShader->shader->GetName();
+	}
+
 	if (ImGui::BeginCombo("Shader", shaderName.c_str()))
 	{
 		if (catalog != nullptr)
 		{
-			auto availShaders = catalog->GetAssetsByType(SHADER_ASSET);
+			// Standard shaders
+			for (auto& standardShader : StandardShaders::GetShaders())
+			{
+				auto shader = standardShader.shader;
+				if (ImGui::Selectable(shader->GetName().c_str()))
+				{
+					_standardShader = &standardShader;
+					_shaderID = uuids::uuid();
+				}
+			}
 
+			// User shaders
+			auto availShaders = catalog->GetAssetsByType(SHADER_ASSET);
 			for (const auto& shader : availShaders)
 			{
-				if (ImGui::Selectable(shader.path.c_str()))
+				if (ImGui::Selectable(shader.name.c_str()))
 				{
+					_standardShader = nullptr;
 					_shaderID = shader.id;
 				}
 			}
@@ -147,14 +169,7 @@ void CreateMaterialDialog::RenderInWindow()
 
 	if (ImGui::Button("Create"))
 	{
-		if (Create(false))
-			Close();
-	}
-
-	ImGui::SameLine();
-	if (ImGui::Button("Create & Import"))
-	{
-		if (Create(true))
+		if (Create())
 			Close();
 	}
 

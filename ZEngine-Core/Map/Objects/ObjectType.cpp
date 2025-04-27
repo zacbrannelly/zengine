@@ -7,6 +7,20 @@ using namespace ZEngine;
 static std::unordered_map<std::string, ObjectType> _stringToObjectTypeMap;
 static std::unordered_map<ObjectType, std::string> _objectTypeToStringMap;
 
+static std::unordered_map<std::string, ObjectType> _extensionToObjectTypeMap {
+  { "shader",   ObjectType::SHADER_ASSET },
+  { "material", ObjectType::MATERIAL_ASSET },
+  { "script",   ObjectType::CSHARP_SCRIPT_ASSET },
+  { "audio",    ObjectType::AUDIO_ASSET },
+  { "fbx",      ObjectType::MODEL_ASSET },
+  { "map",      ObjectType::MAP_ASSET },
+  { "png",      ObjectType::TEXTURE_ASSET },
+  { "jpg",      ObjectType::TEXTURE_ASSET },
+  { "mp3",      ObjectType::AUDIO_ASSET },
+  { "wav",      ObjectType::AUDIO_ASSET },
+  { "cs",       ObjectType::CSHARP_SCRIPT_ASSET },
+};
+
 #define ADD_OBJECT_TYPE(type) \
   _stringToObjectTypeMap[#type] = ObjectType::type; \
   _objectTypeToStringMap[ObjectType::type] = #type;
@@ -63,4 +77,13 @@ ObjectType ZEngine::StringToObjectType(std::string type) {
     throw std::runtime_error("Could not convert string to object type!");
   }
   return result->second;
+}
+
+bool ZEngine::GetObjectTypeFromExtension(std::string extension, ObjectType& type) {
+  if (!_extensionToObjectTypeMap.contains(extension)) {
+    return false;
+  }
+
+  type = _extensionToObjectTypeMap[extension];
+  return true;
 }

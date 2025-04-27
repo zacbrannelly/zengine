@@ -39,6 +39,7 @@ namespace ZEngine
 
 		bool HasAsset(std::string assetPath);
 		bool GetAssetPathFromID(uuids::uuid id, std::string& path, ObjectType& type);
+		bool GetAssetTypeFromPath(std::string path, ObjectType& type);
 		uuids::uuid GetAssetIDFromPath(std::string path);
 		std::vector<CatalogEntry> GetAssetsByType(ObjectType type);
 

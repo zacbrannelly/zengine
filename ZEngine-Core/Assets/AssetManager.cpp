@@ -63,6 +63,13 @@ Asset* AssetManager::LoadAsset(std::string path, ObjectType type)
 
 Asset* AssetManager::LoadAsset(std::string name, std::string path, ObjectType type)
 {
+	auto existingAsset = FindAsset(name);
+	if (existingAsset != nullptr && existingAsset->GetType() == type && existingAsset->GetPath() == path)
+	{
+		// Asset already exists and is loaded
+		return existingAsset;
+	}
+
 	// Create a new empty instance.
 	auto newAsset = Factory::CreateInstance<Asset>(name, type);
 	

@@ -31,12 +31,14 @@ bool File::Create()
 	return true;
 }
 
-bool File::Copy(std::string newPath)
+bool File::Copy(std::string newPath) const
 {
 	ifstream in(_path, ios::binary);
 	ofstream out(newPath, ios::binary);
 
 	out << in.rdbuf();
+	in.close();
+	out.close();
 }
 
 bool File::Move(std::string newPath)

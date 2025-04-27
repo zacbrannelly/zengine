@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 namespace ZEngine
 {
@@ -11,6 +12,13 @@ namespace ZEngine
   };
 
   class Shader;
+
+  struct ShaderInfo
+  {
+    std::string enumName;
+    StandardShader enumValue;
+    Shader* shader;
+  };
 
   class StandardShaders
   {
@@ -24,9 +32,12 @@ namespace ZEngine
     static Shader* GetUnlitColorShader();
     static Shader* GetUnlitTextureShader();
 
+    static const std::vector<ShaderInfo>& GetShaders();
+
   private:
     static Shader* _unlitColorShader;
     static Shader* _unlitTextureShader;
+    static std::vector<ShaderInfo> _shaders;
 
     static void LoadUnlitColorShader();
     static void LoadUnlitTextureShader();

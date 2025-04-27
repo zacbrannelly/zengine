@@ -10,18 +10,22 @@ using namespace ZEngine;
 
 Shader* StandardShaders::_unlitColorShader = nullptr;
 Shader* StandardShaders::_unlitTextureShader = nullptr;
+std::vector<ShaderInfo> StandardShaders::_shaders;
 
 static const std::string MODUlE_NAME = "StandardShaders";
 
-static std::map<std::string, StandardShader> shaderNameToEnum = {
-  { "UNLIT_COLOR_SHADER",   UNLIT_COLOR_SHADER   },
-  { "UNLIT_TEXTURE_SHADER", UNLIT_TEXTURE_SHADER },
-};
+static std::map<std::string, StandardShader> shaderNameToEnum;
 
 void StandardShaders::Init()
 {
   LoadUnlitColorShader();
   LoadUnlitTextureShader();
+
+  // Build the shader name to enum map
+  for (const auto& info : _shaders)
+  {
+    shaderNameToEnum[info.enumName] = info.enumValue;
+  }
 }
 
 Shader* StandardShaders::GetShader(const std::string& shaderName)
@@ -61,6 +65,7 @@ void StandardShaders::LoadUnlitColorShader()
     (uint32_t)sizeof(UNLIT_COLOR_FRAGMENT_SHADER)
   ))
   {
+    _shaders.push_back({ "UNLIT_COLOR_SHADER", UNLIT_COLOR_SHADER, _unlitColorShader });
     LoggingSystem::GetInstance()->LogInfo("Loaded Unlit Color Shader.", MODUlE_NAME);
   }
   else
@@ -79,6 +84,7 @@ void StandardShaders::LoadUnlitTextureShader()
     (uint32_t)sizeof(UNLIT_TEXTURE_FRAGMENT_SHADER)
   ))
   {
+    _shaders.push_back({ "UNLIT_TEXTURE_SHADER", UNLIT_TEXTURE_SHADER, _unlitTextureShader });
     LoggingSystem::GetInstance()->LogInfo("Loaded Unlit Texture Shader.", MODUlE_NAME);
   }
   else
@@ -89,19 +95,19 @@ void StandardShaders::LoadUnlitTextureShader()
 
 void StandardShaders::Release()
 {
-  if (_unlitColorShader != nullptr)
+  for (auto info : _shaders)
   {
-    _unlitColorShader->Release();
-    delete _unlitColorShader;
-    _unlitColorShader = nullptr;
+    if (info.shader != nullptr)
+    {
+      info.shader->Release();
+      delete info.shader;
+    }
   }
 
-  if (_unlitTextureShader != nullptr)
-  {
-    _unlitTextureShader->Release();
-    delete _unlitTextureShader;
-    _unlitTextureShader = nullptr;
-  }
+  _shaders.clear();
+  _unlitColorShader = nullptr;
+  _unlitTextureShader = nullptr;
+  _litColorShader = nullptr;
 }
 
 Shader* StandardShaders::GetUnlitColorShader()
@@ -112,4 +118,9 @@ Shader* StandardShaders::GetUnlitColorShader()
 Shader* StandardShaders::GetUnlitTextureShader()
 {
   return _unlitTextureShader;
+}
+
+const std::vector<ShaderInfo>& StandardShaders::GetShaders()
+{
+  return _shaders;
 }

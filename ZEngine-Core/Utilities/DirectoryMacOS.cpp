@@ -82,6 +82,11 @@ string Directory::GetPathRelativeTo(std::string path) const
   string absolutePath = GetAbsolutePath();
   string relativePath = absolutePath.substr(path.length(), absolutePath.length() - path.length());
 
+  // Relative paths don't start with a slash
+  if (relativePath[0] == '/') {
+    relativePath = relativePath.substr(1);
+  }
+
   return relativePath;
 }
 
@@ -134,7 +139,13 @@ std::vector<File> Directory::GetAllFiles() const
     while ((ent = readdir(dir)) != NULL) {
       if (ent->d_type == DT_REG) {
         string filename = ent->d_name;
-        results.push_back(File(_fullpath + "/" + filename));
+        string fullFilePath;
+        if (_fullpath[_fullpath.size() - 1] != '/') {
+          fullFilePath = _fullpath + "/" + filename;
+        } else {
+          fullFilePath = _fullpath + filename;
+        }
+        results.push_back(File(fullFilePath));
       }
     }
     closedir(dir);

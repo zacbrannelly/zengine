@@ -53,8 +53,12 @@ bool BrowserDialog::ValidateOpenFile()
 	if (!_selectedFile->Exists())
 		return false;
 
-	if (!std::any_of(_filter.begin(), _filter.end(), [this](auto ext) { return _selectedFile->GetExtension() == ext; }))
+	if (
+		_filter.size() > 0 &&
+		!std::any_of(_filter.begin(), _filter.end(), [this](auto ext) { return _selectedFile->GetExtension() == ext; })
+	) {
 		return false;
+	}
 
 	return true;
 }

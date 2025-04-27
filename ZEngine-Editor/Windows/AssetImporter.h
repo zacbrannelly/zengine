@@ -11,11 +11,12 @@ namespace ZEngine
 	class File;
 	class Directory;
 	class AssetManager;
+	class Editor;
 
 	class AssetImporter : public GUIWindow
 	{
 	public:
-		AssetImporter();
+		AssetImporter(Editor* editor);
 		~AssetImporter();
 
 		void Refresh();
@@ -24,6 +25,7 @@ namespace ZEngine
 		void RenderInWindow() override;
 
 	private:
+		Editor* _editor;
 		AssetManager* _assetManager;
 		Directory* _rootFolder;
 		std::map<std::string, ObjectType> _validExtensions;

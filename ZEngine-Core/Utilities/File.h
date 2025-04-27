@@ -15,7 +15,7 @@ namespace ZEngine
 
 		virtual bool Create();
 		virtual bool Move(std::string newPath);
-		virtual bool Copy(std::string newPath);
+		virtual bool Copy(std::string newPath) const;
 		virtual bool Delete();
 
 		virtual bool Exists() const;
