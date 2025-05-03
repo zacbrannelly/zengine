@@ -32,6 +32,10 @@ public:
 		json result;
 		to_json(result, *component);
 
+		// Add the name and type to the JSON object
+		result["name"] = component->GetName();
+		result["type"] = ObjectTypeToString(component->GetType());
+
 		return result;
 	}
 };

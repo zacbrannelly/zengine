@@ -11,7 +11,7 @@ namespace ZEngine
 		ZObject* ImportImpl(std::string name, nlohmann::json& values) override
 		{
 			// Create an instance of the object.
-			auto instance =  Factory::CreateInstance<T>(name, _type);
+			auto instance = Factory::CreateInstance<T>(name, _type);
 			
 			// Inject the values from the json into the instance.
 			// This is done via functions defined by the JSON_SCHEMA_BEGIN/JSON_SCHEMA_END macros in
