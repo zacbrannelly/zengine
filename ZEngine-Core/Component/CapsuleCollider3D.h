@@ -36,9 +36,9 @@ namespace ZEngine
 	#ifndef SWIG
 		// Allow serialization / deserialization
 		JSON_SCHEMA_BEGIN(CapsuleCollider3D)
-			JSON_MAP_TO_SETTER_OPTIONAL (isTrigger, SetIsTrigger, bool)
-			JSON_MAP_TO_SETTER_OPTIONAL (radius,    SetRadius,    float)
-			JSON_MAP_TO_SETTER_OPTIONAL (height,    SetHeight,    float)
+			JSON_MAP_TO_GETTER_SETTER_OPTIONAL (isTrigger, IsTrigger,    SetIsTrigger, bool)
+			JSON_MAP_TO_GETTER_SETTER_OPTIONAL (radius,    GetRadius,    SetRadius,    float)
+			JSON_MAP_TO_GETTER_SETTER_OPTIONAL (height,    GetHeight,    SetHeight,    float)
 		JSON_SCHEMA_END()
 	#endif
 

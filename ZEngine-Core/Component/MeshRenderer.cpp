@@ -11,21 +11,38 @@ MeshRenderer::MeshRenderer() : Component("Mesh Renderer", ObjectType::MESH_RENDE
 {
 	RegisterDerivedType(MESH_RENDERER);
 	_mesh = nullptr;
+	_modelAsset = nullptr;
 }
 
-void MeshRenderer::SetMeshFromAsset(ModelAsset* modelAsset)
+void MeshRenderer::SetModelAsset(ModelAsset* modelAsset)
 {
+	_modelAsset = modelAsset;
 	_mesh = modelAsset->GetMesh();
+}
+
+ModelAsset* MeshRenderer::GetModelAsset() const
+{
+	return _modelAsset;
 }
 
 void MeshRenderer::SetMesh(Mesh* mesh)
 {
+	_modelAsset = nullptr;
 	_mesh = mesh;
 }
 
 Mesh* MeshRenderer::GetMesh() const
 {
 	return _mesh;
+}
+
+Mesh* MeshRenderer::GetSavableMesh() const
+{
+	// Only save the mesh in the component JSON if it is not a model or primitive shape
+	if (_modelAsset == nullptr && _primitiveShape == "") {
+		return _mesh;
+	}
+	return nullptr;
 }
 
 void MeshRenderer::SetMaterial(Material* material)
@@ -48,6 +65,19 @@ void MeshRenderer::SetMaterial(Material* material, int index)
 	}
 	else
 	{
+		auto existing = _materials[index];
+		if (existing != nullptr)
+		{
+			// Remove the old material from the asset list
+			for (auto it = _materialAssets.begin(); it != _materialAssets.end(); ++it)
+			{
+				if ((*it)->GetMaterial() == existing)
+				{
+					_materialAssets.erase(it);
+					break;
+				}
+			}
+		}
 		_materials[index] = material;
 	}
 }
@@ -60,14 +90,24 @@ Material* MeshRenderer::GetMaterial() const
 void MeshRenderer::SetMaterials(const vector<Material*>& materials)
 {
 	_materials = materials;
+	_materialAssets.clear();
 }
 
-void MeshRenderer::SetMaterialsFromAssets(const vector<MaterialAsset*>& materialAssets)
+void MeshRenderer::SetMaterialAssets(const vector<MaterialAsset*>& materialAssets)
 {
+	_materialAssets.clear();
+	_materials.clear();
+
 	for (auto materialAsset : materialAssets)
 	{
+		_materialAssets.push_back(materialAsset);
 		_materials.push_back(materialAsset->GetMaterial());
 	}
+}
+
+const vector<MaterialAsset*>& MeshRenderer::GetMaterialAssets() const
+{
+	return _materialAssets;
 }
 
 const vector<Material*>& MeshRenderer::GetMaterials() const
@@ -85,7 +125,7 @@ void MeshRenderer::Update()
 
 void MeshRenderer::Render(int viewId)
 {
-    Render(viewId, GetOwner()->GetTransform());
+	Render(viewId, GetOwner()->GetTransform());
 }
 
 void MeshRenderer::Render(int viewId, Transform* transform)
@@ -114,8 +154,25 @@ ZObject* MeshRenderer::Copy(string name, ZObject* object)
 	auto source = static_cast<MeshRenderer*>(object);
 	auto copy = new MeshRenderer();
 
-	copy->SetMaterials(source->GetMaterials());
-	copy->SetMesh(source->GetMesh());
+	if (copy->_materialAssets.size() > 0)
+	{
+		copy->SetMaterialAssets(source->GetMaterialAssets());
+	}
+	else
+	{
+		copy->SetMaterials(source->GetMaterials());
+	}
+
+	if (source->_modelAsset != nullptr)
+	{
+		copy->SetModelAsset(source->_modelAsset);
+	}
+	else
+	{
+		copy->SetMesh(source->_mesh);
+	}
+
+	copy->_primitiveShape = source->_primitiveShape;
 
 	return copy;
 }
@@ -127,6 +184,7 @@ void MeshRenderer::OnDeserialization(const nlohmann::json& in, MeshRenderer& out
 	if (in.contains("primitive"))
 	{
 		auto primitive = in["primitive"].get<string>();
+		out._primitiveShape = primitive;
 
 		if (primitive == "cube")
 		{
@@ -160,5 +218,13 @@ void MeshRenderer::OnDeserialization(const nlohmann::json& in, MeshRenderer& out
 
 			out.SetMesh(MeshFactory::CreatePlane("Plane", width, height, facing));
 		}
+	}
+}
+
+void MeshRenderer::OnSerialization(nlohmann::json& out, const MeshRenderer& in)
+{
+	if (in._primitiveShape != "")
+	{
+		out["primitive"] = in._primitiveShape;
 	}
 }

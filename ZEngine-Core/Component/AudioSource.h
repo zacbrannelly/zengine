@@ -32,8 +32,8 @@ namespace ZEngine
 		// Allow serialization / deserialization
 		JSON_SCHEMA_BEGIN(AudioSource)
 			INCLUDE_ASSET_REFERENCES()
-			JSON_MAP_TO_ASSET_REF_SETTER (audio,    SetAudio,    AudioAsset)
-			JSON_MAP_TO_SETTER_OPTIONAL  (autoPlay, SetAutoPlay, bool)
+			JSON_MAP_TO_ASSET_REF_GETTER_SETTER (audio,    GetAudio,    SetAudio,    AudioAsset)
+			JSON_MAP_TO_GETTER_SETTER_OPTIONAL  (autoPlay, IsAutoPlay,  SetAutoPlay, bool)
 		JSON_SCHEMA_END()
 	#endif
 

@@ -76,9 +76,9 @@ namespace ZEngine
 	#ifndef SWIG
 		// Allow serialization / deserialization
 		JSON_SCHEMA_BEGIN(Transform)
-			JSON_MAP_TO_SETTER(position, SetPosition,           glm::vec3)
-			JSON_MAP_TO_SETTER(scale,    SetScale,              glm::vec3)
-			JSON_MAP_TO_SETTER(rotation, SetRotationQuaternion, glm::quat)
+			JSON_MAP_TO_GETTER_SETTER (position, GetPosition,           SetPosition,           glm::vec3)
+			JSON_MAP_TO_GETTER_SETTER (scale,    GetScale,              SetScale,              glm::vec3)
+			JSON_MAP_TO_GETTER_SETTER (rotation, GetRotationQuaternion, SetRotationQuaternion, glm::quat)
 		JSON_SCHEMA_END()
 	#endif
 	};

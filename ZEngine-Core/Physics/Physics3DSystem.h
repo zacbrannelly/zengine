@@ -27,7 +27,7 @@ namespace ZEngine
 
   #ifndef SWIG
     JSON_SCHEMA_BEGIN(PhysicsSceneDescription)
-      JSON_MAP_TO_MEMBER_OPTIONAL(gravity, gravity)
+      JSON_MAP_TO_MEMBER_OPTIONAL (gravity, gravity)
     JSON_SCHEMA_END()
   #endif
   };

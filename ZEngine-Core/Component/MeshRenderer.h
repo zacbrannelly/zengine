@@ -30,6 +30,12 @@ namespace ZEngine
 		void SetMaterials(const std::vector<Material*>& materials);
 		const std::vector<Material*>& GetMaterials() const;
 
+		void SetModelAsset(ModelAsset* modelAsset);
+		ModelAsset* GetModelAsset() const;
+
+		void SetMaterialAssets(const std::vector<MaterialAsset*>& materialAssets);
+		const std::vector<MaterialAsset*>& GetMaterialAssets() const;
+
 		virtual void Init();
 		virtual void Update();
 		virtual void Render(int viewId);
@@ -47,23 +53,30 @@ namespace ZEngine
 		// Allow serialization / deserialization
 		JSON_SCHEMA_BEGIN(MeshRenderer)
 			INCLUDE_ASSET_REFERENCES()
-			JSON_MAP_TO_ASSET_REFS_SETTER_OPTIONAL (materials, SetMaterialsFromAssets, MaterialAsset)
-			JSON_MAP_TO_ASSET_REF_SETTER_OPTIONAL  (model,     SetMeshFromAsset,       ModelAsset)
-			JSON_MAP_TO_FACTORY_SETTER_OPTIONAL    (mesh,      SetMesh,                Mesh)
+			JSON_MAP_TO_ASSET_REFS_GETTER_SETTER_OPTIONAL (materials, GetMaterialAssets, SetMaterialAssets, MaterialAsset)
+			JSON_MAP_TO_ASSET_REF_GETTER_SETTER_OPTIONAL  (model,     GetModelAsset,     SetModelAsset,     ModelAsset)
+			JSON_MAP_TO_FACTORY_GETTER_SETTER_OPTIONAL    (mesh,      GetSavableMesh,    SetMesh,           Mesh)
 
 			// Custom deserialization logic to parse the "primitive" field.
 			// TODO: Make it a struct and use the JSON_SCHEMA_BEGIN macro
 			CUSTOM_JSON_DESERIALIZATION(OnDeserialization)
+			CUSTOM_JSON_SERIALIZATION(OnSerialization)
 		JSON_SCHEMA_END()
 	#endif
 
 		static void OnDeserialization(const nlohmann::json& in, MeshRenderer& out);
+		static void OnSerialization(nlohmann::json& out, const MeshRenderer& in);
 
 	private:
-		void SetMeshFromAsset(ModelAsset* modelAsset);
-		void SetMaterialsFromAssets(const std::vector<MaterialAsset*>& materialAssets);
+		// Returns the mesh if it is not a model or primitive shape
+		Mesh* GetSavableMesh() const;
 
 		Mesh* _mesh;
 		std::vector<Material*> _materials;
+
+		ModelAsset* _modelAsset;
+		std::vector<MaterialAsset*> _materialAssets;
+
+		std::string _primitiveShape;
 	};
 }

@@ -31,9 +31,9 @@ namespace ZEngine
 	#ifndef SWIG
 		// Allow serialization / deserialization
 		JSON_SCHEMA_BEGIN(PlaneCollider3D)
-			JSON_MAP_TO_SETTER_OPTIONAL (isTrigger, SetIsTrigger, bool)
-			JSON_MAP_TO_SETTER_OPTIONAL (direction, SetDirection, glm::vec3)
-			JSON_MAP_TO_SETTER_OPTIONAL (distance,  SetDistance,  float)
+			JSON_MAP_TO_GETTER_SETTER_OPTIONAL (isTrigger, IsTrigger,    SetIsTrigger, bool)
+			JSON_MAP_TO_GETTER_SETTER_OPTIONAL (direction, GetDirection, SetDirection, glm::vec3)
+			JSON_MAP_TO_GETTER_SETTER_OPTIONAL (distance,  GetDistance,  SetDistance,  float)
 		JSON_SCHEMA_END()
 	#endif
 

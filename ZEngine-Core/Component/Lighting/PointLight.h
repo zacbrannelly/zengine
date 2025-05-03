@@ -36,9 +36,9 @@ namespace ZEngine
 #ifndef SWIG
     // Allow serialization / deserialization
     JSON_SCHEMA_BEGIN(PointLight)
-      JSON_MAP_TO_SETTER_OPTIONAL(color,     SetColor,     glm::vec3)
-      JSON_MAP_TO_SETTER_OPTIONAL(intensity, SetIntensity, float)
-      JSON_MAP_TO_SETTER_OPTIONAL(range,     SetRange,     float)
+      JSON_MAP_TO_GETTER_SETTER_OPTIONAL (color,     GetColor,     SetColor,     glm::vec3)
+      JSON_MAP_TO_GETTER_SETTER_OPTIONAL (intensity, GetIntensity, SetIntensity, float)
+      JSON_MAP_TO_GETTER_SETTER_OPTIONAL (range,     GetRange,     SetRange,     float)
     JSON_SCHEMA_END()
 #endif
 

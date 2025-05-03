@@ -16,6 +16,8 @@ namespace ZEngine
     ~CSharpScript();
 
     void SetNamespace(std::string classNamespace);
+    std::string GetNamespace() const;
+
     void SetClassName(std::string className);
     void SetClass(std::string classNamespace, std::string className);
     std::string GetClassName() const;
@@ -39,8 +41,8 @@ namespace ZEngine
 
     // Allow serialization / deserialization
     JSON_SCHEMA_BEGIN(CSharpScript)
-      JSON_MAP_TO_SETTER (namespace, SetNamespace, std::string)
-      JSON_MAP_TO_SETTER (class,     SetClassName, std::string)
+      JSON_MAP_TO_GETTER_SETTER (namespace, GetNamespace, SetNamespace, std::string)
+      JSON_MAP_TO_GETTER_SETTER (class,     GetClassName, SetClassName, std::string)
     JSON_SCHEMA_END()
   };
 }

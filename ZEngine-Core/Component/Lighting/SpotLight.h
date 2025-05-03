@@ -43,12 +43,12 @@ namespace ZEngine
 #ifndef SWIG
     // Allow serialization / deserialization
     JSON_SCHEMA_BEGIN(SpotLight)
-      JSON_MAP_TO_SETTER_OPTIONAL(direction, SetDirection,            glm::vec3)
-      JSON_MAP_TO_SETTER_OPTIONAL(color,     SetColor,                glm::vec3)
-      JSON_MAP_TO_SETTER_OPTIONAL(intensity, SetIntensity,            float)
-      JSON_MAP_TO_SETTER_OPTIONAL(range,     SetRange,                float)
-      JSON_MAP_TO_SETTER_OPTIONAL(penumbra,  SetPenumbraAngleRadians, float)
-      JSON_MAP_TO_SETTER_OPTIONAL(umbra,     SetUmbraAngleRadians,    float)
+      JSON_MAP_TO_GETTER_SETTER_OPTIONAL (direction, GetDirection,            SetDirection,            glm::vec3)
+      JSON_MAP_TO_GETTER_SETTER_OPTIONAL (color,     GetColor,                SetColor,                glm::vec3)
+      JSON_MAP_TO_GETTER_SETTER_OPTIONAL (intensity, GetIntensity,            SetIntensity,            float)
+      JSON_MAP_TO_GETTER_SETTER_OPTIONAL (range,     GetRange,                SetRange,                float)
+      JSON_MAP_TO_GETTER_SETTER_OPTIONAL (penumbra,  GetPenumbraAngleRadians, SetPenumbraAngleRadians, float)
+      JSON_MAP_TO_GETTER_SETTER_OPTIONAL (umbra,     GetUmbraAngleRadians,    SetUmbraAngleRadians,    float)
     JSON_SCHEMA_END()
 #endif
   private:

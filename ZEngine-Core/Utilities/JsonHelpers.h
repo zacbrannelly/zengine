@@ -60,6 +60,10 @@
   if (isParsing && (*parseIn).contains(#member)) \
   { \
     (*parseIn).at(#member).get_to(parseOut->memberName); \
+  } \
+  else if (!isParsing) \
+  { \
+    (*exportOut)[#member] = exportIn->memberName; \
   }
 
 #define JSON_MAP_TO_GETTER_SETTER(member, getter, setter, DataType) \
@@ -70,6 +74,37 @@
   else \
   { \
     (*exportOut)[#member] = exportIn->getter(); \
+  }
+
+#define JSON_MAP_TO_GETTER(member, getter, DataType) \
+  if (!isParsing) \
+  { \
+    (*exportOut)[#member] = exportIn->getter(); \
+  }
+
+#define JSON_MAP_TO_GETTER_SETTER_OPTIONAL(member, getter, setter, DataType) \
+  if (isParsing && (*parseIn).contains(#member)) \
+  { \
+    parseOut->setter((*parseIn).at(#member).get<DataType>()); \
+  } \
+  else if (!isParsing) \
+  { \
+    (*exportOut)[#member] = exportIn->getter(); \
+  }
+
+#define JSON_MAP_TO_VECTOR_OF_POINTERS_OPTIONAL(member, getter, setter, DataType) \
+  if (isParsing && (*parseIn).contains(#member)) \
+  { \
+    parseOut->setter((*parseIn).at(#member).get<std::vector<DataType>>()); \
+  } \
+  else if (!isParsing) \
+  { \
+    (*exportOut)[#member] = std::vector<DataType>(); \
+    auto& vec = exportIn->getter(); \
+    for (auto& item : vec) \
+    { \
+      (*exportOut)[#member].push_back(*item); \
+    } \
   }
 
 #define JSON_MAP_TO_SETTER(member, setter, DataType) \
@@ -98,7 +133,27 @@
     from_json(parseIn->at(#member).get<nlohmann::json>(), *newPtr); \
   }
 
-#define JSON_ON_SERIALIZATION(op) \
+#define JSON_MAP_TO_FACTORY_GETTER_SETTER_OPTIONAL(member, getter, setter, DataType) \
+  if (isParsing && (*parseIn).contains(#member)) \
+  { \
+    auto newPtr = ZEngine::Factory::CreateInstance<DataType>(#DataType, DataType::GetStaticType()); \
+    from_json(parseIn->at(#member).get<nlohmann::json>(), *newPtr); \
+    parseOut->setter(newPtr); \
+  } \
+  else if (!isParsing) \
+  { \
+    auto instance = exportIn->getter(); \
+    to_json((*exportOut)[#member], *instance); \
+  }
+
+#define JSON_MAP_TO_FACTORY_GETTER(member, getter, DataType) \
+  if (!isParsing) \
+  { \
+    auto instance = exportIn->getter(); \
+    to_json((*exportOut)[#member], *newPtr); \
+  }
+
+#define CUSTOM_JSON_SERIALIZATION(op) \
   if (!isParsing) \
   { \
     op(*exportOut, *exportIn); \
@@ -126,6 +181,12 @@
       parseOut->setter(asset->Cast<DataType>()); \
   } \
 
+#define _INTERNAL_JSON_MAP_TO_ASSET_REF_GETTER(member, getter, DataType) \
+  auto asset = exportIn->getter(); \
+  if (asset == nullptr) return; \
+  auto assetId = assetManager->GetCatalog()->GetAssetIDFromPath(asset->GetPath()); \
+  (*exportOut)[#member] = assetId; \
+
 #define JSON_MAP_TO_ASSET_REF_SETTER(member, setter, DataType) \
   if (isParsing) \
   { \
@@ -136,6 +197,26 @@
   if (isParsing && (*parseIn).contains(#member)) \
   { \
     _INTERNAL_JSON_MAP_TO_ASSET_REF_SETTER(member, setter, DataType) \
+  }
+
+#define JSON_MAP_TO_ASSET_REF_GETTER_SETTER(member, getter, setter, DataType) \
+  if (isParsing) \
+  { \
+    _INTERNAL_JSON_MAP_TO_ASSET_REF_SETTER(member, setter, DataType) \
+  } \
+  else \
+  { \
+    _INTERNAL_JSON_MAP_TO_ASSET_REF_GETTER(member, getter, DataType) \
+  }
+
+#define JSON_MAP_TO_ASSET_REF_GETTER_SETTER_OPTIONAL(member, getter, setter, DataType) \
+  if (isParsing && (*parseIn).contains(#member)) \
+  { \
+    _INTERNAL_JSON_MAP_TO_ASSET_REF_SETTER(member, setter, DataType) \
+  } \
+  else if (!isParsing) \
+  { \
+    _INTERNAL_JSON_MAP_TO_ASSET_REF_GETTER(member, getter, DataType) \
   }
 
 #define _INTERNAL_JSON_MAP_TO_ASSET_REFS_SETTER(member, setter, DataType) \
@@ -157,6 +238,18 @@
   } \
   parseOut->setter(assets);
 
+#define _INTERNAL_JSON_MAP_TO_ASSET_REFS_GETTER(member, getter, DataType) \
+  auto assets = exportIn->getter(); \
+  if (assets.empty()) return; \
+  std::vector<uuids::uuid> assetIds; \
+  for (auto asset : assets) \
+  { \
+    if (asset == nullptr) continue; \
+    auto assetId = assetManager->GetCatalog()->GetAssetIDFromPath(asset->GetPath()); \
+    assetIds.push_back(assetId); \
+  } \
+  (*exportOut)[#member] = assetIds; \
+
 #define JSON_MAP_TO_ASSET_REFS_SETTER(member, setter, DataType) \
   if (isParsing) \
   { \
@@ -167,6 +260,26 @@
   if (isParsing && (*parseIn).contains(#member)) \
   { \
     _INTERNAL_JSON_MAP_TO_ASSET_REFS_SETTER(member, setter, DataType) \
+  }
+
+#define JSON_MAP_TO_ASSET_REFS_GETTER_SETTER(member, getter, setter, DataType) \
+  if (isParsing) \
+  { \
+    _INTERNAL_JSON_MAP_TO_ASSET_REFS_SETTER(member, setter, DataType) \
+  } \
+  else \
+  { \
+    _INTERNAL_JSON_MAP_TO_ASSET_REFS_GETTER(member, getter, DataType) \
+  }
+
+#define JSON_MAP_TO_ASSET_REFS_GETTER_SETTER_OPTIONAL(member, getter, setter, DataType) \
+  if (isParsing && (*parseIn).contains(#member)) \
+  { \
+    _INTERNAL_JSON_MAP_TO_ASSET_REFS_SETTER(member, setter, DataType) \
+  } \
+  else \
+  { \
+    _INTERNAL_JSON_MAP_TO_ASSET_REFS_GETTER(member, getter, DataType) \
   }
 
 /**

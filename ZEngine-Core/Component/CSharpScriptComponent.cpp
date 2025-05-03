@@ -11,6 +11,7 @@ CSharpScriptComponent::CSharpScriptComponent() : Component("CSharpScriptComponen
 {
   RegisterDerivedType(CSHARP_SCRIPT_COMPONENT);
   _script = nullptr;
+  _scriptAsset = nullptr;
   _managedInstance = nullptr;
 }
 
@@ -50,6 +51,17 @@ void CSharpScriptComponent::SetScript(CSharpScript* script) {
   // TODO: Support scripting in emscripten.
 }
 #endif
+
+void CSharpScriptComponent::SetScriptAsset(CSharpScriptAsset* scriptAsset) {
+  _scriptAsset = scriptAsset;
+  if (_scriptAsset != nullptr) {
+    SetScript(_scriptAsset->GetScript());
+  }
+}
+
+CSharpScriptAsset* CSharpScriptComponent::GetScriptAsset() const {
+  return _scriptAsset;
+}
 
 CSharpScript* CSharpScriptComponent::GetScript() const {
   return _script;

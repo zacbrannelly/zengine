@@ -30,8 +30,8 @@ namespace ZEngine
 	#ifndef SWIG
 		// Allow serialization / deserialization
 		JSON_SCHEMA_BEGIN(BoxCollider3D)
-			JSON_MAP_TO_SETTER_OPTIONAL (isTrigger, SetIsTrigger, bool)
-			JSON_MAP_TO_SETTER_OPTIONAL (size,      SetSize,      glm::vec3)
+			JSON_MAP_TO_GETTER_SETTER_OPTIONAL (isTrigger, IsTrigger, SetIsTrigger, bool)
+			JSON_MAP_TO_GETTER_SETTER_OPTIONAL (size,      GetSize,   SetSize,      glm::vec3)
 		JSON_SCHEMA_END()
 	#endif
 

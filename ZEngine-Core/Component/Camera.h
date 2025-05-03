@@ -44,6 +44,7 @@ namespace ZEngine
 
 		void SetViewport(glm::vec4 viewport);
 		void SetViewport(int x, int y, int width, int height);
+		const glm::vec4& GetViewport() const;
 		int GetViewportX() const;
 		int GetViewportY() const;
 		int GetViewportWidth() const;
@@ -96,16 +97,16 @@ namespace ZEngine
 	#ifndef SWIG
 		// Allow serialization / deserialization
 		JSON_SCHEMA_BEGIN(Camera)
-			JSON_MAP_TO_SETTER_OPTIONAL(viewId,          SetViewId,          int)
-			JSON_MAP_TO_SETTER_OPTIONAL(clearFlags,      SetClearFlags,      uint16_t)
-			JSON_MAP_TO_SETTER_OPTIONAL(clearColor,      SetClearColor,      glm::vec4)
-			JSON_MAP_TO_SETTER_OPTIONAL(viewport,        SetViewport,        glm::vec4)
-			JSON_MAP_TO_SETTER_OPTIONAL(projection,      SetProjectionMode,  ProjectionMode)
-			JSON_MAP_TO_SETTER_OPTIONAL(renderToTexture, SetRenderToTexture, bool)
-			JSON_MAP_TO_SETTER_OPTIONAL(fieldOfView,     SetFieldOfView,     float)
-			JSON_MAP_TO_SETTER_OPTIONAL(orthoSize,       SetOrthoSize,       float)
-			JSON_MAP_TO_SETTER_OPTIONAL(zNear,           SetNear,            float)
-			JSON_MAP_TO_SETTER_OPTIONAL(zFar,            SetFar,             float)
+			JSON_MAP_TO_GETTER_SETTER_OPTIONAL (viewId,          GetViewId,            SetViewId,          int)
+			JSON_MAP_TO_GETTER_SETTER_OPTIONAL (clearFlags,      GetClearFlags,        SetClearFlags,      uint16_t)
+			JSON_MAP_TO_GETTER_SETTER_OPTIONAL (clearColor,      GetClearColor,        SetClearColor,      glm::vec4)
+			JSON_MAP_TO_GETTER_SETTER_OPTIONAL (viewport,        GetViewport,          SetViewport,        glm::vec4)
+			JSON_MAP_TO_GETTER_SETTER_OPTIONAL (projection,      GetProjectionMode,    SetProjectionMode,  ProjectionMode)
+			JSON_MAP_TO_GETTER_SETTER_OPTIONAL (renderToTexture, IsRenderingToTexture, SetRenderToTexture, bool)
+			JSON_MAP_TO_GETTER_SETTER_OPTIONAL (fieldOfView,     GetFieldOfView,       SetFieldOfView,     float)
+			JSON_MAP_TO_GETTER_SETTER_OPTIONAL (orthoSize,       GetOrthoSize,         SetOrthoSize,       float)
+			JSON_MAP_TO_GETTER_SETTER_OPTIONAL (zNear,           GetNear,              SetNear,            float)
+			JSON_MAP_TO_GETTER_SETTER_OPTIONAL (zFar,            GetFar,               SetFar,             float)
 		JSON_SCHEMA_END()
 	#endif
 

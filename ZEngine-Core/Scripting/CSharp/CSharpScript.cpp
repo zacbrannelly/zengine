@@ -15,6 +15,11 @@ void CSharpScript::SetNamespace(std::string classNamespace)
   SetClass(classNamespace, _className);
 }
 
+std::string CSharpScript::GetNamespace() const
+{
+  return _namespace;
+}
+
 void CSharpScript::SetClassName(std::string className)
 {
   SetClass(_namespace, className);

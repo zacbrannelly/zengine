@@ -127,6 +127,11 @@ void Camera::SetViewport(int x, int y, int width, int height)
 	}
 }
 
+const glm::vec4& Camera::GetViewport() const
+{
+	return _viewport;
+}
+
 int Camera::GetViewportX() const
 {
 	return (int)(_viewport.x + 0.5f);

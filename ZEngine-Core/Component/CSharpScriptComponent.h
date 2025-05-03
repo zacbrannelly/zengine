@@ -20,6 +20,9 @@ namespace ZEngine
 		void SetScript(CSharpScript* script);
 		CSharpScript* GetScript() const;
 
+		void SetScriptAsset(CSharpScriptAsset* scriptAsset);
+		CSharpScriptAsset* GetScriptAsset() const;
+
 		void SetManagedInstance(void* instance);
 		void* GetManagedInstance() const;
 
@@ -27,12 +30,12 @@ namespace ZEngine
 		// Allow serialization / deserialization
 		JSON_SCHEMA_BEGIN(CSharpScriptComponent)
 			INCLUDE_ASSET_REFERENCES()
-			JSON_MAP_TO_ASSET_REF_SETTER(script, SetScriptFromAsset, CSharpScriptAsset)
+			JSON_MAP_TO_ASSET_REF_GETTER_SETTER(script, GetScriptAsset, SetScriptAsset, CSharpScriptAsset)
 		JSON_SCHEMA_END()
 	#endif
 
 	private:
-		void SetScriptFromAsset(CSharpScriptAsset* scriptAsset) { SetScript(scriptAsset->GetScript()); }
+		CSharpScriptAsset* _scriptAsset;
 		CSharpScript* _script;
 		void* _managedInstance;
 
