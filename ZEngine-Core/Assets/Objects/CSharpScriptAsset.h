@@ -12,7 +12,7 @@ namespace ZEngine
 		CSharpScriptAsset(std::string name);
 		~CSharpScriptAsset();
 
-		bool Load(std::string path);
+		bool Load(std::string path) override;
 		void Release() override;
 		
 		CSharpScript* GetScript() const;
