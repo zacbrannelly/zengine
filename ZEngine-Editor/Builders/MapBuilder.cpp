@@ -8,6 +8,7 @@
 #include <ZEngine-Core/Component/Component.h>
 #include <ZEngine-Core/Map/Map.h>
 #include <ZEngine-Core/Map/Objects/Entity.h>
+#include <ZEngine-Core/Assets/Objects/MapAsset.h>
 #include <nlohmann/json.hpp>
 
 using namespace nlohmann;
@@ -65,4 +66,9 @@ bool MapBuilder::BuildDefault(const std::string& path, const std::string& name)
 	delete defaultMap;
 
 	return success;
+}
+
+bool MapBuilder::BuildToFile(const MapAsset* mapAsset)
+{
+	return BuildToFile(mapAsset->GetPath(), mapAsset->GetMap());
 }

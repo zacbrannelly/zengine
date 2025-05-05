@@ -79,10 +79,9 @@ void AssetExplorer::OpenAsset(std::string path, ObjectType type)
 		if (mapAsset != nullptr)
 		{
 			auto map = mapAsset->Cast<MapAsset>()->GetMap();
-			
 			if (map != _editor->GetSelectedMap())
 			{
-				_editor->SetSelectedMap(map);
+				_editor->SetSelectedMapAsset(mapAsset->Cast<MapAsset>());
 			}
 		}
 	}

@@ -33,13 +33,14 @@
 #include <ZEngine-Core/GameLoop/GameLoop.h>
 #include <ZEngine-Core/Physics/Physics3DSystem.h>
 #include <ZEngine-Core/Rendering/Lighting/LightingSystem.h>
+#include <ZEngine-Core/ImmediateUI/GUILibrary.h>
+#include <ZEngine-Core/ImmediateUI/GUIImage.h>
+#include <ZEngine-Core/ImmediateUI/imgui-includes.h>
 #include <glm/glm.hpp>
 
 #include "Controllers/MapController.h"
 #include "Project/Project.h"
 #include "Exporters/ComponentExporter.h"
-#include <ZEngine-Core/ImmediateUI/GUILibrary.h>
-#include <ZEngine-Core/ImmediateUI/GUIImage.h>
 #include "Windows/EditorToolbar.h"
 #include "Windows/MapView.h"
 #include "Windows/InspectorWindow.h"
@@ -52,7 +53,7 @@
 #include "Dialogs/ProjectBrowserDialog.h"
 #include "Dialogs/BuildStatusDialog.h"
 #include "Gizmos/GizmoSystem.h"
-#include <ZEngine-Core/ImmediateUI/imgui-includes.h>
+#include "Builders/MapBuilder.h"
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten/emscripten.h>
@@ -62,7 +63,12 @@ using namespace ZEngine;
 
 static const std::string MODULE_NAME = "Editor";
 
-Editor::Editor(Display* display) : _display(display), _selectedMap(nullptr), _selectedObject(nullptr), _project(nullptr)
+Editor::Editor(Display* display) : 
+	_display(display),
+	_selectedMap(nullptr),
+	_selectedMapAsset(nullptr),
+	_selectedObject(nullptr),
+	_project(nullptr)
 {
 	// Add Views
 	Add(new MapView(this));
@@ -132,13 +138,29 @@ Project* Editor::GetProject() const
 void Editor::SetSelectedMap(Map* map)
 {
 	_selectedMap = map;
-
 	MapManager::GetInstance()->SetCurrentMap(map);
 }
 
 Map* Editor::GetSelectedMap() const
 {
 	return _selectedMap;
+}
+
+void Editor::SetSelectedMapAsset(MapAsset* mapAsset)
+{
+	_selectedMapAsset = mapAsset;
+	SetSelectedMap(mapAsset->GetMap());
+}
+
+MapAsset* Editor::GetSelectedMapAsset() const
+{
+	return _selectedMapAsset;
+}
+
+void Editor::SaveSelectedMapAsset()
+{
+	if (_selectedMapAsset == nullptr) return;
+	MapBuilder::BuildToFile(_selectedMapAsset);
 }
 
 void Editor::SetSelectedEntity(Entity* entity)

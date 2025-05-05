@@ -143,14 +143,18 @@
   else if (!isParsing) \
   { \
     auto instance = exportIn->getter(); \
-    to_json((*exportOut)[#member], *instance); \
+    if (instance != nullptr) { \
+      to_json((*exportOut)[#member], *instance); \
+    } \
   }
 
 #define JSON_MAP_TO_FACTORY_GETTER(member, getter, DataType) \
   if (!isParsing) \
   { \
     auto instance = exportIn->getter(); \
-    to_json((*exportOut)[#member], *newPtr); \
+    if (instance != nullptr) { \
+      to_json((*exportOut)[#member], *newPtr); \
+    } \
   }
 
 #define CUSTOM_JSON_SERIALIZATION(op) \
@@ -183,9 +187,10 @@
 
 #define _INTERNAL_JSON_MAP_TO_ASSET_REF_GETTER(member, getter, DataType) \
   auto asset = exportIn->getter(); \
-  if (asset == nullptr) return; \
-  auto assetId = assetManager->GetCatalog()->GetAssetIDFromPath(asset->GetPath()); \
-  (*exportOut)[#member] = assetId; \
+  if (asset != nullptr) { \
+    auto assetId = assetManager->GetCatalog()->GetAssetIDFromPath(asset->GetPath()); \
+    (*exportOut)[#member] = assetId; \
+  }
 
 #define JSON_MAP_TO_ASSET_REF_SETTER(member, setter, DataType) \
   if (isParsing) \
@@ -240,15 +245,16 @@
 
 #define _INTERNAL_JSON_MAP_TO_ASSET_REFS_GETTER(member, getter, DataType) \
   auto assets = exportIn->getter(); \
-  if (assets.empty()) return; \
-  std::vector<uuids::uuid> assetIds; \
-  for (auto asset : assets) \
-  { \
-    if (asset == nullptr) continue; \
-    auto assetId = assetManager->GetCatalog()->GetAssetIDFromPath(asset->GetPath()); \
-    assetIds.push_back(assetId); \
-  } \
-  (*exportOut)[#member] = assetIds; \
+  if (!assets.empty()) { \
+    std::vector<uuids::uuid> assetIds; \
+    for (auto asset : assets) \
+    { \
+      if (asset == nullptr) continue; \
+      auto assetId = assetManager->GetCatalog()->GetAssetIDFromPath(asset->GetPath()); \
+      assetIds.push_back(assetId); \
+    } \
+    (*exportOut)[#member] = assetIds; \
+  }
 
 #define JSON_MAP_TO_ASSET_REFS_SETTER(member, setter, DataType) \
   if (isParsing) \

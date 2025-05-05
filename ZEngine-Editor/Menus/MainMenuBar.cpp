@@ -16,6 +16,12 @@ MainMenuBar::MainMenuBar(Editor* editor) : _editor(editor)
 
 void MainMenuBar::RenderElement()
 {
+	// Check if the user pressed CMD + S, if so, save the selected map asset
+	if (ImGui::IsKeyChordPressed(ImGuiKey_S | ImGuiMod_Ctrl))
+	{
+		_editor->SaveSelectedMapAsset();
+	}
+
 	ImGui::BeginMenuBar();
 
 	if (ImGui::BeginMenu("File"))
@@ -28,22 +34,38 @@ void MainMenuBar::RenderElement()
 		{
 			_editor->Add(new ProjectBrowserDialog(_editor));
 		}
-		if (ImGui::MenuItem("Load Layout", NULL, (bool*)NULL))
+
+		ImGui::Separator();
+
+		if (ImGui::MenuItem("Save Map", "CMD + S", (bool*)NULL))
 		{
-#ifdef __EMSCRIPTEN__
-			ImGui::LoadIniSettingsFromDisk("/disk/layout.ini");
-#else
-			ImGui::LoadIniSettingsFromDisk("layout.ini");
-#endif
+			_editor->SaveSelectedMapAsset();
 		}
-		if (ImGui::MenuItem("Save Layout", NULL, (bool*)NULL))
-		{
+
+		ImGui::Separator();
+
+		if (ImGui::BeginMenu("Layout")) {
+			if (ImGui::MenuItem("Load Layout", NULL, (bool*)NULL))
+			{
 #ifdef __EMSCRIPTEN__
-			ImGui::SaveIniSettingsToDisk("/disk/layout.ini");
+				ImGui::LoadIniSettingsFromDisk("/disk/layout.ini");
 #else
-			ImGui::SaveIniSettingsToDisk("layout.ini");
+				ImGui::LoadIniSettingsFromDisk("layout.ini");
 #endif
+			}
+			if (ImGui::MenuItem("Save Layout", NULL, (bool*)NULL))
+			{
+#ifdef __EMSCRIPTEN__
+				ImGui::SaveIniSettingsToDisk("/disk/layout.ini");
+#else
+				ImGui::SaveIniSettingsToDisk("layout.ini");
+#endif
+			}
+			ImGui::EndMenu();
 		}
+
+		ImGui::Separator();
+
 		if (ImGui::MenuItem("Close", NULL, (bool*)NULL))
 		{
 			_editor->RequestClose();
