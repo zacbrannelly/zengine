@@ -101,6 +101,7 @@ void Factory::Init()
 	RegisterCopyType<DirectionalLight>();
 	RegisterCopyType<PointLight>();
 	RegisterCopyType<SpotLight>();
+	RegisterCopyType<Material>();
 
 	// Register component importers (from JSON objects)
 	RegisterTypeImporter<Transform>();

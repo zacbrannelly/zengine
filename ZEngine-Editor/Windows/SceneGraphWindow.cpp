@@ -84,9 +84,7 @@ void SceneGraphWindow::RenderInWindow()
 				{
 					auto newEntity = Factory::CreateInstance<Entity>("Cube", ENTITY);
 					auto meshRenderer = Factory::CreateInstance<MeshRenderer>("MeshRenderer", MESH_RENDERER);
-
-					auto mesh = MeshFactory::CreateCube("Cube");
-					meshRenderer->SetMesh(mesh);
+					meshRenderer->SetFromPrimitiveShape("cube", {});
 					
 					auto material = Factory::CreateInstance<Material>("Default Material", MATERIAL);
 					auto shader = StandardShaders::GetUnlitColorShader();
@@ -104,9 +102,7 @@ void SceneGraphWindow::RenderInWindow()
 				{
 					auto newEntity = Factory::CreateInstance<Entity>("Sphere", ENTITY);
 					auto meshRenderer = Factory::CreateInstance<MeshRenderer>("MeshRenderer", MESH_RENDERER);
-
-					auto mesh = MeshFactory::CreateSphereStrip("Sphere");
-					meshRenderer->SetMesh(mesh);
+					meshRenderer->SetFromPrimitiveShape("sphere", {});
 
 					auto material = Factory::CreateInstance<Material>("Default Material", MATERIAL);
 					auto shader = StandardShaders::GetUnlitColorShader();
@@ -124,9 +120,7 @@ void SceneGraphWindow::RenderInWindow()
 				{
 					auto newEntity = Factory::CreateInstance<Entity>("Plane", ENTITY);
 					auto meshRenderer = Factory::CreateInstance<MeshRenderer>("MeshRenderer", MESH_RENDERER);
-
-					auto mesh = MeshFactory::CreatePlane("Plane", 10, 10);
-					meshRenderer->SetMesh(mesh);
+					meshRenderer->SetFromPrimitiveShape("plane", {});
 
 					auto material = Factory::CreateInstance<Material>("Default Material", MATERIAL);
 					auto shader = StandardShaders::GetUnlitColorShader();

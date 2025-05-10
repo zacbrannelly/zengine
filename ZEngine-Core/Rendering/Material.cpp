@@ -150,6 +150,28 @@ ZObject* Material::CreateDefaultInstance(std::string name, ObjectType type)
 	return newInstance;
 }
 
+ZObject* Material::Copy(std::string name, ZObject* object)
+{
+	auto source = static_cast<Material*>(object);
+	if (source == nullptr) return nullptr;
+
+	auto result = new Material(name);
+	result->SetShader(source->GetShader());
+	for (auto pair : source->GetUniforms())
+	{
+		auto uniform = pair.second;
+		result->RegisterUniform(pair.first, uniform.type, uniform.numElements);
+		result->SetUniform(pair.first, uniform.data, uniform.numElements);
+	}
+	for (auto pair : source->GetSamplers())
+	{
+		auto sampler = pair.second;
+		result->RegisterSampler(pair.first);
+		result->SetTexture(pair.first, sampler.texture);
+	}
+	return result;
+}
+
 Material::~Material()
 {
 	for (auto pair : _uniforms)

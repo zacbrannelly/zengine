@@ -283,7 +283,7 @@
   { \
     _INTERNAL_JSON_MAP_TO_ASSET_REFS_SETTER(member, setter, DataType) \
   } \
-  else \
+  else if (!isParsing) \
   { \
     _INTERNAL_JSON_MAP_TO_ASSET_REFS_GETTER(member, getter, DataType) \
   }

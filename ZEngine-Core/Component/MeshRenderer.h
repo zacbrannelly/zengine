@@ -6,6 +6,7 @@
 #include "../Assets/Objects/MaterialAsset.h"
 #include "../Rendering/Mesh.h"
 #include <vector>
+#include <map>
 #include <uuid.h>
 
 namespace ZEngine
@@ -25,6 +26,7 @@ namespace ZEngine
 
 		void SetMaterial(Material* material);
 		void SetMaterial(Material* material, int index);
+		void SetMaterialAsset(MaterialAsset* materialAsset, int index);
 		Material* GetMaterial() const;
 
 		void SetMaterials(const std::vector<Material*>& materials);
@@ -35,6 +37,8 @@ namespace ZEngine
 
 		void SetMaterialAssets(const std::vector<MaterialAsset*>& materialAssets);
 		const std::vector<MaterialAsset*>& GetMaterialAssets() const;
+
+		void SetFromPrimitiveShape(const std::string& primitive, const nlohmann::json& metadata);
 
 		virtual void Init();
 		virtual void Update();
@@ -57,8 +61,7 @@ namespace ZEngine
 			JSON_MAP_TO_ASSET_REF_GETTER_SETTER_OPTIONAL  (model,     GetModelAsset,     SetModelAsset,     ModelAsset)
 			JSON_MAP_TO_FACTORY_GETTER_SETTER_OPTIONAL    (mesh,      GetSavableMesh,    SetMesh,           Mesh)
 
-			// Custom deserialization logic to parse the "primitive" field.
-			// TODO: Make it a struct and use the JSON_SCHEMA_BEGIN macro
+			// Custom deserialization logic to parse the "primitive" & "uniforms" fields
 			CUSTOM_JSON_DESERIALIZATION(OnDeserialization)
 			CUSTOM_JSON_SERIALIZATION(OnSerialization)
 		JSON_SCHEMA_END()
@@ -76,6 +79,7 @@ namespace ZEngine
 
 		ModelAsset* _modelAsset;
 		std::vector<MaterialAsset*> _materialAssets;
+		std::map<Material*, MaterialAsset*> _materialAssetMap;
 
 		std::string _primitiveShape;
 	};

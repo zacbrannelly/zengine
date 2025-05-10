@@ -123,13 +123,16 @@ void MeshRendererInspector::RenderElement()
 						if (asset != nullptr)
 						{
 							auto material = static_cast<MaterialAsset*>(asset);
-							comp->SetMaterial(material->GetMaterial(), i);
+							comp->SetMaterialAsset(material, i);
+							current = comp->GetMaterials()[i];
 						}
 					}
 				}
 			}
 			ImGui::EndCombo();
 		}
+
+		if (current == nullptr) continue;
 
 		for (auto uniform : current->GetUniforms())
 		{
