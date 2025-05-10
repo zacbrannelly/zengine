@@ -5,12 +5,12 @@
 namespace ZEngine
 {
 	class GUITextField;
-	class BrowserDialog;
+	class Editor;
 
 	class CreateMapDialog : public GUIDialog
 	{
 	public:
-		CreateMapDialog(std::string basePath = "./");
+		CreateMapDialog(Editor* editor, std::string basePath = "./");
 		~CreateMapDialog();
 
 		void ProcessInput() override;
@@ -18,11 +18,10 @@ namespace ZEngine
 
 	private:
 		bool Validate();
-		bool Create(bool import);
+		bool Create();
 
+		Editor* _editor;
 		GUITextField* _nameField;
-		GUITextField* _pathField;
-		BrowserDialog* _browser;
 		std::string _basePath;
 	};
 }

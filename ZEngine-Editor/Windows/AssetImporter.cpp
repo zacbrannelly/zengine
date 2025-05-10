@@ -54,7 +54,7 @@ void AssetImporter::RenderInWindow()
 		{
 			if (ImGui::MenuItem("Map"))
 			{
-				auto dialog = new CreateMapDialog(_rootFolder->GetPath());
+				auto dialog = new CreateMapDialog(_editor, _rootFolder->GetPath());
 				dialog->Show();
 
 				Add(dialog);
