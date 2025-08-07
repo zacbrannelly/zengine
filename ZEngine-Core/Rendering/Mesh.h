@@ -37,6 +37,7 @@ namespace ZEngine
 		bool IsDynamic() const;
 
 		void Draw(int viewId, Material* material, Graphics* graphics, const Pass& pass);
+		void Draw(int viewId, Graphics* graphics, const Pass& pass, uint64_t state = 0);
 
 		JSON_SCHEMA_BEGIN(SubMesh)
 			JSON_MAP_TO_GETTER_SETTER          (indices, GetIndices, SetIndices, std::vector<uint32_t>)
@@ -91,6 +92,7 @@ namespace ZEngine
 		const std::vector<glm::vec3>& GetNormals() const;
 
 		void Draw(int viewId, const std::vector<Material*>& materials, glm::mat4& transform);
+		void Draw(int viewId, const Pass& pass, glm::mat4& transform);
 	private:
 		template<typename T>
 		void SetBuffer(VertexBuffer*& buffer, bgfx::VertexLayout& decl, std::vector<T>& originalData, const float* data, unsigned int numElements);
@@ -162,7 +164,7 @@ inline void ZEngine::Mesh::SetBuffer(ZEngine::VertexBuffer*& buffer, bgfx::Verte
 	if (_isDynamic && buffer->GetHandle().idx != bgfx::kInvalidHandle)
 	{
 		auto dynamicVertexBuffer = static_cast<DynamicVertexBuffer*>(buffer);
-		dynamicVertexBuffer->Update(0, &data[0], _vertices.size() * sizeof(T), false);
+		dynamicVertexBuffer->Update(0, &data[0], data.size() * sizeof(T), false);
 	}
 	else
 	{

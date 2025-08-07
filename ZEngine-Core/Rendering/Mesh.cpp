@@ -206,10 +206,24 @@ void Mesh::Draw(int viewId, const std::vector<Material*>& materials, glm::mat4& 
         graphics->SetVertexBuffer(1, _colorBuffer);
         graphics->SetVertexBuffer(2, _texCoordBuffer);
         graphics->SetVertexBuffer(3, _normalBuffer);
-
         _subMeshes[i]->Draw(viewId, material, graphics, pass);
       }
     }
+  }
+}
+
+void Mesh::Draw(int viewId, const Pass& pass, glm::mat4& transform)
+{
+  auto graphics = Graphics::GetInstance();
+
+  for (int i = 0; i < _subMeshes.size(); ++i)
+  {
+    graphics->SetTransform(transform);
+    graphics->SetVertexBuffer(0, _vertexBuffer);
+    graphics->SetVertexBuffer(1, _colorBuffer);
+    graphics->SetVertexBuffer(2, _texCoordBuffer);
+    graphics->SetVertexBuffer(3, _normalBuffer);
+    _subMeshes[i]->Draw(viewId, graphics, pass);
   }
 }
 
@@ -287,7 +301,31 @@ const std::vector<uint32_t>& SubMesh::GetIndices() const
 
 void SubMesh::Draw(int viewId, Material* material, Graphics* graphics, const Pass& pass)
 {
-  uint64_t renderFlags = 0 | BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BGFX_STATE_WRITE_Z | BGFX_STATE_DEPTH_TEST_LESS | BGFX_STATE_CULL_CW | BGFX_STATE_MSAA;
+  uint64_t defaultState = 0
+    | BGFX_STATE_WRITE_RGB
+    | BGFX_STATE_WRITE_A
+    | BGFX_STATE_WRITE_Z
+    | BGFX_STATE_DEPTH_TEST_LESS
+    | BGFX_STATE_CULL_CW
+    | BGFX_STATE_MSAA;
+
+  // Apply lighting uniforms.
+  auto lighting = LightingSystem::GetInstance();
+  if (lighting != nullptr)
+  {
+    LightingSystem::GetInstance()->ApplyUniforms();
+  }
+
+  // Apply material uniforms.
+  material->Apply();
+
+  // Set the index buffer, state and submit the draw call.
+  Draw(viewId, graphics, pass, defaultState);
+}
+
+void SubMesh::Draw(int viewId, Graphics* graphics, const Pass& pass, uint64_t state)
+{
+  uint64_t renderFlags = 0 | state | pass.state;
 
   switch (_drawMode)
   {
@@ -304,17 +342,8 @@ void SubMesh::Draw(int viewId, Material* material, Graphics* graphics, const Pas
     renderFlags |= BGFX_STATE_PT_TRISTRIP;
   }
 
-  // TODO: Make this optional to avoid setting uniforms every time
-  auto lighting = LightingSystem::GetInstance();
-  if (lighting != nullptr)
-  {
-    LightingSystem::GetInstance()->ApplyUniforms();
-  }
-
-  material->Apply();
   graphics->SetIndexBuffer(_indexBuffer);
-  graphics->SetState(renderFlags | pass.state);
-
+  graphics->SetState(renderFlags);
   graphics->Submit(viewId, pass.program);
 }
 
