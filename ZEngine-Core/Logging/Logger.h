@@ -10,11 +10,11 @@ namespace ZEngine
     Logger(std::string module);
     ~Logger();
 
-    void LogError(const std::string& message);
-    void LogWarning(const std::string& message);
-    void LogInfo(const std::string& message);
-    void LogDebug(const std::string& message);
-    void Log(const std::string& message, LogLevel level);
+    void LogError(const std::string& message) const;
+    void LogWarning(const std::string& message) const;
+    void LogInfo(const std::string& message) const;
+    void LogDebug(const std::string& message) const;
+    void Log(const std::string& message, LogLevel level) const;
   private:
     std::string _module;
     LoggingSystem* _loggerSystem;
