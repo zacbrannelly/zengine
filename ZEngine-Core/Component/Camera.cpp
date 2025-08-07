@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include "../Rendering/Graphics.h"
+#include "../Rendering/FrameBuffer.h"
 #include "../Map/Objects/Entity.h"
 #include "Transform.h"
 
@@ -12,8 +13,7 @@ Camera::Camera() : Component("Camera", ObjectType::CAMERA)
 {
 	RegisterDerivedType(CAMERA);
 	_projection = ORTHOGRAPHIC;
-	_frameBuffer = BGFX_INVALID_HANDLE;
-	_renderTexture = BGFX_INVALID_HANDLE;
+	_frameBuffer = nullptr;
 	_clearFlags = BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH;
 	_zNear = 0.001f;
 	_zFar = 100.0f;
@@ -36,7 +36,10 @@ void Camera::Update()
 void Camera::Render(int viewId)
 {
 	// Setup the view
-	_graphics->SetFrameBuffer(_viewId, _frameBuffer);
+	if (_frameBuffer != nullptr)
+	{
+		_graphics->SetFrameBuffer(_viewId, _frameBuffer);
+	}
 	_graphics->ViewMode(_viewId, bgfx::ViewMode::Default);
 	_graphics->Viewport(_viewId, (int)(_viewport.x + 0.5f), (int)(_viewport.y + 0.5f), (int)(_viewport.z + 0.5f), (int)(_viewport.w + 0.5f));
 	_graphics->Clear(_viewId, _clearFlags, (int)(_clearColor.r * 255.0f + 0.5f), (int)(_clearColor.g * 255.0f + 0.5f), (int)(_clearColor.b * 255.0f + 0.5f), (int)(_clearColor.a * 255.0f + 0.5f));
@@ -58,8 +61,8 @@ glm::mat4 Camera::GetProjectionMatrix() const
 
 	if (_projection == Camera::ProjectionMode::ORTHOGRAPHIC)
 	{
-		// Create orthogonal projection with _orthoSize being the half vertical height
-		return glm::ortho<float>(-aspectRatio * _orthoSize, aspectRatio * _orthoSize, -_orthoSize, _orthoSize, _zNear, _zFar);
+		// Create orthogonal projection using _ortho* fields + near & far.
+		return glm::ortho<float>(_orthoLeft, _orthoRight, _orthoBottom, _orthoTop, _zNear, _zFar);
 	}
 	else
 	{
@@ -72,6 +75,11 @@ glm::mat4 Camera::GetViewMatrix() const
 {
 	// View matrix is the inverse of the camera's world transformation matrix
 	return glm::inverse(GetOwner()->GetTransform()->GetWorldTransformMatrix());
+}
+
+glm::mat4 Camera::GetViewProjectionMatrix() const
+{
+	return GetProjectionMatrix() * GetViewMatrix();
 }
 
 void Camera::SetClearFlags(uint16_t flags)
@@ -120,10 +128,8 @@ void Camera::SetViewport(int x, int y, int width, int height)
 
 	if (IsRenderingToTexture())
 	{
-		bgfx::destroy(_frameBuffer);
-
-		_frameBuffer = _graphics->CreateFrameBuffer(_viewport.z, _viewport.w);
-		_renderTexture = _graphics->GetFrameBufferTexture(_frameBuffer);
+		// Resize the frame buffer (this is a no-op if the frame buffer is not resizable)
+		_frameBuffer->Resize(width, height);
 	}
 }
 
@@ -167,28 +173,44 @@ Camera::ProjectionMode Camera::GetProjectionMode() const
 	return _projection;
 }
 
+void Camera::SetFrameBuffer(FrameBuffer* frameBuffer)
+{
+	if (_frameBuffer != nullptr)
+	{
+		delete _frameBuffer;
+	}
+	_frameBuffer = frameBuffer;
+}
+
+FrameBuffer* Camera::GetFrameBuffer() const
+{
+	return _frameBuffer;
+}
+
 void Camera::SetRenderToTexture(bool renderToTexture)
 {
 	if (renderToTexture && !IsRenderingToTexture())
 	{
-		_frameBuffer = _graphics->CreateFrameBuffer(_viewport.z, _viewport.w);
-		_renderTexture = _graphics->GetFrameBufferTexture(_frameBuffer);
+		_frameBuffer = new FrameBuffer();
+		_frameBuffer->Build(_viewport.z, _viewport.w);
 	}
 	else if (!renderToTexture && IsRenderingToTexture())
 	{
-		_graphics->DeleteFrameBuffer(_frameBuffer);
-		_frameBuffer = BGFX_INVALID_HANDLE;
+		delete _frameBuffer;
+		_frameBuffer = nullptr;
 	}
 }
 
 bool Camera::IsRenderingToTexture() const
 {
-	return _frameBuffer.idx != bgfx::kInvalidHandle;
+	return _frameBuffer != nullptr;
 }
 
 bgfx::TextureHandle Camera::GetRenderTexture() const
 {
-	return _renderTexture;
+	return _frameBuffer != nullptr 
+		? _frameBuffer->GetTexture() 
+		: bgfx::TextureHandle { bgfx::kInvalidHandle };
 }
 
 void Camera::SetFieldOfView(float fov)
@@ -204,11 +226,33 @@ float Camera::GetFieldOfView() const
 void Camera::SetOrthoSize(float size)
 {
 	_orthoSize = size;
+	
+	auto aspectRatio = GetAspectRatio();
+	_orthoLeft = -aspectRatio * _orthoSize;
+	_orthoRight = aspectRatio * _orthoSize;
+	_orthoBottom = -_orthoSize;
+	_orthoTop = _orthoSize;
 }
 
 float Camera::GetOrthoSize() const
 {
 	return _orthoSize;
+}
+
+void Camera::SetOrtho(float left, float right, float bottom, float top)
+{
+	_orthoLeft = left;
+	_orthoRight = right;
+	_orthoBottom = bottom;
+	_orthoTop = top;
+}
+
+void Camera::GetOrtho(float& left, float& right, float& bottom, float& top) const
+{
+	left = _orthoLeft;
+	right = _orthoRight;
+	bottom = _orthoBottom;
+	top = _orthoTop;
 }
 
 void Camera::SetNear(float near)
@@ -260,6 +304,7 @@ ZObject* Camera::Copy(string name, ZObject* object)
 
 Camera::~Camera()
 {
-	if (IsRenderingToTexture())
-		bgfx::destroy(_frameBuffer);
+	if (_frameBuffer != nullptr) {
+		delete _frameBuffer;
+	}
 }

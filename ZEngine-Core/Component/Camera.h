@@ -17,6 +17,7 @@
 namespace ZEngine
 {
 	class Graphics;
+	class FrameBuffer;
 
 	class Camera : public Component
 	{
@@ -31,7 +32,7 @@ namespace ZEngine
 
 		void Init() override;
 		void Update() override;
-		void Render(int viewId) override;
+		virtual void Render(int viewId) override;
 
 		void SetViewId(int viewId);
 		int GetViewId() const;
@@ -58,19 +59,26 @@ namespace ZEngine
 		bool IsRenderingToTexture() const;
 		bgfx::TextureHandle GetRenderTexture() const;
 
+		void SetFrameBuffer(FrameBuffer* frameBuffer);
+		FrameBuffer* GetFrameBuffer() const;
+
 		void SetFieldOfView(float fov);
 		float GetFieldOfView() const;
 
 		void SetOrthoSize(float size);
 		float GetOrthoSize() const;
 
+		void SetOrtho(float left, float right, float bottom, float top);
+		void GetOrtho(float& left, float& right, float& bottom, float& top) const;
+
 		void SetNear(float near);
 		void SetFar(float far);
 		float GetNear() const;
 		float GetFar() const;
 
-		glm::mat4 GetProjectionMatrix() const;
-		glm::mat4 GetViewMatrix() const;
+		virtual glm::mat4 GetProjectionMatrix() const;
+		virtual glm::mat4 GetViewMatrix() const;
+		glm::mat4 GetViewProjectionMatrix() const;
 
 	private:
 		Graphics* _graphics;
@@ -84,12 +92,11 @@ namespace ZEngine
 		float _zNear, _zFar;
 		glm::vec4 _viewport;
 
-		bool _renderToTexture;
-		bgfx::FrameBufferHandle _frameBuffer;
-		bgfx::TextureHandle _renderTexture;
+		FrameBuffer* _frameBuffer;
 
 		// Ortho settings
 		float _orthoSize;
+		float _orthoLeft, _orthoRight, _orthoBottom, _orthoTop;
 
 		// Perspective settings
 		float _fieldOfView;

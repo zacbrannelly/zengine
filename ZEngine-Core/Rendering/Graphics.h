@@ -13,6 +13,7 @@ namespace ZEngine
 	class DynamicVertexBuffer;
 	class DynamicIndexBuffer;
 	class Material;
+	class FrameBuffer;
 
 	class Graphics : public Singleton<Graphics>
 	{
@@ -24,7 +25,7 @@ namespace ZEngine
 		void Shutdown();
 
 		void Reset(int width, int height, uint32_t resetFlags);
-		void SetFrameBuffer(int viewId, bgfx::FrameBufferHandle fbo);
+		void SetFrameBuffer(int viewId, FrameBuffer* frameBuffer);
 		void Clear(int viewId);
 		void Clear(int viewId, int r, int g, int b, int a);
 		void Clear(int viewId, uint16_t flags, int r, int g, int b, int a);
@@ -46,7 +47,12 @@ namespace ZEngine
 		void SetTexture(uint8_t stage, bgfx::UniformHandle& sampler, bgfx::TextureHandle& handle, uint32_t flags);
 		void Submit(int viewId, bgfx::ProgramHandle program);
 
+		bgfx::TextureHandle CreateTexture2D(int width, int height, bool hasMips, uint16_t numLayers, bgfx::TextureFormat::Enum format, uint64_t flags);
+		void DestroyTexture(bgfx::TextureHandle texture);
+
+		bgfx::FrameBufferHandle CreateFrameBuffer(bgfx::Attachment textureAttachment);
 		bgfx::FrameBufferHandle CreateFrameBuffer(int width, int height);
+		bgfx::FrameBufferHandle CreateDepthFrameBuffer(int width, int height);
 		bgfx::TextureHandle GetFrameBufferTexture(bgfx::FrameBufferHandle fbo);
 		void DeleteFrameBuffer(bgfx::FrameBufferHandle fbo);
 

@@ -8,6 +8,7 @@
 #include "Shader.h"
 #include "MetalLayerSetup.h"
 #include "StandardShaders.h"
+#include "FrameBuffer.h"
 
 #if defined(__APPLE__)
 #include <TargetConditionals.h>
@@ -110,9 +111,21 @@ const bool Graphics::IsInitialized() const
 	return _initialized;
 }
 
-void Graphics::SetFrameBuffer(int viewId, FrameBufferHandle fbo)
+void Graphics::SetFrameBuffer(int viewId, FrameBuffer* frameBuffer)
 {
-	setViewFrameBuffer(viewId, fbo);
+	if (frameBuffer == nullptr)
+	{
+		_logger.LogError("SetFrameBuffer: FrameBuffer was null, cannot set it!");
+		return;
+	}
+
+	if (!frameBuffer->IsValid())
+	{
+		_logger.LogError("SetFrameBuffer: FrameBuffer was invalid, cannot set it!");
+		return;
+	}
+
+	setViewFrameBuffer(viewId, frameBuffer->GetHandle());
 }
 
 void Graphics::Reset(int width, int height, uint32_t flags)
@@ -218,14 +231,46 @@ void Graphics::Render()
 	frame();
 }
 
+bgfx::TextureHandle Graphics::CreateTexture2D(
+	int width,
+	int height,
+	bool hasMips,
+	uint16_t numLayers,
+	bgfx::TextureFormat::Enum format,
+	uint64_t flags
+) {
+	return createTexture2D(width, height, hasMips, numLayers, format, flags);
+}
+
+FrameBufferHandle Graphics::CreateFrameBuffer(bgfx::Attachment textureAttachment)
+{
+	return createFrameBuffer(1, &textureAttachment, false);
+}
+
+void Graphics::DestroyTexture(bgfx::TextureHandle texture)
+{
+	if (isValid(texture))
+	{
+		destroy(texture);
+	}
+}
+
 FrameBufferHandle Graphics::CreateFrameBuffer(int width, int height)
 {
 	// NOTE: The second texture is a depth buffer, this is needed!!!!
 	bgfx::TextureHandle buffers[2];
 	buffers[0] = createTexture2D(width, height, false, 1, bgfx::TextureFormat::BGRA8, BGFX_TEXTURE_RT);
-	buffers[1] = createTexture2D(width, height, false, 1, bgfx::TextureFormat::D24, BGFX_TEXTURE_RT);
+	buffers[1] = createTexture2D(width, height, false, 1, bgfx::TextureFormat::D32F, BGFX_TEXTURE_RT);
 
 	return createFrameBuffer(2, buffers, true);
+}
+
+FrameBufferHandle Graphics::CreateDepthFrameBuffer(int width, int height)
+{
+	bgfx::TextureHandle buffers[] = {
+		createTexture2D(width, height, false, 1, bgfx::TextureFormat::D32F, BGFX_TEXTURE_RT | BGFX_SAMPLER_COMPARE_LEQUAL)
+	};
+	return createFrameBuffer(1, buffers, true);
 }
 
 TextureHandle Graphics::GetFrameBufferTexture(FrameBufferHandle fbo)
