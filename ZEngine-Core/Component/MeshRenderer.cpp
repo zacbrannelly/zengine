@@ -321,6 +321,15 @@ void MeshRenderer::Render(int viewId, Transform* transform)
 	}
 }
 
+void MeshRenderer::Render(int viewId, const Pass& pass, Transform* transform)
+{
+	if (_mesh != nullptr)
+	{
+		auto worldTransform = transform->GetWorldTransformMatrix();
+		_mesh->Draw(viewId, pass, worldTransform);
+	}
+}
+
 MeshRenderer::~MeshRenderer()
 {
 }

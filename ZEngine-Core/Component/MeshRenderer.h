@@ -44,6 +44,7 @@ namespace ZEngine
 		virtual void Update();
 		virtual void Render(int viewId);
 		virtual void Render(int viewId, Transform* transform);
+		virtual void Render(int viewId, const Pass& pass, Transform* transform);
 
 		static ZObject* CreateInstance(std::string name, ObjectType type);
 		static ZObject* Copy(std::string name, ZObject* object);
