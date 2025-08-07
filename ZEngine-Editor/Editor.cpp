@@ -33,6 +33,7 @@
 #include <ZEngine-Core/GameLoop/GameLoop.h>
 #include <ZEngine-Core/Physics/Physics3DSystem.h>
 #include <ZEngine-Core/Rendering/Lighting/LightingSystem.h>
+#include <ZEngine-Core/Rendering/DebugDrawSystem.h>
 #include <ZEngine-Core/ImmediateUI/GUILibrary.h>
 #include <ZEngine-Core/ImmediateUI/GUIImage.h>
 #include <ZEngine-Core/ImmediateUI/imgui-includes.h>
@@ -257,6 +258,9 @@ int do_main()
 	// Editor specific sub-systems
 	auto gizmoSystem = GizmoSystem::GetInstance();
 	gizmoSystem->Init(editorContainer);
+	
+	auto debugDrawSystem = DebugDrawSystem::GetInstance();
+	debugDrawSystem->Init();
 
 	// Called at a fixed rate
 	std::function<void()> updateCallback = [&]()
@@ -300,6 +304,7 @@ int do_main()
 	delete editorContainer;
 
 	// Clean up
+	debugDrawSystem->Shutdown();
 	gizmoSystem->Shutdown();
 	gui->Shutdown();
 	assetManager->Shutdown();

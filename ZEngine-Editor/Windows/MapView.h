@@ -3,6 +3,7 @@
 #include <ZEngine-Core/ImmediateUI/GUIWindow.h>
 #include <ZEngine-Core/ImmediateUI/GUIImage.h>
 #include <ZEngine-Core/Rendering/Graphics.h>
+#include <ZEngine-Core/Rendering/DebugDrawSystem.h>
 
 namespace ZEngine
 {
@@ -33,6 +34,7 @@ namespace ZEngine
 		Camera* _viewCamera;
 		Editor* _editor;
 		GizmoSystem* _gizmoSystem;
+		DebugDrawSystem* _debugDrawSystem;
 		LightingSystem* _lightingSystem;
 		MapViewToolbar* _mapViewToolbar;
 		MapViewPicker* _mapViewPicker;

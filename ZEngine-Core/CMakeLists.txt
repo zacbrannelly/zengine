@@ -69,6 +69,8 @@ set(SOURCE_FILES
     "Rendering/VertexBuffer.cpp"
     "Rendering/StandardShaders.cpp"
     "Rendering/MaterialFactory.cpp"
+    "Rendering/FrameBuffer.cpp"
+    "Rendering/DebugDrawSystem.cpp"
     "Scripting/CSharp/CSharpScript.cpp"
     "Scripting/CSharp/CSharpScriptSystem.cpp"
     "Scripting/CSharp/AssemblyLoader.cpp"
