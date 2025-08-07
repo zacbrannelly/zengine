@@ -152,6 +152,7 @@ void GameView::RenderElement()
 	Map* selectedMap = _editor->GetSelectedMap();
 	if (selectedMap != nullptr)
 	{
+		// TODO: Fix the lighting system update so it doesn't impact the map view (shadow mapping).
 		_lightingSystem->Update(selectedMap, _mainCamera);
 		selectedMap->RenderWorld(_mainCamera->GetViewId());
 	}

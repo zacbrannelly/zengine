@@ -51,6 +51,7 @@
 #include "Windows/AssetExplorer.h"
 #include "Windows/LogWindow.h"
 #include "Windows/PhysicsSettings.h"
+#include "Windows/ShadowMapDebugger.h"
 #include "Dialogs/ProjectBrowserDialog.h"
 #include "Dialogs/BuildStatusDialog.h"
 #include "Gizmos/GizmoSystem.h"
@@ -82,6 +83,7 @@ Editor::Editor(Display* display) :
 	Add(new PhysicsSettings(this));
 	Add(new ProjectBrowserDialog(this));
 	Add(new BuildStatusDialog(this));
+	Add(new ShadowMapDebugger(this));
 
 	// Add Controllers (make sure update is called after views)
 	_mapController = new MapController(this);

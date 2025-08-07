@@ -2,7 +2,9 @@
 #include "Objects/Entity.h"
 #include "../Component/Camera.h"
 #include "../Component/Transform.h"
+#include "../Component/MeshRenderer.h"
 #include "../Misc/Factory.h"
+#include "../Rendering/Mesh.h"
 
 #include <algorithm>
 
@@ -212,7 +214,7 @@ void Map::Render()
 {
 	for (auto camera : _cameras)
 	{
-		// Render the camera first (negative view id since it doesnt use this input)
+		// Render the camera first (negative view id since it doesn't use this input)
 		camera->Render(-1);
 
 		// Then render all of the other entities
@@ -222,15 +224,27 @@ void Map::Render()
 
 void Map::RenderWorld(int viewId)
 {
-	for (int i = 0; i < _entities.size(); i++)
+	for (int i = 0; i < _entities.size(); ++i)
 	{
 		auto entity = _entities[i];
 
 		for (auto component : entity->GetAllComponents())
 		{
 			if (component->GetType() == ObjectType::CAMERA) continue;
-
 			component->Render(viewId);
+		}
+	}
+}
+
+void Map::RenderWorldToShadowMap(int viewId, const Pass& pass)
+{
+	for (int i = 0; i < _entities.size(); ++i)
+	{
+		auto entity = _entities[i];
+		for (auto component : entity->GetAllComponents())
+		{
+			if (component->GetType() != MESH_RENDERER) continue;
+			component->As<MeshRenderer>()->Render(viewId, pass, entity->GetTransform());
 		}
 	}
 }

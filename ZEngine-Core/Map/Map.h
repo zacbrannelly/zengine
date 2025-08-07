@@ -8,6 +8,7 @@ namespace ZEngine
 {
 	class Entity;
 	class Camera;
+	struct Pass;
 
 	class Map : public ZObject
 	{
@@ -34,6 +35,7 @@ namespace ZEngine
 		void Update();
 		void Render();
 		void RenderWorld(int viewId);
+		void RenderWorldToShadowMap(int viewId, const Pass& pass);
 
 		static ZObject* CreateInstance(std::string name, ObjectType type);
 		static ZObject* Copy(std::string name, ZObject* object);

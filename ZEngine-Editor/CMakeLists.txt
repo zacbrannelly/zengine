@@ -29,6 +29,7 @@ set (SOURCE_FILES
   "Windows/GameView.cpp"
   "Windows/MapViewToolbar.cpp"
   "Windows/PhysicsSettings.cpp"
+  "Windows/ShadowMapDebugger.cpp"
   "Dialogs/CreateMapDialog.cpp"
   "Dialogs/CreateShaderDialog.cpp"
   "Dialogs/NewFolderDialog.cpp"

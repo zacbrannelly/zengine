@@ -10,6 +10,7 @@ namespace ZEngine
     UNLIT_COLOR_SHADER,
     UNLIT_TEXTURE_SHADER,
     LIT_COLOR_SHADER,
+    SHADOW_MAP_SHADER
   };
 
   class Shader;
@@ -33,6 +34,7 @@ namespace ZEngine
     static Shader* GetUnlitColorShader();
     static Shader* GetUnlitTextureShader();
     static Shader* GetLitColorShader();
+    static Shader* GetShadowMapShader();
 
     static const std::vector<ShaderInfo>& GetShaders();
 
@@ -40,10 +42,12 @@ namespace ZEngine
     static Shader* _unlitColorShader;
     static Shader* _unlitTextureShader;
     static Shader* _litColorShader;
+    static Shader* _shadowMapShader;
     static std::vector<ShaderInfo> _shaders;
 
     static void LoadUnlitColorShader();
     static void LoadUnlitTextureShader();
     static void LoadLitColorShader();
+    static void LoadShadowMapShader();
   };
 }

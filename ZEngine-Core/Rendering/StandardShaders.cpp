@@ -3,6 +3,7 @@
 #include "StandardShaders/UnlitColorShader.h"
 #include "StandardShaders/UnlitTextureShader.h"
 #include "StandardShaders/LitColorShader.h"
+#include "StandardShaders/ShadowMapShader.h"
 #include "../Logging/LoggingSystem.h"
 
 #include <map>
@@ -12,9 +13,10 @@ using namespace ZEngine;
 Shader* StandardShaders::_unlitColorShader = nullptr;
 Shader* StandardShaders::_unlitTextureShader = nullptr;
 Shader* StandardShaders::_litColorShader = nullptr;
+Shader* StandardShaders::_shadowMapShader = nullptr;
 std::vector<ShaderInfo> StandardShaders::_shaders;
 
-static const std::string MODUlE_NAME = "StandardShaders";
+static const std::string MODULE_NAME = "StandardShaders";
 
 static std::map<std::string, StandardShader> shaderNameToEnum;
 
@@ -23,6 +25,7 @@ void StandardShaders::Init()
   LoadUnlitColorShader();
   LoadUnlitTextureShader();
   LoadLitColorShader();
+  LoadShadowMapShader();
 
   // Build the shader name to enum map
   for (const auto& info : _shaders)
@@ -40,7 +43,7 @@ Shader* StandardShaders::GetShader(const std::string& shaderName)
   }
   else
   {
-    LoggingSystem::GetInstance()->LogError("GetShader: Shader not found: " + shaderName, MODUlE_NAME);
+    LoggingSystem::GetInstance()->LogError("GetShader: Shader not found: " + shaderName, MODULE_NAME);
     return nullptr;
   }
 }
@@ -55,6 +58,8 @@ Shader* StandardShaders::GetShader(StandardShader shader)
       return _unlitTextureShader;
     case LIT_COLOR_SHADER:
       return _litColorShader;
+    case SHADOW_MAP_SHADER:
+      return _shadowMapShader;
     default:
       return nullptr;
   }
@@ -71,11 +76,11 @@ void StandardShaders::LoadUnlitColorShader()
   ))
   {
     _shaders.push_back({ "UNLIT_COLOR_SHADER", UNLIT_COLOR_SHADER, _unlitColorShader });
-    LoggingSystem::GetInstance()->LogInfo("Loaded Unlit Color Shader.", MODUlE_NAME);
+    LoggingSystem::GetInstance()->LogInfo("Loaded Unlit Color Shader.", MODULE_NAME);
   }
   else
   {
-    LoggingSystem::GetInstance()->LogError("LoadUnlitColorShader: Failed to load.", MODUlE_NAME);
+    LoggingSystem::GetInstance()->LogError("LoadUnlitColorShader: Failed to load.", MODULE_NAME);
   }
 }
 
@@ -90,11 +95,11 @@ void StandardShaders::LoadUnlitTextureShader()
   ))
   {
     _shaders.push_back({ "UNLIT_TEXTURE_SHADER", UNLIT_TEXTURE_SHADER, _unlitTextureShader });
-    LoggingSystem::GetInstance()->LogInfo("Loaded Unlit Texture Shader.", MODUlE_NAME);
+    LoggingSystem::GetInstance()->LogInfo("Loaded Unlit Texture Shader.", MODULE_NAME);
   }
   else
   {
-    LoggingSystem::GetInstance()->LogError("LoadUnlitTextureShader: Failed to load.", MODUlE_NAME);
+    LoggingSystem::GetInstance()->LogError("LoadUnlitTextureShader: Failed to load.", MODULE_NAME);
   }
 }
 
@@ -109,11 +114,30 @@ void StandardShaders::LoadLitColorShader()
   ))
   {
     _shaders.push_back({ "LIT_COLOR_SHADER", LIT_COLOR_SHADER, _litColorShader });
-    LoggingSystem::GetInstance()->LogInfo("Loaded Lit Color Shader.", MODUlE_NAME);
+    LoggingSystem::GetInstance()->LogInfo("Loaded Lit Color Shader.", MODULE_NAME);
   }
   else
   {
-    LoggingSystem::GetInstance()->LogError("LoadLitColorShader: Failed to load.", MODUlE_NAME);
+    LoggingSystem::GetInstance()->LogError("LoadLitColorShader: Failed to load.", MODULE_NAME);
+  }
+}
+
+void StandardShaders::LoadShadowMapShader()
+{
+  _shadowMapShader = new Shader("Shadow Map");
+  if (_shadowMapShader->Load(
+    (uint8_t*)SHADOW_MAP_VERTEX_SHADER,
+    (uint32_t)sizeof(SHADOW_MAP_VERTEX_SHADER),
+    (uint8_t*)SHADOW_MAP_FRAGMENT_SHADER,
+    (uint32_t)sizeof(SHADOW_MAP_FRAGMENT_SHADER)
+  ))
+  {
+    _shaders.push_back({ "SHADOW_MAP_SHADER", SHADOW_MAP_SHADER, _shadowMapShader });
+    LoggingSystem::GetInstance()->LogInfo("Loaded Shadow Map Shader.", MODULE_NAME);
+  }
+  else
+  {
+    LoggingSystem::GetInstance()->LogError("LoadShadowMapShader: Failed to load.", MODULE_NAME);
   }
 }
 
@@ -132,6 +156,7 @@ void StandardShaders::Release()
   _unlitColorShader = nullptr;
   _unlitTextureShader = nullptr;
   _litColorShader = nullptr;
+  _shadowMapShader = nullptr;
 }
 
 Shader* StandardShaders::GetUnlitColorShader()
@@ -142,6 +167,16 @@ Shader* StandardShaders::GetUnlitColorShader()
 Shader* StandardShaders::GetUnlitTextureShader()
 {
   return _unlitTextureShader;
+}
+
+Shader* StandardShaders::GetLitColorShader()
+{
+  return _litColorShader;
+}
+
+Shader* StandardShaders::GetShadowMapShader()
+{
+  return _shadowMapShader;
 }
 
 const std::vector<ShaderInfo>& StandardShaders::GetShaders()

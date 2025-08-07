@@ -39,6 +39,22 @@ namespace ZEngine
       SetTransform(transform);
     }
 
+    void SetFromVertices(const glm::vec3* vertices, int count)
+    {
+      _meshMin = glm::vec3(FLT_MAX);
+      _meshMax = glm::vec3(-FLT_MAX);
+
+      for (int i = 0; i < count; ++i)
+      {
+        // Update min and max points
+        _meshMin = glm::min(_meshMin, vertices[i]);
+        _meshMax = glm::max(_meshMax, vertices[i]);
+      }
+
+      _min = _meshMin;
+      _max = _meshMax;
+    }
+
     void SetTransform(const glm::mat4& transform)
     {
       _transform = transform;
