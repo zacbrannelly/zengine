@@ -29,10 +29,10 @@ namespace ZEngine
 			return IsDerivedType(T::GetStaticType());
 		}
 
-		template<class T> const T* As() const
+		template<class T> T* As()
 		{
 			if (IsType<T>())
-				return static_cast<const T*>(this);
+				return static_cast<T*>(this);
 			return nullptr;
 		}
 	private:
