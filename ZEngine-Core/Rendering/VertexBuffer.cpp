@@ -6,6 +6,7 @@ using namespace ZEngine;
 VertexBuffer::VertexBuffer(VertexLayout decl)
 {
 	_decl = decl;
+	SetHandleID(kInvalidHandle);
 }
 
 void VertexBuffer::Upload(const void* data, unsigned int size, bool copy)

@@ -18,7 +18,7 @@ void DynamicVertexBuffer::Upload(const void * data, unsigned int size, bool copy
 
 	if (GetHandle().idx == kInvalidHandle)
 	{
-		auto handle = createDynamicVertexBuffer(memory, GetDecl());
+		auto handle = createDynamicVertexBuffer(memory, GetDecl(), BGFX_BUFFER_ALLOW_RESIZE);
 		SetHandleID(handle.idx);
 	}
 	else

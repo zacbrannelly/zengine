@@ -5,6 +5,7 @@ using namespace ZEngine;
 
 DynamicIndexBuffer::DynamicIndexBuffer()
 {
+	SetHandleID(kInvalidHandle);
 }
 
 void DynamicIndexBuffer::Upload(const unsigned int* indices, unsigned int size, bool copy)
