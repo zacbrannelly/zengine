@@ -88,8 +88,10 @@ void MeshRendererInspector::RenderElement()
 					if (asset == nullptr)
 						asset = assetManager->LoadAsset(entry.path, entry.path, MODEL_ASSET);
 
-					if (asset != nullptr)
-						comp->SetMesh(asset->Cast<ModelAsset>()->GetMesh());
+					if (asset != nullptr) {
+						auto modelAsset = asset->Cast<ModelAsset>();
+						comp->SetModelAsset(modelAsset);
+					}
 				}
 			}
 		}
