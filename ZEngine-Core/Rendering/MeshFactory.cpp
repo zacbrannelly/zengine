@@ -214,6 +214,34 @@ Mesh* MeshFactory::CreateCubeOutline(std::string name)
     return newMesh;
 }
 
+Mesh* MeshFactory::CreateOutline(std::string name, const std::vector<glm::vec3>& points, glm::vec4 color)
+{
+	auto newMesh = Factory::CreateInstance<Mesh>(name, ObjectType::MESH);
+
+	std::vector<glm::vec3> verts;
+	std::vector<uint32_t> indices;
+
+	for (const auto& point : points)
+	{
+		verts.push_back(point);
+	}
+
+	for (size_t i = 0; i < verts.size(); ++i)
+	{
+		indices.push_back(i);
+	}
+
+	std::vector<glm::vec4> colors(verts.size(), color);
+
+	newMesh->SetName(name);
+	newMesh->SetVertices(verts);
+	newMesh->SetIndices(indices);
+	newMesh->SetColors(colors);
+	newMesh->SetMode(LINES);
+
+	return newMesh;
+}
+
 Mesh* MeshFactory::CreateSphere(std::string name, int resolution)
 {
 	auto newMesh = Factory::CreateInstance<Mesh>(name, ObjectType::MESH);

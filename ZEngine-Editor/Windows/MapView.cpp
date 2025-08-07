@@ -22,6 +22,7 @@ MapView::MapView(Editor* editor) : GUIWindow("Map View", 1024, 850, false), _cam
 {
 	_editor = editor;
 	_gizmoSystem = GizmoSystem::GetInstance();
+	_debugDrawSystem = DebugDrawSystem::GetInstance();
 	_lightingSystem = LightingSystem::GetInstance();
 
 	// We must create an entity (so we can transform the camera) and translate it back 10 units
@@ -163,6 +164,9 @@ void MapView::RenderElement()
 
 		// Render the gizmos (UI elements) to the render texture
 		_gizmoSystem->RenderGizmos(viewId);
+
+		// Render the debug draws (if any)
+		_debugDrawSystem->Render(viewId);
 	}
 
 	// Render the actual texture to the screen (more like submit the draw call to bgfx)
