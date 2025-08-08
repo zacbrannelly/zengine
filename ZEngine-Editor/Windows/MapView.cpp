@@ -37,9 +37,9 @@ MapView::MapView(Editor* editor) : GUIWindow("Map View", 1024, 850, false), _cam
 	_viewCamera->SetProjectionMode(Camera::ProjectionMode::PERSPECTIVE);
 	_viewCamera->SetFieldOfView(60.0f);
 	_viewCamera->SetViewport(0, 0, 1920, 1080);
-	_viewCamera->SetFar(1000);
+	_viewCamera->SetFar(100.0f);
 	_viewCamera->SetClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-	_viewCamera->SetViewId(1);
+	_viewCamera->SetViewId(ZENGINE_EDITOR_VIEW_ID(0));
 	_viewCamera->SetRenderToTexture(true);
 
 	// Make image linked to the view camera
@@ -157,9 +157,9 @@ void MapView::RenderElement()
 		auto map = _editor->GetSelectedMap();
 		auto viewId = _viewCamera->GetViewId();
 
-		// TODO: Update the lighting system with the current map and camera
-		// TODO: This currently doesn't work due to it being called in the GameView.
-		// _lightingSystem->Update(map, _viewCamera);
+		// Update lighting system.
+		// Making sure to use the editor View ID for the shadow maps.
+		_lightingSystem->Update(map, _viewCamera, ZENGINE_EDITOR_SHADOW_PASS_VIEW_ID(0));
 
 		// Render the map
 		map->RenderWorld(viewId);

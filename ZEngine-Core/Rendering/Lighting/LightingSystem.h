@@ -32,6 +32,7 @@ namespace ZEngine
 
     void Update();
     void Update(Map* map, Camera* camera);
+    void Update(Map* map, Camera* camera, int shadowBaseViewId);
     void ApplyUniforms();
 
     bool IsLightingUniform(const bgfx::UniformHandle& uniform) const;

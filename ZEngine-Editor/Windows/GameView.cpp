@@ -38,7 +38,7 @@ void GameView::SetupCamera()
 		// Make main camera render to texture
 		_mainCamera = _editor->GetSelectedMap()->GetCameras()[0];
 		_mainCamera->SetRenderToTexture(true);
-		_mainCamera->SetViewId(2);
+		_mainCamera->SetViewId(ZENGINE_VIEW_ID(0));
 
 		// Set size of the window to the size of the camera viewport
 		SetSize(_mainCamera->GetViewportWidth(), _mainCamera->GetViewportHeight());
@@ -152,7 +152,6 @@ void GameView::RenderElement()
 	Map* selectedMap = _editor->GetSelectedMap();
 	if (selectedMap != nullptr)
 	{
-		// TODO: Fix the lighting system update so it doesn't impact the map view (shadow mapping).
 		_lightingSystem->Update(selectedMap, _mainCamera);
 		selectedMap->RenderWorld(_mainCamera->GetViewId());
 	}

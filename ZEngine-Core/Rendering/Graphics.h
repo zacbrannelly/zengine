@@ -5,6 +5,22 @@
 #include <glm/glm.hpp>
 #include <string>
 
+/**
+View ID determins the rendering order of the views in ascending order.
+Make sure to use the below macros to define the view IDs for your views.
+*/
+#define ZENGINE_EDITOR_SHADOW_PASS_BASE_VIEW_ID 0
+#define ZENGINE_EDITOR_SHADOW_PASS_VIEW_ID(viewId) (ZENGINE_EDITOR_SHADOW_PASS_BASE_VIEW_ID + viewId)
+
+#define ZENGINE_EDITOR_BASE_VIEW_ID 20
+#define ZENGINE_EDITOR_VIEW_ID(viewId) (ZENGINE_EDITOR_BASE_VIEW_ID + viewId)
+
+#define ZENGINE_SHADOW_PASS_BASE_VIEW_ID 40
+#define ZENGINE_SHADOW_PASS_VIEW_ID(viewId) (ZENGINE_SHADOW_PASS_BASE_VIEW_ID + viewId)
+
+#define ZENGINE_VIEW_ID_BASE 60
+#define ZENGINE_VIEW_ID(viewId) (ZENGINE_VIEW_ID_BASE + viewId)
+
 namespace ZEngine
 {
 	class Display;

@@ -24,7 +24,7 @@ namespace ZEngine
   class ShadowCamera : public Camera
   {
   public:
-    ShadowCamera(uint32_t size, uint16_t viewId, bgfx::TextureHandle depthTextureArray, int layerIdx)
+    ShadowCamera(uint32_t size, bgfx::TextureHandle depthTextureArray, int layerIdx)
     {
       // Render to a specific layer of the provided texture array
       auto frameBuffer = new FrameBuffer();
@@ -33,7 +33,6 @@ namespace ZEngine
 
       SetViewport(0, 0, size, size);
       SetProjectionMode(Camera::ORTHOGRAPHIC);
-      SetViewId(viewId);
     }
 
     void SetViewMatrix(const glm::mat4& viewMatrix)
@@ -92,7 +91,7 @@ void LightingSystem::Init()
   );
   for (int i = 0; i < MAX_CASCADES; i++)
   {
-    _cascadeShadowCameras[i] = new ShadowCamera(MAX_SHADOWMAP_SIZE, 100 + i, _cascadeShadowMapArray, i);
+    _cascadeShadowCameras[i] = new ShadowCamera(MAX_SHADOWMAP_SIZE, _cascadeShadowMapArray, i);
   }
   _cascadeDepthArrayUniform =              _graphics->CreateUniform("u_cascadeDepths", bgfx::UniformType::Vec4, MAX_CASCADES);
   _lightViewProjectionMatrixArrayUniform = _graphics->CreateUniform("u_lightViewProjections", bgfx::UniformType::Mat4, MAX_CASCADES);
@@ -122,6 +121,11 @@ void LightingSystem::Update()
 }
 
 void LightingSystem::Update(Map* currentMap, Camera* camera)
+{
+  Update(currentMap, camera, ZENGINE_SHADOW_PASS_VIEW_ID(0));
+}
+
+void LightingSystem::Update(Map* currentMap, Camera* camera, int shadowBaseViewId)
 {
   if (currentMap == nullptr)
   {
@@ -154,6 +158,13 @@ void LightingSystem::Update(Map* currentMap, Camera* camera)
         _lightColors[totalLightCount] = glm::vec4(dirLight->GetColor(), 1.0f);
         _lightIntensities[totalLightCount] = glm::vec4(dirLight->GetIntensity(), 0.0f, 0.0f, 0.0f);
         _lightDirections[totalLightCount] = entity->GetTransform()->GetWorldRotationQuaternion() * glm::vec4(dirLight->GetDirection(), 0.0f);
+
+        // Order the draw calls for the shadow cameras correctly.
+        for (int j = 0; j < MAX_CASCADES; ++j)
+        {
+          auto shadowCamera = _cascadeShadowCameras[j];
+          shadowCamera->SetViewId(shadowBaseViewId + j);
+        }
 
         // Update the cascaded shadow map for the directional light (if any).
         UpdateCascadedShadowMap(currentMap, camera, dirLight, totalLightCount);
@@ -384,6 +395,6 @@ void LightingSystem::Shutdown()
   _graphics->DestroyUniform(_depthBiasConstantUniform);
   _graphics->DestroyUniform(_cascadeShadowMapArrayUniform);
   _graphics->DestroyTexture(_cascadeShadowMapArray);
-  
+
   _logger.LogInfo("Lighting system shut down.");
 }
