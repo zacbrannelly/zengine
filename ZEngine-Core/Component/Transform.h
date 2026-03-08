@@ -3,6 +3,8 @@
 #include <vector>
 #include "Component.h"
 #include "../Utilities/JsonHelpers.h"
+
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>

@@ -5,7 +5,7 @@
 
 #define PI 3.14159265359
 
-vec3 fernelSchlick(vec3 f0, float cosTheta)
+vec3 fresnelSchlick(vec3 f0, float cosTheta)
 {
   return f0 + (1.0 - f0) * pow(1.0 - cosTheta, 5.0);
 }
@@ -21,10 +21,10 @@ float roughnessMappingForImageBasedLighting(float roughness)
   return pow(roughness, 2) / 2;
 }
 
-float roughnessMappingForDirectLighting(float rougness) 
+float roughnessMappingForDirectLighting(float roughness) 
 {
   // Mapping of roughness source: https://cdn2.unrealengine.com/Resources/files/2013SiggraphPresentationsNotes-26915738.pdf
-  return pow(rougness + 1.0, 2) / 8;
+  return pow(roughness + 1.0, 2) / 8;
 }
 
 float geometricAttenuation(float NdotL, float NdotV, float mappedRoughness)
@@ -47,7 +47,7 @@ float ggxNormalDistribution(float roughness, float NdotH)
 
 vec3 diffuseLambertsCosine(float NdotL, vec3 surfaceColor)
 {
-  return (surfaceColor * NdotL) / PI;
+  return surfaceColor / PI;
 }
 
 vec3 calculateLightContribution(
@@ -72,7 +72,7 @@ vec3 calculateLightContribution(
   // Calculate the Fresnel-Schlick approximation for specular reflection (F)
   // F(v,h) = F0 + (1 - F0) * (1 - (v.h))^5
   vec3 F0 = mix(vec3(0.04), surfaceColor, metallic);
-  vec3 F = fernelSchlick(F0, VdotH);
+  vec3 F = fresnelSchlick(F0, VdotH);
 
   // Calculate the geometric attenuation (G)
   float G = geometricAttenuation(NdotL, NdotV, mappedRoughness);

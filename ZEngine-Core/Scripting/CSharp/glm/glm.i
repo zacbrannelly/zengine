@@ -13,6 +13,9 @@
 // init default values in constructors
 #define GLM_FORCE_CTOR_INIT
 
+// enable experimental features
+#define GLM_ENABLE_EXPERIMENTAL
+
 // these included in math/ofVectorMath.h
 // we declare some things manually, so some includes are commented out
 #include "glm/vec2.hpp"
