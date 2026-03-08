@@ -13,8 +13,6 @@
   </Target>
 
   <ItemGroup>
-    <Reference Include="ZEngine.Interop">
-      <HintPath>/Users/zacbrannelly/GitRepos/zengine/build/ZEngine-Core/projects/ZEngine.Interop/bin/Debug/net6.0/publish/ZEngine.Interop.dll</HintPath>
-    </Reference>
+    <Reference Include="ZEngine.Interop" />
   </ItemGroup>
 </Project>

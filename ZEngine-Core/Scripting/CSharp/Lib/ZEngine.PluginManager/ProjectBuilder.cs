@@ -1,3 +1,4 @@
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
 using Microsoft.Build.Locator;
 
@@ -5,6 +6,17 @@ namespace ZEngine.Core
 {
   public static class ProjectBuilder
   {
+    private static string GetInteropReferenceDirectory()
+    {
+      // The editor copies ZEngine.Interop beside the executable under lib/ZEngine.Interop.
+      return Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "lib", "ZEngine.Interop"));
+    }
+
+    private static string GetInteropReferencePath()
+    {
+      return Path.Combine(GetInteropReferenceDirectory(), "ZEngine.Interop.dll");
+    }
+
     public static bool Build(string projectPath, string dllOutputPath)
     {
       Console.WriteLine("Building project...");
@@ -15,11 +27,30 @@ namespace ZEngine.Core
         Console.WriteLine($"Located MSBuild at path: {locatorResults.MSBuildPath}");
       }
 
-      var workspace = MSBuildWorkspace.Create();
+      var interopReferenceDirectory = GetInteropReferenceDirectory();
+      var interopReferencePath = GetInteropReferencePath();
+      Console.WriteLine($"Using interop reference directory: {interopReferenceDirectory}");
+      Console.WriteLine($"Using interop reference path: {interopReferencePath}");
+
+      var workspaceProperties = new Dictionary<string, string>
+      {
+        // Allow <Reference Include="ZEngine.Interop" /> to resolve without embedding
+        // an absolute HintPath into every generated user project.
+        ["ReferencePath"] = interopReferencePath
+      };
+
+      var workspace = MSBuildWorkspace.Create(workspaceProperties);
       var projectLoadTask = workspace.OpenProjectAsync(projectPath);
       projectLoadTask.Wait();
 
       var project = projectLoadTask.Result;
+      if (!File.Exists(interopReferencePath))
+      {
+        Console.WriteLine($"Interop reference was not found at: {interopReferencePath}");
+        return false;
+      }
+
+      project = project.AddMetadataReference(MetadataReference.CreateFromFile(interopReferencePath));
       Console.WriteLine($"Loaded project: {project.Name}");
 
       var compilationTask = project.GetCompilationAsync();

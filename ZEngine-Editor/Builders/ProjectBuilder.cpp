@@ -62,16 +62,9 @@ std::string ProjectBuilder::GenerateProjectCSharpProjectFile(const Directory& pr
   inja::Environment injaEnv;
   inja::Template projectTemplate = injaEnv.parse_template("templates/project/BaseProject/BaseProject.Scripts.csproj");
 
-  // Generate the path to the ZEngine.Interop.dll file
-  auto cwd = Directory::GetCurrentWorkingDirectory();
-  auto interopDllPath = cwd + "/lib/ZEngine.Interop/ZEngine.Interop.dll";
-
   // Generate the project file
-  json data;
-  data["interopDllPath"] = interopDllPath;
-
   auto projectFilePath = projectDirectory.GetAbsolutePath() + "/" + name + ".Scripts.csproj";
-  injaEnv.write(projectTemplate, data, projectFilePath);
+  injaEnv.write(projectTemplate, json::object(), projectFilePath);
 
   return projectFilePath;
 }

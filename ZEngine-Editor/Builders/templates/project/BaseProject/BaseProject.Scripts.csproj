@@ -6,8 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="ZEngine.Interop">
-      <HintPath>{{ interopDllPath }}</HintPath>
-    </Reference>
+    <Reference Include="ZEngine.Interop" />
   </ItemGroup>
 </Project>
