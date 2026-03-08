@@ -2,8 +2,48 @@
 # Linking
 ################################################################################
 
-set(DOTNET_LIBRARY_PATH "/usr/local/share/dotnet/shared/Microsoft.NETCore.App/6.0.14")
-set(DOTNET_HOST_PATH "/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Host.osx-arm64/6.0.14/runtimes/osx-arm64/native")
+# Resolve the real dotnet installation directory from the executable CMake found.
+get_filename_component(DOTNET_EXECUTABLE_REALPATH "${DOTNET_EXECUTABLE}" REALPATH)
+get_filename_component(DOTNET_ROOT "${DOTNET_EXECUTABLE_REALPATH}" DIRECTORY)
+
+# Map the current macOS CPU architecture to the .NET runtime identifier naming.
+if(CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")
+  set(DOTNET_RUNTIME_IDENTIFIER "osx-arm64")
+elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
+  set(DOTNET_RUNTIME_IDENTIFIER "osx-x64")
+else()
+  message(FATAL_ERROR "Unsupported macOS processor for .NET host resolution: ${CMAKE_SYSTEM_PROCESSOR}")
+endif()
+
+# These roots are stable; the version folder below them changes with each .NET install/update.
+set(DOTNET_LIBRARY_ROOT "${DOTNET_ROOT}/shared/Microsoft.NETCore.App")
+set(DOTNET_HOST_ROOT "${DOTNET_ROOT}/packs/Microsoft.NETCore.App.Host.${DOTNET_RUNTIME_IDENTIFIER}")
+
+# Discover all installed runtime/host pack versions so we do not hard-code a specific SDK version.
+file(GLOB DOTNET_LIBRARY_VERSIONS RELATIVE "${DOTNET_LIBRARY_ROOT}" "${DOTNET_LIBRARY_ROOT}/*")
+file(GLOB DOTNET_HOST_VERSIONS RELATIVE "${DOTNET_HOST_ROOT}" "${DOTNET_HOST_ROOT}/*")
+
+if(NOT DOTNET_LIBRARY_VERSIONS)
+  message(FATAL_ERROR "No .NET runtime versions found under ${DOTNET_LIBRARY_ROOT}")
+endif()
+
+if(NOT DOTNET_HOST_VERSIONS)
+  message(FATAL_ERROR "No .NET host pack versions found under ${DOTNET_HOST_ROOT}")
+endif()
+
+# Sort naturally so version strings like 10.0.3 sort after 9.0.x, then pick the newest installed version.
+list(SORT DOTNET_LIBRARY_VERSIONS COMPARE NATURAL ORDER DESCENDING)
+list(SORT DOTNET_HOST_VERSIONS COMPARE NATURAL ORDER DESCENDING)
+
+list(GET DOTNET_LIBRARY_VERSIONS 0 DOTNET_LIBRARY_VERSION)
+list(GET DOTNET_HOST_VERSIONS 0 DOTNET_HOST_VERSION)
+
+# Build the final directories that `find_library` and the runtime loader should search.
+set(DOTNET_LIBRARY_PATH "${DOTNET_LIBRARY_ROOT}/${DOTNET_LIBRARY_VERSION}")
+set(DOTNET_HOST_PATH "${DOTNET_HOST_ROOT}/${DOTNET_HOST_VERSION}/runtimes/${DOTNET_RUNTIME_IDENTIFIER}/native")
+
+message(STATUS "Using .NET runtime path: ${DOTNET_LIBRARY_PATH}")
+message(STATUS "Using .NET host path: ${DOTNET_HOST_PATH}")
 
 find_library(
   DOTNET_CORECLR
